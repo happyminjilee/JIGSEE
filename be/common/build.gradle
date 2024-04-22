@@ -37,6 +37,10 @@ dependencies {
 
 //Mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+//Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 tasks.named('test') {
