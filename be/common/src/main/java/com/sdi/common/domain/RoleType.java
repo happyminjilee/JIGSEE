@@ -8,8 +8,9 @@ import java.util.Arrays;
 @Getter
 @AllArgsConstructor
 public enum RoleType {
-    USER("ROLE_USER", "일반 사용자"),
-    ADMIN("ROLE_ADMIN", "관리자");
+    MANAGER("ROLE_MANAGER", "관리자"),
+    TECHNIKER("ROLE_TECHNIKER", "기술자"),
+    PRODUCER("ROLE_PRODUCER", "생산자");
 
     private final String code;
     private final String displayName;
@@ -18,6 +19,6 @@ public enum RoleType {
         return Arrays.stream(RoleType.values())
                 .filter(roleType -> roleType.getCode().equals(code))
                 .findAny()
-                .orElse(USER);
+                .orElse(PRODUCER);
     }
 }

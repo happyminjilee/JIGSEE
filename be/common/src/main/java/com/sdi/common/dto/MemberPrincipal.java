@@ -18,7 +18,7 @@ public record MemberPrincipal(
     }
 
     public static MemberPrincipal from(Member dto) {
-        Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(dto.role()));
+        Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(dto.role().getCode()));
         return new MemberPrincipal(dto.employeeNo(), dto.password(), authorities);
     }
 

@@ -20,6 +20,7 @@ public class MemberEntity {
     @Column(name="employee_no")
     private String employeeNo;
     private String password;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
 }

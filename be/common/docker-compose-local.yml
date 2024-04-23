@@ -1,0 +1,9 @@
+services:
+  jigsi-redis:
+    container_name: jigsi-redis
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    image: redis
+    ports:
+      - "6379:6379"

@@ -1,12 +1,12 @@
 package com.sdi.common.application;
 
-import com.sdi.common.domain.MemberRefreshToken;
 import com.sdi.common.domain.RoleType;
 import com.sdi.common.dto.Member;
 import com.sdi.common.dto.response.MemberLoginResponse;
-import com.sdi.common.jwt.*;
-import com.sdi.common.repository.MemberRefreshTokenRepository;
+import com.sdi.common.jwt.AuthToken;
+import com.sdi.common.jwt.AuthTokenProvider;
 import com.sdi.common.repository.MemberRepository;
+import com.sdi.common.repository.RefreshTokenCacheRepository;
 import com.sdi.common.util.CommonException;
 import com.sdi.common.util.CookieUtils;
 import com.sdi.common.util.ErrorCode;
@@ -30,7 +30,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final MemberRefreshTokenRepository memberRefreshTokenRepository;
+    private final RefreshTokenCacheRepository refreshTokenCacheRepository;
     private final BCryptPasswordEncoder encoder;
     private final AuthTokenProvider tokenProvider;
 
@@ -41,21 +41,13 @@ public class MemberService {
     private final long TOKEN_EXPIRY = 7200000;
     // 7일
     private final long REFRES_TOKEN_EXPIRY = 604800000;
-    private final static long THREE_DAYS_MSEC = 259200000;
-    private final static String REFRESH_TOKEN = "refresh_token";
+    private static final long THREE_DAYS_MSEC = 259200000;
+    private static final String REFRESH_TOKEN = "refresh_token";
 
     public Optional<Member> loadMemberByEmployeeNo(String employeeNo) {
         return Optional.ofNullable(memberRepository.findByEmployeeNo(employeeNo)
-                .map(Member::fromEntity)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)));
-//        레디스 이용 시 필요 코드
-//        return Optional.ofNullable(MemberRepository.getMember(employeeNo)
-//                .orElseGet(() ->
-//                        memberRepository.findByEmployeeNo(employeeNo)
-//                                .map(Member::fromEntity)
-//                                .orElseThrow(() -> null)
-//                )
-//        );
+                        .map(Member::fromEntity)
+                        .orElseThrow(() -> null));
     }
 
     /**
@@ -72,11 +64,9 @@ public class MemberService {
      * 로그인
      * 1. JWT 토큰 생성
      * 2. 리프레시 토큰 생성
-     * 3. 유저 - 리프레시 토큰이 있는지 확인
-     * 4. 없으면 새로 등록
-     * 5. 있으면 DB에 업데이트
-     * 6. 기존 쿠키 삭제하고 새로 추가
-     * 7. JWT 토큰 리턴
+     * 3. 기존 쿠키 삭제하고 새로 추가
+     * 4. 레디스에 토큰 등록
+     * 5. JWT 토큰 리턴
      */
     public MemberLoginResponse login(HttpServletRequest request, HttpServletResponse response, String employeeNo, String password) {
         // 회원가입 여부 체크
@@ -87,31 +77,24 @@ public class MemberService {
             throw new CommonException(ErrorCode.INVALID_PASSWORD);
         }
 
-        AuthToken accessToken = tokenProvider.createAuthToken(employeeNo, member.role(), TOKEN_EXPIRY);
+        // 엑세스 토큰 생성
+        AuthToken accessToken = tokenProvider.createAuthToken(employeeNo, member.role().getCode(), TOKEN_EXPIRY);
+        // 리픠레시 토큰 생성
         AuthToken refreshToken = tokenProvider.createAuthToken(employeeNo, REFRES_TOKEN_EXPIRY);
-
-        MemberRefreshToken memberRefreshToken = memberRefreshTokenRepository.findByMemberEmployeeNo(employeeNo);
-        if (memberRefreshToken == null) { // 토큰이 없는 경우. 새로 등록
-            memberRefreshToken = new MemberRefreshToken(employeeNo, refreshToken.getToken());
-            memberRefreshTokenRepository.saveAndFlush(memberRefreshToken);
-        } else {  // 토큰 발견 -> 리프레시 토큰 업데이트
-            memberRefreshToken.setRefreshToken(refreshToken.getToken());
-        }
 
         int cookieMaxAge = (int) REFRES_TOKEN_EXPIRY / 60;
         CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtils.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
+        // Redis에 refreshToken 올리기
+        refreshTokenCacheRepository.setRefreshToken(employeeNo, refreshToken);
+
         return new MemberLoginResponse(member.id(), member.name(), member.employeeNo(), member.role(), accessToken.getToken());
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response, String employeeNo) {
-        // 레디스에서 삭제(레디스 이용 시)
-        // memberCacheRepository.deletemember(employeeNo);
-
-        // 리프레시 토큰 정보 삭제
-        MemberRefreshToken memberRefreshToken = memberRefreshTokenRepository.findByMemberEmployeeNo(employeeNo);
-        memberRefreshTokenRepository.delete(memberRefreshToken);
+        // 레디스에서 리프레시 토큰 삭제
+         refreshTokenCacheRepository.deleteRefreshToken(employeeNo);
 
         // 헤더 토큰 삭제
         CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);
@@ -127,7 +110,6 @@ public class MemberService {
      * 6. Claims에서 role타입 가져오기
      * 7. 프론트로 부터 쿠키에서 리프레시 토큰 가져오기
      * 8. 유효한지 확인
-     * 9. 유저-리프레시 레포에서 토큰 가져오기 - 없을 경우 에러 - 로그인할 때 만들어지기 때문에 없을리 없음
      * 10. 새로운 액세스 토큰 발급
      * 11. 리프레시 토큰이 3일 이하로 남았을 경우 리프레시 토큰 갱신
      * 12. DB에 업데이트
@@ -168,12 +150,6 @@ public class MemberService {
             throw new CommonException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        // DB 확인 익셉션
-        MemberRefreshToken memberRefreshToken = memberRefreshTokenRepository.findByMemberEmployeeNoAndRefreshToken(employeeNo, refreshToken);
-        if (memberRefreshToken == null) {
-            throw new CommonException(ErrorCode.INVALID_REFRESH_TOKEN);
-        }
-
         Date now = new Date();
         AuthToken newAccessToken = tokenProvider.createAuthToken(employeeNo, roleType.getCode(), TOKEN_EXPIRY);
 
@@ -182,7 +158,7 @@ public class MemberService {
         //refresh 토큰 기간이 3일 이하일 경우 새로 갱신
         if (validTime <= THREE_DAYS_MSEC) {
             authRefreshToken = tokenProvider.createAuthToken(key, REFRES_TOKEN_EXPIRY);
-            memberRefreshToken.setRefreshToken(authRefreshToken.getToken());
+            refreshTokenCacheRepository.updateRefreshToken(employeeNo, authRefreshToken);
 
             int cookieMaxAge = (int) REFRES_TOKEN_EXPIRY / 60;
             CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);

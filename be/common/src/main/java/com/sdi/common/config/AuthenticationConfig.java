@@ -1,9 +1,9 @@
 package com.sdi.common.config;
 
-import com.sdi.common.jwt.AuthTokenProvider;
-import com.sdi.common.filter.JwtTokenFilter;
-import com.sdi.common.dto.MemberPrincipal;
 import com.sdi.common.application.MemberService;
+import com.sdi.common.dto.MemberPrincipal;
+import com.sdi.common.filter.JwtTokenFilter;
+import com.sdi.common.jwt.AuthTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class AuthenticationConfig {
 
     private final AuthTokenProvider tokenProvider;
-    // Redis를 사용하여 사용자 정보를 캐싱하기 위한 레포지토리
-    // private final MemberRefreshTokenRepository MemberRefreshTokenRepository;
 
     @Bean
     public BCryptPasswordEncoder encodePassword() {
