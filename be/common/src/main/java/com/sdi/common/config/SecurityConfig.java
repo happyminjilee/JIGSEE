@@ -30,8 +30,8 @@ public class SecurityConfig {
             "/api/manager/**"
     };
 
-    private static final String[] OPEN_TECHNIKER = {
-            "/api/techniker/**"
+    private static final String[] OPEN_ENGINEER = {
+            "/api/engineer/**"
     };
 
     private static final String[] OPEN_PRODUCER = {
@@ -41,8 +41,8 @@ public class SecurityConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        String hierarchy = "ROLE_MANAGER > ROLE_TECHNIKER " +
-                "ROLE_TECHNIKER > ROLE_PRODUCER";
+        String hierarchy = "ROLE_MANAGER > ROLE_ENGINEER " +
+                "ROLE_ENGINEER > ROLE_PRODUCER";
         roleHierarchy.setHierarchy(hierarchy);
         return roleHierarchy;
     }
@@ -55,7 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(OPEN_ALL).permitAll()
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(OPEN_MANAGER).hasAuthority("ROLE_MANAGER")
-                        .requestMatchers(OPEN_TECHNIKER).hasAuthority("ROLE_TECHNIKER")
+                        .requestMatchers(OPEN_ENGINEER).hasAuthority("ROLE_ENGINEER")
                         .requestMatchers(OPEN_PRODUCER).hasAuthority("ROLE_PRODUCER")
                         .anyRequest().authenticated()
                 )

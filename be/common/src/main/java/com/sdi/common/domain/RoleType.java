@@ -9,7 +9,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum RoleType {
     MANAGER("ROLE_MANAGER", "관리자"),
-    TECHNIKER("ROLE_TECHNIKER", "기술자"),
+    ENGINEER("ROLE_ENGINEER", "기술자"),
     PRODUCER("ROLE_PRODUCER", "생산자");
 
     private final String code;
