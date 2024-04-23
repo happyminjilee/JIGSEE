@@ -10,7 +10,6 @@ import java.util.List;
 public class FacilityDetailResponseDto {
     Long id;
     String model;
-    String alias;
     String serialNo;
     List<JigDetail> jigList;
 
@@ -21,7 +20,7 @@ public class FacilityDetailResponseDto {
         String serialNo;
         JigStatus status;
         String expectLife;
-        CheckType checkType;
+        Integer checkType;
         Integer repairCount;
         Integer checkCount;
     }

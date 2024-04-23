@@ -14,7 +14,7 @@ public class JigItemResponseDto {
     String serialNo;
     JigStatus status;
     String expectLife;
-    CheckType checkType;
+    Integer checkType;
     Integer repairCount;
     Integer checkCount;
     List<CheckList> checkList;

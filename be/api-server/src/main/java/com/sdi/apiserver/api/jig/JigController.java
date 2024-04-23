@@ -1,17 +1,33 @@
 package com.sdi.apiserver.api.jig;
 
-import com.sdi.apiserver.api.jig.dto.request.JigCreateRequestDto;
+import com.sdi.apiserver.api.jig.dto.request.JigUpdateRequestDto;
+import com.sdi.apiserver.api.jig.dto.response.JigResponseDto;
+import com.sdi.apiserver.util.CheckList;
 import com.sdi.apiserver.util.Response;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/jig")
 public class JigController {
 
-    @PostMapping()
-    Response<Void> add(){
+    @PutMapping()
+    Response<Void> update(@RequestBody JigUpdateRequestDto dto){
         return Response.success();
+    }
+
+    @GetMapping("?mode={model}")
+    Response<JigResponseDto> searchByModel(@RequestParam(name = "model") String model){
+        JigResponseDto dto = new JigResponseDto(
+                "testModel",
+                1,
+                "testExcpectLife",
+                List.of(
+                        new CheckList("test1", "test1"),
+                        new CheckList("test2", "test2")
+                )
+        );
+        return Response.success(dto);
     }
 }

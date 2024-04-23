@@ -2,14 +2,16 @@ package com.sdi.apiserver.api.jig;
 
 import com.sdi.apiserver.api.jig.dto.request.JigItemCreateRequestDto;
 import com.sdi.apiserver.api.jig.dto.request.JigItemSerialNoRequestDto;
+import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
 import com.sdi.apiserver.util.CheckList;
 import com.sdi.apiserver.api.jig.dto.util.JigStatus;
-import com.sdi.apiserver.util.CheckType;
 import com.sdi.apiserver.util.Response;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto.*;
 
 @RestController
 @RequestMapping("/v1/jig-item")
@@ -23,7 +25,7 @@ public class JigItemController {
                 "testSerialNo",
                 JigStatus.WAREHOUSE,
                 "testExpectLife",
-                CheckType.UBM,
+                3,
                 0,
                 0,
                 List.of(
@@ -39,9 +41,18 @@ public class JigItemController {
     }
 
     @GetMapping("/adjustment")
-    Response<Void> adjust(@RequestParam(name = "facility-no") String facilityNo,
-                          @RequestParam(name = "serial-no") String serialNo) {
-        return Response.success();
+    Response<JigItemIsUsableResponseDto> isUsable(@RequestParam(name = "facility-no") String facilityNo,
+                                                  @RequestParam(name = "serial-no") String serialNo) {
+        JigItemIsUsableResponseDto dto = new JigItemIsUsableResponseDto(
+                true,
+                new JigItemSummary(
+                        "testFacilityModel",
+                        "testJigUseAccumulationTime",
+                        1
+                )
+        );
+
+        return Response.success(dto);
     }
 
     @DeleteMapping()

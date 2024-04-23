@@ -2,8 +2,8 @@ package com.sdi.apiserver.api.request_response;
 
 import com.sdi.apiserver.api.request_response.dto.requset.JigRepairRequestDto;
 import com.sdi.apiserver.api.request_response.dto.requset.JigRequestRequestDto;
-import com.sdi.apiserver.api.request_response.response.RequestJigAllResponseDto;
-import com.sdi.apiserver.api.request_response.response.RequestJigAllResponseDto.JigRequest;
+import com.sdi.apiserver.api.request_response.response.RequestJigListResponseDto;
+import com.sdi.apiserver.api.request_response.response.RequestJigListResponseDto.JigRequest;
 import com.sdi.apiserver.util.Response;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +25,14 @@ public class RequestController {
     }
 
     @GetMapping("/jig")
-    Response<RequestJigAllResponseDto> all(){
-        RequestJigAllResponseDto dto = new RequestJigAllResponseDto(
+    Response<RequestJigListResponseDto> all(){
+        RequestJigListResponseDto dto = new RequestJigListResponseDto(
+                true,
+                1,
+                1,
                 List.of(
-                        new JigRequest("testFrom", "testTo", "testModel", 10, LocalDateTime.now()),
-                        new JigRequest("testFrom2", "testTo2", "testModel2", 20, LocalDateTime.now())
+                        new JigRequest(0L, "testFrom", "testTo", "testModel", 10, LocalDateTime.now()),
+                        new JigRequest(1L, "testFrom2", "testTo2", "testModel2", 20, LocalDateTime.now())
                 )
         );
 

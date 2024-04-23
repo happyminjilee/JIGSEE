@@ -12,7 +12,6 @@ public class FacilityAllResponseDto {
     @Value
     public static class FacilityInfo{
         Long id;
-        String alias;
         String model;
         String facilitySerialNo;
     }

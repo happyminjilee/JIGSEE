@@ -4,5 +4,7 @@ import lombok.Value;
 
 @Value
 public class JigRequestResponseRequestDto {
-    boolean isAccept;
+    Long requestId;
+    Boolean isAccept;
+    String memo;
 }
