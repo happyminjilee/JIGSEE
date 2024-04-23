@@ -1,6 +1,6 @@
 package com.sdi.apiserver.api.request_response;
 
-import com.sdi.apiserver.api.request_response.dto.requset.JigRequestResponseRequestDto;
+import com.sdi.apiserver.api.request_response.dto.requset.RequestJigResponseRequestDto;
 import com.sdi.apiserver.util.Response;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ResponseController {
 
     @PostMapping("/jig")
-    Response<Void> jig(@RequestBody JigRequestResponseRequestDto dto){
+    Response<Void> jig(@RequestBody RequestJigResponseRequestDto dto){
         return Response.success();
     }
 }

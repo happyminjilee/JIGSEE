@@ -5,7 +5,7 @@ import lombok.Value;
 import java.util.List;
 
 @Value
-public class JigRequestRequestDto {
+public class RequestJigRequestDto {
     List<JigRequest> list;
 
     public static class JigRequest{

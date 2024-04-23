@@ -1,7 +1,7 @@
 package com.sdi.apiserver.api.request_response;
 
-import com.sdi.apiserver.api.request_response.dto.requset.JigRepairRequestDto;
-import com.sdi.apiserver.api.request_response.dto.requset.JigRequestRequestDto;
+import com.sdi.apiserver.api.request_response.dto.requset.RepairJigRequestDto;
+import com.sdi.apiserver.api.request_response.dto.requset.RequestJigRequestDto;
 import com.sdi.apiserver.api.request_response.response.RequestJigListResponseDto;
 import com.sdi.apiserver.api.request_response.response.RequestJigListResponseDto.JigRequest;
 import com.sdi.apiserver.util.Response;
@@ -15,17 +15,17 @@ import java.util.List;
 public class RequestController {
 
     @PostMapping("/jig")
-    Response<Void> jig(@RequestBody JigRequestRequestDto dto){
+    Response<Void> jig(@RequestBody RequestJigRequestDto dto) {
         return Response.success();
     }
 
     @PostMapping("/repair")
-    Response<Void> repair(@RequestBody JigRepairRequestDto dto){
+    Response<Void> repair(@RequestBody RepairJigRequestDto dto) {
         return Response.success();
     }
 
     @GetMapping("/jig")
-    Response<RequestJigListResponseDto> all(){
+    Response<RequestJigListResponseDto> all() {
         RequestJigListResponseDto dto = new RequestJigListResponseDto(
                 true,
                 1,

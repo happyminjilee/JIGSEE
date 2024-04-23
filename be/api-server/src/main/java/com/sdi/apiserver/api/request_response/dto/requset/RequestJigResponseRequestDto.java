@@ -5,7 +5,7 @@ import lombok.Value;
 import java.util.List;
 
 @Value
-public class JigRequestResponseRequestDto {
+public class RequestJigResponseRequestDto {
     Long requestId;
     Boolean isAccept;
     String memo;

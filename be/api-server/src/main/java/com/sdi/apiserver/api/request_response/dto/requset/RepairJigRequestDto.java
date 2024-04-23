@@ -5,7 +5,7 @@ import lombok.Value;
 import java.util.List;
 
 @Value
-public class JigRepairRequestDto {
+public class RepairJigRequestDto {
 
     List<String> list;
 }
