@@ -20,4 +20,8 @@ public class JigNosqlEntity {
     @Id
     private String id; // model명이 id
     private List<CheckItem> checkList;
+
+    public void updateCheckList(List<CheckItem> checkList){
+        this.checkList = checkList;
+    }
 }

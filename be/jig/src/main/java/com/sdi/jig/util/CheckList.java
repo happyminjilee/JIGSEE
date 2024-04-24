@@ -9,5 +9,8 @@ public record CheckList(List<CheckItem> list) {
     }
 
     public record CheckItem(String content, String standard){
+        public static CheckItem from(String content, String standard){
+            return new CheckItem(content, standard);
+        }
     }
 }
