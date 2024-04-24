@@ -36,7 +36,7 @@ public class JigService {
         jigNosqlRepository.save(entity);
     }
 
-    private JigRDBEntity getJigRdbEntityByModel(String model) {
+    public JigRDBEntity getJigRdbEntityByModel(String model) {
         return jigRDBRepository.findByModel(model)
                 .orElseThrow(() -> new IllegalArgumentException("모델을 찾을 수 없습니다."));
     }
