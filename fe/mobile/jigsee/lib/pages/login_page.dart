@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../components/custom_form.dart';
-import '../size.dart';
+import 'package:jigsee/components/custom_form.dart';
+import 'package:jigsee/size.dart';
 
 // stless 단축키로 자동 생성..
 class LoginPage extends StatelessWidget {
@@ -10,14 +10,23 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView(
-            children: [
-              SizedBox(height: xlarge_gap,),
-              SizedBox(height: large_gap,),
-              CustomForm(),
-            ],
+        resizeToAvoidBottomInset : false,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(30.0),
+          child: Center(
+            child: Column (
+              children: [
+                SizedBox(height: xlarge_gap,),
+                Image(image: AssetImage('assets/SDI_LOGO.png'), width: 228, height: 28,),
+                SizedBox(height: 40,),
+                Text("지그 관리 시스템", style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),),
+                SizedBox(height: xlarge_gap,),
+                CustomForm(),
+              ],
+            )
           ),
         )
     );

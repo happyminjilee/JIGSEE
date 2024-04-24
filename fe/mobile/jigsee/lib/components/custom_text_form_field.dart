@@ -1,52 +1,80 @@
 import 'package:flutter/material.dart';
-import '../size.dart';
-// import 'package:flutter/size.dart';
+import 'package:jigsee/size.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   final String text;
-  const CustomTextFormField(this.text);
+  final Function(String)? onSaved;
+
+  const CustomTextFormField(this.text, {Key? key, this.onSaved}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  bool _passwordVisible = true;
+
+  final TextEditingController _controller = TextEditingController();
+
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return '비밀번호를 입력해주세요.';
+    }
+    String pattern =
+        r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$';
+    RegExp regExp = new RegExp(pattern);
+    if (!regExp.hasMatch(value)) {
+      return '올바른 비밀번호를 입력해주세요';
+    }
+    return null;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(text),
-        SizedBox(height: small_gap,),
+        Text(widget.text),
+        const SizedBox(height: small_gap),
         TextFormField(
-          // 1. [유효성 체크]
-          // 공백일 경우 메시지 출력..
-          validator: (value) => value!.isEmpty
-              ? "필수항목입니다"
-              : null,
-
-          // 2. [마킹처리]
-          // text가 Password일 경우 마킹 처리 true
-          obscureText: text == "Password" ? true : false,
-
-          // 3. [데코레이션]
-          // 힌트 문자나 여러가지 데코레이션 기능 추가
+          controller: _controller,
+          onSaved: (String? value) {
+            if (widget.onSaved != null && value != null) {
+              widget.onSaved!(value);
+            }
+          },
+          validator: (String? value) {
+            if (widget.text == '비밀번호') {
+              return validatePassword(value);
+            } else {
+              return value!.isEmpty ? "필수항목입니다" : null;
+            }
+          },
+          obscureText: widget.text == '비밀번호' ? _passwordVisible : false,
           decoration: InputDecoration(
-              hintText: "Enter $text.", // 힌트문자
-              enabledBorder: OutlineInputBorder(
-                // 기본 모양
-                borderRadius: BorderRadius.circular(20),
+            hintText: widget.text == '비밀번호' ? "비밀번호 입력" : "사원번호 입력",
+            suffixIcon: widget.text == '비밀번호' ? IconButton(
+              icon: SvgPicture.asset(
+                  _passwordVisible ? 'assets/invisible_icon.svg' : 'assets/visible_icon.svg',
+                  key: ValueKey(_passwordVisible)  // Ensure icon updates correctly
               ),
-              focusedBorder: OutlineInputBorder(
-                // 포커스 되었을 경우 모양
-                borderRadius: BorderRadius.circular(20),
-              ),
-              errorBorder: OutlineInputBorder(
-                // 에러 발생 시 모양
-                  borderRadius: BorderRadius.circular(20)
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                // 에러 발생 후 포커스 되었을 경우 모양
-                  borderRadius: BorderRadius.circular(20)
-              )
+              onPressed: () {
+                setState(() {
+                  _passwordVisible = !_passwordVisible;
+                });
+              },
+            ) : null,
           ),
         )
       ],
     );
   }
 }
+

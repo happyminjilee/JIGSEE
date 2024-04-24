@@ -15,13 +15,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'JIG:SEE',
       theme: ThemeData(
-        /// 전체 TextButton 테마를 지정하면 모든 TextButton에 테마가 적용된다.
+        // 전체 TextButton 테마를 지정하면 모든 TextButton에 테마가 적용된다.
         textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
                 backgroundColor: Colors.blue,
                 // primary: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 minimumSize: Size(400, 60)
             )
