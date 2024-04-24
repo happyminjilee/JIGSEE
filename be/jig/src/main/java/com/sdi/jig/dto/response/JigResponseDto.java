@@ -1,6 +1,7 @@
 package com.sdi.jig.dto.response;
 
-import com.sdi.jig.application.wrap.JigInfo;
+import com.sdi.jig.entity.JigNosqlEntity;
+import com.sdi.jig.entity.JigRDBEntity;
 import com.sdi.jig.util.CheckList;
 
 import java.util.List;
@@ -12,12 +13,12 @@ public record JigResponseDto (
         List<CheckList> checkList
 ){
 
-    public static JigResponseDto from(JigInfo jigInfo){
+    public static JigResponseDto from(JigRDBEntity rdb, JigNosqlEntity nosql){
         return new JigResponseDto(
-                jigInfo.rdb().getModel(),
-                jigInfo.rdb().getCheckType(),
-                jigInfo.rdb().getExpectLife(),
-                jigInfo.nosql().getCheckList()
+                rdb.getModel(),
+                rdb.getCheckType(),
+                rdb.getExpectLife(),
+                nosql.getCheckList()
         );
     }
 }

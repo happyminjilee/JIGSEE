@@ -1,6 +1,6 @@
 package com.sdi.jig.application;
 
-import com.sdi.jig.application.wrap.JigInfo;
+import com.sdi.jig.dto.response.JigResponseDto;
 import com.sdi.jig.entity.JigNosqlEntity;
 import com.sdi.jig.entity.JigRDBEntity;
 import com.sdi.jig.repository.JigNosqlRepository;
@@ -17,12 +17,12 @@ public class JigService {
     private final JigRDBRepository jigRDBRepository;
     private final JigNosqlRepository jigNosqlRepository;
 
-    public JigInfo findByModel(String model) {
+    public JigResponseDto findByModel(String model) {
         JigRDBEntity rdb = jigRDBRepository.findByModel(model)
                 .orElseThrow(() -> new IllegalArgumentException("모델을 찾을 수 없습니다."));
         JigNosqlEntity nosql = jigNosqlRepository.findById(model)
                 .orElseThrow(() -> new IllegalArgumentException("모델을 찾을 수 없습니다."));
 
-        return JigInfo.from(rdb, nosql);
+        return JigResponseDto.from(rdb, nosql);
     }
 }

@@ -18,6 +18,6 @@ public class JigController {
 
     @GetMapping
     Response<JigResponseDto> findByModel(@RequestParam(name = "model") String model) {
-        return Response.success(JigResponseDto.from(jigService.findByModel(model)));
+        return Response.success(jigService.findByModel(model));
     }
 }
