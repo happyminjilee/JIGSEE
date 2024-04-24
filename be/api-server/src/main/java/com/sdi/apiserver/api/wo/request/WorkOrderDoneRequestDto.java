@@ -10,5 +10,4 @@ public class WorkOrderDoneRequestDto {
 
     Long id;
     List<CheckDoneList> checkList;
-    Boolean canUse;
 }

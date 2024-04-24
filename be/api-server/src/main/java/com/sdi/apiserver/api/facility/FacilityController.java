@@ -39,8 +39,8 @@ public class FacilityController {
                 "testFacilityModel",
                 "testFacilitySerialNo",
                 List.of(
-                        new JigDetail(0L, "testJigModel", "testJigSerial", JigStatus.WAREHOUSE, "testJigLifeTime", 1, 3, 2),
-                        new JigDetail(1L, "testJigModel2", "testJigSerial2", JigStatus.WAREHOUSE, "testJigLifeTime2", 3, 0, 0)
+                        new JigDetail(0L, "testJigModel", "testJigSerial", JigStatus.WAREHOUSE, "testJigLifeTime", 1, 2),
+                        new JigDetail(1L, "testJigModel2", "testJigSerial2", JigStatus.WAREHOUSE, "testJigLifeTime2", 3, 0)
                 )
         );
         return Response.success(dto);

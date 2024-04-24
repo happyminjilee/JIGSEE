@@ -2,7 +2,6 @@ package com.sdi.apiserver.api.jig.dto.response;
 
 import com.sdi.apiserver.util.CheckList;
 import com.sdi.apiserver.api.jig.dto.util.JigStatus;
-import com.sdi.apiserver.util.CheckType;
 import lombok.Value;
 
 import java.util.List;
@@ -14,7 +13,6 @@ public class JigItemResponseDto {
     String serialNo;
     JigStatus status;
     String expectLife;
-    Integer checkType;
     Integer repairCount;
     Integer checkCount;
     List<CheckList> checkList;

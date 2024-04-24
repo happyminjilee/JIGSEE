@@ -27,7 +27,6 @@ public class JigItemController {
                 "testExpectLife",
                 3,
                 0,
-                0,
                 List.of(
                         new CheckList("test1", "test1"),
                         new CheckList("test2", "test2")

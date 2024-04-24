@@ -21,7 +21,6 @@ public class JigController {
     Response<JigResponseDto> searchByModel(@RequestParam(name = "model") String model){
         JigResponseDto dto = new JigResponseDto(
                 "testModel",
-                1,
                 "testExcpectLife",
                 List.of(
                         new CheckList("test1", "test1"),

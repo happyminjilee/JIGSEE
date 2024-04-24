@@ -8,7 +8,6 @@ import java.util.List;
 @Value
 public class JigResponseDto {
     String model;
-    Integer checkType;
     String expectLife;
     List<CheckList> checkList;
 }

@@ -1,17 +1,14 @@
 package com.sdi.apiserver.api.wo.response;
 
-import lombok.Value;
+import com.sdi.apiserver.api.wo.response.util.WorkOrderSummary;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-@Value
-public class WorkOrderResponseDto {
-    Long id;
-    String model;
-    String serialNo;
-    String creator;
-    String terminator;
-    Boolean isTerminate;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+public record WorkOrderResponseDto(
+        List<WorkOrderSummary> list
+) {
+
+    public static WorkOrderResponseDto from(List<WorkOrderSummary> list){
+        return new WorkOrderResponseDto(list);
+    }
 }
