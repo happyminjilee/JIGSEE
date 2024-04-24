@@ -20,4 +20,10 @@ public class SseController {
         return sseService.subscribe(employeeNo, ""); // EventSource에 헤더를 달아서 전송받지 못한 이벤트를 트래킹 가능한데 이건 프론트에서 뭔가 뚝딱해야됨
 //        return sseService.subscribe(employeeNo, lastEventId);
     }
+
+    @GetMapping("/disconnect/{employeeNo}")
+    public void disconnect(@PathVariable("employeeNo") String employeeNo) {
+        sseService.disconnect(employeeNo);
+    }
+    
 }

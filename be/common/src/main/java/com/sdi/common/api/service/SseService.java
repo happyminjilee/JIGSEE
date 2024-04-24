@@ -36,6 +36,10 @@ public class SseService {
         return emitter;
     }
 
+    public void disconnect(String employeeNo) {
+        emitterRepository.deleteAllEmitterStartWithId(employeeNo);
+    }
+
     private void sendLostData(String lastEventId, String employeeNo, String emitterId, SseEmitter emitter) {
         Map<String, Object> eventCaches = emitterRepository.findAllEventCacheStartsWithMemberId(employeeNo);
         eventCaches.entrySet().stream()
@@ -64,4 +68,5 @@ public class SseService {
     private String makeTimeIncludeId(String employeeNo) {
         return employeeNo + "_" + System.currentTimeMillis();
     }
+
 }

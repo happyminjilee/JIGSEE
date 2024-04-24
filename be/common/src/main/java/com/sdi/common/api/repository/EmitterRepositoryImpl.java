@@ -61,5 +61,6 @@ public class EmitterRepositoryImpl implements EmitterRepository {
     public Map<String, Object> findAllEventCacheStartsWithMemberId(String memberId) {
         return eventCaches.entrySet().stream()
                 .filter(entry -> entry.getKey().startsWith(memberId))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));    }
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 }
