@@ -17,9 +17,6 @@ public class JigRDBEntity {
     @Column(length = 50)
     private String model;
 
-    @Column(name = "check_type")
-    private Integer checkType;
-
     @Column(name = "expect_life", length = 50)
     private String expectLife;
 }
