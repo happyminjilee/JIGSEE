@@ -1,14 +1,5 @@
+spring:
+  application:
+    name: common
 server:
   port: 8080
-
-spring:
-  #DB
-  datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/db_jigsi?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: jigsi
-    password: jigsi
-
-  data:
-    redis:
-      url: redis://localhost:6379

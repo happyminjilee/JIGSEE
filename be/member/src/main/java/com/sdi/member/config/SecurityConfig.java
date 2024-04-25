@@ -1,7 +1,8 @@
-package com.sdi.common.config;
+package com.sdi.member.config;
 
-import com.sdi.common.filter.JwtTokenFilter;
-import com.sdi.common.jwt.AuthTokenProvider;
+import com.sdi.member.filter.ExceptionHandlerFilter;
+import com.sdi.member.filter.JwtTokenFilter;
+import com.sdi.member.jwt.AuthTokenProvider;
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,19 +24,20 @@ public class SecurityConfig {
     private final AuthTokenProvider tokenProvider;
 
     private static final String[] OPEN_ALL = {
-            "/api/*/login"
+            "/api/v1/login",
+            "/api/v1/refresh"
     };
 
     private static final String[] OPEN_MANAGER = {
-            "/api/manager/**"
+            "/api/v1/manager/**"
     };
 
     private static final String[] OPEN_ENGINEER = {
-            "/api/engineer/**"
+            "/api/v1/engineer/**"
     };
 
     private static final String[] OPEN_PRODUCER = {
-            "/api/producer/**"
+            "/api/v1/producer/**"
     };
 
     @Bean
@@ -61,6 +63,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new ExceptionHandlerFilter(), JwtTokenFilter.class)
                 .build();
     }
 }

@@ -1,6 +1,6 @@
 services:
-  jigsi-redis:
-    container_name: jigsi-redis
+  jigsee-redis:
+    container_name: jigsee-redis
     build:
       dockerfile: Dockerfile
       context: ./redis
