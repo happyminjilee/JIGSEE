@@ -3,6 +3,8 @@ package com.sdi.jig.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "jigs")
 @Getter
@@ -19,4 +21,7 @@ public class JigRDBEntity {
 
     @Column(name = "expect_life", length = 50)
     private String expectLife;
+
+    @OneToMany(mappedBy = "jig")
+    private List<FacilityJigMappingRDBEntity> mapping;
 }

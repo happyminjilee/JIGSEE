@@ -2,12 +2,10 @@ package com.sdi.jig.api;
 
 import com.sdi.jig.application.JigItemService;
 import com.sdi.jig.dto.request.JigItemAddRequestDto;
+import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.util.Response;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/jig-item")
@@ -22,4 +20,12 @@ public class JigItemController {
         jigItemService.add(dto.list());
         return Response.success();
     }
+
+    @GetMapping("/usable")
+    Response<JigItemIsUsableResponseDto> isUsable(@RequestParam(name = "facility-model") String facilityModel,
+                                                  @RequestParam(name = "jig-serial-no") String jigSerialNo){
+        JigItemIsUsableResponseDto dto = jigItemService.isUsableOrThrow(facilityModel, jigSerialNo);
+        return Response.success(dto);
+    }
+
 }

@@ -6,25 +6,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "facility_items")
+@Table(name = "facility_jig_mappings")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class FacilityItemRDBEntity {
+public class FacilityJigMappingRDBEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "serial_no", length = 50)
-    private String serialNo;
+    @ManyToOne
+    private JigRDBEntity jig;
 
     @ManyToOne
     private FacilityRDBEntity facility;
-
-    @OneToMany(mappedBy = "facilityItem", fetch = FetchType.LAZY)
-    private List<JigItemRDBEntity> jigItems;
 }

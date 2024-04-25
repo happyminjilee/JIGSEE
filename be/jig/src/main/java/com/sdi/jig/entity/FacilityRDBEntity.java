@@ -1,10 +1,13 @@
 package com.sdi.jig.entity;
 
+import com.sdi.jig.entity.FacilityJigMappingRDBEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Table(name = "facilities")
@@ -20,6 +23,6 @@ public class FacilityRDBEntity {
     @Column(length = 50)
     private String model;
 
-    @Column(name = "serial_no", length = 50)
-    private String serialNo;
+    @OneToMany(mappedBy = "facility")
+    private List<FacilityJigMappingRDBEntity> mapping;
 }
