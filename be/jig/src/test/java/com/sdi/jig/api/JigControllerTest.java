@@ -1,7 +1,9 @@
 package com.sdi.jig.api;
 
 import com.sdi.jig.entity.JigNosqlEntity;
+import com.sdi.jig.repository.JigItemRDBRepository;
 import com.sdi.jig.repository.JigNosqlRepository;
+import org.bson.json.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +32,9 @@ class JigControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private JigItemRDBRepository jigItemRDBRepository;
 
     @Autowired
     private JigNosqlRepository jigNosqlRepository;
@@ -61,7 +67,6 @@ class JigControllerTest {
         int num1 = random.nextInt(100);
         int num2 = random.nextInt(100);
 
-        //
         JSONObject item1 = new JSONObject();
         item1.put("content", num1);
         item1.put("standard", num1);
@@ -91,5 +96,26 @@ class JigControllerTest {
         assertEquals(item1.getString("standard"), entity.getCheckList().get(0).standard());
         assertEquals(item2.getString("content"), entity.getCheckList().get(1).content());
         assertEquals(item2.getString("standard"), entity.getCheckList().get(1).standard());
+    }
+
+    @Test
+    @DisplayName("JIG ITEM 폐기")
+    public void delete() throws Exception {
+        // given
+        String serialNo = "14d51713-3eb5-4d38-af87-31ae7d4c19f3";
+        JSONObject body = new JSONObject();
+        body.put("serialNo", serialNo);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete("/v1/jig-item")
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk());
+        assertTrue(jigItemRDBRepository.findBySerialNo(serialNo).get().getIsDelete());
     }
 }

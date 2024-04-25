@@ -2,6 +2,7 @@ package com.sdi.jig.api;
 
 import com.sdi.jig.application.JigItemService;
 import com.sdi.jig.dto.request.JigItemAddRequestDto;
+import com.sdi.jig.dto.request.JigItemSerialNoRequestDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemResponseDto;
 import com.sdi.jig.util.Response;
@@ -32,5 +33,11 @@ public class JigItemController {
                                                   @RequestParam(name = "jig-serial-no") String jigSerialNo){
         JigItemIsUsableResponseDto dto = jigItemService.isUsable(facilityModel, jigSerialNo);
         return Response.success(dto);
+    }
+
+    @DeleteMapping
+    Response<Void> delete(@RequestBody JigItemSerialNoRequestDto dto){
+        jigItemService.deleteBySerialNo(dto.serialNo());
+        return Response.success();
     }
 }

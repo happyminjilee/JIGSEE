@@ -31,6 +31,9 @@ public class JigItemRDBEntity {
     @Column(name = "use_accumulate_time")
     private Long useAccumulateTime;
 
+    @Column(name = "is_delete")
+    private Boolean isDelete;
+
     @ManyToOne
     private JigRDBEntity jig;
 
@@ -44,7 +47,11 @@ public class JigItemRDBEntity {
     private List<JigItemRepairHistoryRDBEntity> repairHistory;
 
     public static JigItemRDBEntity from(String serialNo, JigRDBEntity jigRDBEntity) {
-        return new JigItemRDBEntity(null, serialNo, JigStatus.WAREHOUSE, 0L, jigRDBEntity,
+        return new JigItemRDBEntity(null, serialNo, JigStatus.WAREHOUSE, 0L, false, jigRDBEntity,
                 null, null, null);
+    }
+
+    public void delete(){
+        this.isDelete = true;
     }
 }

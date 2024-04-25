@@ -76,6 +76,12 @@ public class JigItemService {
         );
     }
 
+    @Transactional
+    public void deleteBySerialNo(String serialNo) {
+        JigItemRDBEntity jigItem = getJigItemBySerialNo(serialNo);
+        jigItem.delete();
+    }
+
     private boolean isUsable(JigItemRDBEntity jigItem, FacilityRDBEntity facilityByModel, Long jigId) {
         // 1. 지그 사용대기 상태 판단
         if (isReady(jigItem.getStatus())) {
