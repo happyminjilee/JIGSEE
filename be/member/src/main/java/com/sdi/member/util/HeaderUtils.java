@@ -1,4 +1,4 @@
-package com.sdi.common.util;
+package com.sdi.member.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;

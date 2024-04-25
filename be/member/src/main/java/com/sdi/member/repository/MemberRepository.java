@@ -1,6 +1,6 @@
-package com.sdi.common.repository;
+package com.sdi.member.repository;
 
-import com.sdi.common.domain.MemberEntity;
+import com.sdi.member.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

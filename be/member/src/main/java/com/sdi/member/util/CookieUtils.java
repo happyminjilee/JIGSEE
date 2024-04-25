@@ -1,4 +1,4 @@
-package com.sdi.common.util;
+package com.sdi.member.util;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

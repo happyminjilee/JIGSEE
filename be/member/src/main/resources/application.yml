@@ -1,0 +1,29 @@
+server:
+  port: 8082
+
+spring:
+  profiles:
+    active: local #default
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  #DB
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_jigsee?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: jigsee
+    password: jigsee
+
+  data:
+    redis:
+      url: redis://localhost:6379

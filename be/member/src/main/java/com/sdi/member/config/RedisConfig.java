@@ -1,6 +1,6 @@
-package com.sdi.common.config;
+package com.sdi.member.config;
 
-import com.sdi.common.jwt.AuthToken;
+import com.sdi.member.jwt.AuthToken;
 import io.lettuce.core.RedisURI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
