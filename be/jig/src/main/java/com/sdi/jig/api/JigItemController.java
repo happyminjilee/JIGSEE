@@ -2,6 +2,7 @@ package com.sdi.jig.api;
 
 import com.sdi.jig.application.JigItemService;
 import com.sdi.jig.dto.request.JigItemAddRequestDto;
+import com.sdi.jig.dto.request.JigItemExchangeRequestDto;
 import com.sdi.jig.dto.request.JigItemSerialNoRequestDto;
 import com.sdi.jig.dto.request.JigItemUpdateStatusRequestDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
@@ -48,4 +49,9 @@ class JigItemController {
         return Response.success();
     }
 
+    @PutMapping("/exchange")
+    Response<Void> exchange(@RequestBody JigItemExchangeRequestDto dto) {
+        jigItemService.exchangeBySerialNo(dto.facilitySerialNo(), dto.beforeSerialNo(), dto.afterSerialNo());
+        return Response.success();
+    }
 }

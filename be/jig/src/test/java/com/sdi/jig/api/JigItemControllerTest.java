@@ -1,6 +1,7 @@
 package com.sdi.jig.api;
 
 import com.sdi.jig.entity.JigItemRDBEntity;
+import com.sdi.jig.repository.JigItemIOHistoryRepository;
 import com.sdi.jig.repository.JigItemRDBRepository;
 import com.sdi.jig.util.JigStatus;
 import org.json.JSONArray;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,6 +37,9 @@ class JigItemControllerTest {
 
     @Autowired
     private JigItemRDBRepository jigItemRDBRepository;
+
+    @Autowired
+    private JigItemIOHistoryRepository jigItemIOHistoryRepository;
 
     @Test
     @DisplayName("지그 serial-no로 검색")
@@ -152,5 +157,39 @@ class JigItemControllerTest {
         // then
         perform.andExpect(status().isOk());
         assertEquals(jigStatus, jigItemRDBRepository.findBySerialNo(serialNo).get().getStatus());
+    }
+
+    @Test
+    @DisplayName("지그 교체")
+    public void exchange() throws Exception {
+        // given
+        String facilitySerialNo = "s1";
+        String beforeSerialNo = "db3a1720-9a95-4563-92ef-8fb3b5576b9a";
+        String afterSerialNo = "872cd4a1-5dd7-47a3-81ae-13ae86d336f2";
+        Long runBeforeAccumulateTime = jigItemRDBRepository.findBySerialNo(beforeSerialNo).get().getUseAccumulateTime();
+        long runBeforeIOHistorySize = jigItemIOHistoryRepository.count();
+
+        JSONObject body = new JSONObject();
+        body.put("facilitySerialNo", facilitySerialNo);
+        body.put("beforeSerialNo", beforeSerialNo);
+        body.put("afterSerialNo", afterSerialNo);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/v1/jig-item/exchange")
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        JigItemRDBEntity before = jigItemRDBRepository.findBySerialNo(beforeSerialNo).get();
+        JigItemRDBEntity after = jigItemRDBRepository.findBySerialNo(afterSerialNo).get();
+
+        perform.andExpect(status().isOk());
+        assertEquals(JigStatus.OUT, before.getStatus());
+        assertEquals(JigStatus.IN, after.getStatus());
+        assertTrue(runBeforeAccumulateTime < before.getUseAccumulateTime());
+        assertEquals(jigItemIOHistoryRepository.count(), (runBeforeIOHistorySize + 2));
     }
 }

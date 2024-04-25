@@ -1,12 +1,14 @@
 package com.sdi.jig.entity;
 
 import com.sdi.jig.util.JigStatus;
+import com.sdi.jig.util.TimeCalculator;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -50,11 +52,15 @@ public class JigItemRDBEntity {
                 null, null, null);
     }
 
-    public void delete(){
+    public void delete() {
         this.isDelete = true;
     }
 
-    public void updateState(JigStatus status){
+    public void updateState(JigStatus status) {
         this.status = status;
+    }
+
+    public void addAccumulateTime(JigItemIOHistoryRDBEntity recentIn) {
+        this.useAccumulateTime += TimeCalculator.timeDiffToMills(recentIn.getInOutTime(), LocalDateTime.now());
     }
 }
