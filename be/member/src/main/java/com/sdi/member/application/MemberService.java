@@ -15,7 +15,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,8 @@ public class MemberService {
     private final AuthTokenProvider tokenProvider;
 
     // 2시간
-    private final long TOKEN_EXPIRY = 7200000;
+//    private final long TOKEN_EXPIRY = 7200000;
+    private final long TOKEN_EXPIRY = 10000;
     // 7일
     private final long REFRES_TOKEN_EXPIRY = 604800000;
     // 3일
@@ -79,15 +79,14 @@ public class MemberService {
 
         // 엑세스 토큰 생성
         AuthToken accessToken = tokenProvider.createAuthToken(employeeNo, memberDto.role().getCode(), TOKEN_EXPIRY);
-        // 리픠레시 토큰 생성
+        // 리프레시 토큰 생성
         AuthToken refreshToken = tokenProvider.createAuthToken(employeeNo, REFRES_TOKEN_EXPIRY);
-
-        int cookieMaxAge = (int) REFRES_TOKEN_EXPIRY / 60;
-        CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);
-        CookieUtils.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
         // Redis에 refreshToken 올리기
         refreshTokenCacheRepository.setRefreshToken(employeeNo, refreshToken);
+
+        // 응답 헤더에 리프레시 토큰 추가
+        response.setHeader(REFRESH_TOKEN, refreshToken.getToken());
 
         return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), accessToken.getToken());
     }
@@ -139,7 +138,7 @@ public class MemberService {
             throw new CommonException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
-        // 2-2. 토큰이 유효하지 않다면 리프레시 토큰이 있는지 확인하자, 만료되었을 경우 만료 토큰을 가져옴.
+        // 2-2. 토큰이 있는지 확인하자, 만료되었을 경우 만료 토큰을 가져옴
         Claims claims = accessToken.getExpiredClaims();
 
         // 토큰이 유효하다면, 지금 토큰 그대로 반환
@@ -154,9 +153,7 @@ public class MemberService {
         RoleType roleType = RoleType.of(claims.get("role", String.class));
 
         //refresh token
-        String refreshToken = CookieUtils.getCookie(request, REFRESH_TOKEN)
-                .map(Cookie::getValue)
-                .orElse(null);
+        String refreshToken = request.getHeader(REFRESH_TOKEN);
         AuthToken authRefreshToken = tokenProvider.convertAuthRefreshToken(refreshToken);
 
         // 유효하지 않다면 익셉션
@@ -187,11 +184,11 @@ public class MemberService {
         //refresh 토큰 기간이 3일 이하일 경우 새로 갱신
         if (validTime <= THREE_DAYS_MSEC) {
             authRefreshToken = tokenProvider.createAuthToken(employeeNo, REFRES_TOKEN_EXPIRY);
+
+            // 레디스 토큰 업데이트
             refreshTokenCacheRepository.updateRefreshToken(employeeNo, authRefreshToken);
 
-            int cookieMaxAge = (int) REFRES_TOKEN_EXPIRY / 60;
-            CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);
-            CookieUtils.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
+            response.setHeader(REFRESH_TOKEN, authRefreshToken.getToken());
         }
 
         return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), newAccessToken.getToken());
