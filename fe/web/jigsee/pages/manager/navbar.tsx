@@ -22,7 +22,7 @@ export default function ManagerNavbar() {
   };
   return (
     <>
-      <Box style={{ paddingTop: "10px" }}>
+      <Box style={{ paddingTop: "5px" }}>
         <List sx={{ display: "flex", paddingTop: "5px" }}>
           <ListItem>
             <img
