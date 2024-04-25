@@ -9,21 +9,21 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         resizeToAvoidBottomInset : false,
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(30.0),
+          padding: EdgeInsets.all(30.0),
           child: Center(
             child: Column (
               children: [
-                SizedBox(height: xlarge_gap,),
+                SizedBox(height: xlargeGap,),
                 Image(image: AssetImage('assets/SDI_LOGO.png'), width: 228, height: 28,),
                 SizedBox(height: 40,),
                 Text("지그 관리 시스템", style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),),
-                SizedBox(height: xlarge_gap,),
+                SizedBox(height: xlargeGap,),
                 CustomForm(),
               ],
             )
