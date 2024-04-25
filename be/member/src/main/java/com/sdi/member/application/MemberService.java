@@ -8,7 +8,6 @@ import com.sdi.member.jwt.AuthTokenProvider;
 import com.sdi.member.repository.MemberRepository;
 import com.sdi.member.repository.RefreshTokenCacheRepository;
 import com.sdi.member.util.CommonException;
-import com.sdi.member.util.CookieUtils;
 import com.sdi.member.util.ErrorCode;
 import com.sdi.member.util.HeaderUtils;
 import io.jsonwebtoken.Claims;
@@ -39,9 +38,10 @@ public class MemberService {
     private final long TOKEN_EXPIRY = 7200000;
     // 7일
     private final long REFRES_TOKEN_EXPIRY = 604800000;
-    private static final String REFRESH_TOKEN = "refresh_token";
-    private static final String ACCESS_TOKEN = "refresh_token";
 
+    /**
+     * 가입 되어 있다면 Optional<MemberDto> 반환, 없다면 null 반환.
+     */
     public Optional<MemberDto> loadMemberByEmployeeNo(String employeeNo) {
         return Optional.ofNullable(memberRepository.findByEmployeeNo(employeeNo)
                         .map(MemberDto::fromEntity)
@@ -66,7 +66,7 @@ public class MemberService {
      * 4. 레디스에 토큰 등록
      * 5. JWT 토큰 리턴
      */
-    public MemberLoginResponseDto login(HttpServletRequest request, HttpServletResponse response, String employeeNo, String password) {
+    public MemberLoginResponseDto login(HttpServletResponse response, String employeeNo, String password) {
         // 회원가입 여부 체크
         MemberDto memberDto = getMemberOrException(employeeNo);
 
@@ -84,18 +84,15 @@ public class MemberService {
         refreshTokenCacheRepository.setRefreshToken(employeeNo, refreshToken);
 
         // 응답 헤더에 엑세스 토큰과 리프레시 토큰 추가
-        response.setHeader(REFRESH_TOKEN, refreshToken.getToken());
-        response.setHeader(ACCESS_TOKEN, accessToken.getToken());
+        HeaderUtils.addAccessToken(response, accessToken.getToken());
+        HeaderUtils.addRefreshToken(response, refreshToken.getToken());
 
         return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
     }
 
-    public void logout(HttpServletRequest request, HttpServletResponse response, String employeeNo) {
+    public void logout(String employeeNo) {
         // 레디스에서 리프레시 토큰 삭제
          refreshTokenCacheRepository.deleteRefreshToken(employeeNo);
-
-        // 헤더 토큰 삭제
-        CookieUtils.deleteCookie(request, response, REFRESH_TOKEN);
     }
 
     /**
@@ -125,7 +122,7 @@ public class MemberService {
             MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
                     () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
             );
-            response.setHeader(ACCESS_TOKEN, accessToken.getToken());
+            HeaderUtils.addAccessToken(response, accessToken.getToken());
             return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
         }
 
@@ -147,14 +144,14 @@ public class MemberService {
             MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
                     () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
             );
-            response.setHeader(ACCESS_TOKEN, accessToken.getToken());
+            HeaderUtils.addAccessToken(response, accessToken.getToken());
             return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
         }
 
         RoleType roleType = RoleType.of(claims.get("role", String.class));
 
         //refresh token
-        String refreshToken = request.getHeader(REFRESH_TOKEN);
+        String refreshToken = HeaderUtils.getRefreshToken(request);
         AuthToken authRefreshToken = tokenProvider.convertAuthRefreshToken(refreshToken);
 
         // 유효하지 않다면 익셉션
@@ -188,8 +185,8 @@ public class MemberService {
         // 레디스 토큰 업데이트
         refreshTokenCacheRepository.updateRefreshToken(employeeNo, authRefreshToken);
 
-        response.setHeader(ACCESS_TOKEN, newAccessToken.getToken());
-        response.setHeader(REFRESH_TOKEN, authRefreshToken.getToken());
+        HeaderUtils.addAccessToken(response, newAccessToken.getToken());
+        HeaderUtils.addRefreshToken(response, authRefreshToken.getToken());
         return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
     }
 }

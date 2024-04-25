@@ -11,9 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
-public class MemberController {
+class MemberController {
     private final MemberService memberService;
 
     /**
@@ -22,8 +22,8 @@ public class MemberController {
      * @return MemberLoginResponse
      */
     @PostMapping("/login")
-    public Response<MemberLoginResponseDto> login(HttpServletRequest request, HttpServletResponse response, @RequestBody MemberLoginRequestDto memberLoginRequestDto) {
-        return Response.success(memberService.login(request, response, memberLoginRequestDto.employeeNo(), memberLoginRequestDto.password()));
+    Response<MemberLoginResponseDto> login(HttpServletResponse response, @RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+        return Response.success(memberService.login(response, memberLoginRequestDto.employeeNo(), memberLoginRequestDto.password()));
     }
 
     /**
@@ -31,8 +31,8 @@ public class MemberController {
      * 리프레시 토큰 정보 삭제.
      */
     @PostMapping("/member/logout")
-    public Response<Void> logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
-        memberService.logout(request, response, authentication.getName());
+    Response<Void> logout(Authentication authentication) {
+        memberService.logout(authentication.getName());
         return Response.success();
     }
 
@@ -43,16 +43,16 @@ public class MemberController {
      * 리프레시 토큰 기간이 3일 이하라면, 리프레시 토큰도 생성한다.
      */
     @GetMapping("/refresh")
-    public Response<MemberLoginResponseDto> tokenRefresh(HttpServletRequest request, HttpServletResponse response) {
+    Response<MemberLoginResponseDto> tokenRefresh(HttpServletRequest request, HttpServletResponse response) {
         return Response.success(memberService.tokenRefresh(request, response));
     }
 
     @GetMapping("/manager")
-    public Response<Void> managerCheck() { return Response.success(); }
+    Response<Void> managerCheck() { return Response.success(); }
 
     @GetMapping("/engineer")
-    public Response<Void> engineerCheck() { return Response.success(); }
+    Response<Void> engineerCheck() { return Response.success(); }
 
     @GetMapping("/producer")
-    public Response<Void> producerCheck() { return Response.success(); }
+    Response<Void> producerCheck() { return Response.success(); }
 }

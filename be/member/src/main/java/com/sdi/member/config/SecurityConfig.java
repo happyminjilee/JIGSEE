@@ -24,20 +24,20 @@ public class SecurityConfig {
     private final AuthTokenProvider tokenProvider;
 
     private static final String[] OPEN_ALL = {
-            "/api/v1/login",
-            "/api/v1/refresh"
+            "/v1/login",
+            "/v1/refresh"
     };
 
     private static final String[] OPEN_MANAGER = {
-            "/api/v1/manager/**"
+            "/v1/manager/**"
     };
 
     private static final String[] OPEN_ENGINEER = {
-            "/api/v1/engineer/**"
+            "/v1/engineer/**"
     };
 
     private static final String[] OPEN_PRODUCER = {
-            "/api/v1/producer/**"
+            "/v1/producer/**"
     };
 
     @Bean
