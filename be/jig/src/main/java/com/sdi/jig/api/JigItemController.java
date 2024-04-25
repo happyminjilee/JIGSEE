@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/jig-item")
 @RequiredArgsConstructor
-public class JigItemController {
+class JigItemController {
 
     private final JigItemService jigItemService;
 

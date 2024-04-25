@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/jig")
 @RequiredArgsConstructor
-public class JigController {
+class JigController {
 
     private final JigService jigService;
 
