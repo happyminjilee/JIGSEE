@@ -1,5 +1,5 @@
 import {Input, Button, Checkbox, Pagination, Select, SelectItem, Selection, Card} from "@nextui-org/react";
-import React from "react";
+import {useState} from "react";
 import styled from "@/styles/Total/Total.module.css";
 
 interface Option {
@@ -21,7 +21,7 @@ interface Props {
 export default function RepairTotal() {
     // 수리요청온 지그의 WO 에 따른 상태 데이터
     const lst: Option[] = [{label: 'Publish', value: '발행'}, {label: 'Onprogress',value:'진행 중'}, {label: 'complete', value: '완료'}];
-    const [values, setValues] = React.useState<Selection>(new Set(['publish', 'onprogress']))
+    const [values, setValues] = useState<Selection>(new Set(['publish', 'onprogress']))
 
     // 임시 JIG 데이터
     const jigData: JigData[] = [
