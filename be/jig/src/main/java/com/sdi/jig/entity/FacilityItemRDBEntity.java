@@ -27,4 +27,11 @@ public class FacilityItemRDBEntity {
 
     @OneToMany(mappedBy = "facilityItem", fetch = FetchType.LAZY)
     private List<JigItemRDBEntity> jigItems;
+
+    public void exchangeJigItem(JigItemRDBEntity beforeJigItem, JigItemRDBEntity afterJigItem) {
+        if (!this.jigItems.remove(beforeJigItem)) {
+            throw new IllegalArgumentException(String.format("\'%s\' 시설은 \'%s\' 지그를 가지고 있지 않습니다.", serialNo, beforeJigItem.getSerialNo()));
+        }
+        this.jigItems.add(afterJigItem);
+    }
 }

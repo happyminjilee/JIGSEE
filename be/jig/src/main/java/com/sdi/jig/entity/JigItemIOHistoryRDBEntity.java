@@ -29,4 +29,8 @@ public class JigItemIOHistoryRDBEntity {
 
     @ManyToOne
     private JigItemRDBEntity jigItem;
+
+    public static JigItemIOHistoryRDBEntity of(IOStatus status, JigItemRDBEntity jigItem) {
+        return new JigItemIOHistoryRDBEntity(null, LocalDateTime.now(), status, jigItem);
+    }
 }

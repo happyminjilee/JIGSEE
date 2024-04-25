@@ -23,9 +23,9 @@ import static com.sdi.jig.dto.request.JigItemAddRequestDto.JigAddRequest;
 public class JigItemService {
 
     private final JigService jigService;
-    private final TimeCalculator timeCalculator;
     private final JigItemRDBRepository jigItemRDBRepository;
     private final FacilityRDBRepository facilityRDBRepository;
+    private final FacilityItemRDBRepository facilityItemRDBRepository;
     private final FacilityJigMappingRDBRepository facilityJigMappingRDBRepository;
     private final JigItemIOHistoryRepository jigItemIOHistoryRepository;
     private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
@@ -88,6 +88,31 @@ public class JigItemService {
         jigItem.updateState(status);
     }
 
+    @Transactional
+    public void exchangeBySerialNo(String facilitySerialNo, String beforeSerialNo, String afterSerialNo) {
+        FacilityItemRDBEntity facilityItem = getFacilityItemBySerialNo(facilitySerialNo);
+        JigItemRDBEntity beforeJigItem = getJigItemBySerialNo(beforeSerialNo);
+        JigItemRDBEntity afterJigItem = getJigItemBySerialNo(afterSerialNo);
+
+        updateBecauseExchange(facilityItem, beforeJigItem, afterJigItem);
+    }
+
+    private void updateBecauseExchange(FacilityItemRDBEntity facilityItem, JigItemRDBEntity beforeJigItem, JigItemRDBEntity afterJigItem) {
+        // 지그 교체
+        facilityItem.exchangeJigItem(beforeJigItem, afterJigItem);
+
+        // 지그 상태 변경
+        beforeJigItem.updateState(JigStatus.OUT);
+        afterJigItem.updateState(JigStatus.IN);
+
+        // 누적 시간 갱신
+        beforeJigItem.addAccumulateTime(getRecentIn(beforeJigItem.getId()));
+
+        // io 이력 추가
+        jigItemIOHistoryRepository.save(JigItemIOHistoryRDBEntity.of(IOStatus.OUT, beforeJigItem));
+        jigItemIOHistoryRepository.save(JigItemIOHistoryRDBEntity.of(IOStatus.IN, afterJigItem));
+    }
+
     private boolean isUsable(JigItemRDBEntity jigItem, FacilityRDBEntity facilityByModel, Long jigId) {
         // 1. 지그 사용대기 상태 판단
         if (isReady(jigItem.getStatus())) {
@@ -127,6 +152,16 @@ public class JigItemService {
                 .orElseThrow(() -> new IllegalArgumentException("serial 번호로 JIG ITEM을 찾을 수 없습니다."));
     }
 
+    private FacilityItemRDBEntity getFacilityItemBySerialNo(String facilitySerialNo) {
+        return facilityItemRDBRepository.findBySerialNo(facilitySerialNo)
+                .orElseThrow(() -> new IllegalArgumentException("serial 번호로 FACILITY ITEM을 찾을 수 없습니다."));
+    }
+
+    private JigItemIOHistoryRDBEntity getRecentIn(Long jigItemId) {
+        return jigItemIOHistoryRepository.findFirstByJigItemIdAndStatusOrderByInOutTime(jigItemId, IOStatus.IN)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("\'%d\'의 지그 투입 이력이 없습니다.", jigItemId)));
+    }
+
     private List<JigItemRepairHistoryRDBEntity> getJigItemRepairHistoriesByJigItemId(Long jigItemId) {
         return jigItemRepairHistoryRepository.findByJigItemId(jigItemId);
     }
@@ -136,11 +171,10 @@ public class JigItemService {
     }
 
     private String getUseAccumulationTime(Long jigItemUseAccumulateTime) {
-        return timeCalculator.millsToString(jigItemUseAccumulateTime);
+        return TimeCalculator.millsToString(jigItemUseAccumulateTime);
     }
 
     private Integer getRepairCount(Long jigItemId) {
         return getJigItemRepairHistoriesByJigItemId(jigItemId).size();
     }
-
 }
