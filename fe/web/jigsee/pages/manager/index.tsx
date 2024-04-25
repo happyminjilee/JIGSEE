@@ -1,3 +1,10 @@
+import Navbar from "./navbar";
+
 export default function Manager() {
-  return <>manager page</>;
+  return (
+    <>
+      <Navbar />
+      manager page
+    </>
+  );
 }
