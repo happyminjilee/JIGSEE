@@ -1,17 +1,17 @@
-package com.sdi.common.dto;
+package com.sdi.member.dto;
 
-import com.sdi.common.domain.MemberEntity;
-import com.sdi.common.domain.RoleType;
+import com.sdi.member.entity.MemberEntity;
+import com.sdi.member.entity.RoleType;
 
-public record Member(
+public record MemberDto(
         Long id,
         String name,
         String employeeNo,
         String password,
         RoleType role
 ) {
-    public static Member fromEntity(MemberEntity entity) {
-        return new Member(
+    public static MemberDto fromEntity(MemberEntity entity) {
+        return new MemberDto(
                 entity.getId(),
                 entity.getName(),
                 entity.getEmployeeNo(),

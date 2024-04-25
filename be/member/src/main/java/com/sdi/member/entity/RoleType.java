@@ -1,4 +1,4 @@
-package com.sdi.common.domain;
+package com.sdi.member.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

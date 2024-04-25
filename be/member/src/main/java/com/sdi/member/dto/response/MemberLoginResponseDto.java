@@ -1,8 +1,8 @@
-package com.sdi.common.dto.response;
+package com.sdi.member.dto.response;
 
-import com.sdi.common.domain.RoleType;
+import com.sdi.member.entity.RoleType;
 
-public record MemberLoginResponse(
+public record MemberLoginResponseDto(
         Long id,
         String name,
         String employeeNo,

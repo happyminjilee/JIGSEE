@@ -1,9 +1,9 @@
-package com.sdi.common.config;
+package com.sdi.member.config;
 
-import com.sdi.common.application.MemberService;
-import com.sdi.common.dto.MemberPrincipal;
-import com.sdi.common.filter.JwtTokenFilter;
-import com.sdi.common.jwt.AuthTokenProvider;
+import com.sdi.member.application.MemberService;
+import com.sdi.member.dto.MemberPrincipalDto;
+import com.sdi.member.filter.JwtTokenFilter;
+import com.sdi.member.jwt.AuthTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class AuthenticationConfig {
     public UserDetailsService userDetailsService(MemberService memberService) {
         return employeeNo -> memberService
                 .loadMemberByEmployeeNo(employeeNo)
-                .map(MemberPrincipal::from)
+                .map(MemberPrincipalDto::from)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with employee no: " + employeeNo));
     }
 }

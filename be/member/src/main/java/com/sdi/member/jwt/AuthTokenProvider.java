@@ -1,8 +1,8 @@
-package com.sdi.common.jwt;
+package com.sdi.member.jwt;
 
-import com.sdi.common.dto.MemberPrincipal;
-import com.sdi.common.util.CommonException;
-import com.sdi.common.util.ErrorCode;
+import com.sdi.member.dto.MemberPrincipalDto;
+import com.sdi.member.util.CommonException;
+import com.sdi.member.util.ErrorCode;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,25 +17,30 @@ import java.util.Collection;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthTokenProvider {
-    private final String key;
+    private final String accessKey;
+    private final String refreshKey;
     private static final String AUTHORITIES_KEY = "role";
 
     /**
      * 액세스 토큰 생성
      */
     public AuthToken createAuthToken(String id, String role, long expiry) {
-        return new AuthToken(id, role, key, expiry);
+        return new AuthToken(id, role, accessKey, expiry);
     }
 
     /**
      * 리프레시 토큰 생성 - MemberService에서 로그인과 리프레시 토큰 생성시 사용
      */
     public AuthToken createAuthToken(String id, long expiry) {
-        return new AuthToken(id, key, expiry);
+        return new AuthToken(id, refreshKey, expiry);
     }
 
-    public AuthToken convertAuthToken(String token) {
-        return new AuthToken(token, key);
+    public AuthToken convertAuthAccessToken(String token) {
+        return new AuthToken(token, accessKey);
+    }
+
+    public AuthToken convertAuthRefreshToken(String token) {
+        return new AuthToken(token, refreshKey);
     }
 
     /**
@@ -50,7 +55,7 @@ public class AuthTokenProvider {
                             })
                             .map(SimpleGrantedAuthority::new)
                             .toList();
-            MemberPrincipal principal = MemberPrincipal.of(authToken.getMemberEmployeeNo(), null, authorities);
+            MemberPrincipalDto principal = MemberPrincipalDto.of(authToken.getMemberEmployeeNo(), null, authorities);
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
         } else {
             throw new CommonException(ErrorCode.INVALID_TOKEN, "Token is invalid");

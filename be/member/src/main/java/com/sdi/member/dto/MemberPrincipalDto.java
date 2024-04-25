@@ -1,4 +1,4 @@
-package com.sdi.common.dto;
+package com.sdi.member.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,19 +7,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-public record MemberPrincipal(
+public record MemberPrincipalDto(
         String employeeNo,
         String password,
         Collection<? extends GrantedAuthority> authorities
 ) implements UserDetails {
 
-    public static MemberPrincipal of(String employeeNo, String password, Collection<? extends GrantedAuthority> authorities) {
-        return new MemberPrincipal(employeeNo, password, authorities);
+    public static MemberPrincipalDto of(String employeeNo, String password, Collection<? extends GrantedAuthority> authorities) {
+        return new MemberPrincipalDto(employeeNo, password, authorities);
     }
 
-    public static MemberPrincipal from(Member dto) {
+    public static MemberPrincipalDto from(MemberDto dto) {
         Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(dto.role().getCode()));
-        return new MemberPrincipal(dto.employeeNo(), dto.password(), authorities);
+        return new MemberPrincipalDto(dto.employeeNo(), dto.password(), authorities);
     }
 
 
