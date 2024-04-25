@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import * as React from "react";
 
-export default function EngineerNavbar() {
+export default function ManagerNavbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -32,29 +32,10 @@ export default function EngineerNavbar() {
                 height: "60px",
                 marginTop: "-10px",
                 marginLeft: "40px",
+                marginRight: "520px",
                 cursor: "pointer",
               }}
             />
-          </ListItem>
-          <ListItem
-            sx={{
-              paddingTop: "10px",
-              paddingBottom: "0px",
-              width: "70%",
-              paddingLeft: "180px",
-            }}
-          >
-            <Button
-              sx={{
-                fontSize: "20px",
-                color: "#40404A",
-                fontWeight: "bold",
-                width: "100%",
-              }}
-              href="/engineer/restore"
-            >
-              보수 요청
-            </Button>
           </ListItem>
           <ListItem sx={{ paddingTop: "10px", paddingBottom: "0px", width: "95%" }}>
             <Button
@@ -64,7 +45,7 @@ export default function EngineerNavbar() {
                 fontWeight: "bold",
                 width: "100%",
               }}
-              href="/engineer"
+              href="/manager"
             >
               Jig 불출
             </Button>

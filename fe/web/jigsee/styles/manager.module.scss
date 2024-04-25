@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  //   높이 나중에 조절
+  height: 90vh;
+  flex-direction: row; /* Stack children vertically */
+  //   레이아웃 표시 나중에 지우기
+  border: 1px solid black;
+}
+.releasecontainer {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 500px;
+  height: 100%;
+  flex-direction: column; /* Stack children vertically */
+  //   레이아웃 표시 나중에 지우기
+  border: 1px solid black;
+}
+.stockcontainer {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 350px;
+  height: 100%;
+  flex-direction: column; /* Stack children vertically */
+  //   레이아웃 표시 나중에 지우기
+  border: 1px solid black;
+}
+.btncontainer {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 350px;
+  height: 100%;
+  flex-direction: column; /* Stack children vertically */
+  //   레이아웃 표시 나중에 지우기
+  border: 1px solid black;
+}

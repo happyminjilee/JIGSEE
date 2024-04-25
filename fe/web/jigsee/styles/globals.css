@@ -87,19 +87,22 @@
 
 html,
 body {
-  max-width: 100vw;
+  max-width: 100%;
   overflow-x: hidden;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
+  width: 100%;
 }
-
 a {
   color: inherit;
   text-decoration: none;
 }
-
+header {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
