@@ -10,13 +10,13 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            SizedBox(height: 200,),
-            SizedBox(height: 50,),
+            const SizedBox(height: 200,),
+            const SizedBox(height: 50,),
             TextButton(
                 onPressed: (){
                   Navigator.pop(context);
                 },
-                child: Text("로그인 페이지로 이동"))
+                child: const Text("로그인 페이지로 이동"))
           ],
         ),
       ),

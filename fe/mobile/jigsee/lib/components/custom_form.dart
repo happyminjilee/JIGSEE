@@ -5,6 +5,7 @@ import 'package:jigsee/components/custom_text_form_field.dart';
 import 'package:jigsee/size.dart';
 
 class CustomForm extends StatefulWidget {
+  const CustomForm({Key? key}) : super(key: key);
 
   @override
   _FormPageState createState() => _FormPageState();
@@ -14,12 +15,6 @@ class _FormPageState extends State<CustomForm> {
   final _formkey = GlobalKey<FormState>();
   static String id = '';
   static String password = '';
-
-  void _saveForm() {
-    if (_formkey.currentState!.validate()) {
-      _formkey.currentState!.save();  // 폼의 save 메소드 호출, 여기서 onSaved 콜백이 실행됩니다.
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +27,12 @@ class _FormPageState extends State<CustomForm> {
             onSaved: (String value) {
             id = value;
           },),
-          const SizedBox(height: medium_gap,),
+          const SizedBox(height: mediumGap,),
           CustomTextFormField("비밀번호",
             onSaved: (String value) {
             password = value;
           },),
-          const SizedBox(height: large_gap,),
+          const SizedBox(height: largeGap,),
           // 로그인 버튼
           TextButton(
             onPressed: (){
@@ -49,7 +44,7 @@ class _FormPageState extends State<CustomForm> {
               _formkey.currentState!.save();
               log('Logged ID: $id, Password: $password');
             },
-            child: Text("Login", style: TextStyle(color: Colors.white),),
+            child: const Text("Login", style: TextStyle(color: Colors.white),),
           )
         ],
       ),

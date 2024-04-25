@@ -23,7 +23,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     }
     String pattern =
         r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$';
-    RegExp regExp = new RegExp(pattern);
+    RegExp regExp = RegExp(pattern);
     if (!regExp.hasMatch(value)) {
       return '올바른 비밀번호를 입력해주세요';
     }
@@ -42,7 +42,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(widget.text),
-        const SizedBox(height: small_gap),
+        const SizedBox(height: smallGap),
         TextFormField(
           controller: _controller,
           onSaved: (String? value) {

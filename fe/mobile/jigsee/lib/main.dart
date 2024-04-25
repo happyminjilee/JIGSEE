@@ -23,14 +23,14 @@ class MyApp extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                minimumSize: Size(400, 60)
+                minimumSize: const Size(400, 60)
             )
         ),
       ),
       initialRoute: "/login", // 초기 경로 설정
       routes: { // 경로 목록
-        "/login" : (context) => LoginPage(),
-        "/home" : (context) => HomePage()
+        "/login" : (context) => const LoginPage(),
+        "/home" : (context) => const HomePage()
       },
     );
   }
