@@ -1,8 +1,8 @@
 package com.sdi.jig.api;
 
+import com.sdi.jig.entity.JigItemRDBEntity;
 import com.sdi.jig.repository.JigItemRDBRepository;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,6 +33,31 @@ class JigItemControllerTest {
 
     @Autowired
     private JigItemRDBRepository jigItemRDBRepository;
+
+    @Test
+    @DisplayName("지그 serial-no로 검색")
+    public void findBySerialNo() throws Exception {
+        // given
+        String serialNo = "869db53f-e9ba-4886-aa06-52d57b5ff07d";
+        JigItemRDBEntity rdb = jigItemRDBRepository.findBySerialNo(serialNo).get();
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get("/v1/jig-item")
+                .param("serial-no", serialNo)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.id").value(rdb.getId()))
+                .andExpect(jsonPath("$.result.model").value(rdb.getJig().getModel()))
+                .andExpect(jsonPath("$.result.serialNo").value(rdb.getSerialNo()))
+                .andExpect(jsonPath("$.result.status").value(rdb.getStatus().toString()))
+                .andExpect(jsonPath("$.result.expectLife").value(rdb.getJig().getExpectLife()))
+                .andExpect(jsonPath("$.result.checkList").isArray());
+    }
 
     @Test
     @DisplayName("지그 재고 추가")

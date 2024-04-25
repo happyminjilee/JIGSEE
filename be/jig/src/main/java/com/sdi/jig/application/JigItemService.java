@@ -2,6 +2,7 @@ package com.sdi.jig.application;
 
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto.JigItemSummary;
+import com.sdi.jig.dto.response.JigItemResponseDto;
 import com.sdi.jig.entity.*;
 import com.sdi.jig.repository.*;
 import com.sdi.jig.util.IOStatus;
@@ -29,6 +30,19 @@ public class JigItemService {
     private final JigItemIOHistoryRepository jigItemIOHistoryRepository;
     private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
 
+    public JigItemResponseDto findBySerialNo(String serialNo) {
+        JigItemRDBEntity rdb = getJigItemBySerialNo(serialNo);
+        JigNosqlEntity nosql = jigService.getJigNosqlEntityByModel(rdb.getJig().getModel());
+        return JigItemResponseDto.from(
+                rdb,
+                nosql,
+                getUseCount(rdb.getId()),
+                getUseAccumulationTime(rdb.getUseAccumulateTime()),
+                getRepairCount(rdb.getId())
+        );
+    }
+
+
     @Transactional
     public void add(List<JigAddRequest> list) {
         List<JigItemRDBEntity> datas = new ArrayList<>();
@@ -52,16 +66,14 @@ public class JigItemService {
 
         boolean isUsable = isUsable(jigItem, facilityByModel, jigId);
 
-        int useCount = jigItemIOHistoryRepository.findByJigItemIdAndStatus(jigItem.getId(), IOStatus.IN).size();
-        String useAccumulationTime = timeCalculator.millsToString(jigItem.getUseAccumulateTime());
-        int repairCount = getJigItemRepairHistoriesByJigItemId(jigItem.getId()).size();
-
         return JigItemIsUsableResponseDto.from(isUsable,
                 JigItemSummary.from(
-                        useCount,
-                        useAccumulationTime,
-                        repairCount
-                ));
+                        getUseCount(jigItem.getId()),
+                        getUseAccumulationTime(jigItem.getUseAccumulateTime()),
+                        getRepairCount(jigItem.getId()
+                        )
+                )
+        );
     }
 
     private boolean isUsable(JigItemRDBEntity jigItem, FacilityRDBEntity facilityByModel, Long jigId) {
@@ -105,5 +117,17 @@ public class JigItemService {
 
     private List<JigItemRepairHistoryRDBEntity> getJigItemRepairHistoriesByJigItemId(Long jigItemId) {
         return jigItemRepairHistoryRepository.findByJigItemId(jigItemId);
+    }
+
+    private Integer getUseCount(Long jigItemId) {
+        return jigItemIOHistoryRepository.findByJigItemIdAndStatus(jigItemId, IOStatus.IN).size();
+    }
+
+    private String getUseAccumulationTime(Long jigItemUseAccumulateTime) {
+        return timeCalculator.millsToString(jigItemUseAccumulateTime);
+    }
+
+    private Integer getRepairCount(Long jigItemId) {
+        return getJigItemRepairHistoriesByJigItemId(jigItemId).size();
     }
 }

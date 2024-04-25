@@ -3,6 +3,7 @@ package com.sdi.jig.api;
 import com.sdi.jig.application.JigItemService;
 import com.sdi.jig.dto.request.JigItemAddRequestDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
+import com.sdi.jig.dto.response.JigItemResponseDto;
 import com.sdi.jig.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class JigItemController {
 
     private final JigItemService jigItemService;
+
+    @GetMapping
+    Response<JigItemResponseDto> findBySerialNo(@RequestParam(name = "serial-no") String serialNo){
+        return Response.success(jigItemService.findBySerialNo(serialNo));
+    }
 
     // 재고추가
     @PostMapping

@@ -5,14 +5,13 @@ import com.sdi.jig.entity.JigNosqlEntity;
 import com.sdi.jig.entity.JigRDBEntity;
 import com.sdi.jig.repository.JigNosqlRepository;
 import com.sdi.jig.repository.JigRDBRepository;
-import com.sdi.jig.util.CheckList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.sdi.jig.util.CheckList.*;
+import static com.sdi.jig.util.CheckList.CheckItem;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,7 +40,7 @@ public class JigService {
                 .orElseThrow(() -> new IllegalArgumentException("모델을 찾을 수 없습니다."));
     }
 
-    private JigNosqlEntity getJigNosqlEntityByModel(String model) {
+    public JigNosqlEntity getJigNosqlEntityByModel(String model) {
         return jigNosqlRepository.findById(model)
                 .orElseThrow(() -> new IllegalArgumentException("모델을 찾을 수 없습니다."));
     }
