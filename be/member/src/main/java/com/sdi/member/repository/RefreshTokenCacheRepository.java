@@ -1,39 +1,29 @@
 package com.sdi.member.repository;
 
-import com.sdi.member.jwt.AuthToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
-import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Repository
 @RequiredArgsConstructor
 public class RefreshTokenCacheRepository {
 
-    private final RedisTemplate<String, AuthToken> refreshTokenRedisTemplate;
-    private static final Duration MEMBER_CACHE_TTL = Duration.ofMillis(1800000); //30분
+    private final RedisTemplate<String, String> refreshTokenRedisTemplate;
 
-    public void setRefreshToken(String employeeNo, AuthToken refreshToken) {
+    public void setRefreshToken(String employeeNo, String refreshToken, long refreshTokenExpiry) {
         String key = getKey(employeeNo);
-        refreshTokenRedisTemplate.opsForValue().set(key, refreshToken, MEMBER_CACHE_TTL);
-        log.info("set refreshToken : {}, {}", key, refreshToken);
+        long refreshTokenExpiryInSeconds = TimeUnit.MILLISECONDS.toSeconds(refreshTokenExpiry);
+        refreshTokenRedisTemplate.opsForValue().set(key, refreshToken, refreshTokenExpiryInSeconds, TimeUnit.SECONDS);
+        log.info("set refreshToken : {}", employeeNo);
     }
 
-    public AuthToken getRefreshToken(String employeeNo) {
+    public String getRefreshToken(String employeeNo) {
         String key = getKey(employeeNo);
-        AuthToken refreshToken = refreshTokenRedisTemplate.opsForValue().get(key);
-        log.info("get refreshToken : {}, {}", key, refreshToken);
-        return refreshToken;
-    }
-
-    public void updateRefreshToken(String employeeNo, AuthToken refreshToken) {
-        String key = getKey(employeeNo);
-        ValueOperations<String, AuthToken> valueOps = refreshTokenRedisTemplate.opsForValue();
-        valueOps.set(key, refreshToken);
+        return refreshTokenRedisTemplate.opsForValue().get(key);
     }
 
     public void deleteRefreshToken(String employeeNo) {

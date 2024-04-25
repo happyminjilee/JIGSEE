@@ -2,7 +2,6 @@ package com.sdi.member.application;
 
 import com.sdi.member.dto.MemberDto;
 import com.sdi.member.dto.response.MemberLoginResponseDto;
-import com.sdi.member.entity.RoleType;
 import com.sdi.member.jwt.AuthToken;
 import com.sdi.member.jwt.AuthTokenProvider;
 import com.sdi.member.repository.MemberRepository;
@@ -10,7 +9,6 @@ import com.sdi.member.repository.RefreshTokenCacheRepository;
 import com.sdi.member.util.CommonException;
 import com.sdi.member.util.ErrorCode;
 import com.sdi.member.util.HeaderUtils;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -18,12 +16,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -34,19 +33,10 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
     private final AuthTokenProvider tokenProvider;
 
-    // 2시간
-    private final long TOKEN_EXPIRY = 7200000;
-    // 7일
-    private final long REFRES_TOKEN_EXPIRY = 604800000;
-
-    /**
-     * 가입 되어 있다면 Optional<MemberDto> 반환, 없다면 null 반환.
-     */
-    public Optional<MemberDto> loadMemberByEmployeeNo(String employeeNo) {
-        return Optional.ofNullable(memberRepository.findByEmployeeNo(employeeNo)
-                        .map(MemberDto::fromEntity)
-                        .orElseThrow(() -> null));
-    }
+    @Value("${jwt.accessToken.expiry}")
+    private long accessTokenExpiry;
+    @Value("${jwt.refreshToken.expiry}")
+    private long refreshTokenExpiry;
 
     /**
      * 가입 되어 있다면 멤버를 반환, 없다면 Exception 반환.
@@ -60,11 +50,11 @@ public class MemberService {
 
     /**
      * 로그인
-     * 1. JWT 토큰 생성
+     * 1. 엑세스 토큰 생성
      * 2. 리프레시 토큰 생성
-     * 3. 기존 쿠키 삭제하고 새로 추가
-     * 4. 레디스에 토큰 등록
-     * 5. JWT 토큰 리턴
+     * 3. 레디스에 토큰 등록
+     * 4. 헤더에 엑세스 토큰 및 리프레시 토큰 추가
+     * 5. MemberLoginResponseDto 정보 반환
      */
     public MemberLoginResponseDto login(HttpServletResponse response, String employeeNo, String password) {
         // 회원가입 여부 체크
@@ -76,12 +66,12 @@ public class MemberService {
         }
 
         // 엑세스 토큰 생성
-        AuthToken accessToken = tokenProvider.createAuthToken(employeeNo, memberDto.role().getCode(), TOKEN_EXPIRY);
+        AuthToken accessToken = tokenProvider.createAuthToken(employeeNo, memberDto.role().getCode(), accessTokenExpiry);
         // 리프레시 토큰 생성
-        AuthToken refreshToken = tokenProvider.createAuthToken(employeeNo, REFRES_TOKEN_EXPIRY);
+        AuthToken refreshToken = tokenProvider.createAuthToken(employeeNo, refreshTokenExpiry);
 
         // Redis에 refreshToken 올리기
-        refreshTokenCacheRepository.setRefreshToken(employeeNo, refreshToken);
+        refreshTokenCacheRepository.setRefreshToken(employeeNo, refreshToken.getToken(), refreshTokenExpiry);
 
         // 응답 헤더에 엑세스 토큰과 리프레시 토큰 추가
         HeaderUtils.addAccessToken(response, accessToken.getToken());
@@ -97,59 +87,15 @@ public class MemberService {
 
     /**
      * 토큰 리프레시
-     * 1. 액세스 토큰 기존 헤더에서 가져오기
-     * 2. 액세스 토큰 (String)-> (Token)으로 변환
-     * 3. 유효한 토큰인지 검증
-     * 4. 만료된 토큰인지 검증
-     * 5. claims에서 이메일 가져오기
-     * 6. Claims에서 role타입 가져오기
-     * 7. 프론트로 부터 쿠키에서 리프레시 토큰 가져오기
-     * 8. 유효한지 확인
-     * 10. 새로운 액세스 토큰 발급
-     * 11. 리프레시 토큰이 3일 이하로 남았을 경우 리프레시 토큰 갱신
-     * 12. DB에 업데이트
-     * 13. 액세스 토큰 리턴
+     * 1. 헤더에서 리프레시 토큰 가져오기
+     * 2. 유효한지 확인
+     * 3. 새로운 액세스 토큰 발급
+     * 4. 리프레시 토큰의 남은 기간을 가진 리프레시 토큰 재발급
+     * 5. Redis 토큰 업데이트
+     * 6. 액세스 토큰 및 리프레시 토큰 헤더에 추가
+     * 7. MemberLoginResponseDto 반환
      */
     public MemberLoginResponseDto tokenRefresh(HttpServletRequest request, HttpServletResponse response) {
-        // 1. 헤더로 부터 액세스 토큰 가져오기
-        String accessTokenStr = HeaderUtils.getAccessToken(request);
-        AuthToken accessToken = tokenProvider.convertAuthAccessToken(accessTokenStr);
-
-        // 2-1. 토큰이 유효한지 체크
-        if (accessToken.validate()) {
-            // 유효하다면 지금 토큰 그대로 반환
-            String employeeNo = accessToken.getMemberEmployeeNo();
-            MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
-                    () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
-            );
-            HeaderUtils.addAccessToken(response, accessToken.getToken());
-            return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
-        }
-
-        // 액세스 토큰 기간 만료 및 기타 유효성 검사
-        try {
-            accessToken.validateOrException();
-        } catch (ExpiredJwtException e) {
-            log.info("Invalid JWT token.");
-        } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
-            throw new CommonException(ErrorCode.INVALID_ACCESS_TOKEN);
-        }
-
-        // 2-2. 토큰이 있는지 확인하자, 만료되었을 경우 만료 토큰을 가져옴
-        Claims claims = accessToken.getExpiredClaims();
-
-        // 토큰이 유효하다면, 지금 토큰 그대로 반환
-        if (claims == null) {
-            String employeeNo = accessToken.getMemberEmployeeNo();
-            MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
-                    () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
-            );
-            HeaderUtils.addAccessToken(response, accessToken.getToken());
-            return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
-        }
-
-        RoleType roleType = RoleType.of(claims.get("role", String.class));
-
         //refresh token
         String refreshToken = HeaderUtils.getRefreshToken(request);
         AuthToken authRefreshToken = tokenProvider.convertAuthRefreshToken(refreshToken);
@@ -164,18 +110,15 @@ public class MemberService {
         }
 
         String employeeNo = authRefreshToken.getMemberEmployeeNo();
-
-        // 레디스에 없다면 익셉션
-        if (!refreshTokenCacheRepository.existsRefreshToken(employeeNo)) {
+        // 레디스에 없거나 등록된 토큰과 다르다면 익셉션
+        if (!refreshTokenCacheRepository.existsRefreshToken(employeeNo) || !Objects.equals(refreshToken, refreshTokenCacheRepository.getRefreshToken(employeeNo))) {
             throw new CommonException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
-        );
+        MemberDto memberDto = getMemberOrException(employeeNo);
 
         Date now = new Date();
-        AuthToken newAccessToken = tokenProvider.createAuthToken(employeeNo, roleType.getCode(), TOKEN_EXPIRY);
+        AuthToken newAccessToken = tokenProvider.createAuthToken(employeeNo, memberDto.role().getCode(), accessTokenExpiry);
 
         long validTime = authRefreshToken.extractClaims().getExpiration().getTime() - now.getTime();
 
@@ -183,7 +126,7 @@ public class MemberService {
         authRefreshToken = tokenProvider.createAuthToken(employeeNo, validTime);
 
         // 레디스 토큰 업데이트
-        refreshTokenCacheRepository.updateRefreshToken(employeeNo, authRefreshToken);
+        refreshTokenCacheRepository.setRefreshToken(employeeNo, authRefreshToken.getToken(), validTime);
 
         HeaderUtils.addAccessToken(response, newAccessToken.getToken());
         HeaderUtils.addRefreshToken(response, authRefreshToken.getToken());
