@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -53,5 +52,9 @@ public class JigItemRDBEntity {
 
     public void delete(){
         this.isDelete = true;
+    }
+
+    public void updateState(JigStatus status){
+        this.status = status;
     }
 }

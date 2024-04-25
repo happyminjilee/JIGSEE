@@ -82,6 +82,12 @@ public class JigItemService {
         jigItem.delete();
     }
 
+    @Transactional
+    public void updateStateBySerialNo(String serialNo, JigStatus status) {
+        JigItemRDBEntity jigItem = getJigItemBySerialNo(serialNo);
+        jigItem.updateState(status);
+    }
+
     private boolean isUsable(JigItemRDBEntity jigItem, FacilityRDBEntity facilityByModel, Long jigId) {
         // 1. 지그 사용대기 상태 판단
         if (isReady(jigItem.getStatus())) {
@@ -136,4 +142,5 @@ public class JigItemService {
     private Integer getRepairCount(Long jigItemId) {
         return getJigItemRepairHistoriesByJigItemId(jigItemId).size();
     }
+
 }

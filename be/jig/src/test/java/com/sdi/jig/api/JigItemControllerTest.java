@@ -2,6 +2,7 @@ package com.sdi.jig.api;
 
 import com.sdi.jig.entity.JigItemRDBEntity;
 import com.sdi.jig.repository.JigItemRDBRepository;
+import com.sdi.jig.util.JigStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class JigItemControllerTest {
@@ -61,7 +63,6 @@ class JigItemControllerTest {
 
     @Test
     @DisplayName("지그 재고 추가")
-    @Transactional
     public void add() throws Exception {
         // given
         String addModel1 = "testModelId";
@@ -112,7 +113,9 @@ class JigItemControllerTest {
         String serialNo = "869db53f-e9ba-4886-aa06-52d57b5ff07d";
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get(String.format("/v1/jig-item/usable?facility-model=%s&jig-serial-no=%s", facilityModel, serialNo))
+                .get("/v1/jig-item/usable")
+                .param("facility-model", facilityModel)
+                .param("jig-serial-no", serialNo)
                 .contentType(MediaType.APPLICATION_JSON);
 
         // when
@@ -125,5 +128,29 @@ class JigItemControllerTest {
                 .andExpect(jsonPath("$.result.data.useAccumulationTime").value("24:00:00.000"))
                 .andExpect(jsonPath("$.result.data.repairCount").value(1));
 
+    }
+
+    @Test
+    @DisplayName("지그 상태 변경")
+    public void updateStatus() throws Exception {
+        // given
+        String serialNo = "14d51713-3eb5-4d38-af87-31ae7d4c19f3";
+        JigStatus jigStatus = JigStatus.OUT;
+
+        JSONObject body = new JSONObject();
+        body.put("serialNo", serialNo);
+        body.put("status", jigStatus);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/v1/jig-item/status")
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk());
+        assertEquals(jigStatus, jigItemRDBRepository.findBySerialNo(serialNo).get().getStatus());
     }
 }
