@@ -51,7 +51,7 @@ export default function EngineerNavbar() {
                 fontWeight: "bold",
                 width: "100%",
               }}
-              href="/engineer/conservation"
+              href="/engineer/restore"
             >
               보수 요청
             </Button>

@@ -1,6 +1,6 @@
 import Navbar from "./navbar";
 
-export default function Conservation() {
+export default function Restore() {
   return (
     <>
       <Navbar />
