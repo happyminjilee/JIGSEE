@@ -39,8 +39,6 @@ public class MemberService {
     private final long TOKEN_EXPIRY = 7200000;
     // 7일
     private final long REFRES_TOKEN_EXPIRY = 604800000;
-    // 3일
-    private static final long THREE_DAYS_MSEC = 259200000;
     private static final String REFRESH_TOKEN = "refresh_token";
     private static final String ACCESS_TOKEN = "refresh_token";
 
