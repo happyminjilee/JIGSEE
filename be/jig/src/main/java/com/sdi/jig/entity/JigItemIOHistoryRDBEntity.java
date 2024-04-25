@@ -1,5 +1,6 @@
 package com.sdi.jig.entity;
 
+import com.sdi.jig.util.IOStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,11 +20,12 @@ public class JigItemIOHistoryRDBEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "input_time")
-    private LocalDateTime inputTime;
+    @Column(name = "in_out_time")
+    private LocalDateTime inOutTime;
 
-    @Column(name = "output_time")
-    private LocalDateTime outputTime;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private IOStatus status;
 
     @ManyToOne
     private JigItemRDBEntity jigItem;

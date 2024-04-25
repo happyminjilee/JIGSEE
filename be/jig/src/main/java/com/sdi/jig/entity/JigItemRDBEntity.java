@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,9 @@ public class JigItemRDBEntity {
     @Enumerated(EnumType.STRING)
     private JigStatus status;
 
+    @Column(name = "use_accumulate_time")
+    private Long useAccumulateTime;
+
     @ManyToOne
     private JigRDBEntity jig;
 
@@ -37,13 +41,10 @@ public class JigItemRDBEntity {
     private List<JigItemIOHistoryRDBEntity> ioHistory;
 
     @OneToMany(mappedBy = "jigItem")
-    private List<JigItemCheckHistoryRDBEntity> checkHistory;
-
-    @OneToMany(mappedBy = "jigItem")
     private List<JigItemRepairHistoryRDBEntity> repairHistory;
 
     public static JigItemRDBEntity from(String serialNo, JigRDBEntity jigRDBEntity) {
-        return new JigItemRDBEntity(null, serialNo, JigStatus.WAREHOUSE, jigRDBEntity,
-                null, null, null, null);
+        return new JigItemRDBEntity(null, serialNo, JigStatus.WAREHOUSE, 0L, jigRDBEntity,
+                null, null, null);
     }
 }

@@ -10,14 +10,14 @@ public record JigItemIsUsableResponseDto(
     }
 
     public record JigItemSummary(
-            String facilityModel,
-            String jigUseAccumulationTime,
+            Integer useCount,
+            String useAccumulationTime,
             Integer repairCount
     ){
-        public static JigItemSummary from(String facilityModel,
-                                          String jigUseAccumulationTime,
+        public static JigItemSummary from(Integer useCount,
+                                          String useAccumulationTime,
                                           Integer repairCount){
-            return new JigItemSummary(facilityModel, jigUseAccumulationTime, repairCount);
+            return new JigItemSummary(useCount, useAccumulationTime, repairCount);
         }
     }
 }

@@ -1,14 +1,12 @@
 package com.sdi.jig.application;
 
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
-import com.sdi.jig.entity.FacilityJigMappingRDBEntity;
-import com.sdi.jig.entity.FacilityRDBEntity;
-import com.sdi.jig.entity.JigItemRDBEntity;
-import com.sdi.jig.entity.JigRDBEntity;
-import com.sdi.jig.repository.FacilityJigMappingRDBRepository;
-import com.sdi.jig.repository.FacilityRDBRepository;
-import com.sdi.jig.repository.JigItemRDBRepository;
+import com.sdi.jig.dto.response.JigItemIsUsableResponseDto.JigItemSummary;
+import com.sdi.jig.entity.*;
+import com.sdi.jig.repository.*;
+import com.sdi.jig.util.IOStatus;
 import com.sdi.jig.util.JigStatus;
+import com.sdi.jig.util.TimeCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +22,12 @@ import static com.sdi.jig.dto.request.JigItemAddRequestDto.JigAddRequest;
 public class JigItemService {
 
     private final JigService jigService;
+    private final TimeCalculator timeCalculator;
     private final JigItemRDBRepository jigItemRDBRepository;
     private final FacilityRDBRepository facilityRDBRepository;
     private final FacilityJigMappingRDBRepository facilityJigMappingRDBRepository;
+    private final JigItemIOHistoryRepository jigItemIOHistoryRepository;
+    private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
 
     @Transactional
     public void add(List<JigAddRequest> list) {
@@ -44,42 +45,48 @@ public class JigItemService {
         jigItemRDBRepository.saveAll(datas);
     }
 
-    public JigItemIsUsableResponseDto isUsableOrThrow(String facilityModel, String jigSerialNo) {
+    public JigItemIsUsableResponseDto isUsable(String facilityModel, String jigSerialNo) {
         FacilityRDBEntity facilityByModel = getFacilityByModel(facilityModel);
         JigItemRDBEntity jigItem = getJigItemBySerialNo(jigSerialNo);
         Long jigId = jigItem.getJig().getId();
 
-        isUsableOrThrow(jigItem, facilityByModel, jigId);
+        boolean isUsable = isUsable(jigItem, facilityByModel, jigId);
 
+        int useCount = jigItemIOHistoryRepository.findByJigItemIdAndStatus(jigItem.getId(), IOStatus.IN).size();
+        String useAccumulationTime = timeCalculator.millsToString(jigItem.getUseAccumulateTime());
+        int repairCount = getJigItemRepairHistoriesByJigItemId(jigItem.getId()).size();
 
-
-        return null;
+        return JigItemIsUsableResponseDto.from(isUsable,
+                JigItemSummary.from(
+                        useCount,
+                        useAccumulationTime,
+                        repairCount
+                ));
     }
 
-    private void isUsableOrThrow(JigItemRDBEntity jigItem, FacilityRDBEntity facilityByModel, Long jigId) {
+    private boolean isUsable(JigItemRDBEntity jigItem, FacilityRDBEntity facilityByModel, Long jigId) {
         // 1. 지그 사용대기 상태 판단
-        isReady(jigItem.getStatus());
-
-        // 2. 설비와 지그 일치
-        isMatchFacilityAndJig(facilityByModel.getId(), jigId);
-    }
-
-    private void isReady(JigStatus status) {
-        if(status != JigStatus.READY){
-            throw new IllegalArgumentException("JIG의 상태가 사용대기가 아니라서 사용할 수 없습니다.");
+        if (isReady(jigItem.getStatus())) {
+            // 2. 설비와 지그 일치
+            return isMatchFacilityAndJig(facilityByModel.getId(), jigId);
         }
+        return false;
     }
 
-    private void isMatchFacilityAndJig(Long facilityId, Long jigId) {
+    private boolean isReady(JigStatus status) {
+        return (status == JigStatus.READY);
+    }
+
+    private boolean isMatchFacilityAndJig(Long facilityId, Long jigId) {
         List<FacilityJigMappingRDBEntity> list = getFacilityJigMappingByFacilityId(facilityId);
-        checkContain(list, jigId);
+        return checkContain(list, jigId);
     }
 
-    private void checkContain(List<FacilityJigMappingRDBEntity> list, Long jigId) {
-        list.stream()
+    private boolean checkContain(List<FacilityJigMappingRDBEntity> list, Long jigId) {
+        return list.stream()
                 .filter(e -> e.getJig().getId().equals(jigId))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("사용 불가능한 지그입니다."));
+                .isEmpty();
     }
 
     private List<FacilityJigMappingRDBEntity> getFacilityJigMappingByFacilityId(Long facilityId) {
@@ -94,5 +101,9 @@ public class JigItemService {
     private JigItemRDBEntity getJigItemBySerialNo(String jigSerialNo) {
         return jigItemRDBRepository.findBySerialNo(jigSerialNo)
                 .orElseThrow(() -> new IllegalArgumentException("serial 번호로 JIG ITEM을 찾을 수 없습니다."));
+    }
+
+    private List<JigItemRepairHistoryRDBEntity> getJigItemRepairHistoriesByJigItemId(Long jigItemId) {
+        return jigItemRepairHistoryRepository.findByJigItemId(jigItemId);
     }
 }

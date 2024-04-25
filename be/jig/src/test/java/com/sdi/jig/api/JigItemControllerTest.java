@@ -15,10 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -34,6 +36,7 @@ class JigItemControllerTest {
 
     @Test
     @DisplayName("지그 재고 추가")
+    @Transactional
     public void add() throws Exception {
         // given
         String addModel1 = "testModelId";
@@ -74,5 +77,28 @@ class JigItemControllerTest {
         perform.andExpect(status().isOk());
         assertEquals(beforeSize1 + serialNos1.length(), jigItemRDBRepository.findByJigModel(addModel1).size());
         assertEquals(beforeSize2 + serialNos2.length(), jigItemRDBRepository.findByJigModel(addModel2).size());
+    }
+
+    @Test
+    @DisplayName("지그 사용 가능 확인")
+    public void isUsable() throws Exception {
+        // given
+        String facilityModel = "f1";
+        String serialNo = "869db53f-e9ba-4886-aa06-52d57b5ff07d";
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(String.format("/v1/jig-item/usable?facility-model=%s&jig-serial-no=%s", facilityModel, serialNo))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // when
+        ResultActions perform = mockMvc.perform(request);
+
+        // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.isUsable").value(true))
+                .andExpect(jsonPath("$.result.data.useCount").value(1))
+                .andExpect(jsonPath("$.result.data.useAccumulationTime").value("24:00:00.000"))
+                .andExpect(jsonPath("$.result.data.repairCount").value(1));
+
     }
 }

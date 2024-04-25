@@ -24,8 +24,7 @@ public class JigItemController {
     @GetMapping("/usable")
     Response<JigItemIsUsableResponseDto> isUsable(@RequestParam(name = "facility-model") String facilityModel,
                                                   @RequestParam(name = "jig-serial-no") String jigSerialNo){
-        JigItemIsUsableResponseDto dto = jigItemService.isUsableOrThrow(facilityModel, jigSerialNo);
+        JigItemIsUsableResponseDto dto = jigItemService.isUsable(facilityModel, jigSerialNo);
         return Response.success(dto);
     }
-
 }
