@@ -20,7 +20,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    private static final String REFRESH_TOKEN = "refresh_token";
     private final AuthTokenProvider tokenProvider;
 
     @Override
