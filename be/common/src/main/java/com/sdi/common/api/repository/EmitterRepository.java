@@ -12,4 +12,5 @@ public interface EmitterRepository {
     void deleteAllEventCacheStartWithId(String id); // 해당 회원과 관련된 모든 이벤트 삭제
     Map<String, SseEmitter> findAllEmitterStartsWithMemberId(String memberId); // 해당 회원과 관련된 모든 emitter 조회
     Map<String, Object> findAllEventCacheStartsWithMemberId(String memberId); // 해당 회원과 관련된 모든 이벤트 조회
+    Map<String, SseEmitter> findAllEmitterStartWithRoleType(String role); // 권한 별 조회
 }

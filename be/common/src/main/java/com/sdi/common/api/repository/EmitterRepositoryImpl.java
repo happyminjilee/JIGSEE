@@ -63,4 +63,13 @@ public class EmitterRepositoryImpl implements EmitterRepository {
                 .filter(entry -> entry.getKey().startsWith(memberId))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
+
+    @Override
+    public Map<String, SseEmitter> findAllEmitterStartWithRoleType(String roleType) {
+        return emitters.entrySet().stream()
+                .filter(entry -> entry.getKey().startsWith(roleType))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+
 }
