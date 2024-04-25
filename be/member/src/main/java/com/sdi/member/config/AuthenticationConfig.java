@@ -1,14 +1,10 @@
 package com.sdi.member.config;
 
-import com.sdi.member.application.MemberService;
-import com.sdi.member.dto.MemberPrincipalDto;
 import com.sdi.member.filter.JwtTokenFilter;
 import com.sdi.member.jwt.AuthTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -31,11 +27,4 @@ public class AuthenticationConfig {
         return new JwtTokenFilter(tokenProvider);
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(MemberService memberService) {
-        return employeeNo -> memberService
-                .loadMemberByEmployeeNo(employeeNo)
-                .map(MemberPrincipalDto::from)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with employee no: " + employeeNo));
-    }
 }
