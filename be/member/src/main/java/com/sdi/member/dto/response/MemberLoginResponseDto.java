@@ -6,7 +6,6 @@ public record MemberLoginResponseDto(
         Long id,
         String name,
         String employeeNo,
-        RoleType role,
-        String token
+        RoleType role
 ) {
 }

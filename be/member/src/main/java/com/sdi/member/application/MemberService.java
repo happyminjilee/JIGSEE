@@ -36,13 +36,13 @@ public class MemberService {
     private final AuthTokenProvider tokenProvider;
 
     // 2시간
-//    private final long TOKEN_EXPIRY = 7200000;
-    private final long TOKEN_EXPIRY = 10000;
+    private final long TOKEN_EXPIRY = 7200000;
     // 7일
     private final long REFRES_TOKEN_EXPIRY = 604800000;
     // 3일
     private static final long THREE_DAYS_MSEC = 259200000;
     private static final String REFRESH_TOKEN = "refresh_token";
+    private static final String ACCESS_TOKEN = "refresh_token";
 
     public Optional<MemberDto> loadMemberByEmployeeNo(String employeeNo) {
         return Optional.ofNullable(memberRepository.findByEmployeeNo(employeeNo)
@@ -85,10 +85,11 @@ public class MemberService {
         // Redis에 refreshToken 올리기
         refreshTokenCacheRepository.setRefreshToken(employeeNo, refreshToken);
 
-        // 응답 헤더에 리프레시 토큰 추가
+        // 응답 헤더에 엑세스 토큰과 리프레시 토큰 추가
         response.setHeader(REFRESH_TOKEN, refreshToken.getToken());
+        response.setHeader(ACCESS_TOKEN, accessToken.getToken());
 
-        return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), accessToken.getToken());
+        return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response, String employeeNo) {
@@ -126,7 +127,8 @@ public class MemberService {
             MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
                     () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
             );
-            return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), accessToken.getToken());
+            response.setHeader(ACCESS_TOKEN, accessToken.getToken());
+            return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
         }
 
         // 액세스 토큰 기간 만료 및 기타 유효성 검사
@@ -147,7 +149,8 @@ public class MemberService {
             MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
                     () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
             );
-            return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), accessToken.getToken());
+            response.setHeader(ACCESS_TOKEN, accessToken.getToken());
+            return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
         }
 
         RoleType roleType = RoleType.of(claims.get("role", String.class));
@@ -181,16 +184,14 @@ public class MemberService {
 
         long validTime = authRefreshToken.extractClaims().getExpiration().getTime() - now.getTime();
 
-        //refresh 토큰 기간이 3일 이하일 경우 새로 갱신
-        if (validTime <= THREE_DAYS_MSEC) {
-            authRefreshToken = tokenProvider.createAuthToken(employeeNo, REFRES_TOKEN_EXPIRY);
+        // 기존 refreshToken의 남은 시간의 유효기간을 가진 새로운 토큰 발급
+        authRefreshToken = tokenProvider.createAuthToken(employeeNo, validTime);
 
-            // 레디스 토큰 업데이트
-            refreshTokenCacheRepository.updateRefreshToken(employeeNo, authRefreshToken);
+        // 레디스 토큰 업데이트
+        refreshTokenCacheRepository.updateRefreshToken(employeeNo, authRefreshToken);
 
-            response.setHeader(REFRESH_TOKEN, authRefreshToken.getToken());
-        }
-
-        return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), newAccessToken.getToken());
+        response.setHeader(ACCESS_TOKEN, newAccessToken.getToken());
+        response.setHeader(REFRESH_TOKEN, authRefreshToken.getToken());
+        return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
     }
 }
