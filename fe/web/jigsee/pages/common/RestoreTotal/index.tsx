@@ -37,22 +37,6 @@ export default function RepairTotal() {
 
     return (
         <>
-            <div className={styled.right}>
-                <Select
-                    label = "선택"
-                    selectionMode="multiple"
-                    placeholder="선택"
-                    selectedKeys = {values}
-                    onSelectionChange={setValues}
-                    className={styled.short}
-                >
-                    {lst.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                        </SelectItem>
-                    ))}
-                </Select>
-            </div>
             <div>
                 {jigData.map((jig, index) => (
                     <div
