@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "jig_items")
 @Getter
@@ -31,7 +33,17 @@ public class JigItemRDBEntity {
     @ManyToOne
     private FacilityItemRDBEntity facilityItem;
 
-    public static JigItemRDBEntity from(String serialNo, JigRDBEntity jigRDBEntity){
-        return new JigItemRDBEntity(null, serialNo, JigStatus.WAREHOUSE, jigRDBEntity, null);
+    @OneToMany(mappedBy = "jigItem")
+    private List<JigItemIOHistoryRDBEntity> ioHistory;
+
+    @OneToMany(mappedBy = "jigItem")
+    private List<JigItemCheckHistoryRDBEntity> checkHistory;
+
+    @OneToMany(mappedBy = "jigItem")
+    private List<JigItemRepairHistoryRDBEntity> repairHistory;
+
+    public static JigItemRDBEntity from(String serialNo, JigRDBEntity jigRDBEntity) {
+        return new JigItemRDBEntity(null, serialNo, JigStatus.WAREHOUSE, jigRDBEntity,
+                null, null, null, null);
     }
 }
