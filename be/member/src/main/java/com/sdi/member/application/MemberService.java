@@ -1,23 +1,25 @@
-package com.sdi.common.application;
+package com.sdi.member.application;
 
-import com.sdi.common.domain.RoleType;
-import com.sdi.common.dto.Member;
-import com.sdi.common.dto.response.MemberLoginResponse;
-import com.sdi.common.jwt.AuthToken;
-import com.sdi.common.jwt.AuthTokenProvider;
-import com.sdi.common.repository.MemberRepository;
-import com.sdi.common.repository.RefreshTokenCacheRepository;
-import com.sdi.common.util.CommonException;
-import com.sdi.common.util.CookieUtils;
-import com.sdi.common.util.ErrorCode;
-import com.sdi.common.util.HeaderUtils;
+import com.sdi.member.dto.MemberDto;
+import com.sdi.member.dto.response.MemberLoginResponseDto;
+import com.sdi.member.entity.RoleType;
+import com.sdi.member.jwt.AuthToken;
+import com.sdi.member.jwt.AuthTokenProvider;
+import com.sdi.member.repository.MemberRepository;
+import com.sdi.member.repository.RefreshTokenCacheRepository;
+import com.sdi.member.util.CommonException;
+import com.sdi.member.util.CookieUtils;
+import com.sdi.member.util.ErrorCode;
+import com.sdi.member.util.HeaderUtils;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,28 +36,26 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
     private final AuthTokenProvider tokenProvider;
 
-    @Value("${jwt.secret}")
-    private String key;
-
     // 2시간
     private final long TOKEN_EXPIRY = 7200000;
     // 7일
     private final long REFRES_TOKEN_EXPIRY = 604800000;
+    // 3일
     private static final long THREE_DAYS_MSEC = 259200000;
     private static final String REFRESH_TOKEN = "refresh_token";
 
-    public Optional<Member> loadMemberByEmployeeNo(String employeeNo) {
+    public Optional<MemberDto> loadMemberByEmployeeNo(String employeeNo) {
         return Optional.ofNullable(memberRepository.findByEmployeeNo(employeeNo)
-                        .map(Member::fromEntity)
+                        .map(MemberDto::fromEntity)
                         .orElseThrow(() -> null));
     }
 
     /**
      * 가입 되어 있다면 멤버를 반환, 없다면 Exception 반환.
      */
-    public Member getMemberOrException(String employeeNo) {
+    public MemberDto getMemberOrException(String employeeNo) {
         return memberRepository.findByEmployeeNo(employeeNo)
-                .map(Member::fromEntity)
+                .map(MemberDto::fromEntity)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with employee no: " + employeeNo));
 
     }
@@ -68,17 +68,17 @@ public class MemberService {
      * 4. 레디스에 토큰 등록
      * 5. JWT 토큰 리턴
      */
-    public MemberLoginResponse login(HttpServletRequest request, HttpServletResponse response, String employeeNo, String password) {
+    public MemberLoginResponseDto login(HttpServletRequest request, HttpServletResponse response, String employeeNo, String password) {
         // 회원가입 여부 체크
-        Member member = getMemberOrException(employeeNo);
+        MemberDto memberDto = getMemberOrException(employeeNo);
 
         // 비밀번호 체크
-        if (!encoder.matches(password, member.password())) {
+        if (!encoder.matches(password, memberDto.password())) {
             throw new CommonException(ErrorCode.INVALID_PASSWORD);
         }
 
         // 엑세스 토큰 생성
-        AuthToken accessToken = tokenProvider.createAuthToken(employeeNo, member.role().getCode(), TOKEN_EXPIRY);
+        AuthToken accessToken = tokenProvider.createAuthToken(employeeNo, memberDto.role().getCode(), TOKEN_EXPIRY);
         // 리픠레시 토큰 생성
         AuthToken refreshToken = tokenProvider.createAuthToken(employeeNo, REFRES_TOKEN_EXPIRY);
 
@@ -89,7 +89,7 @@ public class MemberService {
         // Redis에 refreshToken 올리기
         refreshTokenCacheRepository.setRefreshToken(employeeNo, refreshToken);
 
-        return new MemberLoginResponse(member.id(), member.name(), member.employeeNo(), member.role(), accessToken.getToken());
+        return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), accessToken.getToken());
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response, String employeeNo) {
@@ -101,7 +101,7 @@ public class MemberService {
     }
 
     /**
-     * 리프레시 토큰
+     * 토큰 리프레시
      * 1. 액세스 토큰 기존 헤더에서 가져오기
      * 2. 액세스 토큰 (String)-> (Token)으로 변환
      * 3. 유효한 토큰인지 검증
@@ -115,26 +115,40 @@ public class MemberService {
      * 12. DB에 업데이트
      * 13. 액세스 토큰 리턴
      */
-    public MemberLoginResponse refreshToken(String employeeNo, HttpServletRequest request, HttpServletResponse response) {
+    public MemberLoginResponseDto tokenRefresh(HttpServletRequest request, HttpServletResponse response) {
         // 1. 헤더로 부터 액세스 토큰 가져오기
-        String accessToken = HeaderUtils.getAccessToken(request);
-        AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
-        Member member = loadMemberByEmployeeNo(employeeNo).orElseThrow(
-                () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
-        );
+        String accessTokenStr = HeaderUtils.getAccessToken(request);
+        AuthToken accessToken = tokenProvider.convertAuthAccessToken(accessTokenStr);
 
         // 2-1. 토큰이 유효한지 체크
-        if (authToken.validate()) {
+        if (accessToken.validate()) {
             // 유효하다면 지금 토큰 그대로 반환
-            return new MemberLoginResponse(member.id(), member.name(), member.employeeNo(), member.role(), authToken.getToken());
+            String employeeNo = accessToken.getMemberEmployeeNo();
+            MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
+                    () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
+            );
+            return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), accessToken.getToken());
+        }
+
+        // 액세스 토큰 기간 만료 및 기타 유효성 검사
+        try {
+            accessToken.validateOrException();
+        } catch (ExpiredJwtException e) {
+            log.info("Invalid JWT token.");
+        } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+            throw new CommonException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
         // 2-2. 토큰이 유효하지 않다면 리프레시 토큰이 있는지 확인하자, 만료되었을 경우 만료 토큰을 가져옴.
-        Claims claims = authToken.getExpiredClaims();
+        Claims claims = accessToken.getExpiredClaims();
 
         // 토큰이 유효하다면, 지금 토큰 그대로 반환
         if (claims == null) {
-            return new MemberLoginResponse(member.id(), member.name(), member.employeeNo(), member.role(), accessToken);
+            String employeeNo = accessToken.getMemberEmployeeNo();
+            MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
+                    () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
+            );
+            return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), accessToken.getToken());
         }
 
         RoleType roleType = RoleType.of(claims.get("role", String.class));
@@ -143,12 +157,27 @@ public class MemberService {
         String refreshToken = CookieUtils.getCookie(request, REFRESH_TOKEN)
                 .map(Cookie::getValue)
                 .orElse(null);
-        AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
+        AuthToken authRefreshToken = tokenProvider.convertAuthRefreshToken(refreshToken);
 
-        // 유효하지 않다면, 익셉션
-        if (!authRefreshToken.validate()) {
+        // 유효하지 않다면 익셉션
+        try {
+            authRefreshToken.validateOrException();
+        } catch (ExpiredJwtException e) {
+            throw new CommonException(ErrorCode.EXPIRED_REFRESH_TOKEN);
+        } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
             throw new CommonException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
+
+        String employeeNo = authRefreshToken.getMemberEmployeeNo();
+
+        // 레디스에 없다면 익셉션
+        if (!refreshTokenCacheRepository.existsRefreshToken(employeeNo)) {
+            throw new CommonException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        MemberDto memberDto = loadMemberByEmployeeNo(employeeNo).orElseThrow(
+                () -> new UsernameNotFoundException("User not found with employee no: " + employeeNo)
+        );
 
         Date now = new Date();
         AuthToken newAccessToken = tokenProvider.createAuthToken(employeeNo, roleType.getCode(), TOKEN_EXPIRY);
@@ -157,7 +186,7 @@ public class MemberService {
 
         //refresh 토큰 기간이 3일 이하일 경우 새로 갱신
         if (validTime <= THREE_DAYS_MSEC) {
-            authRefreshToken = tokenProvider.createAuthToken(key, REFRES_TOKEN_EXPIRY);
+            authRefreshToken = tokenProvider.createAuthToken(employeeNo, REFRES_TOKEN_EXPIRY);
             refreshTokenCacheRepository.updateRefreshToken(employeeNo, authRefreshToken);
 
             int cookieMaxAge = (int) REFRES_TOKEN_EXPIRY / 60;
@@ -165,6 +194,6 @@ public class MemberService {
             CookieUtils.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
         }
 
-        return new MemberLoginResponse(member.id(), member.name(), member.employeeNo(), member.role(), newAccessToken.getToken());
+        return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role(), newAccessToken.getToken());
     }
 }

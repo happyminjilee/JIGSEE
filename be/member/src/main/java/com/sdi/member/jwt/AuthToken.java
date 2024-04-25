@@ -1,4 +1,4 @@
-package com.sdi.common.jwt;
+package com.sdi.member.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -48,6 +48,14 @@ public class AuthToken {
         return extractClaims() != null;
     }
 
+    public boolean validateOrException() {
+         return Jwts.parserBuilder()
+                 .setSigningKey(getKey(key))
+                 .build()
+                 .parseClaimsJws(token)
+                 .getBody() != null;
+    }
+
     /**
      * 토큰을 파싱하여 Claim을 추출
      */
@@ -76,8 +84,10 @@ public class AuthToken {
      * 실제 리프레시 토큰을 생성하는 코드
      */
     public String generateToken(String id, String key, long expiredTimeMs) {
+        Claims claims = Jwts.claims();
+        claims.put("employeeNo", id);
         return Jwts.builder()
-                .setSubject(id)
+                .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredTimeMs))
                 .signWith(getKey(key), SignatureAlgorithm.HS256)

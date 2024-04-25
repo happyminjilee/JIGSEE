@@ -1,6 +1,6 @@
-package com.sdi.common.repository;
+package com.sdi.member.repository;
 
-import com.sdi.common.jwt.AuthToken;
+import com.sdi.member.jwt.AuthToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -41,7 +41,14 @@ public class RefreshTokenCacheRepository {
         refreshTokenRedisTemplate.delete(key);
     }
 
+    public boolean existsRefreshToken(String employeeNo) {
+        String key = getKey(employeeNo);
+        boolean exists = refreshTokenRedisTemplate.hasKey(key);
+        log.info("Refresh token exists for {}: {}", employeeNo, exists);
+        return exists;
+    }
+
     private String getKey(String employeeNo) {
-        return "EmployNo:" + employeeNo;
+        return "EmployeeNo:" + employeeNo;
     }
 }

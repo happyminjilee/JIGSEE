@@ -1,9 +1,9 @@
-package com.sdi.common.api;
+package com.sdi.member.api;
 
-import com.sdi.common.application.MemberService;
-import com.sdi.common.dto.request.MemberLoginRequest;
-import com.sdi.common.dto.response.MemberLoginResponse;
-import com.sdi.common.util.Response;
+import com.sdi.member.application.MemberService;
+import com.sdi.member.dto.request.MemberLoginRequestDto;
+import com.sdi.member.dto.response.MemberLoginResponseDto;
+import com.sdi.member.util.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,8 @@ public class MemberController {
      * @return MemberLoginResponse
      */
     @PostMapping("/login")
-    public Response<MemberLoginResponse> login(HttpServletRequest request, HttpServletResponse response, @RequestBody MemberLoginRequest memberLoginRequest) {
-        return Response.success(memberService.login(request, response, memberLoginRequest.employeeNo(), memberLoginRequest.password()));
+    public Response<MemberLoginResponseDto> login(HttpServletRequest request, HttpServletResponse response, @RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+        return Response.success(memberService.login(request, response, memberLoginRequestDto.employeeNo(), memberLoginRequestDto.password()));
     }
 
     /**
@@ -42,8 +42,17 @@ public class MemberController {
      * 만료 되었다면 리프레시 토큰이 있는지 확인 후 액세스 토큰을 발급해준다.
      * 리프레시 토큰 기간이 3일 이하라면, 리프레시 토큰도 생성한다.
      */
-    @GetMapping("/member/refresh")
-    public Response<MemberLoginResponse> refresh(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
-        return Response.success(memberService.refreshToken(authentication.getName(), request, response));
+    @GetMapping("/refresh")
+    public Response<MemberLoginResponseDto> tokenRefresh(HttpServletRequest request, HttpServletResponse response) {
+        return Response.success(memberService.tokenRefresh(request, response));
     }
+
+    @GetMapping("/manager")
+    public Response<Void> managerCheck() { return Response.success(); }
+
+    @GetMapping("/engineer")
+    public Response<Void> engineerCheck() { return Response.success(); }
+
+    @GetMapping("/producer")
+    public Response<Void> producerCheck() { return Response.success(); }
 }
