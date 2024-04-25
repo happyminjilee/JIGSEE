@@ -11,6 +11,7 @@ public enum RoleType {
     PRODUCER("ROLE_PRODUCER", "생산자");
     private final String code;
     private final String displayName;
+
     public static RoleType of(String code) {
         return Arrays.stream(RoleType.values())
                 .filter(roleType -> roleType.getCode().equals(code))
