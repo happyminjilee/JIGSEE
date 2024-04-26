@@ -1,4 +1,4 @@
-import {Input, Button, Checkbox, Pagination, Select, SelectItem, Selection, Card} from "@nextui-org/react";
+import {Input, Button, Checkbox, Pagination, Select, SelectItem, Selection} from "@nextui-org/react";
 import {useState} from "react";
 import styled from "@/styles/Total/Total.module.css";
 
