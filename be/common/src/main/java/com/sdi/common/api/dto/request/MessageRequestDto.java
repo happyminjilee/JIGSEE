@@ -11,10 +11,10 @@ public record MessageRequestDto(
         SseStatus type, // 알림 타입
         String uuid // 알림 세부 정보의 id
 ) {
-    public MessageRequestDto(@JsonProperty("sender_group") String senderGroup,
-                             @JsonProperty("sender_id") String senderId,
-                             @JsonProperty("receiver_group") String receiverGroup,
-                             @JsonProperty("receiver_id") String receiverId,
+    public MessageRequestDto(@JsonProperty("senderGroup") String senderGroup,
+                             @JsonProperty("senderId") String senderId,
+                             @JsonProperty("receiverGroup") String receiverGroup,
+                             @JsonProperty("receiverId") String receiverId,
                              @JsonProperty("type") SseStatus type,
                              @JsonProperty("uuid") String uuid) {
                 this.senderGroup = senderGroup.replaceAll("^ROLE_","");
