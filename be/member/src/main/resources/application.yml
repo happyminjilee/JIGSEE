@@ -2,6 +2,8 @@ server:
   port: 8082
 
 spring:
+  config:
+    import: optional:file:.env[.properties]
   profiles:
     active: local #default
     group:
@@ -27,9 +29,3 @@ spring:
   data:
     redis:
       url: redis://localhost:6379
-
-jwt:
-  accessToken:
-    expiry: 7200000 # 2시간
-  refreshToken:
-    expiry: 604800000 # 2일

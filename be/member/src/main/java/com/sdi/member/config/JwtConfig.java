@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class JwtConfig {
-    @Value("${jwt.secret.access}")
+    @Value("${JWT_SECRET_ACCESS}")
     private String accessKey;
-    @Value("${jwt.secret.refresh}")
+    @Value("${JWT_SECRET_REFRESH}")
     private String refreshKey;
 
     @Bean
