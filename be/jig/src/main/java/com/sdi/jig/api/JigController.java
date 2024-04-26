@@ -15,7 +15,7 @@ class JigController {
     private final JigService jigService;
 
     @PutMapping
-    Response<Void> updateCheckList(@RequestBody JigUpdateRequestDto dto){
+    Response<Void> updateCheckList(@RequestBody JigUpdateRequestDto dto) {
         jigService.updateCheckList(dto.model(), dto.checkList());
         return Response.success();
     }
