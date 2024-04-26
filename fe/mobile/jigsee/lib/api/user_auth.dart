@@ -1,28 +1,46 @@
+import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:jigsee/conts/constants.dart';
+import 'package:jigsee/stores/usePreference.dart';
 
 class AuthService {
   final _storage = const FlutterSecureStorage();
   final String apiUrl = Constants.backUrl;
 
+  Map<String, String> headers = {
+    'content-type' : 'application/json',
+  };
+
   Future<bool> login(String employeeNo, String password) async {
+    UserPreference().initSharedPreferences();
+
     try {
       var response = await http.post(
         Uri.parse(Constants.backUrl + '/login'),
-        body: {'employeeNo': employeeNo, 'password': password},
+        headers: headers,
+        body: jsonEncode({'employeeNo': employeeNo, 'password': password}),
       );
 
       if (response.statusCode == 200) {
-        String accessToken = response.headers['access-token']!;
-        String refreshToken = response.headers['refresh-token']!;
+        // String accessToken = response.headers['Authorization']!;
+        // String refreshToken = response.headers['RefreshToken']!;
+        log('${jsonDecode(utf8.decode(response.bodyBytes))['result']}');
+        var parseData = jsonDecode(utf8.decode(response.bodyBytes))['result'];
+        Map<String, dynamic> info = parseData ?? {'name' : '임시', 'employeeNo':'123', 'role':'test'};
 
-        await _storage.write(key: 'accessToken', value: accessToken);
-        await _storage.write(key: 'refreshToken', value: refreshToken);
+        // await _storage.write(key: 'accessToken', value: accessToken);
+        // await _storage.write(key: 'refreshToken', value: refreshToken);
+        await _storage.write(key: 'userName', value: info['name']);
+        await _storage.write(key: 'employeeNo', value: info['employeeNo']);
+        await _storage.write(key: 'role', value: info['role']);
 
-        return await validateToken(accessToken);
+        // await UserPreference().saveData('userName', info['name']);
+        // await UserPreference().saveData('empNo', info['employeeNo']);
+        // await UserPreference().saveData('role', info['role']);
+
+        return true;
       }
       return false;
     } catch (e) {
@@ -77,7 +95,6 @@ class AuthService {
   }
 
   Future<void> logout() async {
-
     await _storage.deleteAll();
     // Additional logout operations like navigating to the login screen
   }
