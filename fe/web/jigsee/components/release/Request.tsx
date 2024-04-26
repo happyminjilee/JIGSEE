@@ -1,5 +1,4 @@
-import { useState } from "react";
-import * as React from "react";
+import React, { useState } from "react";
 import styled from "@/styles/jigrequest.module.scss";
 
 import {
@@ -8,8 +7,6 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  Link,
-  Image,
   Input,
   Table,
   TableHeader,
@@ -18,7 +15,6 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
-  Spinner,
 } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
 interface RowData {
