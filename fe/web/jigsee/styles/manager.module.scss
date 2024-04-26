@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center; /* Center horizontally */
   //   높이 나중에 조절
-  height: 90vh;
+  height: 85vh;
   flex-direction: row; /* Stack children vertically */
   //   레이아웃 표시 나중에 지우기
   border: 1px solid black;
@@ -39,7 +39,7 @@
   border: 1px solid black;
 }
 .jigbtn {
-  background-color: var(--realwhite); /* Button background */
+  background-color: var(--white); /* Button background */
   border: 1px solid var(--samsungblue); /* Button border */
   color: black; /* Text color */
   padding: 10px 20px; /* Padding inside the button */
