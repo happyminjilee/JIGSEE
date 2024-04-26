@@ -10,7 +10,7 @@ spring:
 ---
 spring:
   config:
-    import: file:.env[.properties]
+    import: file:/var/jenkins_home/workspace/jig/be/jig/.env[.properties]
     activate:
       on-profile: common
   application:
