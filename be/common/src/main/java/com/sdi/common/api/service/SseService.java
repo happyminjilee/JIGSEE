@@ -94,7 +94,7 @@ public class SseService {
                 .orElseThrow(() -> new IllegalArgumentException("발신자 아이디를 찾을 수 없습니다."));
         MemberEntity receiver = memberRepository.findByEmployeeNo(messageRequestDto.receiverId())
                 .orElseThrow(() -> new IllegalArgumentException("수신자 아이디를 찾을 수 없습니다."));
-        NotificationEntity savedNotification = NotificationEntity.of(sender, receiver);
+        NotificationEntity savedNotification = NotificationEntity.of(sender, receiver, messageRequestDto);
         notificationRepository.save(savedNotification);
         return savedNotification;
     }

@@ -1,7 +1,11 @@
 package com.sdi.common.api.entity;
 
+import com.sdi.common.api.dto.request.MessageRequestDto;
+import com.sdi.common.util.SseStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,8 +37,12 @@ public class NotificationEntity {
     @ManyToOne
     @JoinColumn(name = "receiver_id")
     private MemberEntity receiver;
-
-    public static NotificationEntity of(MemberEntity sender, MemberEntity receiver) {
-        return new NotificationEntity(null, false, sender, receiver);
+    @Column(name = "notification_type")
+    @Enumerated(EnumType.STRING)
+    private SseStatus sseStatus;
+    @Column(name = "content_id")
+    private String contentId;
+    public static NotificationEntity of(MemberEntity sender, MemberEntity receiver, MessageRequestDto messageRequestDto) {
+        return new NotificationEntity(null, false, sender, receiver, messageRequestDto.type(), messageRequestDto.uuid());
     }
 }
