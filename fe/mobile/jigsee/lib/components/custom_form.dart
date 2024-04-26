@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:jigsee/components/custom_text_form_field.dart';
 import 'package:jigsee/api/user_auth.dart';
-import 'package:jigsee/size.dart';
+import 'package:jigsee/conts/size.dart';
 
 class CustomForm extends StatefulWidget {
   const CustomForm({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jigsee/components/custom_form.dart';
-import 'package:jigsee/size.dart';
+import 'package:jigsee/conts/size.dart';
 
 // stless 단축키로 자동 생성..
 class LoginPage extends StatelessWidget {

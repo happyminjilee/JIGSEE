@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jigsee/size.dart';
+import 'package:jigsee/conts/size.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomTextFormField extends StatefulWidget {
