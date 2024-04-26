@@ -2,6 +2,7 @@ package com.sdi.member.application;
 
 import com.sdi.member.dto.MemberDto;
 import com.sdi.member.dto.response.MemberLoginResponseDto;
+import com.sdi.member.dto.response.MemberResponseDto;
 import com.sdi.member.jwt.AuthToken;
 import com.sdi.member.jwt.AuthTokenProvider;
 import com.sdi.member.repository.MemberRepository;
@@ -17,7 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +44,7 @@ public class MemberService {
     public MemberDto getMemberOrException(String employeeNo) {
         return memberRepository.findByEmployeeNo(employeeNo)
                 .map(MemberDto::fromEntity)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with employee no: " + employeeNo));
-
+                .orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
     }
 
     /**
@@ -131,5 +130,17 @@ public class MemberService {
         HeaderUtils.addAccessToken(response, newAccessToken.getToken());
         HeaderUtils.addRefreshToken(response, authRefreshToken.getToken());
         return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
+    }
+
+    public MemberResponseDto searchName(String name) {
+        return memberRepository.findByName(name)
+                .map(MemberResponseDto::fromEntity)
+                .orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public MemberResponseDto searchEmployeeNo(String employeeNo) {
+        return memberRepository.findByEmployeeNo(employeeNo)
+                .map(MemberResponseDto::fromEntity)
+                .orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
     }
 }

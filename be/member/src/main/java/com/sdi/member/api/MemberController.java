@@ -3,6 +3,7 @@ package com.sdi.member.api;
 import com.sdi.member.application.MemberService;
 import com.sdi.member.dto.request.MemberLoginRequestDto;
 import com.sdi.member.dto.response.MemberLoginResponseDto;
+import com.sdi.member.dto.response.MemberResponseDto;
 import com.sdi.member.util.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,6 +46,16 @@ class MemberController {
     @GetMapping("/refresh")
     Response<MemberLoginResponseDto> tokenRefresh(HttpServletRequest request, HttpServletResponse response) {
         return Response.success(memberService.tokenRefresh(request, response));
+    }
+
+    @GetMapping("/member/search/name")
+    Response<MemberResponseDto> searchName(@RequestParam("name") String name) {
+        return Response.success(memberService.searchName(name));
+    }
+
+    @GetMapping("/member/search/employee-no")
+    Response<MemberResponseDto> searchEmployeeNo(@RequestParam("employee-no") String employeeNo) {
+        return Response.success(memberService.searchEmployeeNo(employeeNo));
     }
 
     @GetMapping("/manager")
