@@ -10,7 +10,7 @@ spring:
 ---
 spring:
   config:
-    import: optional:file:.env[.properties]
+    import: file:.env[.properties]
     activate:
       on-profile: common
   application:
