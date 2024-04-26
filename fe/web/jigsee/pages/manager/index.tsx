@@ -7,11 +7,13 @@ import Approve from "@/components/release/Approve";
 import Return from "@/components/release/Return";
 
 export default function Manager() {
+  // 불출 승인 , 반려 모달 표시 상태변수
   const [showApproveModal, setApproveShowModal] = useState(false);
   const [showReturnModal, setReturnShowModal] = useState(false);
-
+  // 불출 승인 모달 오픈, 클로즈 함수
   const openApproveModal = () => setApproveShowModal(true);
   const closeApproveModal = () => setApproveShowModal(false);
+  // 불출 반려 모달 오픈, 클로즈 함수
   const openReturnModal = () => setReturnShowModal(true);
   const closeReturnModal = () => setReturnShowModal(false);
   return (
