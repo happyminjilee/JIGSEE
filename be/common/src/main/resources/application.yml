@@ -1,5 +1,27 @@
 spring:
   application:
     name: common
+---
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_jigsee?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: jigsee
+    password: jigsee
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+      uri: mongodb://localhost
+      port: 27017
+      database: jig
+      username: jigsee
+      password: jigseeadmin!
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+     hibernate:
+       format_sql: true
+
 server:
-  port: 8080
+  port: 8088
