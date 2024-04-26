@@ -1,0 +1,31 @@
+server:
+  port: 8082
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  profiles:
+    active: local #default
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  #DB
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
+
+  data:
+    redis:
+      url: ${LOCAL_REDIS_URL}
