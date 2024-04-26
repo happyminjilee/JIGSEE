@@ -1,0 +1,44 @@
+.box {
+    display: flex;
+    flex-direction: column;
+    border: #2f76ff solid;
+    border-radius: 0.5rem;
+    width: 500px;
+    height: 800px;
+    margin: 10px auto;
+    padding: 10px;
+    box-shadow: 4px 4px var(--light-gray);
+    /*align-content: center;*/
+    /*justify-content: center;*/
+    /*height: 100vh;*/
+    /*width: 100vw;*/
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    border: #2f76ff solid;
+    border-radius: 0.5rem;
+    width: 450px;
+    height: 190px;
+    margin: 10px auto;
+    background-color: var(--white);
+    box-shadow: 4px 4px var(--light-gray);
+    justify-content: space-between;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    /*align-items: center;*/
+    /*padding: 10px;*/
+
+}
+
+.division {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    margin: 5px auto;
+}

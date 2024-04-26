@@ -3,19 +3,15 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import Stocklist from "@/components/release/StockList"
 import styled from "@/styles/stocklist.module.css"
-import StockList from "@/components/release/StockList";
+import Requestlist from "@/components/release/RequestList";
 
 const inter = Inter({ subsets: ["latin"] });
-interface lst {
-  model: string;
-  count: number;
-}
 
 export default function Home() {
 
   return (
       <>
-          <StockList/>
+          <Requestlist/>
       </>
   );
 }
