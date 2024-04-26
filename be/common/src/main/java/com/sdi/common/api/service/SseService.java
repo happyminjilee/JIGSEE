@@ -1,9 +1,9 @@
 package com.sdi.common.api.service;
 
-import com.sdi.common.api.dto.DisconnectRequestDto;
+import com.sdi.common.api.dto.request.DisconnectRequestDto;
 import com.sdi.common.api.dto.MemberInfoDto;
-import com.sdi.common.api.dto.MessageRequestDto;
-import com.sdi.common.api.dto.MessageResponseDto;
+import com.sdi.common.api.dto.request.MessageRequestDto;
+import com.sdi.common.api.dto.response.MessageResponseDto;
 import com.sdi.common.api.entity.MemberEntity;
 import com.sdi.common.api.entity.NotificationEntity;
 import com.sdi.common.api.repository.EmitterRepository;
@@ -95,7 +95,6 @@ public class SseService {
         MemberEntity receiver = memberRepository.findByEmployeeNo(messageRequestDto.receiverId())
                 .orElseThrow(() -> new IllegalArgumentException("수신자 아이디를 찾을 수 없습니다."));
         NotificationEntity savedNotification = NotificationEntity.of(sender, receiver);
-        System.out.println(savedNotification.getId());
         notificationRepository.save(savedNotification);
         return savedNotification;
     }

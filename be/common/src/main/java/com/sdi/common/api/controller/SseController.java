@@ -1,8 +1,8 @@
 package com.sdi.common.api.controller;
 
-import com.sdi.common.api.dto.DisconnectRequestDto;
+import com.sdi.common.api.dto.request.DisconnectRequestDto;
 import com.sdi.common.api.dto.MemberInfoDto;
-import com.sdi.common.api.dto.MessageRequestDto;
+import com.sdi.common.api.dto.request.MessageRequestDto;
 import com.sdi.common.api.service.SseService;
 import com.sdi.common.util.RoleType;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +30,6 @@ class SseController {
 
     @PostMapping(value = "/send-message")
     void sendMessage(@RequestBody MessageRequestDto messageRequestDto) {
-        System.out.println(messageRequestDto);
-        System.out.println("===============================");
         sseService.sendToReceiver(messageRequestDto);
     }
 
