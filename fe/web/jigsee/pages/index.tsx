@@ -3,9 +3,7 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import Stocklist from "@/components/release/StockList"
 import styled from "@/styles/stocklist.module.css"
-import Approvedreleaselist from "@/components/release/ApprovedRelease";
-import Rejectedreleaselist from "@/components/release/RejectedRelease"
-
+import Restorememo from "@/components/restore/RestoreMemo";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -13,10 +11,7 @@ export default function Home() {
   return (
       <>
           <div>
-              <Rejectedreleaselist/>
-          </div>
-          <div>
-              <Approvedreleaselist/>
+              <Restorememo/>
           </div>
 
 

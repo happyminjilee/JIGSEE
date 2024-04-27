@@ -9,7 +9,7 @@ interface lst {
 }
 
 
-export default function ApprovedRelease() {
+export default function RejectedRelease() {
     const memo = "좀 아껴써라 이 jig 들아 너희는 그냥 내가 시키는 일만 하면 돼 알았어?"
 
     return (
