@@ -33,7 +33,7 @@
     border: 2px solid var(--samsungblue); /* 스크롤바 썸의 테두리 색상 (선택적) */
 }
 
-.box::-webkit-scrollbar-track {
+.contents::-webkit-scrollbar-track {
     background-color: var(--white);
     border-radius: 10px;
     box-shadow: inset 0px 0px 5px var(--white);

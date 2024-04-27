@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid var(--samsungblue);
+    border-radius: 0.5rem;
+    margin: 10px auto;
+}
+
+.contentbox {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--samsungblue);
+    border-radius: 0.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.contents::-webkit-scrollbar {
+    width: 3px;
+}
+
+.contents::-webkit-scrollbar-button{
+    display: none;
+}
+
+.contents::-webkit-scrollbar-thumb {
+    background-color: var(--samsungblue); /* 스크롤바 썸의 배경색 */
+    border-radius: 10px; /* 스크롤바 썸의 모서리 둥글게 */
+    background-clip: padding-box;
+    border: 2px solid var(--samsungblue); /* 스크롤바 썸의 테두리 색상 (선택적) */
+}
+
+.box::-webkit-scrollbar-track {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px var(--white);
+}
+
+

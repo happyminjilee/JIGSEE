@@ -1,3 +1,16 @@
+import styled from "@/styles/modal/rejectedrelease.module.css"
+import {Button} from "@nextui-org/react"
+
+
 export default function RejectedRelease() {
-  return <>RejectedRelease 불출반려</>;
+  return (
+      <>
+        <div
+            className={styled.container}
+        >
+
+
+        </div>
+      </>
+  );
 }
