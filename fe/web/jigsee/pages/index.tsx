@@ -13,11 +13,12 @@ export default function Home() {
   return (
       <>
           <div>
+              <Rejectedreleaselist/>
+          </div>
+          <div>
               <Approvedreleaselist/>
           </div>
-          {/*<div>*/}
-          {/*    <Rejectedreleaselist/>*/}
-          {/*</div>*/}
+
 
       </>
   );

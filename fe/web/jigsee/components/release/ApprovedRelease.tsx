@@ -55,7 +55,15 @@ export default function ApprovedRelease() {
                   ))}
               </div>
 
-               <Button style={{width: "300px", height: "60px", margin: "20px auto"}} color="primary">확인</Button>
+               <Button style={{
+                   width: "300px",
+                   height: "60px",
+                   margin: "10px auto"
+               }}
+                       color="primary"
+               >
+                   확인
+               </Button>
 
           </div>
       </>
