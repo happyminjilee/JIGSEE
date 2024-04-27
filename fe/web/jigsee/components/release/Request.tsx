@@ -1,27 +1,14 @@
 import React, { useState } from "react";
 import styled from "@/styles/jigrequest.module.scss";
-
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Divider,
-  Input,
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  getKeyValue,
-} from "@nextui-org/react";
-import { Select, SelectItem } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Select, SelectItem, getKeyValue, Divider, Input, Button } from "@nextui-org/react";
 interface RowData {
   key: number;
   facility: string;
   model: string;
   amount: number;
+  [key: string]: any; // 인덱스 시그니처 추가
 }
 
 export default function Request() {
@@ -47,6 +34,10 @@ export default function Request() {
       key: "amount",
       label: "수량",
     },
+    {
+      key: "action",
+      label: "삭제",
+    },
   ];
   // 추가 버튼 함수
   const handleAddRow = () => {
@@ -60,6 +51,10 @@ export default function Request() {
   };
   const handleResetRow = () => {
     setRows([]);
+  };
+  // 특정 행 삭제 함수
+  const handleDeleteRow = (key: number) => {
+    setRows(rows.filter((row) => row.key !== key));
   };
 
   return (
@@ -124,7 +119,20 @@ export default function Request() {
               <TableBody items={rows}>
                 {(item) => (
                   <TableRow className={styled.tableScrollContainer} key={item.key}>
-                    {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+                    {columns.map((column) => (
+                      <TableCell key={`${item.key}-${column.key}`}>
+                        {column.key !== "action" ? (
+                          item[column.key]
+                        ) : (
+                          <img
+                            className={styled.icon}
+                            src="/images/delete_gray.svg"
+                            alt="delete_icon"
+                            onClick={() => handleDeleteRow(item.key)}
+                          />
+                        )}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 )}
               </TableBody>
