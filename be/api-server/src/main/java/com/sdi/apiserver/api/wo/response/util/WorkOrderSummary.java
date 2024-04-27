@@ -12,7 +12,7 @@ public class WorkOrderSummary {
     String serialNo;
     String creator;
     String terminator;
-    Boolean isTerminate;
+    String status;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

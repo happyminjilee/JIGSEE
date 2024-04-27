@@ -2,6 +2,7 @@ package com.sdi.apiserver.api.wo;
 
 import com.sdi.apiserver.api.wo.request.WorkOrderCreateRequest;
 import com.sdi.apiserver.api.wo.request.WorkOrderDoneRequestDto;
+import com.sdi.apiserver.api.wo.request.WorkOrderUpdateStatusRequestDto;
 import com.sdi.apiserver.api.wo.response.WorkOrderDetailResponseDto;
 import com.sdi.apiserver.api.wo.response.WorkOrderGroupingResponseDto;
 import com.sdi.apiserver.api.wo.response.WorkOrderResponseDto;
@@ -22,10 +23,12 @@ public class WorkOrderController {
     Response<WorkOrderDetailResponseDto> searchBySerialNo(@RequestParam(name = "serial-no") String serialNo) {
         WorkOrderDetailResponseDto dto = new WorkOrderDetailResponseDto(
                 0L,
+                "PUBLISH",
                 "testCreator",
                 "testTerminator",
                 "testModel",
                 "testSerialNo",
+                LocalDateTime.now(),
                 List.of(
                         new CheckDoneList("testContent", "testStandard", "testUuid", "testMeasure", "testMemo", true),
                         new CheckDoneList("testContent", "testStandard", "testUuid", "testMeasure", "testMemo", false)
@@ -35,14 +38,14 @@ public class WorkOrderController {
     }
 
     @GetMapping("/all")
-    Response<WorkOrderResponseDto> all() {
+    Response<WorkOrderResponseDto> all(@RequestParam(name = "status")String status) {
         WorkOrderSummary dto = new WorkOrderSummary(
                 0L,
                 "testModel",
                 "testSerialNo",
                 "testCreator",
                 "testTerminator",
-                true,
+                "PUBLISH",
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
@@ -51,20 +54,38 @@ public class WorkOrderController {
 
     @GetMapping("/grouping")
     Response<WorkOrderGroupingResponseDto> grouping(){
-        WorkOrderSummary dto = new WorkOrderSummary(
+        WorkOrderSummary publishDto = new WorkOrderSummary(
                 0L,
                 "testModel",
                 "testSerialNo",
                 "testCreator",
                 "testTerminator",
-                true,
+                "PUBLISH",
+                LocalDateTime.now(),
+                LocalDateTime.now());
+        WorkOrderSummary progressDto = new WorkOrderSummary(
+                0L,
+                "testModel",
+                "testSerialNo",
+                "testCreator",
+                "testTerminator",
+                "PROGRESS",
+                LocalDateTime.now(),
+                LocalDateTime.now());
+        WorkOrderSummary finishDto = new WorkOrderSummary(
+                0L,
+                "testModel",
+                "testSerialNo",
+                "testCreator",
+                "testTerminator",
+                "FINISH",
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
         return Response.success(WorkOrderGroupingResponseDto.from(
-                List.of(dto, dto),
-                List.of(dto),
-                List.of(dto, dto, dto)
+                List.of(publishDto, publishDto),
+                List.of(progressDto),
+                List.of(finishDto, finishDto, finishDto)
         ));
     }
 
@@ -77,7 +98,7 @@ public class WorkOrderController {
                 "testSerialNo",
                 "testCreator",
                 "testTerminator",
-                true,
+                "PROGRESS",
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
@@ -96,6 +117,11 @@ public class WorkOrderController {
 
     @PutMapping("/done")
     Response<Void> done(@RequestBody WorkOrderDoneRequestDto dto) {
+        return Response.success();
+    }
+
+    @PutMapping("/status")
+    Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto){
         return Response.success();
     }
 }
