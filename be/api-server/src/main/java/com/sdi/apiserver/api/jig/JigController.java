@@ -17,7 +17,7 @@ public class JigController {
         return Response.success();
     }
 
-    @GetMapping("?mode={model}")
+    @GetMapping()
     Response<JigResponseDto> searchByModel(@RequestParam(name = "model") String model){
         JigResponseDto dto = new JigResponseDto(
                 "testModel",

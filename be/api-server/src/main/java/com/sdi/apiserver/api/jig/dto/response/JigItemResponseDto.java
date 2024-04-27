@@ -11,10 +11,10 @@ public class JigItemResponseDto {
     Long id;
     String model;
     String serialNo;
-    JigStatus status;
+    String status;
     String expectLife;
+    Integer useCount;
+    String useAccumulationTime;
     Integer repairCount;
-    Integer checkCount;
     List<CheckList> checkList;
-
 }

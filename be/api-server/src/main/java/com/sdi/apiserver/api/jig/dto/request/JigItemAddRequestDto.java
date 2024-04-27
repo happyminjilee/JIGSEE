@@ -5,11 +5,11 @@ import lombok.Value;
 import java.util.List;
 
 @Value
-public class JigItemCreateRequestDto {
+public class JigItemAddRequestDto {
     List<JigItemCreate> list;
 
     public static class JigItemCreate{
-        String serialNo;
-        Integer count;
+        String model;
+        List<String> serialNos;
     }
 }

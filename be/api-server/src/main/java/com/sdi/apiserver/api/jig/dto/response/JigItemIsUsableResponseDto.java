@@ -9,8 +9,8 @@ public class JigItemIsUsableResponseDto {
 
     @Value
     public static class JigItemSummary{
-        String facilityModel;
-        String jigUseAccumulationTime;
+        Integer useCount;
+        String useAccumulationTime;
         Integer repairCount;
     }
 }

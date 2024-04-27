@@ -1,11 +1,12 @@
 package com.sdi.apiserver.api.jig;
 
-import com.sdi.apiserver.api.jig.dto.request.JigItemCreateRequestDto;
+import com.sdi.apiserver.api.jig.dto.request.JigItemAddRequestDto;
+import com.sdi.apiserver.api.jig.dto.request.JigItemExchangeRequestDto;
 import com.sdi.apiserver.api.jig.dto.request.JigItemSerialNoRequestDto;
+import com.sdi.apiserver.api.jig.dto.request.JigItemUpdateStatusRequestDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
 import com.sdi.apiserver.util.CheckList;
-import com.sdi.apiserver.api.jig.dto.util.JigStatus;
 import com.sdi.apiserver.util.Response;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +19,14 @@ import static com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto.
 public class JigItemController {
 
     @GetMapping()
-    Response<JigItemResponseDto> search(@RequestParam(name = "model") String model,
-                                        @RequestParam(name = "serial-no") String serialNo) {
+    Response<JigItemResponseDto> findBySerialNo(@RequestParam(name = "serial-no") String serialNo) {
         JigItemResponseDto dto = new JigItemResponseDto(0L,
                 "testModel",
                 "testSerialNo",
-                JigStatus.WAREHOUSE,
+                "WAREHOUSE",
                 "testExpectLife",
                 3,
+                "testUseAccumulationTime",
                 0,
                 List.of(
                         new CheckList("test1", "test1"),
@@ -35,18 +36,18 @@ public class JigItemController {
     }
 
     @PostMapping()
-    Response<Void> add(@RequestBody JigItemCreateRequestDto dto) {
+    Response<Void> add(@RequestBody JigItemAddRequestDto dto) {
         return Response.success();
     }
 
-    @GetMapping("/adjustment")
-    Response<JigItemIsUsableResponseDto> isUsable(@RequestParam(name = "facility-no") String facilityNo,
-                                                  @RequestParam(name = "serial-no") String serialNo) {
+    @GetMapping("/usable")
+    Response<JigItemIsUsableResponseDto> isUsable(@RequestParam(name = "facility-model") String facilityModel,
+                                                  @RequestParam(name = "jig-serial-no") String jigSerialNo) {
         JigItemIsUsableResponseDto dto = new JigItemIsUsableResponseDto(
                 true,
                 new JigItemSummary(
-                        "testFacilityModel",
-                        "testJigUseAccumulationTime",
+                        1,
+                        "testUseAccumulationTime",
                         1
                 )
         );
@@ -59,18 +60,13 @@ public class JigItemController {
         return Response.success();
     }
 
-    @PutMapping("/use-waiting")
-    Response<Void> useWaiting(@RequestBody JigItemSerialNoRequestDto dto) {
+    @PutMapping("/status")
+    Response<Void> updateStatus(JigItemUpdateStatusRequestDto dto){
         return Response.success();
     }
 
-    @PutMapping("/warehouse")
-    Response<Void> wareHouse(@RequestBody JigItemSerialNoRequestDto dto) {
-        return Response.success();
-    }
-
-    @PutMapping("/change")
-    Response<Void> change(@RequestBody JigItemSerialNoRequestDto dto) {
+    @PutMapping("/exchange")
+    Response<Void> exchange(JigItemExchangeRequestDto dto){
         return Response.success();
     }
 }
