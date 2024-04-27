@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "@/styles/jigrequest.module.scss";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
-import { Select, SelectItem, getKeyValue, Divider, Input, Button } from "@nextui-org/react";
+import { Select, SelectItem, Divider, Input } from "@nextui-org/react";
 interface RowData {
   key: number;
   facility: string;
