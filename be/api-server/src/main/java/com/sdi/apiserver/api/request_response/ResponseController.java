@@ -1,6 +1,6 @@
 package com.sdi.apiserver.api.request_response;
 
-import com.sdi.apiserver.api.request_response.dto.requset.RequestJigResponseRequestDto;
+import com.sdi.apiserver.api.request_response.dto.request.RequestJigResponseRequestDto;
 import com.sdi.apiserver.util.Response;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

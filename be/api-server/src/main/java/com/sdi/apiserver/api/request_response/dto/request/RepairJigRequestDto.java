@@ -1,4 +1,4 @@
-package com.sdi.apiserver.api.request_response.dto.requset;
+package com.sdi.apiserver.api.request_response.dto.request;
 
 import lombok.Value;
 

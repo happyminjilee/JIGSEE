@@ -1,4 +1,4 @@
-package com.sdi.apiserver.api.request_response.response;
+package com.sdi.apiserver.api.request_response.dto.response;
 
 import lombok.Value;
 
@@ -14,12 +14,12 @@ public class RequestJigListResponseDto {
     List<JigRequest> list;
 
     @Value
-    public static class JigRequest{
-        Long requestId;
+    public static class JigRequest {
+        Long id;
+        String status;
         String from;
         String to;
-        String model;
-        Integer count;
-        LocalDateTime requestedAt;
+        LocalDateTime createdAt;
+        LocalDateTime updatedAt;
     }
 }

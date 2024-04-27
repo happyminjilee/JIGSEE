@@ -1,4 +1,4 @@
-package com.sdi.apiserver.api.request_response.dto.requset;
+package com.sdi.apiserver.api.request_response.dto.request;
 
 import lombok.Value;
 
@@ -9,5 +9,5 @@ public class RequestJigResponseRequestDto {
     Long requestId;
     Boolean isAccept;
     String memo;
-    List<String> list; // 지그의 일련번호들
+    List<String> serialNos; // 지그의 일련번호들
 }
