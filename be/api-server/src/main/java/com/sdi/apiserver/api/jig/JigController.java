@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/jig")
 @RequiredArgsConstructor
-public class JigController {
+class JigController {
 
     @Value("${apis.jig-base-url}")
     private String jigBaseUrl;

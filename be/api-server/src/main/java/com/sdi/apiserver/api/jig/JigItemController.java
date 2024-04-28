@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/jig-item")
 @RequiredArgsConstructor
-public class JigItemController {
+class JigItemController {
 
     @Value("${apis.jig-base-url}")
     private String jigBaseUrl;
@@ -57,6 +57,12 @@ public class JigItemController {
     @PutMapping("/exchange")
     ResponseEntity<Response<Void>> exchange(@RequestBody JigItemExchangeRequestDto dto){
         String url = String.format("%s/v1/jig-item/exchange", jigBaseUrl);
+        return request.put(url, dto);
+    }
+
+    @PutMapping("/recovery")
+    ResponseEntity<Response<Void>> recovery(@RequestBody JigItemSerialNoRequestDto dto) {
+        String url = String.format("%s/v1/jig-item/recovery", jigBaseUrl);
         return request.put(url, dto);
     }
 }
