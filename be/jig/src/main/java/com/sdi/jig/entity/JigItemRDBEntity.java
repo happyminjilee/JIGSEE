@@ -60,6 +60,10 @@ public class JigItemRDBEntity {
         this.status = status;
     }
 
+    public void recovery() {
+        this.isDelete = false;
+    }
+
     public void addAccumulateTime(JigItemIOHistoryRDBEntity recentIn) {
         this.useAccumulateTime += TimeCalculator.timeDiffToMills(recentIn.getInOutTime(), LocalDateTime.now());
     }

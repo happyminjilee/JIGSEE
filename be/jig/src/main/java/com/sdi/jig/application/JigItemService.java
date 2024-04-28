@@ -97,6 +97,12 @@ public class JigItemService {
         updateBecauseExchange(facilityItem, beforeJigItem, afterJigItem);
     }
 
+    @Transactional
+    public void recoveryBySerialNo(String serialNo) {
+        JigItemRDBEntity jigItem = getJigItemBySerialNo(serialNo);
+        jigItem.recovery();
+    }
+
     private void updateBecauseExchange(FacilityItemRDBEntity facilityItem, JigItemRDBEntity beforeJigItem, JigItemRDBEntity afterJigItem) {
         // 지그 교체
         facilityItem.exchangeJigItem(beforeJigItem, afterJigItem);
