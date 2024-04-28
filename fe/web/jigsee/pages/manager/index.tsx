@@ -5,8 +5,17 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import RequestList from "@/components/release/RequestList";
 import Approve from "@/components/release/Approve";
 import Return from "@/components/release/Return";
+import EditStandard from "@/components/release/EditStandard";
+import Request from "@/components/release/Request";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import { useRouter } from "next/router";
 
 export default function Manager() {
+  const router = useRouter();
+  const goToJigrestore = () => {
+    router.push("/engineer/restore");
+  };
   // 불출 승인 , 반려 모달 표시 상태변수
   const [showApproveModal, setApproveShowModal] = useState(false);
   const [showReturnModal, setReturnShowModal] = useState(false);
@@ -16,6 +25,16 @@ export default function Manager() {
   // 불출 반려 모달 오픈, 클로즈 함수
   const openReturnModal = () => setReturnShowModal(true);
   const closeReturnModal = () => setReturnShowModal(false);
+  // 지그점검항목 입력 모달
+  const [showEditStandardModal, setShowEditStandardModal] = useState(false);
+  // Jig 정보 입력 모달 오픈, 클로즈 함수
+  const openEditStandardModal = () => setShowEditStandardModal(true);
+  const closeEditStandardModal = () => setShowEditStandardModal(false);
+  // Jig 불출 요청 입력 모달 오픈
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  // Jig 불출 요청 오픈, 클로즈 함수
+  const openRequestModal = () => setShowRequestModal(true);
+  const closeRequestModal = () => setShowRequestModal(false);
   return (
     <>
       <Navbar />
@@ -27,16 +46,69 @@ export default function Manager() {
         </div>
         <div className={styled.stockcontainer}>재고현황리스트</div>
         <div className={styled.btncontainer}>
-          <button className={styled.jigbtn}>
+          <button className={styled.jigbtn} onClick={goToJigrestore}>
+            Jig 보수 요청 확인
+            <ArrowForwardIosIcon color="primary" />
+          </button>
+          <button onClick={openRequestModal} className={styled.jigbtn}>
             Jig 불출 요청 <ArrowForwardIosIcon color="primary" />
           </button>
-          <button className={styled.jigbtn}>
-            Jig 정보 요청 <ArrowForwardIosIcon color="primary" />
-          </button>
-          <button className={styled.jigbtn}>
+
+          <button onClick={openEditStandardModal} className={styled.jigbtn}>
             Jig 정보 입력 <ArrowForwardIosIcon color="primary" />
           </button>
         </div>
+        {/* jig 정보 입력 컴포넌트 모달 창  */}
+        <Modal
+          open={showEditStandardModal} // Corrected from 'open'
+          onClose={closeEditStandardModal} // Added onClose handler
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: "100%",
+              height: "80%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <EditStandard onClose={closeEditStandardModal} />
+          </Box>
+        </Modal>
+
+        {/* jig 불출 요청 컴포넌트 모달  */}
+        <Modal
+          open={showRequestModal} // Corrected from 'open'
+          onClose={closeRequestModal} // Added onClose handler
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: "100%",
+              height: "80%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* 닫기 아이콘 */}
+            {/* <img src="/images/delete_normal.svg" alt="delete" onClick={closeRequestModal}></img> */}
+            <Request />
+          </Box>
+        </Modal>
       </div>
     </>
   );

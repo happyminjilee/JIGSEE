@@ -148,3 +148,25 @@
   justify-content: center; /* Center horizontally */
   align-items: center;
 }
+.addbtnline {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center;
+  flex-direction: row;
+  width: 400px;
+}
+.rowcontainer {
+  width: 400px;
+  height: 100px;
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center;
+  flex-direction: row;
+  label {
+    input {
+      border: 1px var(--samsungblue) solid;
+      height: 50px;
+      background-color: var(--white);
+    }
+  }
+}
