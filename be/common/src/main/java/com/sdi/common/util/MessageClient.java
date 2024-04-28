@@ -5,8 +5,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "apiClient", url = "http://localhost:8084") // 요청을 보낼 url 작성
-public interface ApiClient {
+@FeignClient(name = "messageClient", url = "http://localhost:8084") // 요청을 보낼 url 작성
+public interface MessageClient {
     @PostMapping("/sse/send-message")
     void sendMessage(@RequestBody MessageDto messageDto);
 }

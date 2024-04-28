@@ -1,4 +1,4 @@
-package com.sdi.common.controller.repository;
+package com.sdi.common.repository;
 
 import com.sdi.common.entity.RepairRequestEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;

@@ -23,5 +23,11 @@ spring:
      hibernate:
        format_sql: true
 ---
+#spring:
+#  cloud:
+#    openfeign:
+#      okhttp:
+#        enabled: true
+---
 server:
   port: 8088
