@@ -1,7 +1,9 @@
 import React from "react";
 import styles from "@/styles/wotestresult.module.scss"; // Corrected import
-import { DateInput } from "@nextui-org/react";
-import { CalendarDate } from "@internationalized/date";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
@@ -46,18 +48,12 @@ export default function WOtestresult() {
         </div>
 
         <div className={styles.datepicker}>
-          <DateInput
-            className={styles.dateInput}
-            label={"시작일"}
-            isRequired
-            placeholderValue={new CalendarDate(1995, 11, 6)}
-          />
-          <DateInput
-            className={styles.dateInput}
-            label={"종료일"}
-            isRequired
-            placeholderValue={new CalendarDate(1995, 11, 6)}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker className={styles.dateInput} label="시작일" format="YYYY-M-D" />
+          </LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker className={styles.dateInput} label="종료일" format="YYYY-M-D" />
+          </LocalizationProvider>
         </div>
 
         <Box className={styles.box}>

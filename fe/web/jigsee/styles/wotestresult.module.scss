@@ -47,15 +47,18 @@
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-  width: 500px;
+  width: 450px;
 }
 .dateInput {
-  width: 220px;
-  height: 44px;
-  border: 1px var(--samsungblue) solid;
-  border-radius: 20px;
-  background-color: var(--white);
+  width: 200px;
+  height: auto;
+  border-radius: 5px;
+  background-color: var(--realwhite);
+  border: solid 1px var(--samsungblue);
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
+
 .editbtn {
   background-color: var(--samsungblue);
   color: white; /* 버튼 텍스트 색상 */
@@ -75,7 +78,7 @@
 }
 .box {
   margin-top: 20px;
-  height: 350;
+  height: 300px;
   width: 500;
   margin-bottom: 30px;
   border: 1px var(--samsungblue) solid;
