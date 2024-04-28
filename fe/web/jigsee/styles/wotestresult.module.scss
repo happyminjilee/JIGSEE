@@ -1,0 +1,85 @@
+.container {
+  width: 600px;
+  height: 100%;
+  display: flex;
+  justify-content: start; /* Center horizontally */
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid var(--samsungblue);
+  border-radius: 20px;
+  background-color: var(--white);
+  padding-top: 20px;
+}
+.header {
+  font-weight: bolder;
+  font-size: 30px;
+  margin-top: 5px;
+}
+.body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.inputname {
+  margin-top: 20px;
+  margin-bottom: 5px;
+  width: 260px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  padding: 0 0;
+  input {
+    border: 1px blue solid;
+    border-radius: 10px;
+    margin-top: 0;
+  }
+  label {
+    width: 80px;
+    text-align: center;
+  }
+}
+.datepicker {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 450px;
+}
+.dateInput {
+  width: 200px;
+  height: auto;
+  border-radius: 5px;
+  background-color: var(--realwhite);
+  border: solid 1px var(--samsungblue);
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.editbtn {
+  background-color: var(--samsungblue);
+  color: white; /* 버튼 텍스트 색상 */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 150px;
+  height: 35px;
+  margin-left: 30px;
+  margin-right: 30px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.box {
+  margin-top: 20px;
+  height: 300px;
+  width: 500;
+  margin-bottom: 30px;
+  border: 1px var(--samsungblue) solid;
+}
