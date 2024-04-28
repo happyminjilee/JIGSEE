@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jigsee/pages/home_page.dart';
 import 'package:jigsee/pages/login_page.dart';
+import 'package:jigsee/components/navigate_animation.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -28,10 +29,16 @@ class MyApp extends StatelessWidget {
             )
         ),
       ),
-      initialRoute: "/login", // 초기 경로 설정
-      routes: { // 경로 목록
-        "/login" : (context) => const LoginPage(),
-        "/home" : (context) => const HomePage()
+      initialRoute: "/home", // 초기 경로 설정
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {
+          case '/home':
+            return NoAnimationRoute(builder: (_) => const HomePage(), settings: settings);
+          case '/login':
+            return NoAnimationRoute(builder: (_) => const LoginPage(), settings: settings);
+          default:
+            return MaterialPageRoute(builder: (_) => const HomePage());
+        }
       },
     );
   }

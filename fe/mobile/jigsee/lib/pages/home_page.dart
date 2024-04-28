@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jigsee/stores/usePreference.dart';
+import 'package:jigsee/components/header.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,9 +23,20 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Scaffold(
+              appBar: const CustomAppBar(),
+              body: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView(
+                  children: [
+                    Text('Error: ${snapshot.error}'),
+                  ],
+                )
+              ),
+            );
           }
           return Scaffold(
+            appBar: const CustomAppBar(),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
               child: ListView(
@@ -42,7 +54,17 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         } else {
-          return const CircularProgressIndicator();
+          return Scaffold(
+            appBar: const CustomAppBar(),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: const [
+                  CircularProgressIndicator(),
+                ],
+              ),
+            ),
+          );
         }
       }
     );
