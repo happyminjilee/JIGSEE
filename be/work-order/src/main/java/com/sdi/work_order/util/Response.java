@@ -1,4 +1,4 @@
-package com.sdi.common.util;
+package com.sdi.work_order.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

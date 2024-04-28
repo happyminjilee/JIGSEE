@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: work-order
+server:
+  port: 8085
