@@ -21,3 +21,5 @@ server:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+apis:
+  jig-base-url: ${jig_base_url}

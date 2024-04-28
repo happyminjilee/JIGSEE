@@ -2,9 +2,11 @@ package com.sdi.apiserver.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
+@ToString
 public class Response<T> {
     private String resultCode;
     private T result;
