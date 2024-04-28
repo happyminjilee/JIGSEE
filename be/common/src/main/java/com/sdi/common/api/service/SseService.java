@@ -66,8 +66,10 @@ public class SseService {
         Map<String, SseEmitter> receivers = emitterRepository.findAllEmitterStartWithRoleType(messageRequestDto.receiverGroup());
         for (String key : receivers.keySet()) {
             SseEmitter emitter = receivers.get(key);
-            String eventId = makeTimeIncludeId(messageRequestDto.receiverGroup());
-            send(emitter, eventId, key, messageRequestDto);
+            String receiverId = key.split("_")[1];
+            String eventId = makeTimeIncludeId(messageRequestDto.receiverGroup(), receiverId);
+            System.out.println("eventId : " + eventId);
+            send(emitter, eventId, key, messageRequestDto, receiverId);
         }
     }
 
@@ -89,20 +91,20 @@ public class SseService {
     }
      */
 
-    private NotificationEntity saveToNotificationDB(MessageRequestDto messageRequestDto) {
+    private NotificationEntity saveToNotificationDB(MessageRequestDto messageRequestDto, String receiverId) {
         MemberEntity sender = memberRepository.findByEmployeeNo(messageRequestDto.senderId())
                 .orElseThrow(() -> new IllegalArgumentException("발신자 아이디를 찾을 수 없습니다."));
-        MemberEntity receiver = memberRepository.findByEmployeeNo(messageRequestDto.receiverId())
+        MemberEntity receiver = memberRepository.findByEmployeeNo(receiverId)
                 .orElseThrow(() -> new IllegalArgumentException("수신자 아이디를 찾을 수 없습니다."));
         NotificationEntity savedNotification = NotificationEntity.of(sender, receiver, messageRequestDto);
         notificationRepository.save(savedNotification);
         return savedNotification;
     }
 
-    private void send(SseEmitter emitter, String eventId, String emitterId, MessageRequestDto messageRequestDto) {
+    private void send(SseEmitter emitter, String eventId, String emitterId, MessageRequestDto messageRequestDto, String receiverId) {
         try {
-            NotificationEntity savedNotification = saveToNotificationDB(messageRequestDto);
-            Object data = MessageResponseDto.of(messageRequestDto, savedNotification.getId());
+            NotificationEntity savedNotification = saveToNotificationDB(messageRequestDto, receiverId);
+            Object data = MessageResponseDto.of(messageRequestDto, savedNotification.getId(), receiverId);
             emitter.send(SseEmitter.event()
                     .id(eventId)
                     .data(data));
@@ -115,8 +117,8 @@ public class SseService {
         return makeRoleTypeEmployeeNo(memberInfo) + "_" + System.currentTimeMillis();
     }
 
-    private String makeTimeIncludeId(String roleType) {
-        return roleType + "_" + System.currentTimeMillis();
+    private String makeTimeIncludeId(String roleType, String employeeNo) {
+        return roleType + "_" + employeeNo + "_" + System.currentTimeMillis();
     }
 
     private static String makeRoleTypeEmployeeNo(MemberInfoDto memberInfo) {

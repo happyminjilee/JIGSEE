@@ -9,10 +9,10 @@ public record MessageResponseDto(
         SseStatus type, // 알림 타입
         Long notificationId // 알림 내역 아이디
 ) {
-    public static MessageResponseDto of(MessageRequestDto requestDto, Long notificationId) {
+    public static MessageResponseDto of(MessageRequestDto requestDto, Long notificationId, String receiverId) {
         return new MessageResponseDto(
                 requestDto.senderId(),
-                requestDto.receiverId(),
+                receiverId,
                 requestDto.type(),
                 notificationId
         );
