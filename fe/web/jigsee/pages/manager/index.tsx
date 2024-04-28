@@ -103,13 +103,22 @@ export default function Manager() {
               width: "100%",
               height: "80%",
               display: "flex",
-              alignItems: "center",
+              alignItems: "start",
               justifyContent: "center",
             }}
           >
             {/* 닫기 아이콘 */}
+
+            <Box>
+              <Request />
+            </Box>
+            <img
+              src="/images/delete_gray.svg"
+              alt="delete"
+              onClick={closeRequestModal}
+              style={{ width: "50px", height: "50px" }}
+            ></img>
             {/* <img src="/images/delete_normal.svg" alt="delete" onClick={closeRequestModal}></img> */}
-            <Request />
           </Box>
         </Modal>
       </div>
