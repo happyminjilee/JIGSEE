@@ -101,6 +101,10 @@ public class JigItemService {
         // 지그 교체
         facilityItem.exchangeJigItem(beforeJigItem, afterJigItem);
 
+        // 지그에 설비 정보 추가
+        beforeJigItem.updateFacilityItemNull();
+        afterJigItem.updateFacilityItem(facilityItem);
+
         // 지그 상태 변경
         beforeJigItem.updateState(JigStatus.OUT);
         afterJigItem.updateState(JigStatus.IN);
