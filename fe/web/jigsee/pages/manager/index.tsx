@@ -33,6 +33,9 @@ export default function Manager() {
           <button className={styled.jigbtn}>
             Jig 정보 요청 <ArrowForwardIosIcon color="primary" />
           </button>
+          <button className={styled.jigbtn}>
+            Jig 정보 입력 <ArrowForwardIosIcon color="primary" />
+          </button>
         </div>
       </div>
     </>
