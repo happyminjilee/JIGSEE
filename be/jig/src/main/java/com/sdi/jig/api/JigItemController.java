@@ -54,4 +54,10 @@ class JigItemController {
         jigItemService.exchangeBySerialNo(dto.facilitySerialNo(), dto.beforeSerialNo(), dto.afterSerialNo());
         return Response.success();
     }
+
+    @PutMapping("/recovery")
+    Response<Void> recovery(@RequestBody JigItemSerialNoRequestDto dto) {
+        jigItemService.recoveryBySerialNo(dto.serialNo());
+        return Response.success();
+    }
 }
