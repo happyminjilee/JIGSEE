@@ -9,7 +9,7 @@ interface EditStandardProps {
 }
 interface RowData {
   id: number;
-  contents: string;
+  method: string;
   standard: string;
 }
 export default function EditStandard({ onClose }: EditStandardProps) {
@@ -22,18 +22,23 @@ export default function EditStandard({ onClose }: EditStandardProps) {
   const models = ["swf235430", "dfdg456872", "ddg24652"];
 
   // Row 타입의 배열로 rows 상태를 정의합니다.
-  const [rows, setRows] = useState<RowData[]>([{ method: "", standard: "" }]);
+  const [rows, setRows] = useState<RowData[]>([{ id: 0, method: "", standard: "" }]);
 
   // 새로운 행을 추가하는 함수
   const addRow = () => {
-    setRows([...rows, { method: "", standard: "" }]);
+    setRows([
+      ...rows,
+      { id: rows.length + 1, method: "", standard: "" }, // Added an `id` and changed 'contents' to 'method'
+    ]);
   };
 
   // 특정 행의 데이터를 변경하는 함수
-  const updateRow = (index: number, field: "method" | "standard", value: string) => {
+  const updateRow = (index: number, field: keyof RowData, value: string) => {
     const newRow = [...rows];
-    newRow[index][field] = value; // Type-safe access
-    setRows(newRow);
+    if (field === "method" || field === "standard") {
+      newRow[index][field] = value; // Ensuring the field matches the RowData keys
+      setRows(newRow);
+    }
   };
   return (
     <>

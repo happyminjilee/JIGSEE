@@ -7,6 +7,7 @@ import Approve from "@/components/release/Approve";
 import Return from "@/components/release/Return";
 import EditStandard from "@/components/release/EditStandard";
 import Request from "@/components/release/Request";
+import StockList from "@/components/release/StockList";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
@@ -44,7 +45,9 @@ export default function Manager() {
           {showApproveModal && <Approve onClose={closeApproveModal} />}
           {showReturnModal && <Return onClose={closeReturnModal} />}
         </div>
-        <div className={styled.stockcontainer}>재고현황리스트</div>
+        <div className={styled.stockcontainer}>
+          <StockList />
+        </div>
         <div className={styled.btncontainer}>
           <button className={styled.jigbtn} onClick={goToJigrestore}>
             Jig 보수 요청 확인
@@ -100,13 +103,22 @@ export default function Manager() {
               width: "100%",
               height: "80%",
               display: "flex",
-              alignItems: "center",
+              alignItems: "start",
               justifyContent: "center",
             }}
           >
             {/* 닫기 아이콘 */}
+
+            <Box>
+              <Request />
+            </Box>
+            <img
+              src="/images/delete_gray.svg"
+              alt="delete"
+              onClick={closeRequestModal}
+              style={{ width: "50px", height: "50px" }}
+            ></img>
             {/* <img src="/images/delete_normal.svg" alt="delete" onClick={closeRequestModal}></img> */}
-            <Request />
           </Box>
         </Modal>
       </div>
