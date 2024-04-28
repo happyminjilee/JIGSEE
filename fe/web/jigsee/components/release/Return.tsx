@@ -9,7 +9,7 @@ export default function Return({ onClose }: ReturnProps) {
   return (
     <Modal className={styles.container} isOpen={true} onClose={onClose}>
       <ModalContent>
-        <ModalHeader className={styles.title}>불출 승인</ModalHeader>
+        <ModalHeader className={styles.title}>불출 반려</ModalHeader>
         <ModalBody>
           <Divider className={styles.divider} />
           승인 요청 제목 날짜 영역
