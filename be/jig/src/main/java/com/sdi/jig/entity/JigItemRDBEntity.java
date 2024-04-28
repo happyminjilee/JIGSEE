@@ -63,4 +63,12 @@ public class JigItemRDBEntity {
     public void addAccumulateTime(JigItemIOHistoryRDBEntity recentIn) {
         this.useAccumulateTime += TimeCalculator.timeDiffToMills(recentIn.getInOutTime(), LocalDateTime.now());
     }
+
+    public void updateFacilityItemNull(){
+        this.facilityItem = null;
+    }
+
+    public void updateFacilityItem(FacilityItemRDBEntity facilityItem){
+        this.facilityItem = facilityItem;
+    }
 }
