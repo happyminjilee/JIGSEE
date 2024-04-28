@@ -28,10 +28,28 @@ public class CommonRequest {
         );
     }
 
+    public <T, S> ResponseEntity<Response<T>> post(String url, S body){
+        return restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(body, headers()),
+                new ParameterizedTypeReference<>() {}
+        );
+    }
+
     public <T, S> ResponseEntity<Response<T>> put(String url, S body){
         return restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
+                new HttpEntity<>(body, headers()),
+                new ParameterizedTypeReference<>() {}
+        );
+    }
+
+    public <T, S> ResponseEntity<Response<T>> delete(String url, S body){
+        return restTemplate.exchange(
+                url,
+                HttpMethod.DELETE,
                 new HttpEntity<>(body, headers()),
                 new ParameterizedTypeReference<>() {}
         );
