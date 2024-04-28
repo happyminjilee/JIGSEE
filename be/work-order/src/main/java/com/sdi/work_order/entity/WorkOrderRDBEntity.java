@@ -30,4 +30,8 @@ public class WorkOrderRDBEntity {
     @Column
     @Enumerated(EnumType.STRING)
     private WorkOrderStatus status;
+
+    public static WorkOrderRDBEntity from(String creatorEmployeeNo, String jigSerialNo){
+        return new WorkOrderRDBEntity(null, creatorEmployeeNo, null, jigSerialNo, WorkOrderStatus.PROGRESS);
+    }
 }

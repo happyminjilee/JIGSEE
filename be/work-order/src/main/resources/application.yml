@@ -1,5 +1,25 @@
 spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+spring:
+  config:
+    activate:
+      on-profile: common
   application:
-    name: work-order
+    name: worker-order
 server:
   port: 8085
+  servlet:
+    context-path: /api
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+apis:
+  api-base-url: ${api_base_url}

@@ -6,14 +6,19 @@ import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderSaveRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto;
+import com.sdi.work_order.application.WorkOrderService;
 import com.sdi.work_order.util.Response;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/v1/work-order")
+@RequiredArgsConstructor
 class WorkOrderController {
+
+    private final WorkOrderService workOrderService;
 
     @GetMapping("/detail")
     Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "serial-no") String serialNo){
@@ -38,6 +43,7 @@ class WorkOrderController {
 
     @PostMapping
     Response<Void> create(@RequestBody WorkOrderCreateRequestDto dto){
+        workOrderService.create(dto);
         return Response.success();
     }
 

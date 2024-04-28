@@ -1,5 +1,10 @@
 package com.sdi.work_order.util;
 
+import com.sdi.work_order.dto.reponse.JigItemResponseDto.JigCheckListItem;
+
+import java.util.List;
+import java.util.UUID;
+
 public record WorkOrderCheckList(
         String uuid,
         String content,
@@ -9,19 +14,15 @@ public record WorkOrderCheckList(
         Boolean passOrNot
 ) {
 
-    public static WorkOrderCheckList from(String uuid,
-                                          String content,
-                                          String standard,
-                                          String measure,
-                                          String memo,
-                                          Boolean passOrNot){
-        return new WorkOrderCheckList(uuid, content, standard, measure, memo, passOrNot);
-    }
-
-    public static WorkOrderCheckList from(String uuid,
-                                          String measure,
-                                          String memo,
-                                          Boolean passOrNot){
-        return new WorkOrderCheckList(uuid, null, null, measure, memo, passOrNot);
+    public static List<WorkOrderCheckList> from(List<JigCheckListItem> jigCheckListItem) {
+        return jigCheckListItem.stream()
+                .map(e -> new WorkOrderCheckList(
+                        UUID.randomUUID().toString(),
+                        e.content(),
+                        e.standard(),
+                        "",
+                        "",
+                        false
+                )).toList();
     }
 }
