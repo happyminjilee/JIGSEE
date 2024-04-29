@@ -1,16 +1,16 @@
 package com.sdi.apiserver.api.jig.dto.response;
 
-import lombok.Value;
+public record JigItemIsUsableResponseDto(
+        Boolean isUsable,
+        JigItemSummary data
+) {
 
-@Value
-public class JigItemIsUsableResponseDto {
-    Boolean isUsable;
-    JigItemSummary data;
 
-    @Value
-    public static class JigItemSummary{
-        Integer useCount;
-        String useAccumulationTime;
-        Integer repairCount;
+    public record JigItemSummary(
+            Integer useCount,
+            String useAccumulationTime,
+            Integer repairCount
+    ) {
+
     }
 }

@@ -23,3 +23,4 @@ springdoc:
     path: /swagger-ui.html
 apis:
   jig-base-url: ${JIG_BASE_URL}
+  jig-item-base-url: ${JIG_ITEM_BASE_URL}
