@@ -2,12 +2,12 @@ package com.sdi.common.service;
 
 import com.sdi.common.dto.JigItemStatusUpdateDto;
 import com.sdi.common.dto.MessageDto;
-import com.sdi.common.dto.response.RepairJigDetailResponseDto;
-import com.sdi.common.dto.response.RepairJigListResponseDto;
-import com.sdi.common.dto.response.RequestJigDetailResponseDto;
 import com.sdi.common.dto.request.RepairJigRequestDto;
 import com.sdi.common.dto.request.RequestJigRequestDto;
 import com.sdi.common.dto.request.ResponseJigRequestDto;
+import com.sdi.common.dto.response.RepairJigDetailResponseDto;
+import com.sdi.common.dto.response.RepairJigListResponseDto;
+import com.sdi.common.dto.response.RequestJigDetailResponseDto;
 import com.sdi.common.dto.response.RequestJigListResponseDto;
 import com.sdi.common.entity.RepairRequestEntity;
 import com.sdi.common.entity.WantRequestEntity;
@@ -20,6 +20,7 @@ import com.sdi.common.util.MessageClient;
 import com.sdi.common.util.SseStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +34,8 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class RequestService {
-    private static final int PAGE_SIZE = 5;
+    @Value("${page-size}")
+    private int PAGE_SIZE;
     /*
      * 현재 API 게이트웨이에 알림서버의 api를 호출하는 메소드가 없으므로 연결 불가능
      *
@@ -49,17 +51,17 @@ public class RequestService {
     // Transactional 왜 적용이 안될까?
     // 알림 전송 실패하면 mongo에도 저장되면 안되는데..
     @Transactional
-    public void createWantRequest(RequestJigRequestDto requestJigRequestDto) {
+    public void createWantRequest(RequestJigRequestDto requestJigRequestDto, String accessToken) {
         /*
          * 1. 요청 내용 DB에 저장
          * 2. 알림 서버로 알림 전송 요청 보냄
          */
         WantRequestEntity content = wantRequestsRepository.save(WantRequestEntity.from(requestJigRequestDto));
-        messageClient.sendMessage(MessageDto.of(SseStatus.REQUEST_JIG, requestJigRequestDto.sender(), content.getId()));
+        messageClient.sendMessage(MessageDto.of(SseStatus.REQUEST_JIG, requestJigRequestDto.sender(), content.getId()), accessToken);
     }
 
     @Transactional
-    public void createWantResponse(ResponseJigRequestDto responseJigRequestDto) {
+    public void createWantResponse(ResponseJigRequestDto responseJigRequestDto, String accessToken) {
         /*
          * 1. 승인인지 거부인지 판별
          * 2. 승인이라면 불출된 지그 전부 상태 변경(투입 대기)
@@ -69,7 +71,7 @@ public class RequestService {
          */
         if (responseJigRequestDto.isAccept()) {
             for (String serialNo : responseJigRequestDto.serialNos()) {
-                jigItemClient.changeJigStatusToReady(JigItemStatusUpdateDto.ready(serialNo));
+                jigItemClient.changeJigStatusToReady(JigItemStatusUpdateDto.ready(serialNo), accessToken);
             }
         }
         WantRequestEntity originalRequest = wantRequestsRepository.findById(responseJigRequestDto.requestId())
@@ -77,32 +79,31 @@ public class RequestService {
         originalRequest.processRequest(responseJigRequestDto.sender(), responseJigRequestDto.isAccept());
         wantRequestsRepository.save(originalRequest);
         WantResponseEntity content = wantResponsesRepository.save(WantResponseEntity.from(responseJigRequestDto));
-        messageClient.sendMessage(MessageDto.of(SseStatus.RESPONSE_JIG, responseJigRequestDto.sender(), content.getId()));
+        messageClient.sendMessage(MessageDto.of(SseStatus.RESPONSE_JIG, responseJigRequestDto.sender(), content.getId()), accessToken);
     }
 
     @Transactional
-    public void createRepairRequest(RepairJigRequestDto repairJigRequestDto) {
+    public void createRepairRequest(RepairJigRequestDto repairJigRequestDto, String accessToken) {
         /*
          * 1. 요청 내용 DB에 저장
          * 상태 변경은 다른 곳에서 하는거겠지?
          * 2. 알림 서버로 알림 전송 요청 보냄
          */
         RepairRequestEntity content = repairRequestsRepository.save(RepairRequestEntity.from(repairJigRequestDto));
-        messageClient.sendMessage(MessageDto.of(SseStatus.REQUEST_REPAIR, repairJigRequestDto.sender(), content.getId()));
+        messageClient.sendMessage(MessageDto.of(SseStatus.REQUEST_REPAIR, repairJigRequestDto.sender(), content.getId()), accessToken);
     }
-
 
     public RequestJigListResponseDto findAllWantJigRequests(String option, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, PAGE_SIZE, Sort.by("time").descending());
-        Page page = switch (option) {
+        Page<WantRequestEntity> page = switch (option) {
             case "PUBLISH", "FINISH" -> wantRequestsRepository.findAllByStatus(option, pageable);
             case "REJECT" -> wantRequestsRepository.findAllByIsAcceptAndStatus(false, "FINISH", pageable);
             case "", "ALL" -> wantRequestsRepository.findAll(pageable);
             default -> throw new IllegalStateException("Unexpected value: " + option);
         };
 
-        List<RequestJigDetailResponseDto> dtoList = ((List<WantRequestEntity>) page.getContent()).stream()
-                .map(entity -> RequestJigDetailResponseDto.from(entity))
+        List<RequestJigDetailResponseDto> dtoList = page.getContent().stream()
+                .map(RequestJigDetailResponseDto::from)
                 .collect(Collectors.toList());
 
         return RequestJigListResponseDto.of(page.getNumber() + 1, page.getTotalPages(), dtoList);
@@ -116,10 +117,10 @@ public class RequestService {
 
     public RepairJigListResponseDto findAllRepairRequests(int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, PAGE_SIZE, Sort.by("time").descending());
-        Page page = repairRequestsRepository.findAll(pageable);
+        Page<RepairRequestEntity> page = repairRequestsRepository.findAll(pageable);
 
-        List<RepairJigDetailResponseDto> list = ((List<RepairRequestEntity>) page.getContent()).stream()
-                .map(entity -> RepairJigDetailResponseDto.from(entity))
+        List<RepairJigDetailResponseDto> list = page.getContent().stream()
+                .map(RepairJigDetailResponseDto::from)
                 .collect(Collectors.toList());
 
         return RepairJigListResponseDto.of(page.getNumber() + 1, page.getTotalPages(), list);

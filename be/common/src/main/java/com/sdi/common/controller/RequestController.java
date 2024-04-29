@@ -11,9 +11,9 @@ import com.sdi.common.service.RequestService;
 import com.sdi.common.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,20 +25,20 @@ class RequestController {
     private final RequestService requestService;
 
     @PostMapping("/request/jig")
-    Response<Void> makeWantRequest(@RequestBody RequestJigRequestDto requestJigRequestDto) {
-        requestService.createWantRequest(requestJigRequestDto);
+    Response<Void> makeWantRequest(@RequestBody RequestJigRequestDto requestJigRequestDto, @RequestHeader("Authorization") String accessToken) {
+        requestService.createWantRequest(requestJigRequestDto, accessToken);
         return Response.success();
     }
 
     @PostMapping("/response/jig")
-    Response<Void> makeWantResponse(@RequestBody ResponseJigRequestDto responseJigRequestDto) {
-        requestService.createWantResponse(responseJigRequestDto);
+    Response<Void> makeWantResponse(@RequestBody ResponseJigRequestDto responseJigRequestDto, @RequestHeader("Authorization") String accessToken) {
+        requestService.createWantResponse(responseJigRequestDto, accessToken);
         return Response.success();
     }
 
     @PostMapping("/request/repair")
-    Response<Void> makeRepairRequest(@RequestBody RepairJigRequestDto repairJigRequestDto) {
-        requestService.createRepairRequest(repairJigRequestDto);
+    Response<Void> makeRepairRequest(@RequestBody RepairJigRequestDto repairJigRequestDto, @RequestHeader("Authorization") String accessToken) {
+        requestService.createRepairRequest(repairJigRequestDto, accessToken);
         return Response.success();
     }
 

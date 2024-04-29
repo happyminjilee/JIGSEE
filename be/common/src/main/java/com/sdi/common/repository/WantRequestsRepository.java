@@ -12,8 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface WantRequestsRepository extends MongoRepository<WantRequestEntity, String> {
-    Page<List<WantRequestEntity>> findAllByIsAcceptAndStatus(boolean isAccept, String status, Pageable pageable);
-    Page<List<WantRequestEntity>> findAllByStatus(String status, Pageable pageable);
-
+    Page<WantRequestEntity> findAllByIsAcceptAndStatus(boolean isAccept, String status, Pageable pageable);
+    Page<WantRequestEntity> findAllByStatus(String status, Pageable pageable);
 }
 
