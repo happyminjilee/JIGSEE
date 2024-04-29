@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jigsee/components/custom_form.dart';
-import 'package:jigsee/conts/size.dart';
+import 'package:jigsee/consts/size.dart';
 
 // stless 단축키로 자동 생성..
 class LoginPage extends ConsumerWidget {

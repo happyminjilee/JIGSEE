@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:jigsee/conts/constants.dart';
+import 'package:jigsee/consts/constants.dart';
 import 'package:jigsee/stores/usePreference.dart';
 
 class AuthService {
