@@ -43,14 +43,14 @@ export default function RequestList({ onApproveClick, onReturnClick }: RequestLi
 
         {/*내부 박스*/}
         {lst.map((info, index) => (
-          <div className={styled.container}>
+          <div className={styled.container} key={index}>
             <div style={{ marginTop: "10px", marginLeft: "15px" }}>{info.date}</div>
             <div className={styled.card}>
               <div key={index} className={styled.division}>
                 <div style={{ fontWeight: "bold", fontSize: "30px" }}>{info.title}</div>
                 <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
                   {info.content.map((index) => (
-                    <div style={{ margin: "2px" }}> {index} </div>
+                    <div style={{ margin: "2px" }} key={index}> {index} </div>
                   ))}
                 </div>
               </div>

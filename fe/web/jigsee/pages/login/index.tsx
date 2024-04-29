@@ -22,6 +22,12 @@ export default function Login() {
           setName(result.name);
           setRole(result.role);
           console.log('what you want')
+          if (result.role === 'MANAGER') {
+            router.push("/manager")
+          } else if (result.role === 'ENGINEER') {
+            router.push("/engineer")
+          } 
+          
       } else {
           console.log('Login failed')
       }

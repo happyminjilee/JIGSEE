@@ -12,9 +12,7 @@ export const login = async (employeeNo:string, password:string) => {
             employeeNo: employeeNo,
             password: password,
         })
-        .then((response) => {
-            console.log("hi")
-            console.log(response)
+        .then((response) => {            
             localStorage.setItem('access_token', response.headers['access_token'])
             localStorage.setItem('refresh_token', response.headers['refresh_token'])
             console.log('response login', response)
@@ -25,7 +23,7 @@ export const login = async (employeeNo:string, password:string) => {
             }
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log('login failed', error.message);
             return {
                 success: false,
                 name: "",
