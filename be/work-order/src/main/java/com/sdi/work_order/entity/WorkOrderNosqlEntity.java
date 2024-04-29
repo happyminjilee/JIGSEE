@@ -17,11 +17,11 @@ import java.util.List;
 public class WorkOrderNosqlEntity {
 
     @Id
-    private Long id; // rdb의 work-order의 id 값과 일치 -> id로 조회
+    private String id;
     private Boolean passOrNot; // 전체 통과 유무
     private List<WorkOrderCheckList> checkList;
 
-    public static WorkOrderNosqlEntity from(Long id, Boolean passOrNot, List<WorkOrderCheckList> checkList){
+    public static WorkOrderNosqlEntity from(String id, Boolean passOrNot, List<WorkOrderCheckList> checkList){
         return new WorkOrderNosqlEntity(id, passOrNot, checkList);
     }
 }

@@ -64,7 +64,7 @@ class WorkOrderControllerTest {
     @DisplayName("WO 생성")
     void create() throws Exception {
         // given
-        String serialNo = "testModelId2";
+        String serialNo = "js2";
         JSONObject body = new JSONObject();
         body.put("serialNo", serialNo);
         int beforeSizeRDB = (int) workOrderRDBRepository.count();

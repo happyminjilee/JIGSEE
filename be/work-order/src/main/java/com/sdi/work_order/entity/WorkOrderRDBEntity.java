@@ -31,7 +31,10 @@ public class WorkOrderRDBEntity {
     @Enumerated(EnumType.STRING)
     private WorkOrderStatus status;
 
-    public static WorkOrderRDBEntity from(String creatorEmployeeNo, String jigSerialNo){
-        return new WorkOrderRDBEntity(null, creatorEmployeeNo, null, jigSerialNo, WorkOrderStatus.PROGRESS);
+    @Column(name = "check_list_id")
+    private String checkListId;
+
+    public static WorkOrderRDBEntity from(String creatorEmployeeNo, String jigSerialNo, String checkListId){
+        return new WorkOrderRDBEntity(null, creatorEmployeeNo, null, jigSerialNo, WorkOrderStatus.PROGRESS, checkListId);
     }
 }
