@@ -33,9 +33,9 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
     private final AuthTokenProvider tokenProvider;
 
-    @Value("${ACCESS_TOKEN_EXPIRY}")
+    @Value("${jwt.access.expiry}")
     private long accessTokenExpiry;
-    @Value("${REFRESH_TOKEN_EXPIRY}")
+    @Value("${jwt.refresh.expiry}")
     private long refreshTokenExpiry;
 
     /**
