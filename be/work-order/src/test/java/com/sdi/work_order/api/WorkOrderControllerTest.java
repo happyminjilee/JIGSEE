@@ -2,6 +2,9 @@ package com.sdi.work_order.api;
 
 import com.sdi.work_order.repository.WorkOrderNosqlRepository;
 import com.sdi.work_order.repository.WorkOrderRDBRepository;
+import com.sdi.work_order.util.WorkOrderStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -109,9 +112,29 @@ class WorkOrderControllerTest {
     }
 
     @Test
-    void updateStatus() {
+    void updateStatus() throws Exception {
         // given
+        Long id = workOrderRDBRepository.findAll().getFirst().getId();
+        WorkOrderStatus status = WorkOrderStatus.FINISH;
+
+        JSONObject body = new JSONObject();
+        JSONObject item = new JSONObject();
+        item.put("id", id);
+        item.put("status", status);
+        JSONArray list = new JSONArray();
+        list.put(item);
+        body.put("list", list);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/v1/work-order/status")
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
         // when
+        ResultActions perform = mockMvc.perform(request);
+
         // then
+        perform.andExpect(status().isOk());
+        assertEquals(status, workOrderRDBRepository.findById(id).get().getStatus());
     }
 }

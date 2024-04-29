@@ -57,4 +57,8 @@ public class WorkOrderRDBEntity {
                 null
         );
     }
+
+    public void updateStatus(WorkOrderStatus status){
+        this.status = status;
+    }
 }

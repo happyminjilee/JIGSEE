@@ -11,9 +11,6 @@ public record WorkOrderUpdateStatusRequestDto(
     public record UpdateStatusItem(
             Long id,
             WorkOrderStatus status
-    ){
-        public static UpdateStatusItem from(Long id, WorkOrderStatus status){
-            return new UpdateStatusItem(id, status);
-        }
+    ) {
     }
 }

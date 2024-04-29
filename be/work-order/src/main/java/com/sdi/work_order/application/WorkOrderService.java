@@ -4,6 +4,7 @@ import com.sdi.work_order.client.JigItemClient;
 import com.sdi.work_order.client.response.JigItemResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
+import com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto;
 import com.sdi.work_order.entity.WorkOrderNosqlEntity;
 import com.sdi.work_order.entity.WorkOrderRDBEntity;
 import com.sdi.work_order.repository.WorkOrderNosqlRepository;
@@ -16,11 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -65,6 +65,19 @@ public class WorkOrderService {
         // 데이터 저장
         workOrderRDBRepository.save(rdb);
         workOrderNosqlRepository.save(nosql);
+    }
+
+    @Transactional
+    public void updateStatus(List<UpdateStatusItem> list) {
+        for (UpdateStatusItem item : list) {
+            WorkOrderRDBEntity workOrder = getWorkOrderById(item.id());
+            workOrder.updateStatus(item.status());
+        }
+    }
+
+    private WorkOrderRDBEntity getWorkOrderById(Long id) {
+        return workOrderRDBRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException(String.format("id : %d 로 Work order를 찾을 수 없습니다.", id)));
     }
 
     private JigItemResponseDto getJigItem(String serialNo) {

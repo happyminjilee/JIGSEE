@@ -59,7 +59,8 @@ class WorkOrderController {
     }
 
     @PutMapping("/status")
-    Response<Void> status(@RequestBody WorkOrderUpdateStatusRequestDto dto){
+    Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto){
+        workOrderService.updateStatus(dto.list());
         return Response.success();
     }
 }
