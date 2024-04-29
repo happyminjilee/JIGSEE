@@ -7,7 +7,11 @@ export default function Login() {
     <>
       <div className={styled.container}>
         <div className={styled.logincontainer}>
-          <img src="/images/profile.svg" alt="profile-logo" />
+          <img
+            src="/images/userprofile.svg"
+            alt="profile-logo"
+            style={{ width: "50px", height: "50px" }}
+          />
           {/* 로그인 인풋 영역 */}
           <div style={{ marginBottom: "1rem" }}>
             <Input type="id" variant={"underlined"} label="사번" />

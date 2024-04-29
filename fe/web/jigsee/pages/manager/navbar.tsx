@@ -67,7 +67,7 @@ export default function ManagerNavbar() {
 
           <ListItem sx={{ paddingTop: "10px", paddingBottom: "0px" }}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/images/profile.svg" />
+              <Avatar alt="Remy Sharp" src="/images/userprofile.svg" />
             </IconButton>
             UserName
           </ListItem>
