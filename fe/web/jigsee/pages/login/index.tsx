@@ -2,7 +2,7 @@ import { Input, Button, Checkbox } from "@nextui-org/react";
 import React from "react";
 import styled from "@/styles/login.module.scss";
 import {useRouter} from "next/router";
-import  from "@/utils/instance";
+
 
 
 
