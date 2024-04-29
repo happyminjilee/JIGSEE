@@ -1,5 +1,5 @@
 services:
-  jigsee-redis:
+  redis:
     container_name: jigsee-redis
     build:
       dockerfile: Dockerfile
