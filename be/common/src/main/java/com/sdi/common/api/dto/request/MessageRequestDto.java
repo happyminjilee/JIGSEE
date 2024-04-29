@@ -5,7 +5,7 @@ import com.sdi.common.util.SseStatus;
 
 public record MessageRequestDto(
         String senderGroup, // 발신자 그룹
-        String senderId, // 발신자
+        String senderId, // 발신자 사번
         String receiverGroup, // 수신자 그룹
         SseStatus type, // 알림 타입
         String uuid // 알림 세부 정보의 id

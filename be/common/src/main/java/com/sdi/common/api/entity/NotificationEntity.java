@@ -9,8 +9,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,20 +27,16 @@ public class NotificationEntity {
 
     @Column(name = "check_status")
     private boolean checkStatus;
-
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private MemberEntity sender;
-
-    @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private MemberEntity receiver;
+    @Column(name = "sender_id")
+    private String sender; // 발신자 사번
+    @Column(name = "receiver_id")
+    private String receiver; // 수신자 사번
     @Column(name = "notification_type")
     @Enumerated(EnumType.STRING)
     private SseStatus sseStatus;
     @Column(name = "content_id")
     private String contentId;
-    public static NotificationEntity of(MemberEntity sender, MemberEntity receiver, MessageRequestDto messageRequestDto) {
+    public static NotificationEntity of(String sender, String receiver, MessageRequestDto messageRequestDto) {
         return new NotificationEntity(null, false, sender, receiver, messageRequestDto.type(), messageRequestDto.uuid());
     }
 }
