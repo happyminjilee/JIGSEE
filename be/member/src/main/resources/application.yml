@@ -30,9 +30,9 @@ spring:
   #DB
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: ${MYSQL_DB_URL}
-    username: ${MYSQL_DB_USERNAME}
-    password: ${MYSQL_DB_PASSWORD}
+    url: ${MYSQL_MEMBER_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -43,6 +43,8 @@ spring:
   data:
     redis:
       url: ${REDIS_URL}
+      username: ${REDIS_USERNAME}
+      password: ${REDIS_PASSWORD}
 
 ---
 
@@ -53,9 +55,9 @@ spring:
   #DB
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: ${TEST_MYSQL_DB_URL}
-    username: ${TEST_MYSQL_DB_USERNAME}
-    password: ${TEST_MYSQL_DB_PASSWORD}
+    url: ${TEST_MYSQL_MEMBER_URL}
+    username: ${TEST_MYSQL_USERNAME}
+    password: ${TEST_MYSQL_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -65,4 +67,7 @@ spring:
         format_sql: true
   data:
     redis:
-      url: ${TEST_REDIS_URL}
+      host: ${TEST_REDIS_HOST}
+      port: ${TEST_REDIS_PORT}
+      username: ${TEST_REDIS_USERNAME}
+      password: ${TEST_REDIS_PASSWORD}
