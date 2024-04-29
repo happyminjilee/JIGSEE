@@ -5,13 +5,12 @@ import com.sdi.jig.entity.JigNosqlEntity;
 import com.sdi.jig.entity.JigRDBEntity;
 import com.sdi.jig.repository.JigNosqlRepository;
 import com.sdi.jig.repository.JigRDBRepository;
+import com.sdi.jig.util.CheckItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.sdi.jig.util.CheckList.CheckItem;
 
 @Service
 @Transactional(readOnly = true)
