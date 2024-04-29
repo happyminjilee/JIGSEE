@@ -142,10 +142,43 @@ class WorkOrderControllerTest {
     }
 
     @Test
-    void done() {
+    void done() throws Exception {
         // given
+        Long id = workOrderRDBRepository.findAll().getFirst().getId();
+        String uuid = UUID.randomUUID().toString();
+        String measure = "10";
+        String memo = "memo";
+        boolean passOrNot = true;
+
+        JSONObject body = new JSONObject();
+        JSONArray list = new JSONArray();
+        JSONObject item1 = new JSONObject();
+        item1.put("uuid", uuid);
+        item1.put("measure", measure);
+        item1.put("memo", memo);
+        item1.put("passOrNot", passOrNot);
+        list.put(item1);
+        body.put("id", id);
+        body.put("checkList", list);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/v1/work-order/done")
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
         // when
+        ResultActions perform = mockMvc.perform(request);
+
         // then
+        perform.andExpect(status().isOk());
+
+        List<WorkOrderCheckList> checkList = workOrderNosqlRepository.findById(
+                workOrderRDBRepository.findById(id).get().getCheckListId()).get().getCheckList();
+        assertEquals(uuid, checkList.get(0).uuid());
+        assertEquals(measure, checkList.get(0).measure());
+        assertEquals(memo, checkList.get(0).memo());
+        assertTrue(checkList.get(0).passOrNot());
+        assertTrue(workOrderRDBRepository.findById(id).get().getTerminatorEmployeeNo() != null);
     }
 
     @Test

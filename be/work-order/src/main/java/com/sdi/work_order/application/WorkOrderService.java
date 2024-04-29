@@ -68,6 +68,20 @@ public class WorkOrderService {
     @Transactional
     public void tmpSave(Long id, List<WorkOrderCheckList> updateCheckList) {
         WorkOrderRDBEntity rdb = getRDBWorkOrderById(id);
+        saveData(rdb, updateCheckList);
+    }
+
+    @Transactional
+    public void save(Long id, List<WorkOrderCheckList> checkList) {
+        // TODO: 사용자 사번 조회
+        String terminatorEmployeeNo = "완료자";
+
+        WorkOrderRDBEntity rdb = getRDBWorkOrderById(id);
+        saveData(rdb, checkList);
+        rdb.updateTerminatorEmployeeNo(terminatorEmployeeNo);
+    }
+
+    private void saveData(WorkOrderRDBEntity rdb, List<WorkOrderCheckList> updateCheckList) {
         WorkOrderNosqlEntity nosql;
 
         if(rdb.getCheckListId() != null){

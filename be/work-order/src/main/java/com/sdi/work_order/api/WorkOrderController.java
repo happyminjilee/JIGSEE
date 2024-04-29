@@ -56,6 +56,7 @@ class WorkOrderController {
 
     @PutMapping("/done")
     Response<Void> done(@RequestBody WorkOrderSaveRequestDto dto){
+        workOrderService.save(dto.id(), dto.checkList());
         return Response.success();
     }
 

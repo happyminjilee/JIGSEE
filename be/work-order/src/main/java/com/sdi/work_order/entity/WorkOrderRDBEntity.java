@@ -70,4 +70,8 @@ public class WorkOrderRDBEntity {
     public void updatedCheckListId(String checkListId){
         this.checkListId = checkListId;
     }
+
+    public void updateTerminatorEmployeeNo(String terminatorEmployeeNo){
+        this.terminatorEmployeeNo = terminatorEmployeeNo;
+    }
 }
