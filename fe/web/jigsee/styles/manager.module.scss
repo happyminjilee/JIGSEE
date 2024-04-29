@@ -1,11 +1,12 @@
 .container {
   display: flex;
-  justify-content: center; /* Center horizontally */
+  justify-content: space-between; /* Center horizontally */
   //   높이 나중에 조절
   height: 85vh;
+  width: 100%;
   flex-direction: row; /* Stack children vertically */
-  //   레이아웃 표시 나중에 지우기
-  border: 1px solid black;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 .releasecontainer {
   display: flex;
@@ -14,18 +15,14 @@
   width: 500px;
   height: 100%;
   flex-direction: column; /* Stack children vertically */
-  //   레이아웃 표시 나중에 지우기
-  border: 1px solid black;
 }
 .stockcontainer {
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  width: 350px;
+  width: 400px;
   height: 100%;
   flex-direction: column; /* Stack children vertically */
-  //   레이아웃 표시 나중에 지우기
-  border: 1px solid black;
 }
 .btncontainer {
   display: flex;
@@ -33,10 +30,6 @@
   width: 350px;
   height: 100%;
   flex-direction: column; /* Stack children vertically */
-  padding-top: 30px;
-
-  //   레이아웃 표시 나중에 지우기
-  border: 1px solid black;
 }
 .jigbtn {
   background-color: var(--white); /* Button background */
@@ -65,4 +58,8 @@
 .jigbtn:active {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Smaller shadow when clicked */
   transform: translateY(1px); /* Slightly move the button down when clicked */
+}
+.modalstyle {
+  width: 100%;
+  height: 80%;
 }
