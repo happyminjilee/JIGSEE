@@ -1,10 +1,8 @@
 package com.sdi.jig.dto.request;
 
-import com.sdi.jig.util.CheckList;
+import com.sdi.jig.util.CheckItem;
 
 import java.util.List;
-
-import static com.sdi.jig.util.CheckList.*;
 
 public record JigUpdateRequestDto(
         String model,

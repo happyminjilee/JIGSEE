@@ -1,7 +1,6 @@
 package com.sdi.jig.entity;
 
-import com.sdi.jig.util.CheckList;
-import com.sdi.jig.util.CheckList.CheckItem;
+import com.sdi.jig.util.CheckItem;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ public class JigNosqlEntity {
     private String id; // model명이 id
     private List<CheckItem> checkList;
 
-    public void updateCheckList(List<CheckItem> checkList){
+    public void updateCheckList(List<CheckItem> checkList) {
         this.checkList = checkList;
     }
 }

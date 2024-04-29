@@ -2,7 +2,7 @@ package com.sdi.jig.dto.response;
 
 import com.sdi.jig.entity.JigItemRDBEntity;
 import com.sdi.jig.entity.JigNosqlEntity;
-import com.sdi.jig.util.CheckList.CheckItem;
+import com.sdi.jig.util.CheckItem;
 import com.sdi.jig.util.JigStatus;
 
 import java.util.List;
