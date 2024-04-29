@@ -21,6 +21,14 @@ server:
   servlet:
     context-path: /api
 
+jwt:
+  access:
+    secret: ${JWT_SECRET_ACCESS}
+    expiry: ${ACCESS_TOKEN_EXPIRY}
+  refresh:
+    secret: ${JWT_SECRET_REFRESH}
+    expiry: ${REFRESH_TOKEN_EXPIRY}
+
 ---
 
 spring:
