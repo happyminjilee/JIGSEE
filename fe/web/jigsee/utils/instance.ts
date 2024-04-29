@@ -2,7 +2,7 @@ import axios, {AxiosInstance} from 'axios';
 import {headers} from "next/headers";
 
 
-const api = 'https://www.k8s105.p.ssafy.io/api/v1'
+const api = 'http://k10s105.p.ssafy.io:8082/api/v1'
 
 const axiosAuthApi = (): AxiosInstance => {
     const accessToken = localStorage.getItem('access_token');
