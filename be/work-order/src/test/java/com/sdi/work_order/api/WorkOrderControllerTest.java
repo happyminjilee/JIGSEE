@@ -2,6 +2,7 @@ package com.sdi.work_order.api;
 
 import com.sdi.work_order.repository.WorkOrderNosqlRepository;
 import com.sdi.work_order.repository.WorkOrderRDBRepository;
+import com.sdi.work_order.util.WorkOrderCheckList;
 import com.sdi.work_order.util.WorkOrderStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +19,11 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -98,10 +103,42 @@ class WorkOrderControllerTest {
     }
 
     @Test
-    void tmpSave() {
+    void tmpSave() throws Exception {
         // given
+        Long id = workOrderRDBRepository.findAll().getFirst().getId();
+        String uuid = UUID.randomUUID().toString();
+        String measure = "10";
+        String memo = "memo";
+        boolean passOrNot = true;
+
+        JSONObject body = new JSONObject();
+        JSONArray list = new JSONArray();
+        JSONObject item1 = new JSONObject();
+        item1.put("uuid", uuid);
+        item1.put("measure", measure);
+        item1.put("memo", memo);
+        item1.put("passOrNot", passOrNot);
+        list.put(item1);
+        body.put("id", id);
+        body.put("checkList", list);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put("/v1/work-order/tmp")
+                .content(body.toString())
+                .contentType(MediaType.APPLICATION_JSON);
+
         // when
+        ResultActions perform = mockMvc.perform(request);
+
         // then
+        perform.andExpect(status().isOk());
+
+        List<WorkOrderCheckList> checkList = workOrderNosqlRepository.findById(
+                workOrderRDBRepository.findById(id).get().getCheckListId()).get().getCheckList();
+        assertEquals(uuid, checkList.get(0).uuid());
+        assertEquals(measure, checkList.get(0).measure());
+        assertEquals(memo, checkList.get(0).memo());
+        assertTrue(checkList.get(0).passOrNot());
     }
 
     @Test

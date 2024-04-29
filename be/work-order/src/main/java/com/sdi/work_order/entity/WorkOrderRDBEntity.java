@@ -60,5 +60,14 @@ public class WorkOrderRDBEntity {
 
     public void updateStatus(WorkOrderStatus status){
         this.status = status;
+        updateDate();
+    }
+
+    public void updateDate(){
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updatedCheckListId(String checkListId){
+        this.checkListId = checkListId;
     }
 }

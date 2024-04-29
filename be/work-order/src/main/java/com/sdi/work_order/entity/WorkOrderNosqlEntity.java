@@ -24,4 +24,8 @@ public class WorkOrderNosqlEntity {
     public static WorkOrderNosqlEntity from(String id, Boolean passOrNot, List<WorkOrderCheckList> checkList){
         return new WorkOrderNosqlEntity(id, passOrNot, checkList);
     }
+
+    public void updateCheckList(List<WorkOrderCheckList> checkList){
+        this.checkList = checkList;
+    }
 }

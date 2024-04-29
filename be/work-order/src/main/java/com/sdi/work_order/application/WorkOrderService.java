@@ -4,12 +4,10 @@ import com.sdi.work_order.client.JigItemClient;
 import com.sdi.work_order.client.response.JigItemResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
-import com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto;
 import com.sdi.work_order.entity.WorkOrderNosqlEntity;
 import com.sdi.work_order.entity.WorkOrderRDBEntity;
 import com.sdi.work_order.repository.WorkOrderNosqlRepository;
 import com.sdi.work_order.repository.WorkOrderRDBRepository;
-import com.sdi.work_order.util.Response;
 import com.sdi.work_order.util.WorkOrderCheckList;
 import com.sdi.work_order.util.WorkOrderItem;
 import com.sdi.work_order.util.WorkOrderStatus;
@@ -68,19 +66,43 @@ public class WorkOrderService {
     }
 
     @Transactional
+    public void tmpSave(Long id, List<WorkOrderCheckList> updateCheckList) {
+        WorkOrderRDBEntity rdb = getRDBWorkOrderById(id);
+        WorkOrderNosqlEntity nosql;
+
+        if(rdb.getCheckListId() != null){
+            nosql = getNosqlWorkOrderCheckList(rdb.getCheckListId());
+            nosql.updateCheckList(updateCheckList);
+        }else{
+            String uuid = UUID.randomUUID().toString();
+            nosql = WorkOrderNosqlEntity.from(uuid, false, updateCheckList);
+            rdb.updatedCheckListId(uuid);
+        }
+        workOrderNosqlRepository.save(nosql);
+        rdb.updateDate();
+    }
+
+    @Transactional
     public void updateStatus(List<UpdateStatusItem> list) {
         for (UpdateStatusItem item : list) {
-            WorkOrderRDBEntity workOrder = getWorkOrderById(item.id());
+            WorkOrderRDBEntity workOrder = getRDBWorkOrderById(item.id());
+            if(workOrder.getStatus() == WorkOrderStatus.FINISH) continue; // 이미 종료된 wo는 수정 불가
+
             workOrder.updateStatus(item.status());
         }
     }
 
-    private WorkOrderRDBEntity getWorkOrderById(Long id) {
+    private JigItemResponseDto getJigItem(String serialNo) {
+        return jigItemClient.findBySerialNo(serialNo).getResult();
+    }
+
+    private WorkOrderRDBEntity getRDBWorkOrderById(Long id) {
         return workOrderRDBRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException(String.format("id : %d 로 Work order를 찾을 수 없습니다.", id)));
     }
 
-    private JigItemResponseDto getJigItem(String serialNo) {
-        return jigItemClient.findBySerialNo(serialNo).getResult();
+    private WorkOrderNosqlEntity getNosqlWorkOrderCheckList(String checkListId) {
+        return workOrderNosqlRepository.findById(checkListId)
+                .orElseThrow(()-> new IllegalArgumentException(String.format("id : %s 로 Work order CheckList를 찾을 수 없습니다.", checkListId)));
     }
 }

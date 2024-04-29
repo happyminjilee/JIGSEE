@@ -50,6 +50,7 @@ class WorkOrderController {
 
     @PutMapping("/tmp")
     Response<Void> tmpSave(@RequestBody WorkOrderSaveRequestDto dto){
+        workOrderService.tmpSave(dto.id(), dto.checkList());
         return Response.success();
     }
 
