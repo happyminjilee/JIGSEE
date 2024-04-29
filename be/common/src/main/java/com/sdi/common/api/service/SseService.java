@@ -68,7 +68,6 @@ public class SseService {
             SseEmitter emitter = receivers.get(key);
             String receiverId = key.split("_")[1];
             String eventId = makeTimeIncludeId(messageRequestDto.receiverGroup(), receiverId);
-            System.out.println("eventId : " + eventId);
             send(emitter, eventId, key, messageRequestDto, receiverId);
         }
     }
