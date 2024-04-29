@@ -1,9 +1,8 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import Stocklist from "@/components/release/StockList"
-import styled from "@/styles/stocklist.module.css"
-import Jigdetail from "@/components/repair/JigDetail"
+
+import Wo from "@/components/workorder/template"
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -11,7 +10,7 @@ export default function Home() {
   return (
       <>
           <div>
-              <Jigdetail/>
+              <Wo/>
           </div>
       </>
   );

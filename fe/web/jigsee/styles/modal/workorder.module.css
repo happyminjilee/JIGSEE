@@ -1,0 +1,119 @@
+.divider {
+    border-top: 1px dotted var(--gray);
+    width: 500px;
+    margin: 20px auto;
+}
+
+.container {
+    margin: auto;
+    width: 600px;
+    height: 800px;
+    border: 0.1px solid;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 30px;
+    margin: 10px auto;
+}
+
+.checks {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.check {
+    margin: 10px 25px;
+}
+
+.body1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 1px 30px 1px 1px;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.body2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1px 1px 1px 10px;
+    font-size: 20px;
+    font-weight: lighter;
+    border: black solid 0.5px;
+    margin: 10px auto;
+    height: 50px;
+    width: 500px;
+    background-color: #FFFBFB;
+}
+
+.body3 {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin: 5px auto;
+    height: 70px;
+    width: 500px;
+}
+
+.compo3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFFBFB;
+    border: black solid 0.5px;
+    width: 240px;
+}
+
+.body4 {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin: 5px auto;
+    height: auto ;
+    width: 500px;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+}
+
+.compo4 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFFBFB;
+    border: black solid 0.5px;
+    width: 350px;
+    height: auto;
+    margin: 10px auto;
+}
+
+.compo41 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFFBFB;
+    border: black solid 0.5px;
+    width: 140px;
+    height: auto;
+    margin: 10px auto;
+}
+
+.cell {
+    border: 1px solid black;
+    text-align: center;
+    padding: 1px;
+}
