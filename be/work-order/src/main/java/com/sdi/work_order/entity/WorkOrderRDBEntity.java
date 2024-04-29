@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "work_orders")
 @Getter
@@ -27,6 +29,9 @@ public class WorkOrderRDBEntity {
     @Column(name = "jigSerialNo", length = 50)
     private String jigSerialNo;
 
+    @Column(length = 50)
+    private String model;
+
     @Column
     @Enumerated(EnumType.STRING)
     private WorkOrderStatus status;
@@ -34,7 +39,22 @@ public class WorkOrderRDBEntity {
     @Column(name = "check_list_id")
     private String checkListId;
 
-    public static WorkOrderRDBEntity from(String creatorEmployeeNo, String jigSerialNo, String checkListId){
-        return new WorkOrderRDBEntity(null, creatorEmployeeNo, null, jigSerialNo, WorkOrderStatus.PROGRESS, checkListId);
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    public static WorkOrderRDBEntity from(String creatorEmployeeNo, String jigSerialNo, String model, String checkListId){
+        return new WorkOrderRDBEntity(null,
+                creatorEmployeeNo,
+                null,
+                jigSerialNo,
+                model,
+                WorkOrderStatus.PROGRESS,
+                checkListId,
+                LocalDateTime.now(),
+                null
+        );
     }
 }

@@ -47,10 +47,20 @@ class WorkOrderControllerTest {
     }
 
     @Test
-    void grouping() {
+    @DisplayName("상태 그룹핑")
+    void grouping() throws Exception {
         // given
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get("/v1/work-order/grouping")
+                .contentType(MediaType.APPLICATION_JSON);
+
         // when
+        ResultActions perform = mockMvc.perform(request);
+
         // then
+        perform.andExpect(status().isOk());
+        String contentAsString = perform.andReturn().getResponse().getContentAsString();
+        System.out.println(contentAsString);
     }
 
     @Test

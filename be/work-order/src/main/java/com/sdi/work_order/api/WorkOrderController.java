@@ -32,7 +32,8 @@ class WorkOrderController {
 
     @GetMapping("/grouping")
     Response<WorkOrderGroupingResponseDto> grouping(){
-        return Response.success(null);
+        WorkOrderGroupingResponseDto dto = workOrderService.grouping();
+        return Response.success(dto);
     }
 
     @GetMapping
