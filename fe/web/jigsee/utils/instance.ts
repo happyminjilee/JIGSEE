@@ -63,3 +63,5 @@ const axiosApi = (): AxiosInstance => {
         baseURL: api,
     })
 };
+
+export {axiosApi, axiosAuthApi};
