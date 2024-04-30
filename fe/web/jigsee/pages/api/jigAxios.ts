@@ -19,7 +19,7 @@ export async function updatejigStatus() {
   return axiosAuthApi().post("/jig-item/status", data);
 }
 
-// export async function getJiginfo() {
-//   let data = {};
-//   return axiosAuthApi().post(`${http://k10s105.p.ssafy.io/api/v1/jig-item}+${}`, data);
-// }
+export async function getJiginfo() {
+  let data = {};
+  return axiosAuthApi().post(`${http://k10s105.p.ssafy.io/api/v1/jig-item}+${}`, data);
+}
