@@ -26,7 +26,7 @@ public class WorkOrderRDBEntity {
     @Column(name = "terminator_employee_no", length = 50)
     private String terminatorEmployeeNo;
 
-    @Column(name = "jigSerialNo", length = 50)
+    @Column(name = "jig_serial_no", length = 50)
     private String jigSerialNo;
 
     @Column(length = 50)

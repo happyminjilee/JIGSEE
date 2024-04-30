@@ -2,13 +2,17 @@ package com.sdi.work_order.application;
 
 import com.sdi.work_order.client.JigItemClient;
 import com.sdi.work_order.client.response.JigItemResponseDto;
+import com.sdi.work_order.client.response.MemberListResponseDto;
+import com.sdi.work_order.client.response.MemberResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
 import com.sdi.work_order.entity.WorkOrderNosqlEntity;
 import com.sdi.work_order.entity.WorkOrderRDBEntity;
+import com.sdi.work_order.repository.WorkOrderCriteriaRepository;
 import com.sdi.work_order.repository.WorkOrderNosqlRepository;
 import com.sdi.work_order.repository.WorkOrderRDBRepository;
+import com.sdi.work_order.util.Response;
 import com.sdi.work_order.util.WorkOrderCheckList;
 import com.sdi.work_order.util.WorkOrderItem;
 import com.sdi.work_order.util.WorkOrderStatus;
@@ -19,10 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.UpdateStatusItem;
@@ -35,17 +36,16 @@ public class WorkOrderService {
     private final JigItemClient jigItemClient;
     private final WorkOrderRDBRepository workOrderRDBRepository;
     private final WorkOrderNosqlRepository workOrderNosqlRepository;
+    private final WorkOrderCriteriaRepository workOrderCriteriaRepository;
 
     public WorkOrderResponseDto all(WorkOrderStatus status, int page, int size) {
-        Pageable pageable = PageRequest.of(Math.max(0, page - 1), Math.max(1, size));
+        Pageable pageable = getPageable(page, size);
 
         Page<WorkOrderRDBEntity> infos = switch (status) {
             case PUBLISH, PROGRESS, FINISH -> workOrderRDBRepository.findByStatusOrderByCreatedAtDesc(status, pageable);
             case null -> workOrderRDBRepository.findAllByOrderByCreatedAtDesc(pageable);
         };
-
-        List<WorkOrderItem> workOrderItems = mapToWorkOrderItems(infos);
-        return WorkOrderResponseDto.of(infos.getNumber()+1, infos.getTotalPages(), workOrderItems);
+        return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(infos));
     }
 
     public WorkOrderGroupingResponseDto grouping() {
@@ -58,11 +58,29 @@ public class WorkOrderService {
         return WorkOrderGroupingResponseDto.from(group);
     }
 
+    public WorkOrderResponseDto findByPerson(String employeeNo, String name, int page, int size) {
+        Pageable pageable = getPageable(page, size);
+        if (employeeNo != null) {
+            Page<WorkOrderRDBEntity> infos = workOrderRDBRepository.findAllByCreatorEmployeeNoOrderByCreatedAtDesc(employeeNo, pageable);
+            return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(infos));
+        } else if (name != null) {
+            // TODO: 사람 이름에 맞는 사용자 검색
+            MemberListResponseDto members = MemberListResponseDto.from(List.of(MemberResponseDto.of(name, "creator1"),MemberResponseDto.of(name, "creator2")));
+            List<String> memberEmployeeNos = members.list().stream()
+                    .map(MemberResponseDto::employeeNo)
+                    .toList();
+            Page<WorkOrderRDBEntity> infos = workOrderCriteriaRepository.findByMembers(memberEmployeeNos, pageable);
+            return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(infos));
+        }
+
+        return all(null, page, size);
+    }
+
     @Transactional
     public void create(WorkOrderCreateRequestDto dto) {
         // 사번 조회
         // TODO: 사용자 연결 완료 시 실 사번으로 대체
-        String employeeNo = "생성자 사번";
+        String employeeNo = "생성자 사번2";
 
         // 일련번호로 jig 조회
         JigItemResponseDto jigItem = getJigItem(dto.serialNo());
@@ -97,10 +115,18 @@ public class WorkOrderService {
     public void updateStatus(List<UpdateStatusItem> list) {
         for (UpdateStatusItem item : list) {
             WorkOrderRDBEntity workOrder = getRDBWorkOrderById(item.id());
-            if(workOrder.getStatus() == WorkOrderStatus.FINISH) continue; // 이미 종료된 wo는 수정 불가
+            if (workOrder.getStatus() == WorkOrderStatus.FINISH) continue; // 이미 종료된 wo는 수정 불가
 
             workOrder.updateStatus(item.status());
         }
+    }
+
+    private static Pageable getPageable(int page, int size) {
+        return PageRequest.of(Math.max(0, page - 1), Math.max(1, size));
+    }
+
+    private static WorkOrderResponseDto mapToWorkOrderResponseDto(Page<WorkOrderRDBEntity> infos, List<WorkOrderItem> workOrderItems) {
+        return WorkOrderResponseDto.of(infos.getNumber() + 1, infos.getTotalPages(), workOrderItems);
     }
 
     // List와 Page의 공통 상위 객체인 Iterable 사용
@@ -120,10 +146,10 @@ public class WorkOrderService {
     private void saveData(WorkOrderRDBEntity rdb, List<WorkOrderCheckList> updateCheckList) {
         WorkOrderNosqlEntity nosql;
 
-        if(rdb.getCheckListId() != null){
+        if (rdb.getCheckListId() != null) {
             nosql = getNosqlWorkOrderCheckList(rdb.getCheckListId());
             nosql.updateCheckList(updateCheckList);
-        }else{
+        } else {
             String uuid = UUID.randomUUID().toString();
             nosql = WorkOrderNosqlEntity.from(uuid, false, updateCheckList);
             rdb.updatedCheckListId(uuid);
@@ -138,11 +164,11 @@ public class WorkOrderService {
 
     private WorkOrderRDBEntity getRDBWorkOrderById(Long id) {
         return workOrderRDBRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException(String.format("id : %d 로 Work order를 찾을 수 없습니다.", id)));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("id : %d 로 Work order를 찾을 수 없습니다.", id)));
     }
 
     private WorkOrderNosqlEntity getNosqlWorkOrderCheckList(String checkListId) {
         return workOrderNosqlRepository.findById(checkListId)
-                .orElseThrow(()-> new IllegalArgumentException(String.format("id : %s 로 Work order CheckList를 찾을 수 없습니다.", checkListId)));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("id : %s 로 Work order CheckList를 찾을 수 없습니다.", checkListId)));
     }
 }

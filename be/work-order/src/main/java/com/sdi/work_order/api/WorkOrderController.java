@@ -22,50 +22,53 @@ class WorkOrderController {
     private final WorkOrderService workOrderService;
 
     @GetMapping("/detail")
-    Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "serial-no") String serialNo){
+    Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "serial-no") String serialNo) {
         return Response.success(null);
     }
 
     @GetMapping("/all")
     Response<WorkOrderResponseDto> all(@RequestParam(name = "status", required = false) WorkOrderStatus status,
                                        @RequestParam(name = "page", defaultValue = "1") int page,
-                                       @RequestParam(name = "size", defaultValue = "10") int size){
+                                       @RequestParam(name = "size", defaultValue = "10") int size) {
         WorkOrderResponseDto all = workOrderService.all(status, page, size);
         return Response.success(all);
     }
 
     @GetMapping("/grouping")
-    Response<WorkOrderGroupingResponseDto> grouping(){
+    Response<WorkOrderGroupingResponseDto> grouping() {
         WorkOrderGroupingResponseDto dto = workOrderService.grouping();
         return Response.success(dto);
     }
 
     @GetMapping
-    Response<WorkOrderResponseDto> findByPerson(@RequestParam(name = "employee-no") String employeeNo,
-                                          @RequestParam(name = "name") String name){
-        return Response.success(null);
+    Response<WorkOrderResponseDto> findByPerson(@RequestParam(name = "employee-no", required = false) String employeeNo,
+                                                @RequestParam(name = "name", required = false) String name,
+                                                @RequestParam(name = "page", defaultValue = "1") int page,
+                                                @RequestParam(name = "size", defaultValue = "10") int size) {
+        WorkOrderResponseDto byPerson = workOrderService.findByPerson(employeeNo, name, page, size);
+        return Response.success(byPerson);
     }
 
     @PostMapping
-    Response<Void> create(@RequestBody WorkOrderCreateRequestDto dto){
+    Response<Void> create(@RequestBody WorkOrderCreateRequestDto dto) {
         workOrderService.create(dto);
         return Response.success();
     }
 
     @PutMapping("/tmp")
-    Response<Void> tmpSave(@RequestBody WorkOrderSaveRequestDto dto){
+    Response<Void> tmpSave(@RequestBody WorkOrderSaveRequestDto dto) {
         workOrderService.tmpSave(dto.id(), dto.checkList());
         return Response.success();
     }
 
     @PutMapping("/done")
-    Response<Void> done(@RequestBody WorkOrderSaveRequestDto dto){
+    Response<Void> done(@RequestBody WorkOrderSaveRequestDto dto) {
         workOrderService.save(dto.id(), dto.checkList());
         return Response.success();
     }
 
     @PutMapping("/status")
-    Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto){
+    Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto) {
         workOrderService.updateStatus(dto.list());
         return Response.success();
     }

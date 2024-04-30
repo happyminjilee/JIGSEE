@@ -6,9 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 
 public interface WorkOrderRDBRepository extends JpaRepository<WorkOrderRDBEntity, Long> {
-    Page<WorkOrderRDBEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
+
+    Page<WorkOrderRDBEntity> findAllByCreatorEmployeeNoOrderByCreatedAtDesc(String creatorEmployeeNo, Pageable pageable);
+    Page<WorkOrderRDBEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
     Page<WorkOrderRDBEntity> findByStatusOrderByCreatedAtDesc(WorkOrderStatus status, Pageable pageable);
 }

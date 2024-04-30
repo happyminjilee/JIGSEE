@@ -6,13 +6,13 @@ import com.sdi.work_order.repository.WorkOrderRDBRepository;
 import com.sdi.work_order.util.WorkOrderCheckList;
 import com.sdi.work_order.util.WorkOrderStatus;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -91,10 +92,28 @@ class WorkOrderControllerTest {
     }
 
     @Test
-    void findByPerson() {
+    void findByPersonEmployeeNo() throws Exception {
         // given
+        String employeeNo = "creator1";
+        int page = 1;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
+        int totalElements = (int) workOrderRDBRepository.findAllByCreatorEmployeeNoOrderByCreatedAtDesc(employeeNo, pageable).getTotalElements();
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get("/v1/work-order")
+                .param("employee-no", employeeNo)
+                .contentType(MediaType.APPLICATION_JSON);
+
         // when
+        ResultActions perform = mockMvc.perform(request);
+
+        String contentAsString = perform.andReturn().getResponse().getContentAsString();
+
         // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.list").isArray())
+                .andExpect(jsonPath("$.result.list", hasSize(totalElements)));
     }
 
     @Test
