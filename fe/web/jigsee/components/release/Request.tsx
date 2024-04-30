@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@/styles/jigrequest.module.scss";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { Select, SelectItem, Divider, Input } from "@nextui-org/react";
+import {getfacility, getfacilitylist} from "@/pages/api/facilityAxios";
+
+// 담아서 보낼 데이터 형식
 interface RowData {
   key: number;
   facility: string;
@@ -10,6 +13,7 @@ interface RowData {
   amount: number;
   [key: string]: any; // 인덱스 시그니처 추가
 }
+
 
 export default function Request() {
   const [rows, setRows] = useState<RowData[]>([]);

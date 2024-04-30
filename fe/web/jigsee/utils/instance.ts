@@ -8,7 +8,7 @@ const axiosAuthApi = (): AxiosInstance => {
     const accessToken = localStorage.getItem('access_token');
     const refreshToken = localStorage.getItem('refresh_token');
     const instance = axios.create({
-        baseURL: api,
+        baseURL: "",
         headers: {Authorization: accessToken},
     });
 

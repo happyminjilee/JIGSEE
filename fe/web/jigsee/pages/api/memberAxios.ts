@@ -1,6 +1,4 @@
 import {axiosApi, axiosAuthApi} from '@/utils/instance';
-import {userStore} from "@/store/memberstore";
-
 
 
 export const login = async (employeeNo:string, password:string) => {
@@ -8,7 +6,7 @@ export const login = async (employeeNo:string, password:string) => {
     const http = axiosApi()
 
     return await http
-        .post('/login',
+        .post('http://k10s105.p.ssafy.io:8082/api/v1/login',
             {
             employeeNo: employeeNo,
             password: password,
@@ -37,10 +35,9 @@ export const login = async (employeeNo:string, password:string) => {
 export const logout = async () => {
     console.log('want to logout?')
     const request = axiosAuthApi()
-    const accessToken = localStorage.getItem('access_token')
     return await request
         .post(
-            '/member/logout'
+            'http://k10s105.p.ssafy.io:8082/api/v1/member/logout'
         )
         // 로그아웃 성공 시 local storage 삭제
         .then((response) => {
