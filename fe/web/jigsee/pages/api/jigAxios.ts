@@ -1,25 +1,40 @@
 import { axiosAuthApi } from "@/utils/instance";
-//지그 점검 유형 추가 함수
-export async function putjigMethod(phoneNumber: number | string) {
-  return (
-    axiosAuthApi()
-      //   const requestBody = { model: str, checkList: list }
-      .put("/jig")
-      .then((response) => {
-        console.log(response.data.data);
-        return response.data.data;
-      })
-      .catch((error) => {
-        console.log(error.message);
-      })
-  );
-}
-export async function updatejigStatus() {
-  let data = {};
-  return axiosAuthApi().post("/jig-item/status", data);
+
+//지그 점검 항목 조회-
+export async function getjigMethod(modelID: string) {
+  const params = { model: modelID };
+  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/jig", { params });
 }
 
-export async function getJiginfo() {
-  let data = {};
-  return axiosAuthApi().post(`${http://k10s105.p.ssafy.io/api/v1/jig-item}+${}`, data);
+// 지그 점검 항목 수정-관리자
+export async function updatejigMethod() {
+  const requestBody = {
+    model: "str",
+    checkList: [
+      // 점검항목
+      {
+        content: "str", // 점검 내용
+        standard: "str", // 기준
+      },
+    ],
+  };
+  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/jig", requestBody);
+}
+
+//지그 상태 수정 - 기술팀
+export async function updatejigStatus(modelID: string) {
+  const requestBody = {
+    serialNo: "str",
+    status: "enum(WAREHOUSE, READY, IN, OUT, REPAIR, DELETE)",
+  };
+  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/jig-item/status", requestBody);
+}
+
+//지그 폐기 취소 - 기술팀
+export async function jigStatusrecovery() {
+  const requestBody = {
+    serialNo: "str",
+    status: "enum(WAREHOUSE, READY, IN, OUT, REPAIR, DELETE)",
+  };
+  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/jig-item/recovery", requestBody);
 }
