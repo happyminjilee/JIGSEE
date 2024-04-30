@@ -21,7 +21,8 @@ export default function Login() {
       if (result.success) {
           setName(result.name);
           setRole(result.role);
-          console.log('what you want')
+          // console.log('what you want')
+          // console.log(localStorage.getItem('access_token'))
           if (result.role === 'MANAGER') {
             router.push("/manager")
           } else if (result.role === 'ENGINEER') {

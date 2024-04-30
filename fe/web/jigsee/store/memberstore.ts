@@ -1,5 +1,5 @@
 import {create} from "zustand"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 interface user {
     name: string;
@@ -16,3 +16,4 @@ export const userStore = create<user>(
         setRole: (role) => set(() => ({role})),
     })
 )
+

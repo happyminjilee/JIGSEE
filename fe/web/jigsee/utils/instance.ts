@@ -9,7 +9,7 @@ const axiosAuthApi = (): AxiosInstance => {
     const refreshToken = localStorage.getItem('refresh_token');
     const instance = axios.create({
         baseURL: api,
-        headers: {Authorization: 'Bearer ' + accessToken},
+        headers: {Authorization: accessToken},
     });
 
     instance.interceptors.response.use(
@@ -30,9 +30,8 @@ const axiosAuthApi = (): AxiosInstance => {
 
                     try {
                         const response =
-                            await axiosAuthApi().put(
+                            await axiosAuthApi().get(
                                 '/refresh',
-                                {},
                                 {
                                     headers: {
                                         RefreshToken: 'Bearer ' + refreshToken
