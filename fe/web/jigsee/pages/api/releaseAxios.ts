@@ -51,3 +51,62 @@ export const releaseResponse = async (
             return false
         })
 }
+
+
+//불출정보 조회 (전체 조회에서 페이지, 필터 기능)
+export const releaseGet = async (
+    // status => ALL, PUBLISH, FINISH, REJECT
+    status: string,
+    page: number,
+    size: number,
+) => {
+    const http = axiosAuthApi()
+    return await http
+        .get(
+            'http://k10s105.p.ssafy.io/api/v1/request/jig/all',
+            {
+                params: {
+                    filter: status,
+                    page: page,
+                    size: size,
+                }
+            }
+        )
+        .then((response) => {
+            return response.data.result
+        })
+        .catch((error) => {
+            console.log(error.message)
+            return false
+        })
+}
+
+
+export const releaseDetailGet = async (
+    // status => ALL, PUBLISH, FINISH, REJECT
+    id: string,
+) => {
+    const http = axiosAuthApi()
+    return await http
+        .get(
+            'http://k10s105.p.ssafy.io/api/v1/request/jig/detail',
+            {
+                params: {
+                    "request-jig-id": id,
+                }
+            }
+        )
+        .then((response) => {
+            return response.data.result
+        })
+        .catch((error) => {
+            console.log(error.message)
+            return false
+        })
+}
+
+
+
+
+
+
