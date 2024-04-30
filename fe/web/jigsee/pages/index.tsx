@@ -14,6 +14,7 @@ export default function Home() {
     <>
       <div>
         <button onClick={getApitest}>jigmodel 검색 </button>
+        Samsung One
       </div>
     </>
   );

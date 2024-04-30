@@ -84,6 +84,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: "SamsungOne 400", sans-serif;
 }
 
 html,
@@ -104,9 +105,13 @@ a {
 header {
   padding-left: 0 !important;
   padding-right: 0 !important;
+  font-family: "SamsungOne 400";
 }
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+}
+.MuiButton-root {
+  font-family: "SamsungOne 400", sans-serif;
 }
