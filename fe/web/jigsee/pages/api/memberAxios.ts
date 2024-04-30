@@ -13,8 +13,9 @@ export const login = async (employeeNo:string, password:string) => {
         })
         .then((response) => {            
             localStorage.setItem('access_token', response.headers['authorization'])
-            localStorage.setItem('refresh_token', response.headers['refreshToken'])
-            console.log('response login', response.headers)
+            localStorage.setItem('refresh_token', response.headers['refreshtoken'])
+            // console.log('response login', response.headers)
+            // console.log(localStorage.getItem('refresh_token'))
             return {
                 success: true,
                 name: response.data.result.name,

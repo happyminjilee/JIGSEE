@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("/fonts/font.css");
 
 :root {
   --max-width: 1100px;
@@ -83,12 +84,14 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: "SamsungOne 400", sans-serif;
 }
 
 html,
 body {
   max-width: 100%;
   overflow-x: hidden;
+  font-family: "SamsungOne 400", sans-serif;
 }
 
 body {
@@ -102,9 +105,13 @@ a {
 header {
   padding-left: 0 !important;
   padding-right: 0 !important;
+  font-family: "SamsungOne 400";
 }
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+}
+.MuiButton-root {
+  font-family: "SamsungOne 400", sans-serif;
 }
