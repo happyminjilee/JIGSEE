@@ -3,6 +3,7 @@ package com.sdi.work_order.application;
 import com.sdi.work_order.client.JigItemClient;
 import com.sdi.work_order.client.response.JigItemResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
+import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
 import com.sdi.work_order.entity.WorkOrderNosqlEntity;
 import com.sdi.work_order.entity.WorkOrderRDBEntity;
@@ -12,13 +13,19 @@ import com.sdi.work_order.util.WorkOrderCheckList;
 import com.sdi.work_order.util.WorkOrderItem;
 import com.sdi.work_order.util.WorkOrderStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.*;
+import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.UpdateStatusItem;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,16 +36,21 @@ public class WorkOrderService {
     private final WorkOrderRDBRepository workOrderRDBRepository;
     private final WorkOrderNosqlRepository workOrderNosqlRepository;
 
-    public WorkOrderGroupingResponseDto grouping() {
-        List<WorkOrderItem> items = new ArrayList<>();
-        List<WorkOrderRDBEntity> all = workOrderRDBRepository.findAll();
-        for (WorkOrderRDBEntity entity : all) {
-            // TODO: 사용자 연결 완료시 실제 사용자 이름으로 대체
-            String creator = entity.getCreatorEmployeeNo();
-            String terminator = entity.getTerminatorEmployeeNo();
+    public WorkOrderResponseDto all(WorkOrderStatus status, int page, int size) {
+        Pageable pageable = PageRequest.of(Math.max(0, page - 1), Math.max(1, size));
 
-            items.add(WorkOrderItem.from(entity, creator, terminator));
-        }
+        Page<WorkOrderRDBEntity> infos = switch (status) {
+            case PUBLISH, PROGRESS, FINISH -> workOrderRDBRepository.findByStatusOrderByCreatedAtDesc(status, pageable);
+            case null -> workOrderRDBRepository.findAllByOrderByCreatedAtDesc(pageable);
+        };
+
+        List<WorkOrderItem> workOrderItems = mapToWorkOrderItems(infos);
+        return WorkOrderResponseDto.of(infos.getNumber()+1, infos.getTotalPages(), workOrderItems);
+    }
+
+    public WorkOrderGroupingResponseDto grouping() {
+        List<WorkOrderRDBEntity> all = workOrderRDBRepository.findAll();
+        List<WorkOrderItem> items = mapToWorkOrderItems(all);
 
         Map<WorkOrderStatus, List<WorkOrderItem>> group =
                 items.stream()
@@ -81,6 +93,30 @@ public class WorkOrderService {
         rdb.updateTerminatorEmployeeNo(terminatorEmployeeNo);
     }
 
+    @Transactional
+    public void updateStatus(List<UpdateStatusItem> list) {
+        for (UpdateStatusItem item : list) {
+            WorkOrderRDBEntity workOrder = getRDBWorkOrderById(item.id());
+            if(workOrder.getStatus() == WorkOrderStatus.FINISH) continue; // 이미 종료된 wo는 수정 불가
+
+            workOrder.updateStatus(item.status());
+        }
+    }
+
+    // List와 Page의 공통 상위 객체인 Iterable 사용
+    private List<WorkOrderItem> mapToWorkOrderItems(Iterable<WorkOrderRDBEntity> infos) {
+        List<WorkOrderItem> items = new ArrayList<>();
+
+        for (WorkOrderRDBEntity info : infos) {
+            // TODO: 사용자 연결 완료시 실제 사용자 이름으로 대체
+            String creator = info.getCreatorEmployeeNo();
+            String terminator = info.getTerminatorEmployeeNo();
+
+            items.add(WorkOrderItem.from(info, creator, terminator));
+        }
+        return items;
+    }
+
     private void saveData(WorkOrderRDBEntity rdb, List<WorkOrderCheckList> updateCheckList) {
         WorkOrderNosqlEntity nosql;
 
@@ -94,16 +130,6 @@ public class WorkOrderService {
         }
         workOrderNosqlRepository.save(nosql);
         rdb.updateDate();
-    }
-
-    @Transactional
-    public void updateStatus(List<UpdateStatusItem> list) {
-        for (UpdateStatusItem item : list) {
-            WorkOrderRDBEntity workOrder = getRDBWorkOrderById(item.id());
-            if(workOrder.getStatus() == WorkOrderStatus.FINISH) continue; // 이미 종료된 wo는 수정 불가
-
-            workOrder.updateStatus(item.status());
-        }
     }
 
     private JigItemResponseDto getJigItem(String serialNo) {

@@ -8,6 +8,7 @@ import com.sdi.work_order.dto.request.WorkOrderSaveRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto;
 import com.sdi.work_order.application.WorkOrderService;
 import com.sdi.work_order.util.Response;
+import com.sdi.work_order.util.WorkOrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,11 @@ class WorkOrderController {
     }
 
     @GetMapping("/all")
-    Response<WorkOrderResponseDto> all(@RequestParam(name = "status") String status){
-        return Response.success(null);
+    Response<WorkOrderResponseDto> all(@RequestParam(name = "status", required = false) WorkOrderStatus status,
+                                       @RequestParam(name = "page", defaultValue = "1") int page,
+                                       @RequestParam(name = "size", defaultValue = "10") int size){
+        WorkOrderResponseDto all = workOrderService.all(status, page, size);
+        return Response.success(all);
     }
 
     @GetMapping("/grouping")

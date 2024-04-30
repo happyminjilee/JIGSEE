@@ -1,5 +1,6 @@
 package com.sdi.work_order.api;
 
+import com.sdi.work_order.entity.WorkOrderRDBEntity;
 import com.sdi.work_order.repository.WorkOrderNosqlRepository;
 import com.sdi.work_order.repository.WorkOrderRDBRepository;
 import com.sdi.work_order.util.WorkOrderCheckList;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -24,6 +27,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -48,10 +52,25 @@ class WorkOrderControllerTest {
     }
 
     @Test
-    void all() {
+    void all() throws Exception {
         // given
+        int page = 1;
+        int size = 5;
+        long totalPageSize = Math.max(1, workOrderRDBRepository.count() / size);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get("/v1/work-order/all")
+                .param("page", String.valueOf(page))
+                .param("size", String.valueOf(size))
+                .contentType(MediaType.APPLICATION_JSON);
+
         // when
+        ResultActions perform = mockMvc.perform(request);
+
         // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.currentPage").value(String.valueOf(page)))
+                .andExpect(jsonPath("$.result.endPage").value(String.valueOf(totalPageSize)));
     }
 
     @Test
