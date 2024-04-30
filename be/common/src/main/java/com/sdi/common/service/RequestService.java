@@ -16,6 +16,7 @@ import com.sdi.common.repository.RepairRequestsRepository;
 import com.sdi.common.repository.WantRequestsRepository;
 import com.sdi.common.repository.WantResponsesRepository;
 import com.sdi.common.util.JigItemClient;
+import com.sdi.common.util.JigRequestStatus;
 import com.sdi.common.util.MessageClient;
 import com.sdi.common.util.SseStatus;
 import jakarta.transaction.Transactional;
@@ -34,8 +35,7 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class RequestService {
-    @Value("${page-size}")
-    private int PAGE_SIZE;
+
     /*
      * 현재 API 게이트웨이에 알림서버의 api를 호출하는 메소드가 없으므로 연결 불가능
      *
@@ -93,11 +93,11 @@ public class RequestService {
         messageClient.sendMessage(MessageDto.of(SseStatus.REQUEST_REPAIR, repairJigRequestDto.sender(), content.getId()), accessToken);
     }
 
-    public RequestJigListResponseDto findAllWantJigRequests(String option, int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, PAGE_SIZE, Sort.by("time").descending());
+    public RequestJigListResponseDto findAllWantJigRequests(String option, int pageNumber, int size) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, size, Sort.by("time").descending());
         Page<WantRequestEntity> page = switch (option) {
-            case "PUBLISH", "FINISH" -> wantRequestsRepository.findAllByStatus(option, pageable);
-            case "REJECT" -> wantRequestsRepository.findAllByIsAcceptAndStatus(false, "FINISH", pageable);
+            case "PUBLISH", "FINISH" -> wantRequestsRepository.findAllByStatus(JigRequestStatus.valueOf(option), pageable);
+            case "REJECT" -> wantRequestsRepository.findAllByIsAcceptAndStatus(false, JigRequestStatus.FINISH, pageable);
             case "", "ALL" -> wantRequestsRepository.findAll(pageable);
             default -> throw new IllegalStateException("Unexpected value: " + option);
         };
@@ -115,8 +115,8 @@ public class RequestService {
                         .orElseThrow(() -> new IllegalArgumentException("원본 요청을 찾을 수 없습니다.")));
     }
 
-    public RepairJigListResponseDto findAllRepairRequests(int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, PAGE_SIZE, Sort.by("time").descending());
+    public RepairJigListResponseDto findAllRepairRequests(int pageNumber, int size) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, size, Sort.by("time").descending());
         Page<RepairRequestEntity> page = repairRequestsRepository.findAll(pageable);
 
         List<RepairJigDetailResponseDto> list = page.getContent().stream()

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 class RequestController {
     private final RequestService requestService;
@@ -43,8 +43,10 @@ class RequestController {
     }
 
     @GetMapping("/request/jig/all")
-    Response<RequestJigListResponseDto> findAllWantJigRequests(@RequestParam(value = "filter",defaultValue = "ALL") String option, @RequestParam(value = "page", defaultValue = "1") int page) {
-        return Response.success(requestService.findAllWantJigRequests(option, page));
+    Response<RequestJigListResponseDto> findAllWantJigRequests(@RequestParam(value = "filter",defaultValue = "ALL") String option,
+                                                               @RequestParam(value = "page", defaultValue = "1") int page,
+                                                               @RequestParam(value = "size", defaultValue = "10") int size) {
+        return Response.success(requestService.findAllWantJigRequests(option, page, size));
     }
 
     @GetMapping("/request/jig/detail")
@@ -53,8 +55,9 @@ class RequestController {
     }
 
     @GetMapping("/request/repair")
-    Response<RepairJigListResponseDto> findAllRepairRequests(@RequestParam(value = "page", defaultValue = "1") int page) {
-        return Response.success(requestService.findAllRepairRequests(page));
+    Response<RepairJigListResponseDto> findAllRepairRequests(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                             @RequestParam(value = "size", defaultValue = "10") int size) {
+        return Response.success(requestService.findAllRepairRequests(page, size));
     }
 
     @GetMapping("/request/repair/detail")

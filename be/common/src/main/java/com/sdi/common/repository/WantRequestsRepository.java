@@ -1,6 +1,7 @@
 package com.sdi.common.repository;
 
 import com.sdi.common.entity.WantRequestEntity;
+import com.sdi.common.util.JigRequestStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface WantRequestsRepository extends MongoRepository<WantRequestEntity, String> {
-    Page<WantRequestEntity> findAllByIsAcceptAndStatus(boolean isAccept, String status, Pageable pageable);
-    Page<WantRequestEntity> findAllByStatus(String status, Pageable pageable);
+    Page<WantRequestEntity> findAllByIsAcceptAndStatus(Boolean isAccept, JigRequestStatus status, Pageable pageable);
+    Page<WantRequestEntity> findAllByStatus(JigRequestStatus status, Pageable pageable);
 }
 

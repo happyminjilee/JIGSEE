@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "jigItemClient", url = "${url.api-server}") // 요청을 보낼 url 작성
+@FeignClient(name = "jigItemClient", url = "${apis.api-base-url}") // 요청을 보낼 url 작성
 public interface JigItemClient {
     @PutMapping("/jig-item/status")
     void changeJigStatusToReady(@RequestBody JigItemStatusUpdateDto jigItemStatusUpdateDto, @RequestHeader("Authorization") String accessToken);

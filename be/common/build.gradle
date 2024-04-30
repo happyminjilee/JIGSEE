@@ -21,6 +21,15 @@ repositories {
     mavenCentral()
 }
 
+bootJar {
+    archiveFileName = 'app-notification-api.jar'
+}
+
+jar {
+    enabled = false
+}
+
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
