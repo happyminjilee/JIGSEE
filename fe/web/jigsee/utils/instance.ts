@@ -4,12 +4,12 @@ import { headers } from "next/headers";
 const api = "http://k10s105.p.ssafy.io:8082/api/v1";
 
 const axiosAuthApi = (): AxiosInstance => {
-    const accessToken = localStorage.getItem('access_token');
-    const refreshToken = localStorage.getItem('refresh_token');
-    const instance = axios.create({
-        baseURL: api,
-        headers: {Authorization: accessToken},
-    });
+  const accessToken = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
+  const instance = axios.create({
+    baseURL: "",
+    headers: { Authorization: accessToken },
+  });
 
   instance.interceptors.response.use(
     (response) => {
@@ -27,30 +27,20 @@ const axiosAuthApi = (): AxiosInstance => {
         if (!originRequest._retry) {
           originRequest._retry = true;
 
-                    try {
-                        const response =
-                            await axiosAuthApi().get(
-                                '/refresh',
-                                {
-                                    headers: {
-                                        RefreshToken: refreshToken
-                                    }
-                                });
-                        const newAccessToken = response.headers['authorization']
-                        localStorage.setItem('access_token', newAccessToken);
-                        originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-                        return axios(originRequest)
-                    } catch (refreshError) {
-                        window.alert('로그인이 만료되었습니다.');
-                        // 페이지 리다이렉트
-                    }
-                }
-            }
-            if (error.response?.resultCode === "INVALID_ACCESS_TOKEN") {
-                window.alert('로그인이 만료되었습니다.');
-            }
-
-            return Promise.reject(error);
+          try {
+            const response = await axiosAuthApi().get("/refresh", {
+              headers: {
+                RefreshToken: "Bearer " + refreshToken,
+              },
+            });
+            const newAccessToken = response.headers["authorization"];
+            localStorage.setItem("access_token", newAccessToken);
+            originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            return axios(originRequest);
+          } catch (refreshError) {
+            window.alert("로그인이 만료되었습니다.");
+            // 페이지 리다이렉트
+          }
         }
       }
       if (error.response?.resultCode === "INVALID_ACCESS_TOKEN") {

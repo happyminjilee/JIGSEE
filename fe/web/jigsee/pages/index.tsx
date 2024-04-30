@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const getApitest = () => {
-    const result = getjigMethod("testModelID");
+    const result = getjigMethod("testModelId");
     console.log(result);
   };
   return (

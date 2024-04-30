@@ -4,7 +4,7 @@ export async function getWoInfo(WOId: string) {
   const params = {
     "wo-order-id": WOId,
   };
-  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/work-order/detail", { params });
+  return axiosAuthApi().get("/work-order/detail", { params });
 }
 //WO전체 조회
 export async function getAllWo(WOId: string) {
@@ -13,18 +13,18 @@ export async function getAllWo(WOId: string) {
     page: "{페이지번호}",
     size: "{반환리스트개수}",
   };
-  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/work-order/all", { params });
+  return axiosAuthApi().get("/work-order/all", { params });
 }
 // Wo grouping 조회
 export async function getWogroup(WOId: string) {
-  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/work-order/group");
+  return axiosAuthApi().get("work-order/group");
 }
 // wo 생성
 export async function createWo(serialNo: string) {
   const requestBody = {
     serialNo: "str",
   };
-  return axiosAuthApi().post("http://k10s105.p.ssafy.io/api/v1/work-order/group", requestBody);
+  return axiosAuthApi().post("/work-order/group", requestBody);
 }
 // WO 임시저장
 export async function saveWotmp() {
@@ -56,7 +56,7 @@ export async function doneWo() {
       },
     ],
   };
-  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/work-order/done", requestBody);
+  return axiosAuthApi().put("/work-order/done", requestBody);
 }
 // Wo 상태 변경(리스트)
 export async function updateWoList() {
@@ -68,5 +68,5 @@ export async function updateWoList() {
       },
     ],
   };
-  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/work-order/done", requestBody);
+  return axiosAuthApi().put("/work-order/done", requestBody);
 }

@@ -1,9 +1,16 @@
 import { axiosAuthApi } from "@/utils/instance";
 
-//지그 점검 항목 조회-
+//지그 점검 항목 조회- 동작확인 완료
 export async function getjigMethod(modelID: string) {
   const params = { model: modelID };
-  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/jig", { params });
+  try {
+    const response = await axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/jig", { params });
+    console.log("data", response.data);
+    return response;
+  } catch (error) {
+    console.error("Error fetching Jig data:", error);
+    throw error; // 에러를 더 상위로 전파하여 필요한 조치를 취할 수 있도록 합니다.
+  }
 }
 
 // 지그 점검 항목 수정-관리자
