@@ -15,7 +15,7 @@ public enum RoleType {
 
     public static RoleType of(String code) {
         return Arrays.stream(RoleType.values())
-                .filter(roleType -> roleType.getCode().equals(code))
+                .filter(roleType -> roleType.getCode().equals(code) || roleType.toString().equals(code))
                 .findAny()
                 .orElse(PRODUCER);
     }

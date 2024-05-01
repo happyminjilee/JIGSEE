@@ -1,13 +1,11 @@
 package com.sdi.notification.service;
 
 import com.sdi.notification.dto.MemberInfoDto;
-import com.sdi.notification.dto.request.DisconnectRequestDto;
+import com.sdi.notification.dto.MemberResponseDto;
 import com.sdi.notification.dto.request.MessageRequestDto;
 import com.sdi.notification.dto.response.MessageResponseDto;
-import com.sdi.notification.entity.MemberEntity;
 import com.sdi.notification.entity.NotificationEntity;
 import com.sdi.notification.repository.EmitterRepository;
-import com.sdi.notification.repository.MemberRepository;
 import com.sdi.notification.repository.NotificationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,6 @@ public class SseService {
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60; // SSE 연결 지속 시간 : 1시간
 
     private final EmitterRepository emitterRepository;
-    private final MemberRepository memberRepository;
     private final NotificationRepository notificationRepository;
 
     public SseEmitter subscribe(MemberInfoDto memberInfo, String lastEventId) {
@@ -68,13 +65,12 @@ public class SseService {
             SseEmitter emitter = receivers.get(key);
             String receiverId = key.split("_")[1];
             String eventId = makeTimeIncludeId(messageRequestDto.receiverGroup(), receiverId);
-            System.out.println("eventId : " + eventId);
             send(emitter, eventId, key, messageRequestDto, receiverId);
         }
     }
 
-    public void disconnect(DisconnectRequestDto disconnectRequestDto) {
-        emitterRepository.deleteAllEmitterStartWithId(makeRoleTypeEmployeeNo(disconnectRequestDto));
+    public void disconnect(MemberResponseDto memberResponseDto) {
+        emitterRepository.deleteAllEmitterStartWithId(makeRoleTypeEmployeeNo(memberResponseDto));
     }
 
     // Header의 LastEventId가 있을 때 이벤트 재전송하는 로직
@@ -92,11 +88,7 @@ public class SseService {
      */
 
     private NotificationEntity saveToNotificationDB(MessageRequestDto messageRequestDto, String receiverId) {
-        MemberEntity sender = memberRepository.findByEmployeeNo(messageRequestDto.senderId())
-                .orElseThrow(() -> new IllegalArgumentException("발신자 아이디를 찾을 수 없습니다."));
-        MemberEntity receiver = memberRepository.findByEmployeeNo(receiverId)
-                .orElseThrow(() -> new IllegalArgumentException("수신자 아이디를 찾을 수 없습니다."));
-        NotificationEntity savedNotification = NotificationEntity.of(sender, receiver, messageRequestDto);
+        NotificationEntity savedNotification = NotificationEntity.of(messageRequestDto.senderId(), receiverId, messageRequestDto);
         notificationRepository.save(savedNotification);
         return savedNotification;
     }
@@ -125,7 +117,7 @@ public class SseService {
         return memberInfo.roleType() + "_" + memberInfo.employeeNo();
     }
 
-    private static String makeRoleTypeEmployeeNo(DisconnectRequestDto disconnectRequestDto) {
-        return disconnectRequestDto.role() + "_" + disconnectRequestDto.employeeNo();
+    private static String makeRoleTypeEmployeeNo(MemberResponseDto memberResponseDto) {
+        return memberResponseDto.role() + "_" + memberResponseDto.employeeNo();
     }
 }
