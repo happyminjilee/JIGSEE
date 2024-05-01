@@ -1,13 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/wotestresult.module.scss"; // Corrected import
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-
+import { getjigMethod } from "@/pages/api/jigAxios";
+import { usewoStore } from "@/store/workorderstore";
+interface testMethodItem {
+  content: string;
+  standard: string;
+}
+interface RowItem {
+  id: number;
+  contents: string;
+  standard: string;
+  measure: string;
+  memo: string;
+  passOrNot: boolean;
+}
 export default function WOtestresult() {
+  const { woId, openWotest, setopenWotest } = usewoStore();
+  const [testMethod, setTestMethod] = useState<testMethodItem[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("tttt", woId);
+        const result = await getjigMethod("testModelId");
+        console.log(result.data.result.list);
+        setTestMethod(result.data.result.list);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, [woId]);
+
   const columns: GridColDef<(typeof rows)[number]>[] = [
     { field: "contents", headerName: "기준 항목", width: 90 },
     {
@@ -35,9 +65,20 @@ export default function WOtestresult() {
       editable: true,
     },
   ];
-  const rows = [
-    { id: 1, contents: "직경", standard: "2.99-3m", measure: "2", memo: "모름", passOrNot: true },
-  ];
+  const [rows, setRows] = useState<RowItem[]>([]);
+
+  useEffect(() => {
+    const newRows = testMethod.map((method, index) => ({
+      id: index + 1,
+      contents: method.content,
+      standard: method.standard,
+      measure: "",
+      memo: "",
+      passOrNot: false,
+    }));
+    setRows(newRows);
+  }, [testMethod]);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>Test Result</div>
