@@ -1,65 +1,157 @@
 import React, { useState, useEffect } from "react";
 import styled from "@/styles/jigrequest.module.scss";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { Select, SelectItem, Divider, Input } from "@nextui-org/react";
-import {getfacility, getfacilitylist} from "@/pages/api/facilityAxios";
+import Grid from "@mui/material/Grid";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
 
-// 담아서 보낼 데이터 형식
-interface RowData {
-  key: number;
-  facility: string;
-  model: string;
-  amount: number;
-  [key: string]: any; // 인덱스 시그니처 추가
+//transfer list 함수
+// 배열 a에서 배열 b에 없는 항목만 반환
+function not(a: readonly string[], b: readonly string[]) {
+  return a.filter((value) => b.indexOf(value) === -1);
 }
 
-
+// 두 배열 a와 b의 교집합을 반환
+function intersection(a: readonly string[], b: readonly string[]) {
+  return a.filter((value) => b.indexOf(value) !== -1);
+}
 export default function Request() {
-  const [rows, setRows] = useState<RowData[]>([]);
+  // dummy jig serial 가져오기
+  const serialNo = [
+    "5254-245",
+    "0942-6487",
+    "52125-206",
+    "14783-304",
+    "67692-332",
+    "76237-247",
+    "35356-807",
+    "13668-030",
+    "68306-101",
+    "64141-111",
+    "49647-0001",
+    "42254-178",
+    "36987-1806",
+    "65321-030",
+    "54868-6185",
+    "51531-8365",
+    "13537-108",
+    "55154-3030",
+    "59762-3328",
+    "55154-4798",
+    "54973-1129",
+    "50419-701",
+    "0472-0163",
+    "30142-686",
+    "55292-122",
+    "67253-388",
+    "41250-029",
+    "52544-950",
+    "54738-905",
+    "51079-075",
+  ];
+
+  // 체크된 아이템을 관리하는 상태
+  const [checked, setChecked] = React.useState<readonly string[]>([]);
+  // 왼쪽 리스트를 관리하는 상태
+  const [left, setLeft] = React.useState<readonly string[]>(serialNo);
+  // 입력 필드에서의 사용자 입력 상태
+  const [filter, setFilter] = useState("");
+  // 오른쪽 리스트를 관리하는 상태
+  const [right, setRight] = React.useState<readonly string[]>([]);
+  // 입력 필드 값이 변경될 때마다 필터링 로직 실행
+  useEffect(() => {
+    if (filter === "") {
+      setLeft(serialNo); // 필터가 비어있다면 전체 리스트를 보여줌
+    } else {
+      const filteredSerials = serialNo.filter((s) => s.startsWith(filter));
+      setLeft(filteredSerials); // 필터에 맞는 결과로 상태 업데이트
+    }
+  }, [filter]);
+
+  // 왼쪽 리스트에서 체크된 아이템
+  const leftChecked = intersection(checked, left);
+  // 오른쪽 리스트에서 체크된 아이템
+  const rightChecked = intersection(checked, right);
+
+  // 특정 아이템의 체크 상태를 토글하는 함수
+  const handleToggle = (value: string) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
+  // 모든 아이템을 오른쪽으로 이동
+  // const handleAllRight = () => {
+  //   setRight(right.concat(left));
+  //   setLeft([]);
+  // };
+
+  // 체크된 아이템만 오른쪽으로 이동
+  const handleCheckedRight = () => {
+    setRight(right.concat(leftChecked));
+    setLeft(not(left, leftChecked));
+    setChecked(not(checked, leftChecked));
+  };
+
+  // 체크된 아이템만 왼쪽으로 이동
+  const handleCheckedLeft = () => {
+    setLeft(left.concat(rightChecked));
+    setRight(not(right, rightChecked));
+    setChecked(not(checked, rightChecked));
+  };
+
+  // 모든 아이템을 왼쪽으로 이동
+  // const handleAllLeft = () => {
+  //   setLeft(left.concat(right));
+  //   setRight([]);
+  // };
+
+  // 리스트 아이템을 렌더링하는 함수
+  const customList = (items: readonly string[]) => (
+    <Paper sx={{ width: 200, height: 230, overflow: "auto" }}>
+      <List dense component="div" role="list">
+        {items.map((value: string) => {
+          const labelId = `transfer-list-item-${value}-label`;
+
+          return (
+            <ListItemButton key={value} role="listitem" onClick={handleToggle(value)}>
+              <ListItemIcon>
+                <Checkbox
+                  checked={checked.indexOf(value) !== -1}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{
+                    "aria-labelledby": labelId,
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+            </ListItemButton>
+          );
+        })}
+      </List>
+    </Paper>
+  );
+
   const [selectedFacility, setSelectedFacility] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
-  const [amount, setAmount] = useState("");
   // 설비명 리스트 더미
   const facilities = ["line cutter", "raser", "metalize"];
   // 모델명 리스트 더미
   const models = ["swf235430", "dfdg456872", "ddg24652"];
-  // 테이블 열이름
-  const columns = [
-    {
-      key: "facility",
-      label: "설비",
-    },
-    {
-      key: "model",
-      label: "Jig 모델",
-    },
-    {
-      key: "amount",
-      label: "수량",
-    },
-    {
-      key: "action",
-      label: "삭제",
-    },
-  ];
-  // 추가 버튼 함수
-  const handleAddRow = () => {
-    const newRow = {
-      key: rows.length + 1,
-      facility: selectedFacility,
-      model: selectedModel,
-      amount: Number(amount),
-    };
-    setRows([...rows, newRow]);
-  };
-  const handleResetRow = () => {
-    setRows([]);
-  };
-  // 특정 행 삭제 함수
-  const handleDeleteRow = (key: number) => {
-    setRows(rows.filter((row) => row.key !== key));
-  };
 
   return (
     <>
@@ -97,50 +189,65 @@ export default function Request() {
               ))}
             </Select>
             <Input
-              type="number"
+              type="string"
               variant="bordered"
               labelPlacement="outside-left"
-              label="수량"
+              label="serial number"
               className={styled.amountinput}
-              onChange={(e) => setAmount(e.target.value)}
+              // 입력값에 따라 필터
+              onChange={(e) => setFilter(e.target.value)}
             />
           </div>
 
           <div className={styled.btncontainer}>
-            <button className={styled.addbtn} onClick={handleAddRow}>
-              추가
-            </button>
-            <button className={styled.resetbtn} onClick={handleResetRow}>
-              초기화
-            </button>
-          </div>
-          <div className={styled.tableScrollContainer}>
-            <Table className={styled.table} aria-label="불출 요청 리스트 테이블">
-              <TableHeader className={styled.tableheader} columns={columns}>
-                {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-              </TableHeader>
-
-              <TableBody items={rows}>
-                {(item) => (
-                  <TableRow className={styled.tableScrollContainer} key={item.key}>
-                    {columns.map((column) => (
-                      <TableCell key={`${item.key}-${column.key}`}>
-                        {column.key !== "action" ? (
-                          item[column.key]
-                        ) : (
-                          <img
-                            className={styled.icon}
-                            src="/images/delete_gray.svg"
-                            alt="delete_icon"
-                            onClick={() => handleDeleteRow(item.key)}
-                          />
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+            <Grid container spacing={2} justifyContent="center" alignItems="center">
+              <Grid item>사용대기 jig {customList(left)}</Grid>
+              <Grid item>
+                <Grid container direction="column" alignItems="center">
+                  {/* <Button
+                    sx={{ my: 0.5 }}
+                    variant="outlined"
+                    size="small"
+                    onClick={handleAllRight}
+                    disabled={left.length === 0}
+                    aria-label="move all right"
+                  >
+                    ≫
+                  </Button> */}
+                  <Button
+                    sx={{ my: 0.5 }}
+                    variant="outlined"
+                    size="small"
+                    onClick={handleCheckedRight}
+                    disabled={leftChecked.length === 0}
+                    aria-label="move selected right"
+                  >
+                    &gt;
+                  </Button>
+                  <Button
+                    sx={{ my: 0.5 }}
+                    variant="outlined"
+                    size="small"
+                    onClick={handleCheckedLeft}
+                    disabled={rightChecked.length === 0}
+                    aria-label="move selected left"
+                  >
+                    &lt;
+                  </Button>
+                  {/* <Button
+                    sx={{ my: 0.5 }}
+                    variant="outlined"
+                    size="small"
+                    onClick={handleAllLeft}
+                    disabled={right.length === 0}
+                    aria-label="move all left"
+                  >
+                    ≪
+                  </Button> */}
+                </Grid>
+              </Grid>
+              <Grid item>불출요청jig{customList(right)}</Grid>
+            </Grid>
           </div>
         </CardBody>
         <Divider />
