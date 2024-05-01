@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "jigItemClient", url = "${api-base-url}")
+@FeignClient(name = "jigItemClient", url = "${apis.api-base-url}")
 public interface JigItemClient {
 
     @GetMapping("/jig-item")
