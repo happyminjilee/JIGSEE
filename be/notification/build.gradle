@@ -21,6 +21,14 @@ repositories {
     mavenCentral()
 }
 
+bootJar {
+    archiveFileName = 'app-notification.jar'
+}
+
+jar {
+    enabled = false
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
