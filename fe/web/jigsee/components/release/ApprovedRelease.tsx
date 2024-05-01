@@ -1,5 +1,6 @@
 import styled from "@/styles/modal/approvedrelease.module.css"
 import {Button} from "@nextui-org/react"
+import {useReleaseDetailStore, useReleaseModalStore} from "@/store/releasestore"
 
 interface lst {
     model: string;
@@ -21,7 +22,8 @@ export default function ApprovedRelease() {
       {model: 'A100520', model_name: 'repulse', count: 5},
       {model: 'A100521', model_name: 'captain', count: 5},
   ]
-
+  const {serialNos} = useReleaseDetailStore()
+  const {isClose, setClose} = useReleaseModalStore()
   return (
       <>
           <div
@@ -42,15 +44,15 @@ export default function ApprovedRelease() {
               <div
                   className={styled.content}
               >
-                  {lst.map((info) => (
+                  {serialNos.map((info) => (
                       <div
-                          key={info.model}
+                          key={info}
                           style= {{
                               fontWeight: "bold",
                               fontSize: "large"
                           }}
                       >
-                          {info.model}  |  {info.count}
+                          {info}
                       </div>
                   ))}
               </div>
@@ -61,6 +63,7 @@ export default function ApprovedRelease() {
                    margin: "10px auto"
                }}
                        color="primary"
+                       onPress={() => {setClose(false)}}
                >
                    확인
                </Button>

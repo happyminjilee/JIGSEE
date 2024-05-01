@@ -1,9 +1,9 @@
 import {create} from "zustand"
 import {userStore} from "@/store/memberstore";
 import {releaseGet, releaseDetailGet} from "@/pages/api/releaseAxios";
+import {AxiosResponse} from "axios";
 
-const role = userStore((state) => state.role)
-const checkManager = (role === "MANAGER")
+
 
 interface lst {
     id: string, // 요청 uuid
@@ -19,7 +19,7 @@ interface release {
     currentPage: number,
     endPage: number,
     list: lst[],
-    fetchRelease: (status:string, page:number, size: number) => Promise<void>;
+    fetchRelease: (status:string, page:number, size: number) => Promise<AxiosResponse>;
 }
 
 
@@ -33,13 +33,17 @@ interface releaseDetail {
     createAt: string, // 요청시간
     updatedAt: string,
     serialNos: string[], // 요청 지그 리스트
-    fetchReleaseDetail: (id:string) => Promise<void>,
+    fetchReleaseDetail: (id:string) => Promise<AxiosResponse>,
 }
 
+interface modalState {
+    isClose: boolean,
+    setClose: (n:boolean) => void;
+}
 
-const useReleaseStore = create<release>(
+export const useReleaseStore = create<release>(
     (set) => ({
-        isManager: checkManager,
+        isManager: false,
         currentPage: 1,
         endPage: 1,
         list: [],
@@ -51,13 +55,14 @@ const useReleaseStore = create<release>(
                 endPage: data.result.endPage,
                 list: data.result.list,
             })
+            return data
         }
     })
 )
 
-const useReleaseDetailStore = create<releaseDetail>(
+export const useReleaseDetailStore = create<releaseDetail>(
     (set) => ({
-        isManager: checkManager,
+        isManager: false,
         id: "", // 요청 id
         status: "",
         from: "", // 요청자
@@ -79,13 +84,22 @@ const useReleaseDetailStore = create<releaseDetail>(
                 updatedAt: data.result.updatedAt,
                 serialNos: data.result.serialNos, // 요청 지그 리스트
             })
+            return data;
         }
     })
 )
 
 
+export const useReleaseModalStore = create<modalState>(
+    (set) => ({
+        isClose: false,
+        setClose: (newClose) => {
+            set({isClose: newClose})
+        }
+    })
+)
 
-export default {useReleaseStore, useReleaseDetailStore}
+
 
 
 

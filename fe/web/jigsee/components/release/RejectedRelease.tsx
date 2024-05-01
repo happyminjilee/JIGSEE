@@ -1,5 +1,7 @@
 import styled from "@/styles/modal/rejectedrelease.module.css"
-import {Button} from "@nextui-org/react"
+import {Button, modal} from "@nextui-org/react"
+import React from "react";
+import {useReleaseDetailStore, useReleaseModalStore} from "@/store/releasestore"
 
 interface lst {
     requestedId : string;
@@ -10,8 +12,8 @@ interface lst {
 
 
 export default function RejectedRelease() {
-    const memo = "좀 아껴써라 이 jig 들아 너희는 그냥 내가 시키는 일만 하면 돼 알았어?"
-
+    const {memo} = useReleaseDetailStore()
+    const {isClose, setClose} = useReleaseModalStore()
     return (
         <>
             <div
@@ -34,7 +36,9 @@ export default function RejectedRelease() {
                     height: "60px",
                     margin: "10px auto"
                 }}
-                        color="primary">
+                        color="primary"
+                        onPress={() => {setClose(false)}}
+                >
                     확인
                 </Button>
 

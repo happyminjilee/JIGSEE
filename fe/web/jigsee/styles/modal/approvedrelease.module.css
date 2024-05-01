@@ -8,6 +8,7 @@
   width: 400px;
   height: 400px;
   margin: auto;
+  background-color: var(--realwhite);
 }
 
 .title {
@@ -19,16 +20,18 @@
 .content {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
   align-items: center;
   border-radius: 0.5rem;
   background-color: var(--light-gray);
   overflow-y: auto;
   overflow-x: hidden;
   width: 300px;
-  /*height: 400px;*/
+  height: 300px;
   margin: auto;
-  max-height: 400px;
+  max-height: 300px;
+  font-weight: bold;
 }
 
 .content::-webkit-scrollbar {
