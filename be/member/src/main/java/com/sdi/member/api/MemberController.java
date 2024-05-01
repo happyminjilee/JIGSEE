@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
@@ -48,8 +50,13 @@ class MemberController {
         return Response.success(memberService.tokenRefresh(request, response));
     }
 
+    @GetMapping("/member/search")
+    Response<MemberLoginResponseDto> searchMyInfo(Authentication authentication) {
+        return Response.success(memberService.searchMyInfo(authentication));
+    }
+
     @GetMapping("/member/search/name")
-    Response<MemberResponseDto> searchName(@RequestParam("name") String name) {
+    Response<List<MemberResponseDto>> searchName(@RequestParam("name") String name) {
         return Response.success(memberService.searchName(name));
     }
 
