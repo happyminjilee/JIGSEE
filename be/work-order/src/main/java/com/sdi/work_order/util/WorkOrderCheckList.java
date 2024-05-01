@@ -1,7 +1,5 @@
 package com.sdi.work_order.util;
 
-import com.sdi.work_order.client.response.JigItemResponseDto.JigCheckListItem;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -14,12 +12,12 @@ public record WorkOrderCheckList(
         Boolean passOrNot
 ) {
 
-    public static List<WorkOrderCheckList> from(List<JigCheckListItem> jigCheckListItem) {
-        if(jigCheckListItem == null){
+    public static List<WorkOrderCheckList> from(List<JigCheckItem> jigCheckItem) {
+        if(jigCheckItem == null){
             return List.of();
         }
 
-        return jigCheckListItem.stream()
+        return jigCheckItem.stream()
                 .map(e -> new WorkOrderCheckList(
                         UUID.randomUUID().toString(),
                         e.content(),

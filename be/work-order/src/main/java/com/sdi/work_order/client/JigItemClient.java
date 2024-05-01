@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "jigItemClient", url = "${api-base-url}")
 public interface JigItemClient {
 
-    @GetMapping("/v1/jig-item")
+    @GetMapping("/jig-item")
     Response<JigItemResponseDto> findBySerialNo(@RequestParam(name = "serial-no") String serialNo);
 
 }

@@ -12,7 +12,6 @@ import com.sdi.work_order.entity.WorkOrderRDBEntity;
 import com.sdi.work_order.repository.WorkOrderCriteriaRepository;
 import com.sdi.work_order.repository.WorkOrderNosqlRepository;
 import com.sdi.work_order.repository.WorkOrderRDBRepository;
-import com.sdi.work_order.util.Response;
 import com.sdi.work_order.util.WorkOrderCheckList;
 import com.sdi.work_order.util.WorkOrderItem;
 import com.sdi.work_order.util.WorkOrderStatus;
@@ -23,7 +22,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.UpdateStatusItem;
@@ -34,6 +36,7 @@ import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.Upd
 public class WorkOrderService {
 
     private final JigItemClient jigItemClient;
+    //private final CommonRequest request;
     private final WorkOrderRDBRepository workOrderRDBRepository;
     private final WorkOrderNosqlRepository workOrderNosqlRepository;
     private final WorkOrderCriteriaRepository workOrderCriteriaRepository;
@@ -65,7 +68,7 @@ public class WorkOrderService {
             return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(infos));
         } else if (name != null) {
             // TODO: 사람 이름에 맞는 사용자 검색
-            MemberListResponseDto members = MemberListResponseDto.from(List.of(MemberResponseDto.of(name, "creator1"),MemberResponseDto.of(name, "creator2")));
+            MemberListResponseDto members = MemberListResponseDto.from(List.of(MemberResponseDto.of(name, "creator1"), MemberResponseDto.of(name, "creator2")));
             List<String> memberEmployeeNos = members.list().stream()
                     .map(MemberResponseDto::employeeNo)
                     .toList();
