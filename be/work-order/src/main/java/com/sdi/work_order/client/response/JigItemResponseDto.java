@@ -8,6 +8,11 @@ import java.util.List;
 public record JigItemResponseDto(
         String model,
         String serialNo,
+        String status,
+        String expectLife,
+        Integer useCount,
+        String useAccumulationTime,
+        Integer repairCount,
         List<JigCheckItem> checkList
 ) {
 

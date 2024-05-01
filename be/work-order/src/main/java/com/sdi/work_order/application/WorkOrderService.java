@@ -4,6 +4,7 @@ import com.sdi.work_order.client.JigItemClient;
 import com.sdi.work_order.client.response.JigItemResponseDto;
 import com.sdi.work_order.client.response.MemberListResponseDto;
 import com.sdi.work_order.client.response.MemberResponseDto;
+import com.sdi.work_order.dto.reponse.WorkOrderDetailResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
@@ -12,7 +13,7 @@ import com.sdi.work_order.entity.WorkOrderRDBEntity;
 import com.sdi.work_order.repository.WorkOrderCriteriaRepository;
 import com.sdi.work_order.repository.WorkOrderNosqlRepository;
 import com.sdi.work_order.repository.WorkOrderRDBRepository;
-import com.sdi.work_order.util.WorkOrderCheckList;
+import com.sdi.work_order.util.WorkOrderCheckItem;
 import com.sdi.work_order.util.WorkOrderItem;
 import com.sdi.work_order.util.WorkOrderStatus;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.UpdateStatusItem;
@@ -36,10 +34,21 @@ import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.Upd
 public class WorkOrderService {
 
     private final JigItemClient jigItemClient;
-    //private final CommonRequest request;
     private final WorkOrderRDBRepository workOrderRDBRepository;
     private final WorkOrderNosqlRepository workOrderNosqlRepository;
     private final WorkOrderCriteriaRepository workOrderCriteriaRepository;
+
+    public WorkOrderDetailResponseDto detail(Long workOrderId) {
+        WorkOrderRDBEntity rdb = getRDBWorkOrderById(workOrderId);
+        JigItemResponseDto jigItem = getJigItem(rdb.getJigSerialNo());
+        WorkOrderNosqlEntity nosql = getNosqlWorkOrderCheckList(rdb.getCheckListId());
+
+        // TODO: 생성자, 완료자 조회
+        String creator = rdb.getCreatorEmployeeNo();
+        String terminator = rdb.getTerminatorEmployeeNo(); // null 확인 필요
+
+        return WorkOrderDetailResponseDto.from(rdb, creator, terminator, jigItem, nosql.getCheckList());
+    }
 
     public WorkOrderResponseDto all(WorkOrderStatus status, int page, int size) {
         Pageable pageable = getPageable(page, size);
@@ -91,7 +100,7 @@ public class WorkOrderService {
         // 저장할 데이터 생성
         String checkListId = UUID.randomUUID().toString();
         WorkOrderRDBEntity rdb = WorkOrderRDBEntity.from(employeeNo, jigItem.serialNo(), jigItem.model(), checkListId);
-        WorkOrderNosqlEntity nosql = WorkOrderNosqlEntity.from(checkListId, false, WorkOrderCheckList.from(jigItem.checkList()));
+        WorkOrderNosqlEntity nosql = WorkOrderNosqlEntity.from(checkListId, false, WorkOrderCheckItem.from(jigItem.checkList()));
 
         // 데이터 저장
         workOrderRDBRepository.save(rdb);
@@ -99,13 +108,13 @@ public class WorkOrderService {
     }
 
     @Transactional
-    public void tmpSave(Long id, List<WorkOrderCheckList> updateCheckList) {
+    public void tmpSave(Long id, List<WorkOrderCheckItem> updateCheckList) {
         WorkOrderRDBEntity rdb = getRDBWorkOrderById(id);
         saveData(rdb, updateCheckList);
     }
 
     @Transactional
-    public void save(Long id, List<WorkOrderCheckList> checkList) {
+    public void save(Long id, List<WorkOrderCheckItem> checkList) {
         // TODO: 사용자 사번 조회
         String terminatorEmployeeNo = "완료자";
 
@@ -146,7 +155,7 @@ public class WorkOrderService {
         return items;
     }
 
-    private void saveData(WorkOrderRDBEntity rdb, List<WorkOrderCheckList> updateCheckList) {
+    private void saveData(WorkOrderRDBEntity rdb, List<WorkOrderCheckItem> updateCheckList) {
         WorkOrderNosqlEntity nosql;
 
         if (rdb.getCheckListId() != null) {

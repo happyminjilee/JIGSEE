@@ -1,6 +1,6 @@
 package com.sdi.work_order.entity;
 
-import com.sdi.work_order.util.WorkOrderCheckList;
+import com.sdi.work_order.util.WorkOrderCheckItem;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,13 +19,13 @@ public class WorkOrderNosqlEntity {
     @Id
     private String id;
     private Boolean passOrNot; // 전체 통과 유무
-    private List<WorkOrderCheckList> checkList;
+    private List<WorkOrderCheckItem> checkList;
 
-    public static WorkOrderNosqlEntity from(String id, Boolean passOrNot, List<WorkOrderCheckList> checkList){
+    public static WorkOrderNosqlEntity from(String id, Boolean passOrNot, List<WorkOrderCheckItem> checkList){
         return new WorkOrderNosqlEntity(id, passOrNot, checkList);
     }
 
-    public void updateCheckList(List<WorkOrderCheckList> checkList){
+    public void updateCheckList(List<WorkOrderCheckItem> checkList){
         this.checkList = checkList;
     }
 }

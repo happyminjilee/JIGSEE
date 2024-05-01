@@ -22,8 +22,9 @@ class WorkOrderController {
     private final WorkOrderService workOrderService;
 
     @GetMapping("/detail")
-    Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "serial-no") String serialNo) {
-        return Response.success(null);
+    Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "work-order-id") Long workOrderId) {
+        WorkOrderDetailResponseDto dto = workOrderService.detail(workOrderId);
+        return Response.success(dto);
     }
 
     @GetMapping("/all")

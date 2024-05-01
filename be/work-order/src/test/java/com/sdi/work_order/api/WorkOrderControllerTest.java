@@ -3,7 +3,7 @@ package com.sdi.work_order.api;
 import com.sdi.work_order.entity.WorkOrderRDBEntity;
 import com.sdi.work_order.repository.WorkOrderNosqlRepository;
 import com.sdi.work_order.repository.WorkOrderRDBRepository;
-import com.sdi.work_order.util.WorkOrderCheckList;
+import com.sdi.work_order.util.WorkOrderCheckItem;
 import com.sdi.work_order.util.WorkOrderStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class WorkOrderControllerTest {
 
     @Autowired
@@ -46,13 +47,28 @@ class WorkOrderControllerTest {
     private WorkOrderNosqlRepository workOrderNosqlRepository;
 
     @Test
-    void detail() {
+    @DisplayName("상세조회")
+    void detail() throws Exception {
         // given
+        Long workOrderId = 8L;
+        WorkOrderRDBEntity rdb = workOrderRDBRepository.findById(workOrderId).get();
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get("/v1/work-order/detail")
+                .param("work-order-id", String.valueOf(workOrderId))
+                .contentType(MediaType.APPLICATION_JSON);
+
         // when
+        ResultActions perform = mockMvc.perform(request);
+
         // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.id").value(workOrderId))
+                .andExpect(jsonPath("$.result.status").value(rdb.getStatus().toString()));
     }
 
     @Test
+    @DisplayName("전체 조회")
     void all() throws Exception {
         // given
         int page = 1;
@@ -92,6 +108,7 @@ class WorkOrderControllerTest {
     }
 
     @Test
+    @DisplayName("사번 조회")
     void findByPersonEmployeeNo() throws Exception {
         // given
         String employeeNo = "creator1";
@@ -107,8 +124,6 @@ class WorkOrderControllerTest {
 
         // when
         ResultActions perform = mockMvc.perform(request);
-
-        String contentAsString = perform.andReturn().getResponse().getContentAsString();
 
         // then
         perform.andExpect(status().isOk())
@@ -141,6 +156,7 @@ class WorkOrderControllerTest {
     }
 
     @Test
+    @DisplayName("임시 저장")
     void tmpSave() throws Exception {
         // given
         Long id = workOrderRDBRepository.findAll().getFirst().getId();
@@ -171,7 +187,7 @@ class WorkOrderControllerTest {
         // then
         perform.andExpect(status().isOk());
 
-        List<WorkOrderCheckList> checkList = workOrderNosqlRepository.findById(
+        List<WorkOrderCheckItem> checkList = workOrderNosqlRepository.findById(
                 workOrderRDBRepository.findById(id).get().getCheckListId()).get().getCheckList();
         assertEquals(uuid, checkList.get(0).uuid());
         assertEquals(measure, checkList.get(0).measure());
@@ -180,6 +196,7 @@ class WorkOrderControllerTest {
     }
 
     @Test
+    @DisplayName("저장")
     void done() throws Exception {
         // given
         Long id = workOrderRDBRepository.findAll().getFirst().getId();
@@ -210,7 +227,7 @@ class WorkOrderControllerTest {
         // then
         perform.andExpect(status().isOk());
 
-        List<WorkOrderCheckList> checkList = workOrderNosqlRepository.findById(
+        List<WorkOrderCheckItem> checkList = workOrderNosqlRepository.findById(
                 workOrderRDBRepository.findById(id).get().getCheckListId()).get().getCheckList();
         assertEquals(uuid, checkList.get(0).uuid());
         assertEquals(measure, checkList.get(0).measure());
@@ -220,6 +237,7 @@ class WorkOrderControllerTest {
     }
 
     @Test
+    @DisplayName("상태 변경")
     void updateStatus() throws Exception {
         // given
         Long id = workOrderRDBRepository.findAll().getFirst().getId();
