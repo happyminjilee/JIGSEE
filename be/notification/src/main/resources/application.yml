@@ -1,8 +1,29 @@
 spring:
-  application:
-    name: notification
+  profiles:
+    active: local #default
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
+    application:
+      name: notification
+
+server:
+  port: 8084
+  servlet:
+    context-path: /api
+---
+spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/db_jigsee?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/notification?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: jigsee
     password: jigseeadmin!
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,5 +38,3 @@ spring:
         format_sql: true
     open-in-view: false
 
-server:
-  port: 8084
