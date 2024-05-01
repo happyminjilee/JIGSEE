@@ -10,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import * as React from "react";
-import {useRouter} from "next/router";
-import {userStore} from "@/store/memberstore";
-import {useEffect} from "react";
-import {logout} from "@/pages/api/memberAxios";
+import { useRouter } from "next/router";
+import { userStore } from "@/store/memberstore";
+import { useEffect } from "react";
+import { logout } from "@/pages/api/memberAxios";
 
 export default function ManagerNavbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -24,30 +24,32 @@ export default function ManagerNavbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const router = useRouter()
-  const { setName, setRole, name, role } = userStore(state => ({
-      name: state.name,
-      role: state.role,
-      setName: state.setName,
-      setRole: state.setRole
-  }))
-  useEffect(() => {
-      console.log('Updated name:', name);
-      console.log('Updated role:', role);
-  }, [name, role])
-  const handlelogout = async () => {
-      const result = await logout();
-      if (result) {
-          setName("");
-          setRole("");
-          console.log('delete zustand info')
+  const router = useRouter();
+  const { setName, setRole, name, role } = userStore((state) => ({
+    name: state.name,
+    role: state.role,
+    setName: state.setName,
+    setRole: state.setRole,
+  }));
 
-          router.push("/login")
-      } else {
-          console.log("로그인이 만료되었습니다.")
-          router.push("/login")
-      }
-  }
+  useEffect(() => {
+    console.log("Updated name:", name);
+    console.log("Updated role:", role);
+  }, [name, role]);
+
+  const handlelogout = async () => {
+    const result = await logout();
+    if (result) {
+      setName("");
+      setRole("");
+      console.log("delete zustand info");
+
+      router.push("/login");
+    } else {
+      console.log("로그인이 만료되었습니다.");
+      router.push("/login");
+    }
+  };
   return (
     <>
       <Box style={{ paddingTop: "5px" }}>
@@ -117,11 +119,8 @@ export default function ManagerNavbar() {
             onClose={handleCloseUserMenu}
           >
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography
-                  textAlign="center"
-                  onClick={handlelogout}
-              >
-                  Logout
+              <Typography textAlign="center" onClick={handlelogout}>
+                Logout
               </Typography>
             </MenuItem>
           </Menu>
