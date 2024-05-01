@@ -6,9 +6,13 @@ import Wo from "@/components/workorder/template";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const getApitest = () => {
-    const result = getjigMethod("testModelId");
-    console.log(result);
+  const getApitest = async () => {
+    try {
+      const result = await getjigMethod("testModelId");
+      console.log(result.data.result);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
   };
   return (
     <>

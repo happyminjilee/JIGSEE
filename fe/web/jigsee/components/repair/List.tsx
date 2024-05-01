@@ -13,7 +13,7 @@ interface lst {
 
 export default function RequestList() {
   // wo id 상태 변화를 위한 store 변수 선언
-  const { woId, setWoId } = usewoStore();
+  const { woId, setWoId, openWotest, setopenWotest } = usewoStore();
   // 확인용 함수 - 나중에 api 함수 연결
   useEffect(() => {
     // woId가 변경될 때마다 api함수 실행
@@ -73,9 +73,9 @@ export default function RequestList() {
   ];
 
   const cardClick = (Id: string) => () => {
-    // 클릭한 S/N로 아이디가 바뀌엇는지 확인
-    setWoId(Id);
-    console.log("clicked", woId);
+    // 클릭한 S/N로 아이디로 바꾸기 , 추후 수정 예정
+    setWoId("testModelId");
+    setopenWotest(true);
   };
 
   return (
