@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: notification
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_jigsee?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: jigsee
+    password: jigseeadmin!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    open-in-view: false
+
+server:
+  port: 8084
