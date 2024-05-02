@@ -1,13 +1,4 @@
-import {
-  Input,
-  Button,
-  Checkbox,
-  Pagination,
-  Select,
-  SelectItem,
-  Selection,
-  Card,
-} from "@nextui-org/react";
+import { Pagination, Select, SelectItem, Selection } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";

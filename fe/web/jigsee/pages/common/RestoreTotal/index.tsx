@@ -1,13 +1,4 @@
-import {
-  Input,
-  Button,
-  Checkbox,
-  Pagination,
-  Select,
-  SelectItem,
-  Selection,
-  Card,
-} from "@nextui-org/react";
+import { Pagination, Selection } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
@@ -31,7 +22,7 @@ interface Props {
 
 export default function RepairTotal() {
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
-
+  const [page, setPage] = useState<number>(0);
   useEffect(() => {
     // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
     const storedRole = localStorage.getItem("role");
@@ -54,6 +45,11 @@ export default function RepairTotal() {
     { label: "complete", value: "완료" },
   ];
   const [values, setValues] = useState<Selection>(new Set(["publish", "onprogress"]));
+  // 페이지가 변할때마다 리스트 최신화
+  useEffect(() => {
+    // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
+    console.log(page);
+  }, [page]);
 
   // 임시 JIG 데이터
   const jigData: JigData[] = [
@@ -80,7 +76,7 @@ export default function RepairTotal() {
         ))}
       </div>
       <div className={styled.center}>
-        <Pagination total={10} />
+        <Pagination onChange={(e) => setPage(e)} total={10} />
       </div>
     </>
   );
