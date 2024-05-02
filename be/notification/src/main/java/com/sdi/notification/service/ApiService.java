@@ -13,6 +13,6 @@ public class ApiService {
     private final MemberClient memberClient;
 
     public MemberResponseDto getMember(String accessToken) {
-        return memberClient.getMember(accessToken);
+        return memberClient.getMember(accessToken).getResult();
     }
 }
