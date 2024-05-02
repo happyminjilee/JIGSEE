@@ -45,7 +45,7 @@ class MemberController {
      * 만료 되었다면 리프레시 토큰이 있는지 확인 후 액세스 토큰을 발급해준다.
      * 리프레시 토큰 기간이 3일 이하라면, 리프레시 토큰도 생성한다.
      */
-    @GetMapping("/refresh")
+    @PostMapping("/refresh")
     Response<MemberLoginResponseDto> tokenRefresh(HttpServletRequest request, HttpServletResponse response) {
         return Response.success(memberService.tokenRefresh(request, response));
     }
