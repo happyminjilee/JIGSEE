@@ -27,9 +27,9 @@ export default function WOtestresult() {
     const fetchData = async () => {
       try {
         console.log("tttt", woId);
-        const result = await getjigMethod("testModelId");
-        console.log(result.data.result.list);
-        setTestMethod(result.data.result.list);
+        const result = await getjigMethod("testModelId2");
+        console.log("result-check", result);
+        setTestMethod(result.data.result.checkList);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }

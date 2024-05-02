@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@/styles/jigrequest.module.scss";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 import { Select, SelectItem, Divider, Input } from "@nextui-org/react";
+import { updatejigMethod } from "@/pages/api/jigAxios";
 
 // Step 1: prop types 정의
 interface EditStandardProps {
   onClose: () => void; // Function that will be called to close the modal
 }
 interface RowData {
-  id: number;
-  method: string;
+  content: string;
   standard: string;
 }
+
 export default function EditStandard({ onClose }: EditStandardProps) {
   const [selectedFacility, setSelectedFacility] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
@@ -22,23 +23,36 @@ export default function EditStandard({ onClose }: EditStandardProps) {
   const models = ["swf235430", "dfdg456872", "ddg24652"];
 
   // Row 타입의 배열로 rows 상태를 정의합니다.
-  const [rows, setRows] = useState<RowData[]>([{ id: 0, method: "", standard: "" }]);
+  const [rows, setRows] = useState<RowData[]>([{ content: "", standard: "" }]);
 
   // 새로운 행을 추가하는 함수
   const addRow = () => {
     setRows([
       ...rows,
-      { id: rows.length + 1, method: "", standard: "" }, // Added an `id` and changed 'contents' to 'method'
+      { content: "", standard: "" }, // Added an `id` and changed 'contents' to 'content'
     ]);
   };
 
   // 특정 행의 데이터를 변경하는 함수
-  const updateRow = (index: number, field: keyof RowData, value: string) => {
+  const updateRow = (content: number, field: keyof RowData, value: string) => {
     const newRow = [...rows];
-    if (field === "method" || field === "standard") {
-      newRow[index][field] = value; // Ensuring the field matches the RowData keys
+    if (field === "content" || field === "standard") {
+      newRow[content][field] = value; // Ensuring the field matches the RowData keys
       setRows(newRow);
     }
+  };
+
+  // 지그 점검 항목 제출 버튼
+  const submitRow = async () => {
+    try {
+      console.log("tttt", rows);
+      // jig model도 전달하는 로직으로 수정필요
+      const result = await updatejigMethod(rows);
+      console.log(result);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+    onClose();
   };
   return (
     <>
@@ -86,14 +100,14 @@ export default function EditStandard({ onClose }: EditStandardProps) {
             </div>
             <Divider className={styled.headerline} />
 
-            {rows.map((row, index) => (
-              <div key={index} className={styled.rowcontainer}>
+            {rows.map((row, content) => (
+              <div key={content} className={styled.rowcontainer}>
                 <label>
                   방법
                   <input
                     type="text"
-                    value={row.method}
-                    onChange={(e) => updateRow(index, "method", e.target.value)}
+                    value={row.content}
+                    onChange={(e) => updateRow(content, "content", e.target.value)}
                   />
                 </label>
                 <label>
@@ -101,7 +115,7 @@ export default function EditStandard({ onClose }: EditStandardProps) {
                   <input
                     type="text"
                     value={row.standard}
-                    onChange={(e) => updateRow(index, "standard", e.target.value)}
+                    onChange={(e) => updateRow(content, "standard", e.target.value)}
                   />
                 </label>
               </div>
@@ -110,7 +124,7 @@ export default function EditStandard({ onClose }: EditStandardProps) {
         </CardBody>
 
         <CardFooter className={styled.cardfooter}>
-          <button className={styled.addbtn} onClick={onClose}>
+          <button className={styled.addbtn} onClick={submitRow}>
             제출
           </button>
         </CardFooter>

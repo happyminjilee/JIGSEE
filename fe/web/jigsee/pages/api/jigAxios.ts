@@ -1,5 +1,8 @@
 import { axiosAuthApi } from "@/utils/instance";
-
+interface RowData {
+  content: string;
+  standard: string;
+}
 //지그 점검 항목 조회-
 export async function getjigMethod(modelID: string) {
   const params = { model: modelID };
@@ -7,16 +10,10 @@ export async function getjigMethod(modelID: string) {
 }
 
 // 지그 점검 항목 수정-관리자
-export async function updatejigMethod() {
+export async function updatejigMethod(checkList: RowData[]) {
   const requestBody = {
-    model: "str",
-    checkList: [
-      // 점검항목
-      {
-        content: "str", // 점검 내용
-        standard: "str", // 기준
-      },
-    ],
+    model: "testModelId2",
+    checkList: checkList,
   };
   return axiosAuthApi().put("http://k10s105.p.ssafy.io:80/api/v1/jig", requestBody);
 }
