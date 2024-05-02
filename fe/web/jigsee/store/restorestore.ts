@@ -17,6 +17,9 @@ interface RestoreState {
   getRestoreDetail: () => Promise<void>;
   // jig 보수 요청 아이디 변경
   setRestoreJigid: (restoreId: number) => void;
+  //modal open 변수
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 export const useRestoreStore = create<RestoreState>((set, get) => ({
   page: 1,
@@ -44,10 +47,13 @@ export const useRestoreStore = create<RestoreState>((set, get) => ({
       console.log("Detail data received", result);
     } catch (error) {
       console.error("Failed to fetch detail data:", error);
-      console.log("dsdf", jijij);
     }
   },
   setRestoreJigid: (newId: number) => {
     set({ restoreId: newId });
+  },
+  open: false,
+  setOpen: (newOpen: boolean) => {
+    set({ open: newOpen });
   },
 }));

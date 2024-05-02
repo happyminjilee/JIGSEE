@@ -4,11 +4,9 @@ import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
 import { useRestoreStore } from "@/store/restorestore";
-interface Option {
-  label: string;
-  value: string;
-}
-
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import RestoreDetail from "@/components/restore/RestoreMemo";
 interface Props {
   onClick(): void;
 }
@@ -47,6 +45,8 @@ export default function RepairTotal() {
     getRestoreDetail,
     setRestoreJigid,
     restoreId,
+    open,
+    setOpen,
   } = useRestoreStore();
   useEffect(() => {
     getRestoreList(); // Fetch list whenever the page changes
@@ -54,6 +54,7 @@ export default function RepairTotal() {
 
   function cardClick(jigID: number) {
     setRestoreJigid(jigID);
+    setOpen(true);
     console.log("clicked", jigID);
   }
   // jig선택한 id가 바뀔때마다 jig Detail이 변함
@@ -79,6 +80,34 @@ export default function RepairTotal() {
       <div className={styled.center}>
         <Pagination onChange={(e) => setPage(e)} total={endpage} />
       </div>
+      <Modal
+        open={open} // Corrected from 'open'
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          "& .MuiBox-root": {
+            // Assuming the box is causing issues
+            outline: "none",
+            border: "none",
+            boxShadow: "none",
+          },
+        }}
+      >
+        <Box
+          sx={{
+            width: "100%",
+            height: "80%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <RestoreDetail />
+        </Box>
+      </Modal>
     </>
   );
 }
