@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
  * HTTP 요청 헤더에서 JWT 토큰을 추출
  */
 public class HeaderUtils {
+    private static final String REFRESH_TOKEN = "RefreshToken";
 
     public static String getAccessToken(HttpServletRequest request) {
         String headerValue = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -19,7 +20,7 @@ public class HeaderUtils {
     }
 
     public static String getRefreshToken(HttpServletRequest request) {
-        String headerValue = request.getHeader("RefreshToken");
+        String headerValue = request.getHeader(REFRESH_TOKEN);
         if (headerValue == null) {
             return null;
         }
@@ -33,7 +34,6 @@ public class HeaderUtils {
     }
 
     public static void addRefreshToken(HttpServletResponse response, String value) {
-        String headerValue = "RefreshToken";
-        response.addHeader(headerValue, value);
+        response.addHeader(REFRESH_TOKEN, value);
     }
 }
