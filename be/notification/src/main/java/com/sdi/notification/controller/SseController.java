@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
-@RequestMapping("/sse")
+@RequestMapping("/v1/sse")
 @RequiredArgsConstructor
 class SseController {
     private final SseService sseService;
@@ -43,9 +43,5 @@ class SseController {
         sseService.disconnect(currentMember);
         return Response.success();
     }
-
-    @GetMapping("/deploy-test")
-    Response<String> deployTest() {
-        return Response.success("deploy-success!!!");
-    }
+    
 }
