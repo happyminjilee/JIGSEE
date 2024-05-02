@@ -11,6 +11,17 @@ interface lst {
   status: string;
 }
 
+interface forSlice {
+  id: number,
+  model: string, // 지그 모델명
+  serialNo: string, // 지그 일련번호
+  creator: string, // 작성자
+  terminator: string, // 작성 종료자
+  status: string, // wo 상태
+  createdAt: string, // wo 생성시간
+  updatedAt: string // wo 수정시간
+}
+
 export default function RequestList() {
   // wo id 상태 변화를 위한 store 변수 선언
   const { woId, setWoId, rightCompo, setRightCompo } = useCompoStore();
@@ -21,15 +32,41 @@ export default function RequestList() {
   useEffect(() => {
     fetchWoGroup()
         .then((res) => {
-          console.log(res)
+          if (publish !== null) {
+            if (publish.length >7) {
+              setForPublish(publish.slice(0, 7))
+            } else if (publish.length > 1) {
+              setForPublish(publish.slice(0, publish.length - 1))
+            } else {
+              setForPublish(publish)
+            }
+          } else {
+            setForPublish([])
+          }
+
+          if (progress !== null) {
+            if (progress.length >7) {
+              setForProgress(progress.slice(0, 7))
+            } else if (progress.length > 1) {
+              setForProgress(progress.slice(0, progress.length-1))
+            } else {
+              setForProgress(progress)
+            }
+          } else {
+            setForProgress([])
+          }
+
         })
         .catch((error) => {
           console.log(error.message)
         })
   }, []);
-  const forPublish = publish.slice(0, 7);
-  const forProgress = progress.slice(0, 7);
-
+  const [forPublish, setForPublish] = useState<forSlice[]>([]) ;
+  const [forProgress,setForProgress] = useState<forSlice[]>([]);
+  console.log("publish", publish)
+  console.log("progress", progress)
+  console.log("forPublish", forPublish)
+  console.log("forProgress", forProgress)
   const lst = [
     {
       createdAt: "2024.04.26",
@@ -82,7 +119,7 @@ export default function RequestList() {
     },
   ];
 
-  const cardClick = (Id: string, state: string) => {
+  const cardClick = (Id: number, state: string) => {
     // 클릭한 S/N로 아이디로 바꾸기 , 추후 수정 예정
     setWoId("testModelId");
     setRightCompo(state);
@@ -99,7 +136,7 @@ export default function RequestList() {
     <>
       <div className={styled.box}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
-          <div style={{ fontWeight: "bold", fontSize: "15px" }}>재고 불출 요청 내역</div>
+          <div style={{ fontWeight: "bold", fontSize: "15px" }}>수리 진행 내역</div>
           <Link
             href="/common/ReleaseTotal/"
             // passHref
@@ -111,10 +148,10 @@ export default function RequestList() {
         </div>
         <div className={styled.contents}>
           {/* card */}
-          {forPublish.map((info, index) => (
-            <div key={index} className={styled.card} onClick={() =>{cardClick(info.serialNo, info.status )}}>
+          {publish.map((info, index) => (
+            <div key={index} className={styled.card} onClick={() =>{cardClick(info.id, info.status )}}>
               <div className={styled.division1}>
-                <div className={styled.date}>{info.createdAt}</div>
+                <div className={styled.date}>{info.createdAt[1]}</div>
                 <div className={styled.title}>
                   {info.serialNo} | {info.model}
                 </div>
@@ -123,8 +160,8 @@ export default function RequestList() {
               <div className={styled.division2}>{info.status}</div>
             </div>
           ))}
-          {forProgress.map((info, index) => (
-              <div key={index} className={styled.card} onClick={() =>{cardClick(info.serialNo, info.status )}}>
+          {progress.map((info, index) => (
+              <div key={index} className={styled.card} onClick={() =>{cardClick(info.id, info.status )}}>
                 <div className={styled.division1}>
                   <div className={styled.date}>{info.createdAt}</div>
                   <div className={styled.title}>

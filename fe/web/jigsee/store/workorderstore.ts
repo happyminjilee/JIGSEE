@@ -86,7 +86,7 @@ interface WoDetail {
   updatedAt: string, // wo 수정일
   jigItemInfo: jigItemInfo,
   checkList: checklist[],
-  fetchWoDetail: (id:string) => Promise<AxiosResponse>
+  fetchWoDetail: (id:number) => Promise<AxiosResponse>
 }
 
 
@@ -127,7 +127,7 @@ export const useWoDetailStore = create<WoDetail>(
         repairCount: 0 // 지그 수리 횟수
       },
       checkList: [],
-      fetchWoDetail: async (id:string) => {
+      fetchWoDetail: async (id:number) => {
         const data = await getWoInfo(id);
         set({
           id: data.data.result.id,
@@ -153,9 +153,9 @@ export const useWoGroupStore = create<WoGroup>(
       fetchWoGroup: async () => {
         const data = await getWogroup();
         set({
-          publish: data.data.result.publish,
-          progress: data.data.result.progress,
-          finish: data.data.result.finish,
+          publish: data.data.result.publish || [] ,
+          progress: data.data.result.progress || [],
+          finish: data.data.result.finish || [] ,
         })
         return data.data
       }

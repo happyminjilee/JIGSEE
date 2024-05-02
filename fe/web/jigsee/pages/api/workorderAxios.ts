@@ -1,9 +1,9 @@
 import { axiosAuthApi } from "@/utils/instance";
 
 //work order id로 WO조회 -기술팀
-export async function getWoInfo(WOId: string) {
+export async function getWoInfo(WOId: number) {
   const params = {
-    "wo-order-id": WOId,
+    "work-order-id": WOId,
   };
   return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/work-order/detail", { params });
 }
