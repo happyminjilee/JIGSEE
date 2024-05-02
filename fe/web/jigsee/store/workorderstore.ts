@@ -162,6 +162,16 @@ export const useWoGroupStore = create<WoGroup>(
     })
 )
 
+interface Stepper {
+    activeStep: number;
+    setActiveStep: (step: number) => void;
+}
+
+export const useStepperStore = create<Stepper>((set) => ({
+    activeStep: 1,
+    setActiveStep: (step:number) => {set({activeStep:step})}
+}))
+
 interface woPut {
     id: number,
     checklist : [{

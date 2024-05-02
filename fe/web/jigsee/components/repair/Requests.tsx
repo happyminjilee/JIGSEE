@@ -1,7 +1,8 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Link, Button } from "@nextui-org/react";
 import styled from "@/styles/repairrequest.module.css";
 import { list } from "postcss";
+import {updateWoList, createWo} from "@/pages/api/workorderAxios";
 
 interface lst {
     id: number;
@@ -9,6 +10,10 @@ interface lst {
     model: string;
     serialNo: string;
     status: string;
+}
+
+interface request {
+    serialNo: string
 }
 
 export default function RequestList() {
@@ -82,13 +87,22 @@ export default function RequestList() {
         console.log("clicked", requestId)
     }
 
-    const createWo = () => {
-
+    const openModal = () => {
+    //     모달 열어서 wo 생성 마무리
     }
 
     const requestPost = () => {
+        // 리스트로 담아서 상태 변화
 
+        // store 설정, 담아있는 리스트를 반환
+        updateWoList([{id: 0, status: "PUBLISH"}])
     }
+
+    const [requestList, setRequestList] = useState<request[]>([])
+    useEffect(() => {
+        setRequestList(lst);
+        // 리스트에 값이 추가될 때마다 requestlist 가 최신화 되도록 설정
+    }, [lst]);
 
 
     return (
@@ -153,7 +167,7 @@ export default function RequestList() {
                             margin: "10px, 0px, 0px, 0px",
                             width: "190px",
                         }}
-                        onPress={() => {createWo()}}
+                        onPress={() => {openModal()}}
                     >
                         WO 생성
                     </Button>

@@ -1,41 +1,19 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ChickBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import styled from "@/styles/modal/workorder.module.css";
-import {isDataView} from "node:util/types";
+import {useWoDetailStore} from "@/store/workorderstore"
 
-// enum Status {
-//     PUBLISH = "PUBLISH",
-//     PROGRESS = "PROGRESS",
-//     FINISH = "FINISH"
-// }
-
-// 점검항목에 대한 인터페이스 정의
-interface CheckListItem {
-    uuid: string;       // 점검항목 구분을 위한 id
-    content: string;    // 점검항목
-    standard: string;   // 기준 값
-    measure: string;    // 측정값
-    memo: string;       // 비고
-    passOrNot: boolean; // 통과 유무
-}
-
-// 주 데이터 구조에 대한 인터페이스 정의
-interface WorkOrder {
-    id: number;                   // 고유 ID
-    status: string;               // 상태
-    creator: string;              // 생성자
-    terminator: string;           // 완료자
-    model: string;                // 지그 모델명
-    serialNo: string;             // 지그 일련번호
-    createdAt: Date;              // wo 생성일
-    checkList: CheckListItem[];   // 점검항목 리스트
-}
 
 export default function workorder() {
-    const [qualification, setQualification] = useState()
+    const {id, status, createdAt, creator, checkList, jigItemInfo,terminator, updatedAt} = useWoDetailStore()
+    const [qualification, setQualification] = useState(false)
+    useEffect(() => {
+        const allQualified = checkList.every(item=> item.passOrNot === true)
+        setQualification(allQualified)
+    }, []);
     const WorkOrder =
         {
             id: 31112323,
@@ -89,12 +67,12 @@ export default function workorder() {
                     수리 요청 WORK ORDER
                 </div>
                 <div className={styled.body1}>
-                    <div>요청인 : {WorkOrder.creator}</div>
-                    <div>요청일 : {WorkOrder.createdAt}</div>
-                    <div>NO. {WorkOrder.id}</div>
+                    <div>요청인 : {creator}</div>
+                    <div>요청일 : {createdAt}</div>
+                    <div>NO. {id}</div>
                 </div>
                 <div className={styled.checks}>
-                    {WorkOrder.status === "PUBLISH" ?
+                    {status === "PUBLISH" ?
                         <div className={styled.check}>
                             <CheckBoxIcon>
                             </CheckBoxIcon>
@@ -109,7 +87,7 @@ export default function workorder() {
                         </div>
 
                     }
-                    {WorkOrder.status === "PROGRESS" ?
+                    {status === "PROGRESS" ?
                         <div className={styled.check}>
                             <CheckBoxIcon>
                             </CheckBoxIcon>
@@ -124,7 +102,7 @@ export default function workorder() {
                         </div>
 
                     }
-                    {WorkOrder.status === "FINISH" ?
+                    {status === "FINISH" ?
                         <div className={styled.check}>
                             <CheckBoxIcon>
                             </CheckBoxIcon>
@@ -140,23 +118,23 @@ export default function workorder() {
                     }
                 </div>
                 <div className={styled.body2}>
-                    Model : {WorkOrder.model}
+                    Model : {jigItemInfo.model}
                 </div>
                 <div className={styled.body2}>
-                    S/N : {WorkOrder.serialNo}
+                    S/N : {jigItemInfo.serialNo}
                 </div>
                 <hr className={styled.divider}/>
 
                 <div className={styled.body2}>
-                    Technician : {WorkOrder.terminator}
+                    Technician : {terminator}
                 </div>
                 <div className={styled.body3}>
                     <div className={styled.compo3}>
                         <div>
-                            Test Start
+                            지그 수리 횟수
                         </div>
                         <div>
-                            asdf
+                            {jigItemInfo.repairCount}
                         </div>
                     </div>
                     <div className={styled.compo3}>
@@ -164,7 +142,7 @@ export default function workorder() {
                             Test End
                         </div>
                         <div>
-                            asdf
+                            {updatedAt}
                         </div>
                     </div>
                 </div>
@@ -204,7 +182,7 @@ export default function workorder() {
                                         overflowY: "scroll",
                                     }}
                                 >
-                                {WorkOrder.checkList.map((check, index) => (
+                                {checkList.map((check, index) => (
                                     <tr key={check.uuid} className={styled.cell}>
                                         <td className={styled.cell}>{check.content}</td>
                                         <td className={styled.cell}>{check.standard}</td>
@@ -225,7 +203,7 @@ export default function workorder() {
                         >
                             Qualification
                         </div>
-                        {}
+                        {qualification ? <CheckIcon/>: <ClearIcon/>}
                     </div>
                 </div>
             </div>
