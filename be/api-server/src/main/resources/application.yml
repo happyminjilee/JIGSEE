@@ -24,3 +24,4 @@ springdoc:
 apis:
   jig-base-url: ${JIG_BASE_URL}
   jig-item-base-url: ${JIG_ITEM_BASE_URL}
+  member-base-url: ${MEMBER_BASE_URL}

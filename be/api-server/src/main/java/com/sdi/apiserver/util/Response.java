@@ -1,15 +1,22 @@
 package com.sdi.apiserver.util;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@AllArgsConstructor
 @ToString
 public class Response<T> {
-    private String resultCode;
-    private T result;
+    private final String resultCode;
+    private final T result;
+
+    @JsonCreator
+    public Response(@JsonProperty("resultCode") String resultCode,
+                    @JsonProperty("result") T result) {
+        this.resultCode = resultCode;
+        this.result = result;
+    }
 
     public static Response<Void> success() {
         return new Response<Void>("SUCCESS", null);
