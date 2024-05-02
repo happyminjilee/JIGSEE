@@ -3,6 +3,7 @@ package com.sdi.member.application;
 import com.sdi.member.dto.MemberDto;
 import com.sdi.member.dto.response.MemberLoginResponseDto;
 import com.sdi.member.dto.response.MemberResponseDto;
+import com.sdi.member.entity.MemberEntity;
 import com.sdi.member.jwt.AuthToken;
 import com.sdi.member.jwt.AuthTokenProvider;
 import com.sdi.member.repository.MemberRepository;
@@ -18,10 +19,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -132,15 +135,19 @@ public class MemberService {
         return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
     }
 
-    public MemberResponseDto searchName(String name) {
-        return memberRepository.findByName(name)
-                .map(MemberResponseDto::fromEntity)
-                .orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
+    public MemberLoginResponseDto searchMyInfo(Authentication authentication) {
+        String employeeNo = authentication.getName();
+        MemberDto memberDto = getMemberOrException(employeeNo);
+        return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
+    }
+
+    public List<MemberResponseDto> searchName(String name) {
+        return memberRepository.findAllByName(name).stream().map(MemberResponseDto::fromEntity).toList();
     }
 
     public MemberResponseDto searchEmployeeNo(String employeeNo) {
         return memberRepository.findByEmployeeNo(employeeNo)
                 .map(MemberResponseDto::fromEntity)
-                .orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
+                .orElse(null);
     }
 }
