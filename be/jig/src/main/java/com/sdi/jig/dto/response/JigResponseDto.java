@@ -6,13 +6,13 @@ import com.sdi.jig.util.CheckItem;
 
 import java.util.List;
 
-public record JigResponseDto (
+public record JigResponseDto(
         String model,
         String expectLife,
-        List<CheckItem> list
-){
+        List<CheckItem> checkList
+) {
 
-    public static JigResponseDto from(JigRDBEntity rdb, JigNosqlEntity nosql){
+    public static JigResponseDto from(JigRDBEntity rdb, JigNosqlEntity nosql) {
         return new JigResponseDto(
                 rdb.getModel(),
                 rdb.getExpectLife(),

@@ -54,7 +54,7 @@ class JigControllerTest {
         // then
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.model").value(model))
-                .andExpect(jsonPath("$.result.checkList.list").isArray());
+                .andExpect(jsonPath("$.result.checkList").isArray());
     }
 
     @Test
@@ -99,7 +99,7 @@ class JigControllerTest {
 
     @Test
     @DisplayName("JIG ITEM 폐기")
-    public void delete() throws Exception{
+    public void delete() throws Exception {
         // given
         String serialNo = "14d51713-3eb5-4d38-af87-31ae7d4c19f3";
         JSONObject body = new JSONObject();

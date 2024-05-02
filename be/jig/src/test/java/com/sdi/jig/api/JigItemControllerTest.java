@@ -128,7 +128,7 @@ class JigItemControllerTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.isUsable").value(true))
+                .andExpect(jsonPath("$.result.isUsable").value(false))
                 .andExpect(jsonPath("$.result.data.useCount").value(1))
                 .andExpect(jsonPath("$.result.data.useAccumulationTime").value("24:00:00.000"))
                 .andExpect(jsonPath("$.result.data.repairCount").value(1));

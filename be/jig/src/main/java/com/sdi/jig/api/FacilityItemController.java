@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/facility-item")
 @RequiredArgsConstructor
-class FacilityController {
+class FacilityItemController {
 
     private final FacilityItemService facilityItemService;
 
     @GetMapping("/all")
-    Response<FacilityItemAllResponseDto> all(){
+    Response<FacilityItemAllResponseDto> all() {
         FacilityItemAllResponseDto dto = facilityItemService.all();
         return Response.success(dto);
     }
 
     @GetMapping
-    Response<FacilityItemDetailResponseDto> detail(@RequestParam(name = "facility-id") Long facilityId){
+    Response<FacilityItemDetailResponseDto> detail(@RequestParam(name = "facility-id") Long facilityId) {
         FacilityItemDetailResponseDto dto = facilityItemService.detail(facilityId);
         return Response.success(dto);
     }
