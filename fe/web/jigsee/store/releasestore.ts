@@ -69,16 +69,17 @@ export const useReleaseDetailStore = create<releaseDetail>((set) => ({
   serialNos: [], // 요청 지그 리스트
   fetchReleaseDetail: async (id: string) => {
     const data = await releaseDetailGet(id);
+    console.log("sdfdfe", data);
     set({
-      isManager: data.data.result.isManager,
-      id: data.data.result.id, // 요청 id
-      status: data.data.result.status,
-      from: data.data.result.from, // 요청자
-      to: data.data.result.to, // 승인자
-      memo: data.data.result.memo, // 사유
-      createAt: data.data.result.createAt, // 요청시간
-      updatedAt: data.data.result.updatedAt,
-      serialNos: data.data.result.serialNos, // 요청 지그 리스트
+      isManager: data.isManager,
+      id: data.id, // 요청 id
+      status: data.status,
+      from: data.from, // 요청자
+      to: data.to, // 승인자
+      memo: data.memo, // 사유
+      createAt: data.createAt, // 요청시간
+      updatedAt: data.updatedAt,
+      serialNos: data.list, // 요청 지그 리스트
     });
     return data.data;
   },

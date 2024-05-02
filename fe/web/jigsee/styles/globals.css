@@ -112,6 +112,11 @@ header {
     color-scheme: dark;
   }
 }
-.MuiButton-root {
+.MuiButton {
   font-family: "SamsungOne 400", sans-serif;
+}
+.MuiButtonBase-root-MuiButton {
+  a {
+    font-family: "SamsungOne 400", sans-serif;
+  }
 }
