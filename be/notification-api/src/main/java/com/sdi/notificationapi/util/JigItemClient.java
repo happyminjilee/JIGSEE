@@ -14,5 +14,5 @@ public interface JigItemClient {
     @PutMapping("/jig-item/status")
     void changeJigStatusToReady(@RequestBody JigItemStatusUpdateDto jigItemStatusUpdateDto, @RequestHeader("Authorization") String accessToken);
     @GetMapping("/jig-item?serial-no={serialNo}")
-    JigItemResponseDto findBySerialNo(@PathVariable("serialNo") String serialNo, @RequestHeader("Authorization") String accessToken);
+    Response<JigItemResponseDto> findBySerialNo(@PathVariable("serialNo") String serialNo, @RequestHeader("Authorization") String accessToken);
 }

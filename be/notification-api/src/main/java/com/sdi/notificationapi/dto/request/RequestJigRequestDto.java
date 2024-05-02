@@ -1,18 +1,12 @@
 package com.sdi.notificationapi.dto.request;
 
-import com.sdi.notificationapi.dto.RequestJigDto;
-
 import java.util.List;
 
 /**
  *
- * @param sender 토큰에서 가져오거나 Member API 호출하든지 해야함(수정 필요)
- * @param list
- * @param memo
+ * @param serialNos 요청 지그 일련번호 리스트
  */
 public record RequestJigRequestDto(
-        String sender, // 요청자 사번
-        List<RequestJigDto> list, // 요청 지그 리스트
-        String memo // 메모
+        List<String> serialNos // 요청 지그 리스트
 ) {
 }

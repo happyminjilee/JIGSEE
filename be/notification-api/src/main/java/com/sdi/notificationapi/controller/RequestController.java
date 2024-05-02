@@ -1,5 +1,6 @@
 package com.sdi.notificationapi.controller;
 
+import com.sdi.notificationapi.dto.MemberInfoDto;
 import com.sdi.notificationapi.dto.request.RepairJigRequestDto;
 import com.sdi.notificationapi.dto.request.RequestJigRequestDto;
 import com.sdi.notificationapi.dto.request.ResponseJigRequestDto;
@@ -7,6 +8,7 @@ import com.sdi.notificationapi.dto.response.RepairJigDetailResponseDto;
 import com.sdi.notificationapi.dto.response.RepairJigListResponseDto;
 import com.sdi.notificationapi.dto.response.RequestJigDetailResponseDto;
 import com.sdi.notificationapi.dto.response.RequestJigListResponseDto;
+import com.sdi.notificationapi.service.ApiService;
 import com.sdi.notificationapi.service.RequestService;
 import com.sdi.notificationapi.util.Response;
 import lombok.RequiredArgsConstructor;
@@ -23,22 +25,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 class RequestController {
     private final RequestService requestService;
+    private final ApiService apiService;
 
     @PostMapping("/request/jig")
     Response<Void> makeWantRequest(@RequestBody RequestJigRequestDto requestJigRequestDto, @RequestHeader("Authorization") String accessToken) {
-        requestService.createWantRequest(requestJigRequestDto, accessToken);
+        MemberInfoDto memberInfoDto = apiService.getCurrentMember(accessToken);
+        requestService.createWantRequest(requestJigRequestDto, memberInfoDto, accessToken);
         return Response.success();
     }
 
     @PostMapping("/response/jig")
     Response<Void> makeWantResponse(@RequestBody ResponseJigRequestDto responseJigRequestDto, @RequestHeader("Authorization") String accessToken) {
-        requestService.createWantResponse(responseJigRequestDto, accessToken);
+        MemberInfoDto memberInfoDto = apiService.getCurrentMember(accessToken);
+        requestService.createWantResponse(responseJigRequestDto, memberInfoDto, accessToken);
         return Response.success();
     }
 
     @PostMapping("/request/repair")
     Response<Void> makeRepairRequest(@RequestBody RepairJigRequestDto repairJigRequestDto, @RequestHeader("Authorization") String accessToken) {
-        requestService.createRepairRequest(repairJigRequestDto, accessToken);
+        MemberInfoDto memberInfoDto = apiService.getCurrentMember(accessToken);
+        requestService.createRepairRequest(repairJigRequestDto, memberInfoDto, accessToken);
         return Response.success();
     }
 
