@@ -5,7 +5,7 @@ interface Stepper {
     setActiveStep: (step: number) => void;
 }
 
-export const useStepperstore = create((set) => ({
+export const useStepperStore = create<Stepper>((set) => ({
     activeStep: 1,
-    setActiveStep: (step:number) => set({activeStep:step}),
+    setActiveStep: (step:number) => {set({activeStep:step})}
 }))

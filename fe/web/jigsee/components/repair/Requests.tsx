@@ -82,6 +82,15 @@ export default function RequestList() {
         console.log("clicked", requestId)
     }
 
+    const createWo = () => {
+
+    }
+
+    const requestPost = () => {
+
+    }
+
+
     return (
         <>
             <div className={styled.box}>
@@ -132,6 +141,7 @@ export default function RequestList() {
                             margin: "10px, 0px, 0px, 0px",
                             width: "190px"
                         }}
+                        onPress={() => {requestPost()}}
                     >
                         요 청
                     </Button>
@@ -143,8 +153,9 @@ export default function RequestList() {
                             margin: "10px, 0px, 0px, 0px",
                             width: "190px",
                         }}
+                        onPress={() => {createWo()}}
                     >
-                        WO생성
+                        WO 생성
                     </Button>
                 </div>
             </div>
