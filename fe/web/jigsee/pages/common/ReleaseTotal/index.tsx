@@ -1,17 +1,9 @@
-import {
-  Input,
-  Button,
-  Checkbox,
-  Pagination,
-  Select,
-  SelectItem,
-  Selection,
-} from "@nextui-org/react";
+import { Pagination, Select, SelectItem, Selection } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
-import { userStore } from "@/store/memberstore";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
+import { useReleaseStore } from "@/store/releasestore";
 
 interface Option {
   label: string;
@@ -30,8 +22,8 @@ interface Props {
 }
 
 export default function RepairTotal() {
+  const { fetchRelease } = useReleaseStore();
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
-
   useEffect(() => {
     // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
     const storedRole = localStorage.getItem("role");
@@ -49,13 +41,21 @@ export default function RepairTotal() {
   }
   // 수리요청온 지그의 WO 에 따른 상태 데이터
   const lst: Option[] = [
-    { label: "Publish", value: "발행" },
-    { label: "Onprogress", value: "진행 중" },
-    { label: "complete", value: "완료" },
+    { label: "ALL", value: "ALL" },
+    { label: "발행", value: "PUBLISH" },
+    { label: "불출완료", value: "FINISH" },
+    { label: "반려", value: "REJECT" },
   ];
-  const [values, setValues] = useState<Selection>(new Set(["publish", "onprogress"]));
-
-  // 임시 JIG 데이터
+  // 불출 상황 옵션 변수
+  const [values, setValues] = useState<string>("ALL");
+  const [page, setPage] = useState<number>(1);
+  // page와 선택 옵션이 바뀜에 따라 api 호출
+  useEffect(() => {
+    console.log(values, page);
+    // store에 있는 api 함수 실행
+    fetchRelease(values, page, 5);
+  }, [page, values]);
+  // 임시 JIG 데이터- api 요청으로 불러오기
   const jigData: JigData[] = [
     { date: "2024.04.21", serialNumber: "S/N S00000001", model: "Model Name", status: "발행" },
     { date: "2024.04.22", serialNumber: "S/N S00000002", model: "Model Name", status: "발행" },
@@ -72,11 +72,13 @@ export default function RepairTotal() {
       <div className={styled.right}>
         <Select
           label="선택"
-          selectionMode="multiple"
-          placeholder="선택"
-          selectedKeys={values}
-          onSelectionChange={setValues}
+          selectionMode="single"
+          placeholder="ALL"
+          onChange={(e) => {
+            setValues(e.target.value);
+          }}
           className={styled.short}
+          labelPlacement="outside-left"
         >
           {lst.map((option) => (
             <SelectItem key={option.value} value={option.value}>
@@ -97,7 +99,7 @@ export default function RepairTotal() {
         ))}
       </div>
       <div className={styled.center}>
-        <Pagination total={10} />
+        <Pagination onChange={(e) => setPage(e)} total={10} />
       </div>
     </>
   );
