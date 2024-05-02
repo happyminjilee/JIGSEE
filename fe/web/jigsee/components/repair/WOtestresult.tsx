@@ -6,7 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { getjigMethod } from "@/pages/api/jigAxios";
-import { usewoStore } from "@/store/workorderstore";
+import { useCompoStore } from "@/store/workorderstore";
 interface testMethodItem {
   content: string;
   standard: string;
@@ -20,7 +20,7 @@ interface RowItem {
   passOrNot: boolean;
 }
 export default function WOtestresult() {
-  const { woId, openWotest, setopenWotest } = usewoStore();
+  const { woId, rightCompo, setRightCompo } = useCompoStore();
   const [testMethod, setTestMethod] = useState<testMethodItem[]>([]);
 
   useEffect(() => {

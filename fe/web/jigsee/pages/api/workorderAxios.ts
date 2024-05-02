@@ -1,11 +1,13 @@
 import { axiosAuthApi } from "@/utils/instance";
+
 //work order id로 WO조회 -기술팀
 export async function getWoInfo(WOId: string) {
   const params = {
     "wo-order-id": WOId,
   };
-  return axiosAuthApi().get("/work-order/detail", { params });
+  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/work-order/detail", { params });
 }
+
 //WO전체 조회
 export async function getAllWo(state: string, page: number, size: number) {
   const params = {
@@ -13,42 +15,45 @@ export async function getAllWo(state: string, page: number, size: number) {
     page: page,
     size: size,
   };
-  return axiosAuthApi().get("/work-order/all", { params });
+  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/work-order/all", { params });
 }
+
 // Wo grouping 조회
 export async function getWogroup() {
-  return axiosAuthApi().get("work-order/grouping");
+  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/work-order/grouping");
 }
+
 // wo 생성
 export async function createWo(serialNo: string) {
   const requestBody = {
     serialNo: "str",
   };
-  return axiosAuthApi().post("/work-order", requestBody);
+  return axiosAuthApi().post("http://k10s105.p.ssafy.io/api/v1/work-order", requestBody);
 }
+
 // WO 임시저장
 export async function saveWotmp(
     id:number,
-    checklist: [{uuid: string, measure: string, memo:string, passOrNot: boolean}]
+    checklist: {uuid: string, measure: string, memo:string, passOrNot: boolean}[]
 ) {
   const requestBody = {
     id: id, // wo의 id
     checkList: checklist
   };
-  return axiosAuthApi().put("/work-order/tmp", requestBody);
+  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/work-order/tmp", requestBody);
 }
 
 
 // Wo 완료
 export async function doneWo(
     id:number,
-    checklist: [{uuid: string, measure: string, memo:string, passOrNot: boolean}]
+    checklist: {uuid: string, measure: string, memo:string, passOrNot: boolean}[]
 ) {
   const requestBody = {
     id: id, // wo의 id
     checkList: checklist
   };
-  return axiosAuthApi().put("/work-order/done", requestBody);
+  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/work-order/done", requestBody);
 }
 
 
@@ -64,5 +69,5 @@ export async function updateWoList(
   const requestBody = {
     list: list
   };
-  return axiosAuthApi().put("/work-order/status", requestBody);
+  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/work-order/status", requestBody);
 }

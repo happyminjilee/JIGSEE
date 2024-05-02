@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Button } from "@nextui-org/react";
+import React, { useState, useEffect } from "react";
+import {Link, Button, user} from "@nextui-org/react";
 import styled from "@/styles/jigdetail.module.css";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Stepper from "@/components/repair/stepper"
@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import Report from "@/components/workorder/template";
 import Modal from "@mui/material/Modal";
 import {useCompoStore, useWoDetailStore} from "@/store/workorderstore";
-import {saveWotmp} from "@/pages/api/workorderAxios"
+import {doneWo} from "@/pages/api/workorderAxios"
 
 interface lst {
     id: number;
@@ -20,13 +20,20 @@ interface lst {
     createdAt: string;
 }
 
+interface APIChecklist {
+    uuid: string,
+    measure: string,
+    memo: string,
+    passOrNot: boolean,
+}
+
 export default function RequestList() {
     const { modal, setModal, rightCompo, setRightCompo } = useCompoStore();
     // 지그점검항목 입력 모달
     const openModal = () => setModal(true);
     const closeModal = () => setModal(false);
 
-    const {id, creator, createdAt, jigItemInfo } = useWoDetailStore()
+    const {id, creator, createdAt, jigItemInfo, checkList } = useWoDetailStore()
 
 
     const lst = [
@@ -91,8 +98,27 @@ export default function RequestList() {
         setRightCompo("TEST")
     }
 
-    const testPut = () => {
 
+    const [transformed, setTransformed ]= useState<APIChecklist[]>([])
+    useEffect(() => {
+        const transformed = checkList.map(item => ({
+            uuid: item.uuid,
+            measure: item.measure,
+            memo: item.memo,
+            passOrNot: item.passOrNot
+        }));
+        setTransformed(transformed);
+    }, [])
+
+
+    const testPut = () => {
+        doneWo(id, transformed)
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((error) => {
+                console.log(error.message)
+            })
     }
 
     return (
