@@ -69,6 +69,7 @@ export default function RepairTotal() {
   return (
     <>
       {Navbar}
+
       <div className={styled.right}>
         <Select
           label="선택"
@@ -87,14 +88,14 @@ export default function RepairTotal() {
           ))}
         </Select>
       </div>
-      <div>
+
+      <div className={styled.container}>
         {jigData.map((jig, index) => (
           <div key={index} onClick={() => cardClick(jig)} className={styled.fullWidth}>
             <h3>{jig.date}</h3>
             <p>
-              {jig.serialNumber} | {jig.model}
+              {jig.serialNumber} | {jig.model} {jig.status}
             </p>
-            {jig.status}
           </div>
         ))}
       </div>

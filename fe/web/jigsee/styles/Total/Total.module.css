@@ -1,6 +1,6 @@
 .fullWidth {
   /* 너비 관련 스타일 */
-  width: 100%;
+  width: 80%;
   max-width: 100%;
   box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 설정 */
 
@@ -9,11 +9,12 @@
   padding: 20px;
 
   /* 테두리와 라운드 */
-  border: 1px solid #000000;
+  border: 1px solid var(--samsungblue);
   border-radius: 8px;
-
+  background-color: var(--white);
   cursor: pointer;
   /*transition: box-shadow 0.3s ease;*/
+  height: 80px;
 }
 
 .fullWidth:hover {
@@ -24,13 +25,22 @@
 .right {
   display: flex;
   justify-content: flex-end;
+  margin-right: 180px;
 }
 
 .center {
   display: flex;
   justify-content: center;
+  flex-direction: row;
 }
 
 .short {
   max-width: 200px;
+}
+.container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;
+  flex-direction: column;
+  margin-top: 50px;
 }
