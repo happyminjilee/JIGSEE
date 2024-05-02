@@ -148,6 +148,6 @@ public class MemberService {
     public MemberResponseDto searchEmployeeNo(String employeeNo) {
         return memberRepository.findByEmployeeNo(employeeNo)
                 .map(MemberResponseDto::fromEntity)
-                .orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
+                .orElse(null);
     }
 }
