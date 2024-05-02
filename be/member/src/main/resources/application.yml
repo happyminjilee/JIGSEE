@@ -30,7 +30,6 @@ jwt:
     expiry: ${REFRESH_TOKEN_EXPIRY}
 
 security:
-  cors-allowed-headers: ${ALLOWED_HEADERS}
   open:
     all: ${OPEN_ALL}
     manager: ${OPEN_MANAGER}
