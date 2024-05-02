@@ -33,9 +33,6 @@ public class SecurityConfig {
 
     private final AuthTokenProvider tokenProvider;
 
-    @Value("${security.cors-allowed-headers}")
-    private List<String> allowedHeaders;
-
     @Value("${security.open.all}")
     private String[] openAll;
 
@@ -73,19 +70,5 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new ExceptionHandlerFilter(), JwtTokenFilter.class)
                 .build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(allowedHeaders);
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList(HttpHeaders.ORIGIN, "X-Requested-With", HttpHeaders.CONTENT_TYPE, HttpHeaders.ACCEPT, HttpHeaders.AUTHORIZATION, HeaderUtils.REFRESH_TOKEN));
-        configuration.setExposedHeaders(Arrays.asList(HttpHeaders.AUTHORIZATION, HeaderUtils.REFRESH_TOKEN));
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }
