@@ -7,66 +7,62 @@ export async function getWoInfo(WOId: string) {
   return axiosAuthApi().get("/work-order/detail", { params });
 }
 //WO전체 조회
-export async function getAllWo(WOId: string) {
+export async function getAllWo(state: string, page: number, size: number) {
   const params = {
-    status: "{wo상태}",
-    page: "{페이지번호}",
-    size: "{반환리스트개수}",
+    status: state,
+    page: page,
+    size: size,
   };
   return axiosAuthApi().get("/work-order/all", { params });
 }
 // Wo grouping 조회
-export async function getWogroup(WOId: string) {
-  return axiosAuthApi().get("work-order/group");
+export async function getWogroup() {
+  return axiosAuthApi().get("work-order/grouping");
 }
 // wo 생성
 export async function createWo(serialNo: string) {
   const requestBody = {
     serialNo: "str",
   };
-  return axiosAuthApi().post("/work-order/group", requestBody);
+  return axiosAuthApi().post("/work-order", requestBody);
 }
 // WO 임시저장
-export async function saveWotmp() {
+export async function saveWotmp(
+    id:number,
+    checklist: [{uuid: string, measure: string, memo:string, passOrNot: boolean}]
+) {
   const requestBody = {
-    id: "long", // wo의 id
-    checkList: [
-      // 점검리스트
-      {
-        uuid: "str", // 점검 항목을 위한 값
-        measure: "str", // 측정값
-        memo: "str", // 비고
-        passOrNot: "boolean", // 통과유무
-      },
-    ],
+    id: id, // wo의 id
+    checkList: checklist
   };
   return axiosAuthApi().put("/work-order/tmp", requestBody);
 }
+
+
 // Wo 완료
-export async function doneWo() {
+export async function doneWo(
+    id:number,
+    checklist: [{uuid: string, measure: string, memo:string, passOrNot: boolean}]
+) {
   const requestBody = {
-    id: "long", // wo의 id
-    checkList: [
-      // 점검리스트
-      {
-        uuid: "str", // 점검 항목을 위한 값
-        measure: "str", // 측정값
-        memo: "str", // 비고
-        passOrNot: "boolean", // 통과유무
-      },
-    ],
+    id: id, // wo의 id
+    checkList: checklist
   };
   return axiosAuthApi().put("/work-order/done", requestBody);
 }
+
+
 // Wo 상태 변경(리스트)
-export async function updateWoList() {
-  const requestBody = {
+export async function updateWoList(
     list: [
       {
-        id: "long", // wo의 id
-        status: "enum", // 변경될 상태
+        id: number, // wo의 id
+        status: string, // 변경될 상태
       },
     ],
+) {
+  const requestBody = {
+    list: list
   };
-  return axiosAuthApi().put("/work-order/done", requestBody);
+  return axiosAuthApi().put("/work-order/status", requestBody);
 }

@@ -6,6 +6,7 @@ import ApprovedRelease from "@/components/release/ApprovedRelease"
 import RejectedRelease from "@/components/release/RejectedRelease"
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { useDrag } from 'react-dnd';
 
 
 interface lst {
@@ -83,10 +84,6 @@ export default function ReleaseStatusList() {
               setClose(true)
           })
   }
-
-  useEffect(() => {
-
-  })
 
   return (
       <>

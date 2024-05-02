@@ -18,6 +18,8 @@
     margin-left: 10px;
     display: flex;
     align-content: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
     width: 500px;
 }
 

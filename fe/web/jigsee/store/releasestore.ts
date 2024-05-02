@@ -50,10 +50,10 @@ export const useReleaseStore = create<release>(
         fetchRelease: async (status: string, page: number, size: number) => {
             const data = await releaseGet(status, page, size);
             set({
-                isManager: data.result.isManager,
-                currentPage: data.result.currentPage,
-                endPage: data.result.endPage,
-                list: data.result.list,
+                isManager: data.data.result.isManager,
+                currentPage: data.data.result.currentPage,
+                endPage: data.data.result.endPage,
+                list: data.data.result.list,
             })
             return data
         }
@@ -74,17 +74,17 @@ export const useReleaseDetailStore = create<releaseDetail>(
         fetchReleaseDetail: async (id: string) => {
             const data = await releaseDetailGet(id);
             set({
-                isManager: data.result.isManager,
-                id: data.result.id, // 요청 id
-                status: data.result.status,
-                from: data.result.from, // 요청자
-                to: data.result.to, // 승인자
-                memo: data.result.memo, // 사유
-                createAt: data.result.createAt, // 요청시간
-                updatedAt: data.result.updatedAt,
-                serialNos: data.result.serialNos, // 요청 지그 리스트
+                isManager: data.data.result.isManager,
+                id: data.data.result.id, // 요청 id
+                status: data.data.result.status,
+                from: data.data.result.from, // 요청자
+                to: data.data.result.to, // 승인자
+                memo: data.data.result.memo, // 사유
+                createAt: data.data.result.createAt, // 요청시간
+                updatedAt: data.data.result.updatedAt,
+                serialNos: data.data.result.serialNos, // 요청 지그 리스트
             })
-            return data;
+            return data.data;
         }
     })
 )
