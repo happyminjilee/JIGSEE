@@ -5,6 +5,7 @@ import 'package:jigsee/pages/home_page.dart';
 import 'package:jigsee/pages/login_page.dart';
 import 'package:jigsee/components/navigate_animation.dart';
 import 'package:jigsee/pages/ocr_page.dart';
+import 'package:jigsee/api/user_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,21 +41,47 @@ class MyApp extends StatelessWidget {
             )
         ),
       ),
-      initialRoute: "/ocr", // 초기 경로 설정
-      onGenerateRoute: (RouteSettings settings) {
-        switch (settings.name) {
-          case '/home':
-            return NoAnimationRoute(builder: (_) => const HomePage(), settings: settings);
-          case '/login':
-            return NoAnimationRoute(builder: (_) => const LoginPage(), settings: settings);
-          case '/ocr':
-            return NoAnimationRoute(builder: (_) => ReadSerialNum(
-              camera: camera,
-            ), settings: settings);
-          default:
-            return MaterialPageRoute(builder: (_) => const HomePage());
+      home: FutureBuilder<bool>(
+        future: AuthService().isLogin(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done){
+            return MaterialApp(
+              title: 'JiG:SEE',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+                textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        // primary: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        minimumSize: const Size(400, 60)
+                    )
+                ),
+              ),
+              initialRoute: snapshot.data ?? false ? '/login' : '/home',
+              onGenerateRoute: (RouteSettings settings) {
+                switch (settings.name) {
+                  case '/home':
+                    return NoAnimationRoute(builder: (_) => const HomePage(), settings: settings);
+                  case '/login':
+                    return NoAnimationRoute(builder: (_) => const LoginPage(), settings: settings);
+                  case '/ocr':
+                    return NoAnimationRoute(builder: (_) => ReadSerialNum(
+                      camera: camera,
+                    ), settings: settings);
+                  default:
+                    return MaterialPageRoute(builder: (_) => const HomePage());
+                }
+              },
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
         }
-      },
+      )
     );
   }
 }

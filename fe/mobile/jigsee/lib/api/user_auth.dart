@@ -24,17 +24,14 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        // String accessToken = response.headers['Authorization']!;
-        // String refreshToken = response.headers['RefreshToken']!;
-        log('${jsonDecode(utf8.decode(response.bodyBytes))['result']}');
-        var parseData = jsonDecode(utf8.decode(response.bodyBytes))['result'];
-        Map<String, dynamic> info = parseData ?? {'name' : '임시', 'employeeNo':'123', 'role':'test'};
+        String accessToken = response.headers['authorization']!;
+        String refreshToken = response.headers['refreshtoken']!;
 
-        // await _storage.write(key: 'accessToken', value: accessToken);
-        // await _storage.write(key: 'refreshToken', value: refreshToken);
-        await _storage.write(key: 'userName', value: info['name']);
-        await _storage.write(key: 'employeeNo', value: info['employeeNo']);
-        await _storage.write(key: 'role', value: info['role']);
+        await _storage.write(key: 'accessToken', value: accessToken);
+        await _storage.write(key: 'refreshToken', value: refreshToken);
+        await _storage.write(key: 'userName', value: response.body['result']['name']);
+        await _storage.write(key: 'employeeNo', value: response.body['result']['employeeNo']);
+        await _storage.write(key: 'role', value: response.body['result']['role']);
 
         // await UserPreference().saveData('userName', info['name']);
         // await UserPreference().saveData('empNo', info['employeeNo']);
@@ -49,18 +46,40 @@ class AuthService {
     }
   }
 
+  /// 로그인 유지 체크 함수
+  Future<bool> isLogin() async {
+    try {
+      final String? refreshToken = await _storage.read(key:'refreshToken');
+      var response = await http.get(
+        Uri.parse(Constants.backUrl + '/refresh'),
+        headers: {'Authorization' : '$refreshToken'}
+      );
+      if (response.statusCode == 200) {
+        await _storage.write(key:'accessToken', value: response.headers['AccessToken']);
+        await _storage.write(key:'refreshToken', value: response.headers['RefreshToken']);
+      } else if (response.statusCode == 401) {
+        await logout();
+        return false;
+      }
+      return true;
+    } catch(e) {
+      await logout();
+      return false;
+    }
+  }
+
   Future<bool> validateToken(String accessToken) async {
     try {
       var response = await http.get(
-        Uri.parse(Constants.backUrl + '/validate-token'),
-        headers: {'Authorization': 'Bearer $accessToken'},
+        Uri.parse(Constants.backUrl + '/refresh'),
+        headers: {'Authorization': accessToken},
       );
 
       if (response.statusCode == 200) {
         return true; // Access token is valid
       } else if (response.statusCode == 401) {
         // Access token is invalid, try to refresh it
-        return await refreshToken();
+        return await isValidRefreshToken();
       }
       return false;
     } catch (e) {
@@ -69,7 +88,7 @@ class AuthService {
     }
   }
 
-  Future<bool> refreshToken() async {
+  Future<bool> isValidRefreshToken() async {
     String? refreshToken = await _storage.read(key: 'refreshToken');
 
     if (refreshToken == null) return false;

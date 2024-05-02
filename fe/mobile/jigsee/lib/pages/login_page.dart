@@ -11,7 +11,7 @@ class LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Scaffold(
-        resizeToAvoidBottomInset : false,
+        // resizeToAvoidBottomInset : false,
         body: SingleChildScrollView(
           padding: EdgeInsets.all(30.0),
           child: Center(

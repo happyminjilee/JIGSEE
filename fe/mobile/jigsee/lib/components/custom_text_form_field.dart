@@ -21,12 +21,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     if (value == null || value.isEmpty) {
       return '비밀번호를 입력해주세요.';
     }
-    String pattern =
-        r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$';
-    RegExp regExp = RegExp(pattern);
-    if (!regExp.hasMatch(value)) {
-      return '올바른 비밀번호를 입력해주세요';
-    }
+    // String pattern =
+    //     r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$';
+    // RegExp regExp = RegExp(pattern);
+    // if (!regExp.hasMatch(value)) {
+    //   return '올바른 비밀번호를 입력해주세요';
+    // }
     return null;
   }
 
