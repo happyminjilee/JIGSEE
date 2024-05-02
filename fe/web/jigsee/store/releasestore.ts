@@ -16,7 +16,7 @@ interface release {
   isManager: boolean;
   currentPage: number;
   endPage: number;
-  list: lst[];
+  releaseList: lst[];
   fetchRelease: (status: string, page: number, size: number) => Promise<AxiosResponse>;
 }
 
@@ -42,14 +42,16 @@ export const useReleaseStore = create<release>((set) => ({
   isManager: false,
   currentPage: 1,
   endPage: 1,
-  list: [],
+  releaseList: [],
   fetchRelease: async (status: string, page: number, size: number) => {
     const data = await releaseGet(status, page, size);
+    console.log("vkdfjl", data.isManager);
+    console.log("cbe", data.list);
     set({
-      isManager: data.data.result.isManager,
-      currentPage: data.data.result.currentPage,
-      endPage: data.data.result.endPage,
-      list: data.data.result.list,
+      isManager: data.isManager,
+      currentPage: data.currentPage,
+      endPage: data.endPage,
+      releaseList: data.list,
     });
     return data;
   },

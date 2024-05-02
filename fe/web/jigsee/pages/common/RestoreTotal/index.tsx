@@ -1,9 +1,8 @@
-import { Pagination, Selection } from "@nextui-org/react";
+import { Pagination } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
-import { getJigrestorerList } from "@/pages/api/restoreAxios";
 import { useRestoreStore } from "@/store/restorestore";
 interface Option {
   label: string;

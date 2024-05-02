@@ -22,7 +22,7 @@ interface Props {
 }
 
 export default function RepairTotal() {
-  const { fetchRelease } = useReleaseStore();
+  const { releaseList, fetchRelease, endPage } = useReleaseStore();
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
   useEffect(() => {
     // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
@@ -51,10 +51,15 @@ export default function RepairTotal() {
   const [page, setPage] = useState<number>(1);
   // page와 선택 옵션이 바뀜에 따라 api 호출
   useEffect(() => {
-    console.log(values, page);
-    // store에 있는 api 함수 실행
-    fetchRelease(values, page, 5);
-  }, [page, values]);
+    setIsLoading(true); // API 호출 시작 전에 로딩 상태를 true로 설정
+    fetchRelease(values, page, 5)
+      .then(() => {
+        setIsLoading(false); // 데이터를 성공적으로 받아온 후에 로딩 상태를 false로 설정
+      })
+      .catch(() => {
+        setIsLoading(false); // 에러가 발생해도 로딩 상태를 false로 설정
+      });
+  }, [page, values, fetchRelease]);
   // 임시 JIG 데이터- api 요청으로 불러오기
   const jigData: JigData[] = [
     { date: "2024.04.21", serialNumber: "S/N S00000001", model: "Model Name", status: "발행" },
@@ -62,10 +67,10 @@ export default function RepairTotal() {
     { date: "2024.04.23", serialNumber: "S/N S00000003", model: "Model Name", status: "발행" },
     // 다른 JIG 데이터 객체들...
   ];
-  function cardClick(jig: JigData) {
-    console.log("clicked", jig);
+  function cardClick(jigid: string) {
+    console.log("clicked", jigid);
   }
-
+  const [isLoading, setIsLoading] = useState(true);
   return (
     <>
       {Navbar}
@@ -90,17 +95,23 @@ export default function RepairTotal() {
       </div>
 
       <div className={styled.container}>
-        {jigData.map((jig, index) => (
-          <div key={index} onClick={() => cardClick(jig)} className={styled.fullWidth}>
-            <h3>{jig.date}</h3>
-            <p>
-              {jig.serialNumber} | {jig.model} {jig.status}
-            </p>
-          </div>
-        ))}
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : releaseList.length > 0 ? (
+          releaseList.map((jig, index) => (
+            <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
+              <p>
+                {jig.id} | 요청자 {jig.from} | 승인자 {jig.to} | 수정일{" "}
+                {jig.updatedAt.split("T")[0]} status: {jig.status}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>No data available.</p>
+        )}
       </div>
       <div className={styled.center}>
-        <Pagination onChange={(e) => setPage(e)} total={10} />
+        <Pagination onChange={(e) => setPage(e)} total={endPage} />
       </div>
     </>
   );
