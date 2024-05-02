@@ -24,18 +24,11 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        String accessToken = response.headers['authorization']!;
-        String refreshToken = response.headers['refreshtoken']!;
-
-        await _storage.write(key: 'accessToken', value: accessToken);
-        await _storage.write(key: 'refreshToken', value: refreshToken);
+        await _storage.write(key: 'accessToken', value: response.headers['authorization']);
+        await _storage.write(key: 'refreshToken', value: response.headers['refreshtoken']);
         await _storage.write(key: 'userName', value: response.body['result']['name']);
         await _storage.write(key: 'employeeNo', value: response.body['result']['employeeNo']);
         await _storage.write(key: 'role', value: response.body['result']['role']);
-
-        // await UserPreference().saveData('userName', info['name']);
-        // await UserPreference().saveData('empNo', info['employeeNo']);
-        // await UserPreference().saveData('role', info['role']);
 
         return true;
       }
@@ -47,6 +40,7 @@ class AuthService {
   }
 
   /// 로그인 유지 체크 함수
+  /// 로그인 여부를 판단한 후 로그인 되어 있는 상태면 accessToken 을 재발급 받는다
   Future<bool> isLogin() async {
     try {
       final String? refreshToken = await _storage.read(key:'refreshToken');
@@ -64,51 +58,6 @@ class AuthService {
       return true;
     } catch(e) {
       await logout();
-      return false;
-    }
-  }
-
-  Future<bool> validateToken(String accessToken) async {
-    try {
-      var response = await http.get(
-        Uri.parse(Constants.backUrl + '/refresh'),
-        headers: {'Authorization': accessToken},
-      );
-
-      if (response.statusCode == 200) {
-        return true; // Access token is valid
-      } else if (response.statusCode == 401) {
-        // Access token is invalid, try to refresh it
-        return await isValidRefreshToken();
-      }
-      return false;
-    } catch (e) {
-      log('Token validation error: $e');
-      return false;
-    }
-  }
-
-  Future<bool> isValidRefreshToken() async {
-    String? refreshToken = await _storage.read(key: 'refreshToken');
-
-    if (refreshToken == null) return false;
-
-    try {
-      var response = await http.post(
-        Uri.parse(Constants.backUrl + '/refresh-token'),
-        headers: {'Authorization': 'Bearer $refreshToken'},
-      );
-
-      if (response.statusCode == 200) {
-        String newAccessToken = response.headers['access-token']!;
-        await _storage.write(key: 'accessToken', value: newAccessToken);
-        return true;
-      } else {
-        await logout(); // Refresh token is also invalid
-        return false;
-      }
-    } catch (e) {
-      log('Refresh token error: $e');
       return false;
     }
   }
