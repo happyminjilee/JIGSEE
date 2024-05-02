@@ -4,7 +4,7 @@ import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
 import { getJigrestorerList } from "@/pages/api/restoreAxios";
-
+import { useRestoreStore } from "@/store/restorestore";
 interface Option {
   label: string;
   value: string;
@@ -21,7 +21,7 @@ interface ListData {
 
 export default function RepairTotal() {
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
-  const [page, setPage] = useState<number>(1);
+
   useEffect(() => {
     // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
     const storedRole = localStorage.getItem("role");
@@ -38,24 +38,10 @@ export default function RepairTotal() {
     Navbar = <ManagerNav />; // 기본값으로 ManagerNav 설정
   }
 
-  const [restoreList, setRestoreList] = useState<ListData[]>([]);
+  const { restoreList, page, setPage, getRestoreList, endpage } = useRestoreStore();
   useEffect(() => {
-    // 내부에서 비동기 함수를 정의합니다.
-    const fetchData = async () => {
-      try {
-        console.log("Fetching data for page:", page);
-        const result = await getJigrestorerList(page);
-        console.log("Data fetched successfully:", result.data.result.list);
-        // api 응답 리스트 저장
-        setRestoreList(result.data.result.list);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
-    // 비동기 함수를 호출합니다.
-    fetchData();
-  }, [page]); // page가 변경될 때마다 useEffect가 실행됩니다.
+    getRestoreList(); // Fetch list whenever the page changes
+  }, [page, getRestoreList]);
 
   // function cardClick(jig: JigData) {
   //   console.log("clicked", jig);
@@ -75,7 +61,7 @@ export default function RepairTotal() {
         ))}
       </div>
       <div className={styled.center}>
-        <Pagination onChange={(e) => setPage(e)} total={10} />
+        <Pagination onChange={(e) => setPage(e)} total={endpage} />
       </div>
     </>
   );
