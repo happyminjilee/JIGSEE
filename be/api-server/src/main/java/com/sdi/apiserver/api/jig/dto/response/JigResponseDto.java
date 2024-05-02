@@ -8,6 +8,6 @@ public record JigResponseDto(
         String model,
         String expectLife,
 
-        List<CheckItem> list
+        List<CheckItem> checkList
 ) {
 }
