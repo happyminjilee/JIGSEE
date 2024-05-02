@@ -42,7 +42,6 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_URI}
-      port: ${MONGO_PORT}
       database: ${MONGO_DB}
       username: ${MONGO_USERNAME}
       password: ${MONGO_PASSWORD}
@@ -67,7 +66,6 @@ spring:
   data:
     mongodb:
       uri: ${TEST_MONGO_URI}
-      port: ${TEST_MONGO_PORT}
       database: ${TEST_MONGO_DB}
       username: ${TEST_MONGO_USERNAME}
       password: ${TEST_MONGO_PASSWORD}
