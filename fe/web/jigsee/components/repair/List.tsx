@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, Button } from "@nextui-org/react";
 import styled from "@/styles/releasestatuslist.module.css";
 import { list } from "postcss";
-import { usewoStore } from "@/store/workorderstore";
+import { useCompoStore, useWoDetailStore, useWoGroupStore, useWoStore } from "@/store/workorderstore";
 interface lst {
   id: number;
   createdAt: string;
@@ -13,12 +13,22 @@ interface lst {
 
 export default function RequestList() {
   // wo id 상태 변화를 위한 store 변수 선언
-  const { woId, setWoId, openWotest, setopenWotest } = usewoStore();
+  const { woId, setWoId, rightCompo, setRightCompo } = useCompoStore();
   // 확인용 함수 - 나중에 api 함수 연결
+
+  const {fetchWoDetail, id} = useWoDetailStore()
+  const{fetchWoGroup, publish, progress} = useWoGroupStore()
   useEffect(() => {
-    // woId가 변경될 때마다 api함수 실행
-    console.log("woId has been updated to:", woId);
-  }, [woId]);
+    fetchWoGroup()
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error.message)
+        })
+  }, []);
+  const forPublish = publish.slice(0, 7);
+  const forProgress = progress.slice(0, 7);
 
   const lst = [
     {
@@ -72,10 +82,17 @@ export default function RequestList() {
     },
   ];
 
-  const cardClick = (Id: string) => () => {
+  const cardClick = (Id: string, state: string) => {
     // 클릭한 S/N로 아이디로 바꾸기 , 추후 수정 예정
     setWoId("testModelId");
-    setopenWotest(true);
+    setRightCompo(state);
+    fetchWoDetail(Id)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error.message)
+        })
   };
 
   return (
@@ -94,8 +111,8 @@ export default function RequestList() {
         </div>
         <div className={styled.contents}>
           {/* card */}
-          {lst.map((info, index) => (
-            <div key={index} className={styled.card} onClick={cardClick(info.serialNo)}>
+          {forPublish.map((info, index) => (
+            <div key={index} className={styled.card} onClick={() =>{cardClick(info.serialNo, info.status )}}>
               <div className={styled.division1}>
                 <div className={styled.date}>{info.createdAt}</div>
                 <div className={styled.title}>
@@ -105,6 +122,18 @@ export default function RequestList() {
 
               <div className={styled.division2}>{info.status}</div>
             </div>
+          ))}
+          {forProgress.map((info, index) => (
+              <div key={index} className={styled.card} onClick={() =>{cardClick(info.serialNo, info.status )}}>
+                <div className={styled.division1}>
+                  <div className={styled.date}>{info.createdAt}</div>
+                  <div className={styled.title}>
+                    {info.serialNo} | {info.model}
+                  </div>
+                </div>
+
+                <div className={styled.division2}>{info.status}</div>
+              </div>
           ))}
         </div>
       </div>

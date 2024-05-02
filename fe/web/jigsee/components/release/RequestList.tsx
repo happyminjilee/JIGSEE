@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Button } from "@nextui-org/react";
 import styled from "@/styles/requestlist.module.css";
-import { list } from "postcss";
+import { useDrag } from 'react-dnd';
 
 interface lst {
   index: number;
@@ -31,6 +31,7 @@ export default function RequestList({ onApproveClick, onReturnClick }: RequestLi
       content: ["지그 목록", "지그 목록", "지그 목록"],
     },
   ];
+
   return (
     <>
       <div className={styled.box}>

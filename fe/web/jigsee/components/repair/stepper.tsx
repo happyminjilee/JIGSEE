@@ -4,13 +4,14 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Typography from '@mui/material/Typography';
-import {useStepperstore} from '@/store/stepperstore'
+import {useStepperStore} from '@/store/stepperstore'
+import {useWoDetailStore} from "@/store/workorderstore";
 
 const steps = ['발행', '진행 중', '완료'];
 
 export default function HorizontalLinearStepper() {
-    const activeStep = useStepperstore(state => state.activeStep);
-
+    const {activeStep, setActiveStep} = useStepperStore();
+    const {} = useWoDetailStore()
     return (
         <Box sx={{ width: '100%' }}>
             <Stepper activeStep={activeStep} alternativeLabel>

@@ -3,8 +3,12 @@ import { Link, Button } from "@nextui-org/react";
 import styled from "@/styles/jigdetail.module.css";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Stepper from "@/components/repair/stepper"
-import { list } from "postcss";
-import {fontStyle, fontWeight} from "@mui/system";
+import ClearIcon from '@mui/icons-material/Clear';
+import Box from "@mui/material/Box";
+import Report from "@/components/workorder/template";
+import Modal from "@mui/material/Modal";
+import {useCompoStore, useWoDetailStore} from "@/store/workorderstore";
+import {saveWotmp} from "@/pages/api/workorderAxios"
 
 interface lst {
     id: number;
@@ -16,9 +20,15 @@ interface lst {
     createdAt: string;
 }
 
-
-
 export default function RequestList() {
+    const { modal, setModal, rightCompo, setRightCompo } = useCompoStore();
+    // 지그점검항목 입력 모달
+    const openModal = () => setModal(true);
+    const closeModal = () => setModal(false);
+
+    const {id, creator, createdAt, jigItemInfo } = useWoDetailStore()
+
+
     const lst = [
         {
             id: 12222,
@@ -68,8 +78,21 @@ export default function RequestList() {
 
     ]
 
-    const cardClick = (id: number) => () => {
+    const cardClick = (id: number) => {
         console.log("clicked", id)
+        openModal()
+    }
+
+    const goRequest = () => {
+        setRightCompo("REQUEST")
+    }
+
+    const goTest = () => {
+        setRightCompo("TEST")
+    }
+
+    const testPut = () => {
+
     }
 
     return (
@@ -78,25 +101,26 @@ export default function RequestList() {
                 <div
                     className={styled.head}
                 >
-                    INFO
+                    <div>INFO</div>
+                    <ClearIcon/>
                 </div>
 
                 {/*jig 정보*/}
                 <div
                     className={styled.first}
                 >
-                    <div className={styled.card}>Model : {lst[0].model}</div>
-                    <div className={styled.card}>S/N : {lst[0].serialNo}</div>
-                    <div className={styled.card}>생성자 : {lst[0].creator}</div>
-                    <div className={styled.card}>생성일 : {lst[0].createdAt}</div>
+                    <div className={styled.card}>Model : {jigItemInfo.model}</div>
+                    <div className={styled.card}>S/N : {jigItemInfo.serialNo}</div>
+                    <div className={styled.card}>생성자 : {creator}</div>
+                    <div className={styled.card}>생성일 : {createdAt}</div>
                 </div>
 
                 {/* Work order 이동 */}
                 <div
                     className={styled.second}
-                    onClick={cardClick(lst[0].id)}
+                    onClick={() =>{cardClick(id)}}
                 >
-                    <div style={{margin: "auto 0px auto 40px"}}>Work Order : {lst[0].id}</div>
+                    <div style={{margin: "auto 0px auto 40px"}}>Work Order : {id}</div>
                     <div style={{margin: "auto 40px auto 0px"}}><ArrowForwardIosIcon /></div>
                 </div>
 
@@ -115,13 +139,14 @@ export default function RequestList() {
                         <Stepper></Stepper>
                     </div>
 
-                    {lst[0].status === 'PUBLISH' &&
+                    {jigItemInfo.status === 'PUBLISH' &&
                         <div
                             className={styled.button}
                         >
                             <Button
                                 color={"primary"}
                                 style={{width: "180px"}}
+                                onPress={() => {goRequest()}}
                             >
                                 담기
                             </Button>
@@ -129,7 +154,7 @@ export default function RequestList() {
                             }
 
 
-                    {lst[0].status === 'PROGRESS' &&
+                    {jigItemInfo.status === 'PROGRESS' &&
                         <div
                             className={styled.button}
                         >
@@ -138,15 +163,16 @@ export default function RequestList() {
                                 style={{
                                     width: "180px",
                                 }}
+                                onPress={() => {goTest()}}
                             >
-                                Work Order 수정
+                                Test 결과 입력
                             </Button>
                             <Button
                                 color={"primary"}
                                 style={{
                                     width: "180px",
-
                                 }}
+                                onPress={() => {testPut()}}
                             >
                                 제출
                             </Button>
@@ -154,6 +180,35 @@ export default function RequestList() {
                     }
                 </div>
             </div>
+            <Modal
+                open={modal} // Corrected from 'open'
+                onClose={closeModal} // Added onClose handler
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    '& .MuiBox-root': {  // Assuming the box is causing issues
+                        outline: 'none',
+                        border: 'none',
+                        boxShadow: 'none'
+                    }
+                }}
+            >
+
+                <Box
+                    sx={{
+                        width: "100%",
+                        height: "80%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Report/>
+                </Box>
+            </Modal>
         </>
     );
     }
