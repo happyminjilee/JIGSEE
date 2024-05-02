@@ -6,13 +6,16 @@ interface ListData {
   from: string;
   id: number;
 }
+// interface DetailData {
 
+// }
 interface RestoreState {
-  page: number;
+  page: number; // 보수요청내역 전체보기 page
   restoreList: ListData[];
   endpage: number;
   setPage: (page: number) => void;
-  getRestoreList: () => Promise<void>;
+  getRestoreList: () => Promise<void>; // page별 리스트 불러오기
+  detailList:
 }
 
 export const useRestoreStore = create<RestoreState>((set, get) => ({
