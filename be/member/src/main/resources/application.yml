@@ -29,6 +29,14 @@ jwt:
     secret: ${JWT_SECRET_REFRESH}
     expiry: ${REFRESH_TOKEN_EXPIRY}
 
+security:
+  cors-allowed-headers: ${ALLOWED_HEADERS}
+  open:
+    all: ${OPEN_ALL}
+    manager: ${OPEN_MANAGER}
+    engineer: ${OPEN_ENGINEER}
+    producer: ${OPEN_PRODUCER}
+
 ---
 
 spring:

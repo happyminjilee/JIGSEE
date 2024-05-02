@@ -1,15 +1,18 @@
 package com.sdi.member.config;
 
-import com.sdi.member.filter.CorsFilter;
 import com.sdi.member.filter.ExceptionHandlerFilter;
 import com.sdi.member.filter.JwtTokenFilter;
 import com.sdi.member.jwt.AuthTokenProvider;
+import com.sdi.member.util.HeaderUtils;
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,6 +24,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -28,24 +32,21 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final AuthTokenProvider tokenProvider;
-    private final CorsFilter corsFilter;
 
-    private static final String[] OPEN_ALL = {
-            "/v1/login",
-            "/v1/refresh"
-    };
+    @Value("${security.cors-allowed-headers}")
+    private List<String> allowedHeaders;
 
-    private static final String[] OPEN_MANAGER = {
-            "/v1/manager/**"
-    };
+    @Value("${security.open.all}")
+    private String[] openAll;
 
-    private static final String[] OPEN_ENGINEER = {
-            "/v1/engineer/**"
-    };
+    @Value("${security.open.manager}")
+    private String[] openManager;
 
-    private static final String[] OPEN_PRODUCER = {
-            "/v1/producer/**"
-    };
+    @Value("${security.open.engineer}")
+    private String[] openEngineer;
+
+    @Value("${security.open.producer}")
+    private String[] openProducer;
 
     @Bean
     public RoleHierarchy roleHierarchy() {
@@ -58,17 +59,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(OPEN_ALL).permitAll()
+                        .requestMatchers(openAll).permitAll()
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                        .requestMatchers(OPEN_MANAGER).hasAuthority("ROLE_MANAGER")
-                        .requestMatchers(OPEN_ENGINEER).hasAuthority("ROLE_ENGINEER")
-                        .requestMatchers(OPEN_PRODUCER).hasAuthority("ROLE_PRODUCER")
+                        .requestMatchers(openManager).hasAuthority("ROLE_MANAGER")
+                        .requestMatchers(openEngineer).hasAuthority("ROLE_ENGINEER")
+                        .requestMatchers(openProducer).hasAuthority("ROLE_PRODUCER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new ExceptionHandlerFilter(), JwtTokenFilter.class)
                 .build();
@@ -77,10 +78,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOrigins(allowedHeaders);
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization", "RefreshToken"));
+        configuration.setAllowedHeaders(Arrays.asList(HttpHeaders.ORIGIN, "X-Requested-With", HttpHeaders.CONTENT_TYPE, HttpHeaders.ACCEPT, HttpHeaders.AUTHORIZATION, HeaderUtils.REFRESH_TOKEN));
+        configuration.setExposedHeaders(Arrays.asList(HttpHeaders.AUTHORIZATION, HeaderUtils.REFRESH_TOKEN));
         configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
