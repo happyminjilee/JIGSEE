@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
@@ -43,13 +45,18 @@ class MemberController {
      * 만료 되었다면 리프레시 토큰이 있는지 확인 후 액세스 토큰을 발급해준다.
      * 리프레시 토큰 기간이 3일 이하라면, 리프레시 토큰도 생성한다.
      */
-    @GetMapping("/refresh")
+    @PostMapping("/refresh")
     Response<MemberLoginResponseDto> tokenRefresh(HttpServletRequest request, HttpServletResponse response) {
         return Response.success(memberService.tokenRefresh(request, response));
     }
 
+    @GetMapping("/member/search")
+    Response<MemberLoginResponseDto> searchMyInfo(Authentication authentication) {
+        return Response.success(memberService.searchMyInfo(authentication));
+    }
+
     @GetMapping("/member/search/name")
-    Response<MemberResponseDto> searchName(@RequestParam("name") String name) {
+    Response<List<MemberResponseDto>> searchName(@RequestParam("name") String name) {
         return Response.success(memberService.searchName(name));
     }
 
