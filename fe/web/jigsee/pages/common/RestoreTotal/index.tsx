@@ -27,6 +27,7 @@ export default function RepairTotal() {
     if (storedRole !== null) {
       setRole(storedRole); // 로컬 스토리지의 값이 null이 아닌 경우에만 상태 업데이트
     }
+    getRestoreList();
   }, []);
   let Navbar;
   if (role === "MANAGER") {
@@ -37,22 +38,38 @@ export default function RepairTotal() {
     Navbar = <ManagerNav />; // 기본값으로 ManagerNav 설정
   }
 
-  const { restoreList, page, setPage, getRestoreList, endpage } = useRestoreStore();
+  const {
+    restoreList,
+    page,
+    setPage,
+    getRestoreList,
+    endpage,
+    getRestoreDetail,
+    setRestoreJigid,
+    restoreId,
+  } = useRestoreStore();
   useEffect(() => {
     getRestoreList(); // Fetch list whenever the page changes
   }, [page, getRestoreList]);
 
-  // function cardClick(jig: JigData) {
-  //   console.log("clicked", jig);
-  // }
+  function cardClick(jigID: number) {
+    setRestoreJigid(jigID);
+    console.log("clicked", jigID);
+  }
+  // jig선택한 id가 바뀔때마다 jig Detail이 변함
+  useEffect(() => {
+    getRestoreDetail();
+  }, [restoreId]);
 
   return (
     <>
       {Navbar}
       <div className={styled.container}>
         {restoreList.map((item, index) => (
-          <div key={index} className={styled.fullWidth}>
-            <h3>생성일 {item.createdAt.split("T")[0]}</h3>
+          <div key={index} className={styled.fullWidth} onClick={() => cardClick(item.id)}>
+            <h3>
+              생성일 {item.createdAt[0]}년 {item.createdAt[1]}월 {item.createdAt[2]}일
+            </h3>
             <p>
               보수 요청 번호 {item.id} | 요청자 {item.from}
             </p>

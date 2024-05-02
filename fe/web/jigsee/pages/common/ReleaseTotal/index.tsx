@@ -101,8 +101,8 @@ export default function RepairTotal() {
           releaseList.map((jig, index) => (
             <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
               <p>
-                {jig.id} | 요청자 {jig.from} | 승인자 {jig.to} | 수정일{" "}
-                {jig.updatedAt.split("T")[0]} status: {jig.status}
+                {jig.id} | 요청자 {jig.from} | 승인자 {jig.to} | 수정일 {jig.updatedAt[0]}년
+                {jig.updatedAt[1]}월{jig.updatedAt[2]}일 status: {jig.status}
               </p>
             </div>
           ))
