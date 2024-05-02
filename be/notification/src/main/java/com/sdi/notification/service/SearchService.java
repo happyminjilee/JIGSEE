@@ -23,7 +23,7 @@ public class SearchService {
     private final NotificationRepository notificationRepository;
 
     public UncheckedNotificationListResponseDto getUncheckedNotifications(MemberResponseDto member) {
-        List<NotificationEntity> uncheckedNotificationList = notificationRepository.findAllByReceiverAndCheckStatusIsTrueOrderByIdDesc(member.employeeNo())
+        List<NotificationEntity> uncheckedNotificationList = notificationRepository.findAllByReceiverAndCheckStatusIsFalseOrderByIdDesc(member.employeeNo())
                 .orElseThrow(() -> new IllegalArgumentException("사번 : " + member.employeeNo() + "의 미확인 알림을 검색하는 과정에서 문제 발생"));
 
         return UncheckedNotificationListResponseDto.from(

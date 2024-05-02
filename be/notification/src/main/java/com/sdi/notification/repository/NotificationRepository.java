@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
-    Optional<List<NotificationEntity>> findAllByReceiverAndCheckStatusIsTrueOrderByIdDesc(String receiver);
+    Optional<List<NotificationEntity>> findAllByReceiverAndCheckStatusIsFalseOrderByIdDesc(String receiver);
     Page<NotificationEntity> findAllByReceiverOrderByIdDesc(String receiver, Pageable pageable);
 }
