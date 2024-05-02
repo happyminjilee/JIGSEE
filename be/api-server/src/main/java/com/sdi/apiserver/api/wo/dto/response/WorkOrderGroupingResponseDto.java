@@ -1,6 +1,6 @@
-package com.sdi.apiserver.api.wo.response;
+package com.sdi.apiserver.api.wo.dto.response;
 
-import com.sdi.apiserver.api.wo.response.util.WorkOrderSummary;
+import com.sdi.apiserver.api.wo.dto.response.util.WorkOrderSummary;
 
 import java.util.List;
 

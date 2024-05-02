@@ -1,4 +1,4 @@
-package com.sdi.apiserver.api.wo.response.util;
+package com.sdi.apiserver.api.wo.dto.response.util;
 
 import lombok.Value;
 
