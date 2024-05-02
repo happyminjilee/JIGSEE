@@ -1,7 +1,7 @@
 package com.sdi.notification.entity;
 
 import com.sdi.notification.dto.request.MessageRequestDto;
-import com.sdi.notification.util.SseStatus;
+import com.sdi.notification.util.NotificationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,7 +32,7 @@ public class NotificationEntity {
     private String receiver; // 수신자 사번
     @Column(name = "notification_type")
     @Enumerated(EnumType.STRING)
-    private SseStatus sseStatus;
+    private NotificationStatus notificationStatus;
     @Column(name = "content_id")
     private String contentId;
     public static NotificationEntity of(String sender, String receiver, MessageRequestDto messageRequestDto) {

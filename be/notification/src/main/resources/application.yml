@@ -37,4 +37,6 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
     open-in-view: false
-
+---
+apis:
+  api-base-url: "http://localhost:8080/api/v1"

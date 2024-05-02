@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
-@RequestMapping("/v1/sse")
+@RequestMapping("/v1/notification/sse")
 @RequiredArgsConstructor
 class SseController {
     private final SseService sseService;
@@ -43,5 +43,4 @@ class SseController {
         sseService.disconnect(currentMember);
         return Response.success();
     }
-    
 }
