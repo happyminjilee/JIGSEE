@@ -11,5 +11,4 @@ public interface JigItemClient {
 
     @GetMapping("/jig-item")
     Response<JigItemResponseDto> findBySerialNo(@RequestParam(name = "serial-no") String serialNo);
-
 }

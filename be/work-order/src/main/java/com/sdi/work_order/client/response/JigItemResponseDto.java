@@ -6,6 +6,7 @@ import java.util.List;
 
 
 public record JigItemResponseDto(
+        String id,
         String model,
         String serialNo,
         String status,

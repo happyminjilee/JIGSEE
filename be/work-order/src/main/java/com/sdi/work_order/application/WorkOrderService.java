@@ -1,6 +1,5 @@
 package com.sdi.work_order.application;
 
-import com.sdi.work_order.client.JigItemClient;
 import com.sdi.work_order.client.response.JigItemResponseDto;
 import com.sdi.work_order.client.response.MemberListResponseDto;
 import com.sdi.work_order.client.response.MemberResponseDto;
@@ -23,7 +22,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.UpdateStatusItem;
@@ -33,36 +35,36 @@ import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.Upd
 @RequiredArgsConstructor
 public class WorkOrderService {
 
-    private final JigItemClient jigItemClient;
+    private final JigItemService jigItemService;
+    private final MemberService memberService;
     private final WorkOrderRDBRepository workOrderRDBRepository;
     private final WorkOrderNosqlRepository workOrderNosqlRepository;
     private final WorkOrderCriteriaRepository workOrderCriteriaRepository;
 
-    public WorkOrderDetailResponseDto detail(Long workOrderId) {
+    public WorkOrderDetailResponseDto detail(Long workOrderId, String accessToken) {
         WorkOrderRDBEntity rdb = getRDBWorkOrderById(workOrderId);
         JigItemResponseDto jigItem = getJigItem(rdb.getJigSerialNo());
         WorkOrderNosqlEntity nosql = getNosqlWorkOrderCheckList(rdb.getCheckListId());
 
-        // TODO: 생성자, 완료자 조회
-        String creator = rdb.getCreatorEmployeeNo();
-        String terminator = rdb.getTerminatorEmployeeNo(); // null 확인 필요
+        String creator = getMemberInfo(rdb.getCreatorEmployeeNo(), accessToken);
+        String terminator = getMemberInfo(rdb.getTerminatorEmployeeNo(), accessToken);
 
         return WorkOrderDetailResponseDto.from(rdb, creator, terminator, jigItem, nosql.getCheckList());
     }
 
-    public WorkOrderResponseDto all(WorkOrderStatus status, int page, int size) {
+    public WorkOrderResponseDto all(String accessToken, WorkOrderStatus status, int page, int size) {
         Pageable pageable = getPageable(page, size);
 
         Page<WorkOrderRDBEntity> infos = switch (status) {
             case PUBLISH, PROGRESS, FINISH -> workOrderRDBRepository.findByStatusOrderByCreatedAtDesc(status, pageable);
             case null -> workOrderRDBRepository.findAllByOrderByCreatedAtDesc(pageable);
         };
-        return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(infos));
+        return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(accessToken, infos));
     }
 
-    public WorkOrderGroupingResponseDto grouping() {
-        List<WorkOrderRDBEntity> all = workOrderRDBRepository.findAll();
-        List<WorkOrderItem> items = mapToWorkOrderItems(all);
+    public WorkOrderGroupingResponseDto grouping(String accessToken) {
+        List<WorkOrderRDBEntity> findAll = workOrderRDBRepository.findAll();
+        List<WorkOrderItem> items = mapToWorkOrderItems(accessToken, findAll);
 
         Map<WorkOrderStatus, List<WorkOrderItem>> group =
                 items.stream()
@@ -70,11 +72,11 @@ public class WorkOrderService {
         return WorkOrderGroupingResponseDto.from(group);
     }
 
-    public WorkOrderResponseDto findByPerson(String employeeNo, String name, int page, int size) {
+    public WorkOrderResponseDto findByPerson(String accessToken, String employeeNo, String name, int page, int size) {
         Pageable pageable = getPageable(page, size);
         if (employeeNo != null) {
             Page<WorkOrderRDBEntity> infos = workOrderRDBRepository.findAllByCreatorEmployeeNoOrderByCreatedAtDesc(employeeNo, pageable);
-            return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(infos));
+            return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(accessToken, infos));
         } else if (name != null) {
             // TODO: 사람 이름에 맞는 사용자 검색
             MemberListResponseDto members = MemberListResponseDto.from(List.of(MemberResponseDto.of(name, "creator1"), MemberResponseDto.of(name, "creator2")));
@@ -82,17 +84,17 @@ public class WorkOrderService {
                     .map(MemberResponseDto::employeeNo)
                     .toList();
             Page<WorkOrderRDBEntity> infos = workOrderCriteriaRepository.findByMembers(memberEmployeeNos, pageable);
-            return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(infos));
+            return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(accessToken, infos));
         }
 
-        return all(null, page, size);
+        // 사번, 이름 둘 다 null 일 때 전부 조회
+        return all(accessToken, null, page, size);
     }
 
     @Transactional
-    public void create(WorkOrderCreateRequestDto dto) {
+    public void create(String accessToken, WorkOrderCreateRequestDto dto) {
         // 사번 조회
-        // TODO: 사용자 연결 완료 시 실 사번으로 대체
-        String employeeNo = "생성자 사번2";
+        String employeeNo = getMemberEmployeeNo(accessToken);
 
         // 일련번호로 jig 조회
         JigItemResponseDto jigItem = getJigItem(dto.serialNo());
@@ -114,9 +116,8 @@ public class WorkOrderService {
     }
 
     @Transactional
-    public void save(Long id, List<WorkOrderCheckItem> checkList) {
-        // TODO: 사용자 사번 조회
-        String terminatorEmployeeNo = "완료자";
+    public void save(String accessToken, Long id, List<WorkOrderCheckItem> checkList) {
+        String terminatorEmployeeNo = getMemberEmployeeNo(accessToken);
 
         WorkOrderRDBEntity rdb = getRDBWorkOrderById(id);
         saveData(rdb, checkList);
@@ -133,22 +134,21 @@ public class WorkOrderService {
         }
     }
 
-    private static Pageable getPageable(int page, int size) {
+    private Pageable getPageable(int page, int size) {
         return PageRequest.of(Math.max(0, page - 1), Math.max(1, size));
     }
 
-    private static WorkOrderResponseDto mapToWorkOrderResponseDto(Page<WorkOrderRDBEntity> infos, List<WorkOrderItem> workOrderItems) {
+    private WorkOrderResponseDto mapToWorkOrderResponseDto(Page<WorkOrderRDBEntity> infos, List<WorkOrderItem> workOrderItems) {
         return WorkOrderResponseDto.of(infos.getNumber() + 1, infos.getTotalPages(), workOrderItems);
     }
 
-    // List와 Page의 공통 상위 객체인 Iterable 사용
-    private List<WorkOrderItem> mapToWorkOrderItems(Iterable<WorkOrderRDBEntity> infos) {
+    private List<WorkOrderItem> mapToWorkOrderItems(String accessToken, Iterable<WorkOrderRDBEntity> infos) {
         List<WorkOrderItem> items = new ArrayList<>();
 
         for (WorkOrderRDBEntity info : infos) {
-            // TODO: 사용자 연결 완료시 실제 사용자 이름으로 대체
-            String creator = info.getCreatorEmployeeNo();
+            String creator = memberService.getMemberInfo(accessToken, info.getCreatorEmployeeNo());
             String terminator = info.getTerminatorEmployeeNo();
+            terminator = getMemberInfo(accessToken, terminator);
 
             items.add(WorkOrderItem.from(info, creator, terminator));
         }
@@ -171,7 +171,18 @@ public class WorkOrderService {
     }
 
     private JigItemResponseDto getJigItem(String serialNo) {
-        return jigItemClient.findBySerialNo(serialNo).getResult();
+        return jigItemService.findBySerialNo(serialNo).getResult();
+    }
+
+    private String getMemberInfo(String accessToken, String employeeNo) {
+        if (employeeNo != null) {
+            return memberService.getMemberInfo(accessToken, employeeNo);
+        }
+        return null;
+    }
+
+    private String getMemberEmployeeNo(String accessToken) {
+        return memberService.getMemberEmployeeNo(accessToken);
     }
 
     private WorkOrderRDBEntity getRDBWorkOrderById(Long id) {
