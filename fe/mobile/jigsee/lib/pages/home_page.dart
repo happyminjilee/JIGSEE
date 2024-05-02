@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jigsee/pages/will_change_list.dart';
 import 'package:jigsee/stores/usePreference.dart';
 import 'package:jigsee/components/header.dart';
 
@@ -46,9 +47,13 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 50,),
                   TextButton(
                       onPressed: (){
-                        Navigator.pop(context);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const WillChangeJigs()
+                          )
+                        );
                       },
-                      child: const Text("로그인 페이지로 이동"))
+                      child: const Text("교체 지그 목록"))
                 ],
               ),
             ),
