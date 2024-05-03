@@ -22,6 +22,22 @@
   flex-direction: row;
   margin-bottom: 10px;
 }
+.labelcontainer {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center;
+  flex-direction: row;
+  width: 65%;
+  margin-top: 30px;
+
+  label {
+    color: black;
+    border-radius: 5px;
+    // border: 2px solid var(--light-gray);
+    font-weight: bold;
+    font-size: 13px;
+  }
+}
 .headerline {
   border: 1px solid var(--samsungblue);
   width: 80%;
@@ -33,6 +49,7 @@
   align-items: center;
   flex-direction: column;
   margin-bottom: 0px;
+  margin-bottom: 15px;
 }
 .select {
   width: 360px;

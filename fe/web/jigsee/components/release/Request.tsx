@@ -138,7 +138,7 @@ export default function Request() {
                   }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+              <ListItemText id={labelId} primary={`${value + 1}`} />
             </ListItemButton>
           );
         })}
@@ -197,11 +197,21 @@ export default function Request() {
               // 입력값에 따라 필터
               onChange={(e) => setFilter(e.target.value)}
             />
+            <div className={styled.labelcontainer}>
+              <label htmlFor="불출 가능">불출 가능</label>
+              <label htmlFor="불출 요청">불출 요청</label>
+            </div>
           </div>
 
           <div className={styled.btncontainer}>
-            <Grid container spacing={2} justifyContent="center" alignItems="center">
-              <Grid item>사용대기 jig {customList(left)}</Grid>
+            <Grid
+              sx={{ mt: "3px" }}
+              container
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Grid item>{customList(left)}</Grid>
               <Grid item>
                 <Grid container direction="column" alignItems="center">
                   {/* <Button
@@ -246,7 +256,7 @@ export default function Request() {
                   </Button> */}
                 </Grid>
               </Grid>
-              <Grid item>불출요청jig{customList(right)}</Grid>
+              <Grid item>{customList(right)}</Grid>
             </Grid>
           </div>
         </CardBody>
