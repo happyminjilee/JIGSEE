@@ -6,6 +6,7 @@ import com.sdi.apiserver.api.member.dto.request.LoginRequestDto;
 import com.sdi.apiserver.api.member.dto.response.LoginResponseDto;
 import com.sdi.apiserver.api.member.dto.response.MemberResponseDto;
 import com.sdi.apiserver.util.CommonException;
+import com.sdi.apiserver.util.HandleFeignResponse;
 import com.sdi.apiserver.util.HeaderUtils;
 import com.sdi.apiserver.util.Response;
 import feign.Headers;
@@ -34,28 +35,8 @@ class MemberController {
 
     @PostMapping("/login")
     Response<LoginResponseDto> login(@RequestBody LoginRequestDto dto, HttpServletResponse httpServletResponse) throws IOException {
-
         feign.Response backResponse = memberClient.login(dto);
-
-        InputStream inputStream = backResponse.body().asInputStream();
-        ObjectMapper mapper = new ObjectMapper();
-        Response response = mapper.readValue(inputStream, Response.class);
-
-        if(backResponse.status() != HttpStatus.OK.value()) {
-            httpServletResponse.setStatus(backResponse.status());
-            return response;
-        }
-
-        Map<String, Collection<String>> headers = backResponse.headers();
-
-        String accessToken = headers.get("Authorization").iterator().next();
-        String refreshToken = headers.get("RefreshToken").iterator().next();
-
-        // 양쪽의 []를 제거하고 헤더에 추가
-        HeaderUtils.addAccessToken(httpServletResponse, accessToken.replace("[", "").replace("]", ""));
-        HeaderUtils.addRefreshToken(httpServletResponse, refreshToken.replace("[", "").replace("]", ""));
-
-        return response;
+        return HandleFeignResponse.handleFeignResponse(backResponse, httpServletResponse, LoginResponseDto.class);
     }
 
     @PostMapping("/member/logout")
@@ -68,26 +49,7 @@ class MemberController {
     Response<LoginResponseDto> refresh(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         String refreshToken = HeaderUtils.getRefreshToken(httpServletRequest);
         feign.Response backResponse = memberClient.tokenRefresh(refreshToken);
-
-        InputStream inputStream = backResponse.body().asInputStream();
-        ObjectMapper mapper = new ObjectMapper();
-        Response response = mapper.readValue(inputStream, Response.class);
-
-        if(backResponse.status() != HttpStatus.OK.value()) {
-            httpServletResponse.setStatus(backResponse.status());
-            return response;
-        }
-
-        Map<String, Collection<String>> headers = backResponse.headers();
-
-        String accessToken = headers.get("Authorization").iterator().next();
-        refreshToken = headers.get("RefreshToken").iterator().next();
-
-        // 양쪽의 []를 제거하고 헤더에 추가
-        HeaderUtils.addAccessToken(httpServletResponse, accessToken.replace("[", "").replace("]", ""));
-        HeaderUtils.addRefreshToken(httpServletResponse, refreshToken.replace("[", "").replace("]", ""));
-
-        return response;
+        return HandleFeignResponse.handleFeignResponse(backResponse, httpServletResponse, LoginResponseDto.class);
     }
 
     @GetMapping("/member/search")
