@@ -1,10 +1,13 @@
 package com.sdi.notificationapi.util;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Response<T> {
     private String resultCode;
     private T result;
@@ -17,7 +20,7 @@ public class Response<T> {
         return new Response<>("SUCCESS", result);
     }
 
-    public static Response<Void> error(String errorCode) {
-        return new Response<>(errorCode, null);
+    public static Response<String> error(String message) {
+        return new Response<>("FAIL", message);
     }
 }
