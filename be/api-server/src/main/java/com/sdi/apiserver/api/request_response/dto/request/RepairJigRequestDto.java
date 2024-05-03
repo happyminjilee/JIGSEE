@@ -1,11 +1,14 @@
 package com.sdi.apiserver.api.request_response.dto.request;
 
-import lombok.Value;
-
 import java.util.List;
 
-@Value
-public class RepairJigRequestDto {
-
-    List<String> list;
+/**
+ *
+ * @param serialNos
+ * @param memo
+ */
+public record RepairJigRequestDto(
+        List<String> serialNos, // 지그 일련번호 리스트
+        String memo // 메모
+) {
 }

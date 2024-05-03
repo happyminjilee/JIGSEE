@@ -5,6 +5,7 @@ import com.sdi.apiserver.api.jig.dto.request.JigItemAddRequestDto;
 import com.sdi.apiserver.api.jig.dto.request.JigItemExchangeRequestDto;
 import com.sdi.apiserver.api.jig.dto.request.JigItemSerialNoRequestDto;
 import com.sdi.apiserver.api.jig.dto.request.JigItemUpdateStatusRequestDto;
+import com.sdi.apiserver.api.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
 import com.sdi.apiserver.util.Response;
@@ -36,4 +37,8 @@ public interface JigItemClient {
 
     @PutMapping("/recovery")
     Response<Void> recovery(@RequestBody JigItemSerialNoRequestDto dto);
+
+    @GetMapping("/facility-available")
+    Response<JigItemFacilityAvailableResponseDto> facilityAvailable(
+            @RequestParam(name = "facility-model") String facilityModel);
 }

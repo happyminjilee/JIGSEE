@@ -9,7 +9,9 @@ import com.sdi.apiserver.api.wo.dto.response.WorkOrderDetailResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderGroupingResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderResponseDto;
 import com.sdi.apiserver.util.Response;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,32 +22,33 @@ public class WorkOrderController {
     private final WorkOrderClient workOrderClient;
 
     @GetMapping("/detail")
-    Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "work-order-id") Long workOrderId) {
-        System.out.println("-----");
-        return workOrderClient.detail(workOrderId);
+    Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "work-order-id") Long workOrderId, HttpServletRequest request) {
+        return workOrderClient.detail(getAccessToken(request), workOrderId);
     }
 
     @GetMapping("/all")
     Response<WorkOrderResponseDto> all(@RequestParam(name = "status") String status,
                                        @RequestParam(name = "page", required = false) Integer page,
-                                       @RequestParam(name = "size", required = false) Integer size) {
-        return workOrderClient.all(status, page, size);
+                                       @RequestParam(name = "size", required = false) Integer size,
+                                       HttpServletRequest request) {
+        return workOrderClient.all(getAccessToken(request), status, page, size);
     }
 
     @GetMapping("/grouping")
-    Response<WorkOrderGroupingResponseDto> grouping() {
-        return workOrderClient.grouping();
+    Response<WorkOrderGroupingResponseDto> grouping(HttpServletRequest request) {
+        return workOrderClient.grouping(getAccessToken(request));
     }
 
     @GetMapping
-    Response<WorkOrderResponseDto> searchByPerson(@RequestParam(name = "employee-no", required = false) String employeeNo,
+    Response<WorkOrderResponseDto> searchByPerson(HttpServletRequest request,
+                                                  @RequestParam(name = "employee-no", required = false) String employeeNo,
                                                   @RequestParam(name = "name", required = false) String name) {
-        return workOrderClient.searchByPerson(employeeNo, name);
+        return workOrderClient.searchByPerson(getAccessToken(request), employeeNo, name);
     }
 
     @PostMapping
-    Response<Void> add(@RequestBody WorkOrderCreateRequest dto) {
-        return workOrderClient.add(dto);
+    Response<Void> add(HttpServletRequest request, @RequestBody WorkOrderCreateRequest dto) {
+        return workOrderClient.add(getAccessToken(request), dto);
     }
 
     @PutMapping("/tmp")
@@ -54,12 +57,16 @@ public class WorkOrderController {
     }
 
     @PutMapping("/done")
-    Response<Void> done(@RequestBody WorkOrderDoneRequestDto dto) {
-        return workOrderClient.done(dto);
+    Response<Void> save(HttpServletRequest request, @RequestBody WorkOrderDoneRequestDto dto) {
+        return workOrderClient.save(getAccessToken(request), dto);
     }
 
     @PutMapping("/status")
     Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto) {
         return workOrderClient.updateStatus(dto);
+    }
+
+    private String getAccessToken(HttpServletRequest request) {
+        return request.getHeader(HttpHeaders.AUTHORIZATION);
     }
 }

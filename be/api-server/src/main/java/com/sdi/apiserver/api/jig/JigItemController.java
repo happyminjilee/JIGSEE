@@ -5,6 +5,7 @@ import com.sdi.apiserver.api.jig.dto.request.JigItemAddRequestDto;
 import com.sdi.apiserver.api.jig.dto.request.JigItemExchangeRequestDto;
 import com.sdi.apiserver.api.jig.dto.request.JigItemSerialNoRequestDto;
 import com.sdi.apiserver.api.jig.dto.request.JigItemUpdateStatusRequestDto;
+import com.sdi.apiserver.api.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
 import com.sdi.apiserver.util.Response;
@@ -46,13 +47,13 @@ class JigItemController {
     }
 
     @PutMapping("/status")
-    Response<Void> updateStatus(@RequestBody JigItemUpdateStatusRequestDto dto){
+    Response<Void> updateStatus(@RequestBody JigItemUpdateStatusRequestDto dto) {
         log.info("{} 상태 변경 {}", dto.serialNo(), dto.status());
         return jigItemClient.updateStatus(dto);
     }
 
     @PutMapping("/exchange")
-    Response<Void> exchange(@RequestBody JigItemExchangeRequestDto dto){
+    Response<Void> exchange(@RequestBody JigItemExchangeRequestDto dto) {
         log.info("{}에 {}를 {}로 변경", dto.facilitySerialNo(), dto.beforeSerialNo(), dto.afterSerialNo());
         return jigItemClient.exchange(dto);
     }
@@ -61,5 +62,12 @@ class JigItemController {
     Response<Void> recovery(@RequestBody JigItemSerialNoRequestDto dto) {
         log.info("{} 상태 변경", dto.serialNo());
         return jigItemClient.recovery(dto);
+    }
+
+    @GetMapping("/facility-available")
+    Response<JigItemFacilityAvailableResponseDto> facilityAvailable(
+            @RequestParam(name = "facility-model") String facilityModel) {
+        log.info("{}에 사용 가능한 지그 목록", facilityModel);
+        return jigItemClient.facilityAvailable(facilityModel);
     }
 }
