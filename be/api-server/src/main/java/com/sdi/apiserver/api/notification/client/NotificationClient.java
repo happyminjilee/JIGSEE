@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-@FeignClient(name = "notificationApiClient", url = "${apis.notification-base-url}")
+@FeignClient(name = "notificationClient", url = "${apis.notification-base-url}")
 public interface NotificationClient {
     final String ACCESS_TOKEN_PREFIX = "Authorization";
 
