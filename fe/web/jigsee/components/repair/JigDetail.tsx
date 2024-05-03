@@ -14,6 +14,8 @@ import WoModal from "@/components/workorder/CreateWoModal";
 
 interface APIChecklist {
     uuid: string,
+    content: string, // 점검항목
+    standard: string, // 기준 값
     measure: string,
     memo: string,
     passOrNot: boolean,
@@ -58,7 +60,9 @@ export default function RequestList() {
             uuid: item.uuid,
             measure: item.measure,
             memo: item.memo,
-            passOrNot: item.passOrNot
+            passOrNot: item.passOrNot,
+            content: item.content, // 점검항목
+            standard: item.standard, // 기준 값
         }));
         setTransformed(transformed);
     }, [])
