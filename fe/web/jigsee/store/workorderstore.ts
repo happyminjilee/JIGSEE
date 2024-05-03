@@ -6,6 +6,8 @@ import { getAllWo, getWogroup, getWoInfo, saveWotmp, doneWo } from "@/pages/api/
 interface compo {
   modal: boolean;
   setModal: (n: boolean) => void;
+  modalName: string;
+  setModalName: (n: string) => void;
   // wo 조회에 필요한 wo id 변수
   woId: string;
   setWoId: (newId: string) => void;
@@ -19,6 +21,10 @@ export const useCompoStore = create<compo>((set) => ({
   setModal: (n: boolean) => {
     set({ modal: n });
   },
+  modalName: "",
+  setModalName: (n: string) => {
+      set({modalName: n})
+  },
   // wo 조회에 필요한 wo id 변수
   woId: "",
   setWoId: (newId: string) => {
@@ -27,19 +33,20 @@ export const useCompoStore = create<compo>((set) => ({
   // wo test 컴포넌트를 여는 상태변수
   rightCompo: "",
   setRightCompo: (n: string) => {
-    set({ woId: n });
+    set({rightCompo: n})
   },
 }));
 
+
 interface lst {
-  id: number;
-  model: string; // 지그 모델명
-  serialNo: string; // 지그 일련번호
-  creator: string; // 작성자
-  terminator: string; // 작성 종료자
-  status: string; // wo 상태
-  createdAt: string; // wo 생성시간
-  updatedAt: string; // wo 수정시간
+  id: number,
+  model: string, // 지그 모델명
+  serialNo: string, // 지그 일련번호
+  creator: string, // 작성자
+  terminator: string, // 작성 종료자
+  status: string, // wo 상태
+  createdAt: number[], // wo 생성시간
+  updatedAt: string, // wo 수정시간
 }
 
 interface jigItemInfo {
@@ -76,15 +83,15 @@ interface WoGroup {
 }
 
 interface WoDetail {
-  id: number;
-  status: string;
-  creator: string; // 생성자
-  terminator: string; // 완료자
-  createdAt: string; // wo 생성일
-  updatedAt: string; // wo 수정일
-  jigItemInfo: jigItemInfo;
-  checkList: checklist[];
-  fetchWoDetail: (id: number) => Promise<AxiosResponse>;
+  id: number,
+  status: string,
+  creator: string, // 생성자
+  terminator: string, // 완료자
+  createdAt: number[], // wo 생성일
+  updatedAt: string, // wo 수정일
+  jigItemInfo: jigItemInfo,
+  checkList: checklist[],
+  fetchWoDetail: (id:number) => Promise<AxiosResponse>,
   fetchWoUpdateTmp: (id: number, tmpcheckList: checklist[]) => Promise<AxiosResponse>;
   fetchWoDone: (id: number, tmpcheckList: checklist[]) => Promise<AxiosResponse>;
 }
@@ -109,7 +116,7 @@ export const useWoDetailStore = create<WoDetail>((set) => ({
   status: "PUBLISH",
   creator: "", // 생성자
   terminator: "", // 완료자
-  createdAt: "", // wo 생성일
+  createdAt: [], // wo 생성일
   updatedAt: "", // wo 수정일
   jigItemInfo: {
     model: "", // 지그 모델명
@@ -150,26 +157,37 @@ export const useWoDetailStore = create<WoDetail>((set) => ({
   },
 }));
 
-export const useWoGroupStore = create<WoGroup>((set) => ({
-  publish: [],
-  progress: [],
-  finish: [],
-  fetchWoGroup: async () => {
-    const data = await getWogroup();
-    set({
-      publish: data.data.result.publish,
-      progress: data.data.result.progress,
-      finish: data.data.result.finish,
-    });
-    return data.data;
-  },
-}));
 
-interface woUpdate {
-  list: [
-    {
-      id: number; // wo의 id
-      status: string;
-    }
-  ]; // 변경될 상태}
-}
+export const useWoGroupStore = create<WoGroup>(
+    (set) => ({
+      publish: [],
+      progress: [],
+      finish: [],
+      fetchWoGroup: async () => {
+        const data = await getWogroup();
+        set({
+          publish: data.data.result.publish || [] ,
+          progress: data.data.result.progress || [],
+          finish: data.data.result.finish || [] ,
+        })
+        return data.data
+      }
+    })
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

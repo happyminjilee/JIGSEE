@@ -3,6 +3,7 @@ import { Link, Button } from "@nextui-org/react";
 import styled from "@/styles/releasestatuslist.module.css";
 import { list } from "postcss";
 import { useCompoStore, useWoDetailStore, useWoGroupStore, useWoStore } from "@/store/workorderstore";
+
 interface lst {
   id: number;
   createdAt: string;
@@ -32,30 +33,30 @@ export default function RequestList() {
   useEffect(() => {
     fetchWoGroup()
         .then((res) => {
-          if (publish !== null) {
-            if (publish.length >7) {
-              setForPublish(publish.slice(0, 7))
-            } else if (publish.length > 1) {
-              setForPublish(publish.slice(0, publish.length - 1))
-            } else {
-              setForPublish(publish)
-            }
-          } else {
-            setForPublish([])
-          }
-
-          if (progress !== null) {
-            if (progress.length >7) {
-              setForProgress(progress.slice(0, 7))
-            } else if (progress.length > 1) {
-              setForProgress(progress.slice(0, progress.length-1))
-            } else {
-              setForProgress(progress)
-            }
-          } else {
-            setForProgress([])
-          }
-
+          // if (publish !== null) {
+          //   if (publish.length >7) {
+          //     setForPublish(publish.slice(0, 7))
+          //   } else if (publish.length > 1) {
+          //     setForPublish(publish.slice(0, publish.length - 1))
+          //   } else {
+          //     setForPublish(publish)
+          //   }
+          // } else {
+          //   setForPublish([])
+          // }
+          //
+          // if (progress !== null) {
+          //   if (progress.length >7) {
+          //     setForProgress(progress.slice(0, 7))
+          //   } else if (progress.length > 1) {
+          //     setForProgress(progress.slice(0, progress.length-1))
+          //   } else {
+          //     setForProgress(progress)
+          //   }
+          // } else {
+          //   setForProgress([])
+          // }
+        console.log(res)
         })
         .catch((error) => {
           console.log(error.message)
@@ -123,9 +124,11 @@ export default function RequestList() {
     // 클릭한 S/N로 아이디로 바꾸기 , 추후 수정 예정
     setWoId("testModelId");
     setRightCompo(state);
+    console.log("cardclick", state)
+    console.log("cardclick", rightCompo)
     fetchWoDetail(Id)
         .then((res) => {
-          console.log(res)
+          console.log('woDetail', res)
         })
         .catch((error) => {
           console.log(error.message)
@@ -135,7 +138,11 @@ export default function RequestList() {
   return (
     <>
       <div className={styled.box}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          margin: "10px 15px 10px 10px",
+        }}>
           <div style={{ fontWeight: "bold", fontSize: "15px" }}>수리 진행 내역</div>
           <Link
             href="/common/ReleaseTotal/"
@@ -151,7 +158,9 @@ export default function RequestList() {
           {publish.map((info, index) => (
             <div key={index} className={styled.card} onClick={() =>{cardClick(info.id, info.status )}}>
               <div className={styled.division1}>
-                <div className={styled.date}>{info.createdAt[1]}</div>
+                <div className={styled.date}>
+                  {info.createdAt[0]}.{info.createdAt[1]}.{info.createdAt[2]}
+                </div>
                 <div className={styled.title}>
                   {info.serialNo} | {info.model}
                 </div>
@@ -163,7 +172,9 @@ export default function RequestList() {
           {progress.map((info, index) => (
               <div key={index} className={styled.card} onClick={() =>{cardClick(info.id, info.status )}}>
                 <div className={styled.division1}>
-                  <div className={styled.date}>{info.createdAt}</div>
+                  <div className={styled.date}>
+                    {info.createdAt[0]}.{info.createdAt[1]}.{info.createdAt[2]}
+                  </div>
                   <div className={styled.title}>
                     {info.serialNo} | {info.model}
                   </div>

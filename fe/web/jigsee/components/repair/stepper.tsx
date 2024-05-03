@@ -17,13 +17,13 @@ export default function HorizontalLinearStepper() {
     useEffect(() => {
         switch(status) {
             case "PUBLISH":
-                setActiveStep(1);
+                setActiveStep(0);
                 break;
             case "PROGRESS":
-                setActiveStep(2);
+                setActiveStep(1);
                 break;
-            default:
-                setActiveStep(3);
+            case "FINISH":
+                setActiveStep(2);
                 break;
         }
     }, [status]); // status가 변경될 때만 이 코드 블록이 실행됩니다.
@@ -36,24 +36,6 @@ export default function HorizontalLinearStepper() {
                     </Step>
                 ))}
             </Stepper>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                }}
-            >
-                {activeStep === 3 ? (
-                    <React.Fragment
-                    >
-                        <Typography sx={{ mt: 2 }}>완 료</Typography>
-                    </React.Fragment>
-                ) : (
-                    <React.Fragment>
-                        <Typography sx={{ mt: 2, mb: 1 }}>{status}</Typography>
-                    </React.Fragment>
-                )}
-            </div>
-
         </Box>
     );
 }

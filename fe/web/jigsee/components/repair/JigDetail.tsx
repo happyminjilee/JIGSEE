@@ -8,17 +8,9 @@ import Box from "@mui/material/Box";
 import Report from "@/components/workorder/template";
 import Modal from "@mui/material/Modal";
 import {useCompoStore, useWoDetailStore} from "@/store/workorderstore";
-import {doneWo} from "@/pages/api/workorderAxios"
+import {doneWo} from "@/pages/api/workorderAxios";
+import WoModal from "@/components/workorder/CreateWoModal";
 
-interface lst {
-    id: number;
-    stauts: string;
-    creator: string;
-    terminator: string;
-    model: string;
-    serialNo: string;
-    createdAt: string;
-}
 
 interface APIChecklist {
     uuid: string,
@@ -28,62 +20,19 @@ interface APIChecklist {
 }
 
 export default function RequestList() {
-    const { modal, setModal, rightCompo, setRightCompo } = useCompoStore();
+    const {
+        modal, setModal,
+        rightCompo, setRightCompo,
+        modalName, setModalName,
+    } = useCompoStore();
     // 지그점검항목 입력 모달
     const openModal = () => setModal(true);
     const closeModal = () => setModal(false);
+    const {
+        id, creator, status,
+        createdAt, jigItemInfo, checkList
+    } = useWoDetailStore()
 
-    const {id, creator, createdAt, jigItemInfo, checkList } = useWoDetailStore()
-
-
-    const lst = [
-        {
-            id: 12222,
-            status: "PUBLISH",
-            creator: "주준형",
-            terminator: "이민지",
-            model: "razer",
-            serialNo: "S10P31S105",
-            createdAt: "2024.04.28"
-        },
-        {
-            id: 12221,
-            status: "PUBLISH",
-            creator: "주준형",
-            terminator: "이민지",
-            model: "mulnir",
-            serialNo: "S10P31S105",
-            createdAt: "2024.04.27"
-        },
-        {
-            id: 12220,
-            status: "PUBLISH",
-            creator: "주준형",
-            terminator: "이민지",
-            model: "ironman",
-            serialNo: "S10P31S105",
-            createdAt: "2024.04.26"
-        },
-        {
-            id: 12219,
-            status: "PROGRESS",
-            creator: "주준형",
-            terminator: "이민지",
-            model: "repulse",
-            serialNo: "S10P31S105",
-            createdAt: "2024.04.25"
-        },
-        {
-            id: 12218,
-            status: "FINISH",
-            creator: "주준형",
-            terminator: "이민지",
-            model: "hawk-eye",
-            serialNo: "S10P31S105",
-            createdAt: "2024.04.24"
-        },
-
-    ]
 
     const cardClick = (id: number) => {
         console.log("clicked", id)
@@ -98,6 +47,10 @@ export default function RequestList() {
         setRightCompo("TEST")
     }
 
+    const createWo = () => {
+        openModal()
+        setModalName("CREATEWO")
+    }
 
     const [transformed, setTransformed ]= useState<APIChecklist[]>([])
     useEffect(() => {
@@ -128,7 +81,12 @@ export default function RequestList() {
                     className={styled.head}
                 >
                     <div>INFO</div>
-                    <ClearIcon/>
+                    <div
+                        className = {styled.clear}
+                        onClick={() => {setRightCompo("")}}
+                    >
+                        <ClearIcon/>
+                    </div>
                 </div>
 
                 {/*jig 정보*/}
@@ -138,7 +96,7 @@ export default function RequestList() {
                     <div className={styled.card}>Model : {jigItemInfo.model}</div>
                     <div className={styled.card}>S/N : {jigItemInfo.serialNo}</div>
                     <div className={styled.card}>생성자 : {creator}</div>
-                    <div className={styled.card}>생성일 : {createdAt}</div>
+                    <div className={styled.card}>생성일 : {createdAt[0]}.{createdAt[1]}.{createdAt[2]} </div>
                 </div>
 
                 {/* Work order 이동 */}
@@ -160,55 +118,58 @@ export default function RequestList() {
                         수리 진행 상황
                     </div>
                     <div
-                        className={styled.state}
+                        className={styled.middleBox}
                     >
-                        <Stepper></Stepper>
+                        <div
+                            className={styled.state}
+                        >
+                            <Stepper></Stepper>
+                        </div>
+                        {status === 'PUBLISH' &&
+                            <div
+                                className={styled.button}
+                            >
+                                <Button
+                                    color={"primary"}
+                                    style={{width: "180px"}}
+                                    onPress={() => {goRequest()}}
+                                >
+                                    담기
+                                </Button>
+                            </div>
+                        }
+
+
+                        {status === 'PROGRESS' &&
+                            <div
+                                className={styled.button}
+                            >
+                                <Button
+                                    color={"primary"}
+                                    style={{
+                                        width: "180px",
+                                    }}
+                                    onPress={() => {goTest()}}
+                                >
+                                    Test 결과 입력
+                                </Button>
+                                <Button
+                                    color={"primary"}
+                                    style={{
+                                        width: "180px",
+                                    }}
+                                    onPress={() => {testPut()}}
+                                >
+                                    제출
+                                </Button>
+                            </div>
+                        }
                     </div>
-
-                    {jigItemInfo.status === 'PUBLISH' &&
-                        <div
-                            className={styled.button}
-                        >
-                            <Button
-                                color={"primary"}
-                                style={{width: "180px"}}
-                                onPress={() => {goRequest()}}
-                            >
-                                담기
-                            </Button>
-                        </div>
-                            }
-
-
-                    {jigItemInfo.status === 'PROGRESS' &&
-                        <div
-                            className={styled.button}
-                        >
-                            <Button
-                                color={"primary"}
-                                style={{
-                                    width: "180px",
-                                }}
-                                onPress={() => {goTest()}}
-                            >
-                                Test 결과 입력
-                            </Button>
-                            <Button
-                                color={"primary"}
-                                style={{
-                                    width: "180px",
-                                }}
-                                onPress={() => {testPut()}}
-                            >
-                                제출
-                            </Button>
-                        </div>
-                    }
                 </div>
             </div>
             <Modal
                 open={modal} // Corrected from 'open'
-                onClose={closeModal} // Added onClose handler
+                onClose={()=> {setModal(false)}} // Added onClose handler
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
                 sx={{

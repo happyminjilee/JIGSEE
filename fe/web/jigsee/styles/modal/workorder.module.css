@@ -9,6 +9,7 @@
     width: 600px;
     height: 800px;
     border: 0.1px solid;
+    background-color: var(--realwhite);
 }
 
 .header {
