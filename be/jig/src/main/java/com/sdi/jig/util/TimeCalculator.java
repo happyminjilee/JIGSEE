@@ -10,11 +10,12 @@ public class TimeCalculator {
     }
 
     public static String millsToString(Long mills) {
-        long hours = mills / (1000 * 60 * 60);
+        long days = mills / (1000 * 60 * 60 * 24);
+        long hours = (mills % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
         long minutes = (mills % (1000 * 60 * 60)) / (1000 * 60);
         long seconds = ((mills % (1000 * 60 * 60)) % (1000 * 60)) / 1000;
         long millis = mills % 1000;
 
-        return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis);
+        return String.format("%dD %02d:%02d:%02d.%03d", days, hours, minutes, seconds, millis);
     }
 }
