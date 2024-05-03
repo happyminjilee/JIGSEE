@@ -23,6 +23,15 @@
     width: 500px;
 }
 
+.clear {
+    margin: auto 5px 10px auto;
+}
+
+.clear:hover {
+    color: var(--gray);
+    cursor: pointer;
+}
+
 .first {
     display: flex;
     flex-direction: column;
@@ -78,6 +87,10 @@
     font-weight: 900;
 }
 
+.middleBox {
+    margin: auto auto;
+}
+
 .state {
     display: flex;
     flex-direction: row;
@@ -91,6 +104,6 @@
     flex-direction: row;
     justify-content: space-around;
     width: 400px;
-    margin: 10px auto;
+    margin: 25px auto 10px auto;
     font-weight: 900;
 }

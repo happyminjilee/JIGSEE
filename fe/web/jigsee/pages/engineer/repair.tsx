@@ -11,13 +11,16 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import React from "react";
 import {useReleaseModalStore} from "@/store/releasestore";
-import {useState} from "react"
+import {useState, useEffect} from "react"
 import Report from "@/components/workorder/template"
 import Request from "@/components/repair/Requests"
 
 export default function Repair() {
   const { rightCompo } = useCompoStore();
-
+  useEffect(() => {
+      console.log(`rightCompo has changed to: ${rightCompo}`);
+      // 여기서 추가적인 로직을 실행할 수 있습니다.
+  }, [rightCompo]);
   return (
     <>
       <Navbar />

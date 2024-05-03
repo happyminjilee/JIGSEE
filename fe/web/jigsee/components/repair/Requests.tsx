@@ -1,8 +1,14 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Link, Button } from "@nextui-org/react";
 import styled from "@/styles/repairrequest.module.css";
 import { list } from "postcss";
 import {updateWoList, createWo} from "@/pages/api/workorderAxios";
+import {useCompoStore} from "@/store/workorderstore";
+import Box from "@mui/material/Box";
+import WoModal from "@/components/workorder/CreateWoModal";
+import Report from "@/components/workorder/template";
+import Modal from "@mui/material/Modal";
+import ClearIcon from "@mui/icons-material/Clear";
 
 interface lst {
     id: number;
@@ -12,9 +18,11 @@ interface lst {
     status: string;
 }
 
-interface request {
-    serialNo: string
+interface cart {
+    id : number,
+    status: string,
 }
+
 
 export default function RequestList() {
     const lst = [
@@ -82,7 +90,7 @@ export default function RequestList() {
             status: "PROGRESS"
         },
     ];
-
+    const {setRightCompo} = useCompoStore()
     const cardClick = (requestId: number) => () => {
         console.log("clicked", requestId)
     }
@@ -98,18 +106,35 @@ export default function RequestList() {
         updateWoList([{id: 0, status: "PUBLISH"}])
     }
 
-    const [requestList, setRequestList] = useState<request[]>([])
-    useEffect(() => {
-        setRequestList(lst);
-        // 리스트에 값이 추가될 때마다 requestlist 가 최신화 되도록 설정
-    }, [lst]);
+    const [cartList, setCartList] = useState<cart[]>([])
+    const addToCart = (item:cart) => {
+        setCartList(prev => [...prev, item])
+    }
+    const removeFromCart = (item:cart) => {
+        setCartList(prev => prev.filter(ready => ready.id !== item.id))
+    }
+    const clearCart = () => {
+        setCartList([])
+    }
 
+
+    const {modalName, setModalName, modal, setModal} = useCompoStore()
+    const createWo = () => {
+        openModal()
+        setModalName("CREATEWO")
+    }
 
     return (
         <>
             <div className={styled.box}>
                 <div style={{display: "flex", justifyContent: "space-between", marginBottom: "15px"}}>
                     <div style={{fontWeight: "bold", fontSize: "15px"}}>재고 불출 요청 내역</div>
+                    <div
+                        className = {styled.clear}
+                        onClick={() => {setRightCompo("")}}
+                    >
+                        <ClearIcon/>
+                    </div>
                 </div>
                 <div
                     className={styled.contents}
@@ -167,12 +192,41 @@ export default function RequestList() {
                             margin: "10px, 0px, 0px, 0px",
                             width: "190px",
                         }}
-                        onPress={() => {openModal()}}
+                        onPress={() => {createWo()}}
                     >
                         WO 생성
                     </Button>
                 </div>
             </div>
+            <Modal
+                open={modal} // Corrected from 'open'
+                onClose={()=> {setModal(false)}} // Added onClose handler
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    '& .MuiBox-root': {  // Assuming the box is causing issues
+                        outline: 'none',
+                        border: 'none',
+                        boxShadow: 'none'
+                    }
+                }}
+            >
+
+                <Box
+                    sx={{
+                        width: "100%",
+                        height: "80%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <WoModal/>
+                </Box>
+            </Modal>
         </>
     );
 }

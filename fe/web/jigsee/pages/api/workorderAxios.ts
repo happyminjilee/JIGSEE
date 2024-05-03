@@ -26,7 +26,7 @@ export async function getWogroup() {
 // wo 생성
 export async function createWo(serialNo: string) {
   const requestBody = {
-    serialNo: "str",
+    serialNo: serialNo,
   };
   return axiosAuthApi().post("http://k10s105.p.ssafy.io/api/v1/work-order", requestBody);
 }

@@ -7,6 +7,8 @@ import {getAllWo, getWogroup, getWoInfo} from "@/pages/api/workorderAxios";
 interface compo {
   modal: boolean;
   setModal: (n: boolean) => void;
+  modalName: string;
+  setModalName: (n: string) => void;
   // wo 조회에 필요한 wo id 변수
   woId: string;
   setWoId: (newId: string) => void;
@@ -20,6 +22,10 @@ export const useCompoStore = create<compo>((set) => ({
   setModal: (n: boolean) => {
    set({modal: n})
   },
+  modalName: "",
+  setModalName: (n: string) => {
+      set({modalName: n})
+  },
   // wo 조회에 필요한 wo id 변수
   woId: "",
   setWoId: (newId: string) => {
@@ -28,7 +34,7 @@ export const useCompoStore = create<compo>((set) => ({
   // wo test 컴포넌트를 여는 상태변수
   rightCompo: "",
   setRightCompo: (n: string) => {
-    set({woId: n})
+    set({rightCompo: n})
   },
 }));
 
@@ -40,7 +46,7 @@ interface lst {
   creator: string, // 작성자
   terminator: string, // 작성 종료자
   status: string, // wo 상태
-  createdAt: string, // wo 생성시간
+  createdAt: number[], // wo 생성시간
   updatedAt: string, // wo 수정시간
 }
 
@@ -82,7 +88,7 @@ interface WoDetail {
   status: string,
   creator: string, // 생성자
   terminator: string, // 완료자
-  createdAt: string, // wo 생성일
+  createdAt: number[], // wo 생성일
   updatedAt: string, // wo 수정일
   jigItemInfo: jigItemInfo,
   checkList: checklist[],
@@ -115,7 +121,7 @@ export const useWoDetailStore = create<WoDetail>(
       status: "PUBLISH",
       creator: "", // 생성자
       terminator: "", // 완료자
-      createdAt: "", // wo 생성일
+      createdAt: [], // wo 생성일
       updatedAt: "", // wo 수정일
       jigItemInfo: {
         model: "", // 지그 모델명
@@ -131,10 +137,10 @@ export const useWoDetailStore = create<WoDetail>(
         const data = await getWoInfo(id);
         set({
           id: data.data.result.id,
-          status: data.data.result.status,
+            status: data.data.result.status,
           creator: data.data.result.creator, // 생성자
           terminator: data.data.result.terminator, // 완료자
-          createdAt: data.data.result.createAt, // wo 생성일
+          createdAt: data.data.result.createdAt, // wo 생성일
           updatedAt: data.data.result.updatedAt, // wo 수정일
           jigItemInfo: data.data.result.jigItemInfo,
           checkList: data.data.result.checkList,
@@ -162,31 +168,9 @@ export const useWoGroupStore = create<WoGroup>(
     })
 )
 
-interface Stepper {
-    activeStep: number;
-    setActiveStep: (step: number) => void;
-}
-
-export const useStepperStore = create<Stepper>((set) => ({
-    activeStep: 1,
-    setActiveStep: (step:number) => {set({activeStep:step})}
-}))
-
-interface woPut {
-    id: number,
-    checklist : [{
-        uuid: string,
-        measure: string,
-        memo:string,
-        passOrNot: boolean }]
-}
 
 
-interface woUpdate {
-    list: [{
-            id: number, // wo의 id
-            status: string,}], // 변경될 상태}
-}
+
 
 
 
