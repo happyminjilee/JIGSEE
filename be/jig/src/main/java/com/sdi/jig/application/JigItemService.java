@@ -1,5 +1,6 @@
 package com.sdi.jig.application;
 
+import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto.JigItemSummary;
 import com.sdi.jig.dto.response.JigItemResponseDto;
@@ -26,8 +27,8 @@ public class JigItemService {
     private final JigItemRDBRepository jigItemRDBRepository;
     private final FacilityRDBRepository facilityRDBRepository;
     private final FacilityItemRDBRepository facilityItemRDBRepository;
-    private final FacilityJigMappingRDBRepository facilityJigMappingRDBRepository;
     private final JigItemIOHistoryRepository jigItemIOHistoryRepository;
+    private final FacilityJigMappingRDBRepository facilityJigMappingRDBRepository;
     private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
 
     public JigItemResponseDto findBySerialNo(String serialNo) {
@@ -101,6 +102,29 @@ public class JigItemService {
     public void recoveryBySerialNo(String serialNo) {
         JigItemRDBEntity jigItem = getJigItemBySerialNo(serialNo);
         jigItem.recovery();
+    }
+
+    public JigItemFacilityAvailableResponseDto facilityAvailable(String facilityModel) {
+        FacilityRDBEntity facilityByModel = getFacilityByModel(facilityModel);
+        List<Long> jigIds = extractJigIds(facilityByModel);
+
+        List<String> serialNos = getAvailableExtractJigItemSerialNos(jigIds);
+
+        return JigItemFacilityAvailableResponseDto.from(serialNos);
+    }
+
+    private List<Long> extractJigIds(FacilityRDBEntity facilityByModel) {
+        return getFacilityJigMappingByFacilityId(facilityByModel.getId())
+                .stream()
+                .map(m -> m.getJig().getId())
+                .toList();
+    }
+
+    private List<String> getAvailableExtractJigItemSerialNos(List<Long> jigIds) {
+        return jigItemRDBRepository.findByStatusAndJigIdIn(JigStatus.WAREHOUSE, jigIds)
+                .stream()
+                .map(JigItemRDBEntity::getSerialNo)
+                .toList();
     }
 
     private void updateBecauseExchange(FacilityItemRDBEntity facilityItem, JigItemRDBEntity beforeJigItem, JigItemRDBEntity afterJigItem) {
@@ -187,4 +211,5 @@ public class JigItemService {
     private Integer getRepairCount(Long jigItemId) {
         return getJigItemRepairHistoriesByJigItemId(jigItemId).size();
     }
+
 }

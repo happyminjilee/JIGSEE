@@ -5,6 +5,7 @@ import com.sdi.jig.dto.request.JigItemAddRequestDto;
 import com.sdi.jig.dto.request.JigItemExchangeRequestDto;
 import com.sdi.jig.dto.request.JigItemSerialNoRequestDto;
 import com.sdi.jig.dto.request.JigItemUpdateStatusRequestDto;
+import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemResponseDto;
 import com.sdi.jig.util.Response;
@@ -59,5 +60,11 @@ class JigItemController {
     Response<Void> recovery(@RequestBody JigItemSerialNoRequestDto dto) {
         jigItemService.recoveryBySerialNo(dto.serialNo());
         return Response.success();
+    }
+
+    @GetMapping("/facility-available")
+    Response<JigItemFacilityAvailableResponseDto> facilityAvailable(
+            @RequestParam(name = "facility-model") String facilityModel){
+        return Response.success(jigItemService.facilityAvailable(facilityModel));
     }
 }
