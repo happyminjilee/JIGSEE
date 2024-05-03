@@ -9,6 +9,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @FeignClient(name = "memberClient", url = "${apis.member-base-url}")
 public interface MemberClient {
     @PostMapping("/login")
@@ -24,7 +26,7 @@ public interface MemberClient {
     Response<LoginResponseDto> searchMyInfo(@RequestHeader("Authorization") String accessToken);
 
     @GetMapping("/member/search/name")
-    Response<MemberResponseDto> searchName(@RequestHeader("Authorization") String accessToken, @RequestParam("name") String name);
+    Response<List<MemberResponseDto>>searchName(@RequestHeader("Authorization") String accessToken, @RequestParam("name") String name);
 
     @GetMapping("/member/search/employee-no")
     Response<MemberResponseDto> searchEmployeeNo(@RequestHeader("Authorization") String accessToken, @RequestParam("employee-no") String employeeNo);

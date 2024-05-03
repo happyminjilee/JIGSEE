@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,8 +37,16 @@ class MemberController {
 
         feign.Response backResponse = memberClient.login(dto);
 
-        Map<String, Collection<String>> headers = backResponse.headers();
         InputStream inputStream = backResponse.body().asInputStream();
+        ObjectMapper mapper = new ObjectMapper();
+        Response response = mapper.readValue(inputStream, Response.class);
+
+        if(backResponse.status() != HttpStatus.OK.value()) {
+            httpServletResponse.setStatus(backResponse.status());
+            return response;
+        }
+
+        Map<String, Collection<String>> headers = backResponse.headers();
 
         String accessToken = headers.get("Authorization").iterator().next();
         String refreshToken = headers.get("RefreshToken").iterator().next();
@@ -44,9 +54,6 @@ class MemberController {
         // 양쪽의 []를 제거하고 헤더에 추가
         HeaderUtils.addAccessToken(httpServletResponse, accessToken.replace("[", "").replace("]", ""));
         HeaderUtils.addRefreshToken(httpServletResponse, refreshToken.replace("[", "").replace("]", ""));
-
-        ObjectMapper mapper = new ObjectMapper();
-        Response response = mapper.readValue(inputStream, Response.class);
 
         return response;
     }
@@ -60,10 +67,17 @@ class MemberController {
     @PostMapping("/refresh")
     Response<LoginResponseDto> refresh(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         String refreshToken = HeaderUtils.getRefreshToken(httpServletRequest);
-
         feign.Response backResponse = memberClient.tokenRefresh(refreshToken);
 
         InputStream inputStream = backResponse.body().asInputStream();
+        ObjectMapper mapper = new ObjectMapper();
+        Response response = mapper.readValue(inputStream, Response.class);
+
+        if(backResponse.status() != HttpStatus.OK.value()) {
+            httpServletResponse.setStatus(backResponse.status());
+            return response;
+        }
+
         Map<String, Collection<String>> headers = backResponse.headers();
 
         String accessToken = headers.get("Authorization").iterator().next();
@@ -72,9 +86,6 @@ class MemberController {
         // 양쪽의 []를 제거하고 헤더에 추가
         HeaderUtils.addAccessToken(httpServletResponse, accessToken.replace("[", "").replace("]", ""));
         HeaderUtils.addRefreshToken(httpServletResponse, refreshToken.replace("[", "").replace("]", ""));
-
-        ObjectMapper mapper = new ObjectMapper();
-        Response response = mapper.readValue(inputStream, Response.class);
 
         return response;
     }
@@ -86,7 +97,7 @@ class MemberController {
     }
 
     @GetMapping("/member/search/name")
-    Response<MemberResponseDto> searchByName(HttpServletRequest httpServletRequest, @RequestParam(name = "name") String name) {
+    Response<List<MemberResponseDto>> searchByName(HttpServletRequest httpServletRequest, @RequestParam(name = "name") String name) {
         String accessToken = HeaderUtils.getAccessToken(httpServletRequest);
         return memberClient.searchName(accessToken, name);
     }
