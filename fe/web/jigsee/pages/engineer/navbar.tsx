@@ -10,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import * as React from "react";
-import { useRouter } from "next/router";
-import { logout } from "@/pages/api/memberAxios";
-import { userStore } from "@/store/memberstore";
-import { useEffect } from "react";
+import {useRouter} from "next/router"
+import {logout} from "@/pages/api/memberAxios"
+import {userStore} from "@/store/memberstore"
+import {useEffect} from "react";
 
 export default function EngineerNavbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -24,37 +24,30 @@ export default function EngineerNavbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const router = useRouter();
-  const { setName, setRole, name, role } = userStore((state) => ({
-    name: state.name,
-    role: state.role,
-    setName: state.setName,
-    setRole: state.setRole,
-  }));
+  const router = useRouter()
+  const { setName, setRole, name, role } = userStore(state => ({
+      name: state.name,
+      role: state.role,
+      setName: state.setName,
+      setRole: state.setRole
+  }))
   useEffect(() => {
-    console.log("Updated name:", name);
-    console.log("Updated role:", role);
-  }, [name, role]);
+      console.log('Updated name:', name);
+      console.log('Updated role:', role);
+  }, [name, role])
   const handlelogout = async () => {
-    const result = await logout();
-    if (result) {
-      setName("");
-      setRole("");
-      console.log("delete zustand info");
+      const result = await logout();
+      if (result) {
+          setName("");
+          setRole("");
+          console.log('delete zustand info')
 
-      router.push("/login");
-    } else {
-      console.log("로그인이 만료되었습니다.");
-      router.push("/login");
-    }
-  };
-  // 현재위치 표시 로직
-  const currentPath = router.pathname; // 현재 URL을 가져옵니다.
-
-  // 페이지에 따라 스타일을 동적으로 적용합니다.
-  const isRestorePage = currentPath === "/engineer/restore";
-  const isReleasePage = currentPath === "/engineer";
-  const isRepairPage = currentPath === "/engineer/repair";
+          router.push("/login")
+      } else {
+          console.log("로그인이 만료되었습니다.")
+          router.push("/login")
+      }
+  }
   return (
     <>
       <Box style={{ paddingTop: "5px" }}>
@@ -85,7 +78,6 @@ export default function EngineerNavbar() {
                 color: "#40404A",
                 fontWeight: "bold",
                 width: "100%",
-                textDecoration: isRestorePage ? "underline var(--samsungblue)" : "none",
               }}
               href="/engineer/restore"
             >
@@ -99,7 +91,6 @@ export default function EngineerNavbar() {
                 color: "#40404A",
                 fontWeight: "bold",
                 width: "100%",
-                textDecoration: isReleasePage ? "underline var(--samsungblue)" : "none",
               }}
               href="/engineer"
             >
@@ -114,7 +105,6 @@ export default function EngineerNavbar() {
                 fontWeight: "bold",
                 width: "100%",
                 marginRight: "50px",
-                textDecoration: isRepairPage ? "underline var(--samsungblue)" : "none",
               }}
               href="/engineer/repair"
             >
@@ -146,8 +136,11 @@ export default function EngineerNavbar() {
             onClose={handleCloseUserMenu}
           >
             <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center" onClick={handlelogout}>
-                Logout
+              <Typography
+                  textAlign="center"
+                  onClick={handlelogout}
+              >
+                  Logout
               </Typography>
             </MenuItem>
           </Menu>
