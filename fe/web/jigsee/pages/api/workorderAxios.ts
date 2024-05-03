@@ -1,4 +1,14 @@
 import { axiosAuthApi } from "@/utils/instance";
+
+// 임시저장에 필요한 checklist 형싱
+interface checklist {
+  uuid: string; // 점검항목 구분을 위한 id
+  content: string; // 점검항목
+  standard: string; // 기준 값
+  measure: string; // 측정값
+  memo: string; // 비고
+  passOrNot: boolean; // 통과 유무
+}
 //work order id로 WO조회 -기술팀
 export async function getWoInfo(WOId: number) {
   const params = {
@@ -28,15 +38,13 @@ export async function createWo(serialNo: string) {
   return axiosAuthApi().post("/work-order", requestBody);
 }
 // WO 임시저장
-export async function saveWotmp(
-  id: number,
-  checklist: [{ uuid: string; measure: string; memo: string; passOrNot: boolean }]
-) {
+export async function saveWotmp(id: number, checklist: checklist[]) {
   const requestBody = {
     id: id, // wo의 id
     checkList: checklist,
   };
-  return axiosAuthApi().put("/work-order/tmp", requestBody);
+  console.log(id, checklist);
+  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/work-order/tmp", requestBody);
 }
 
 // Wo 완료

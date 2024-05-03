@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { AxiosResponse } from "axios";
 import { state } from "sucrase/dist/types/parser/traverser/base";
-import { getAllWo, getWogroup, getWoInfo } from "@/pages/api/workorderAxios";
+import { getAllWo, getWogroup, getWoInfo, saveWotmp } from "@/pages/api/workorderAxios";
 
 interface compo {
   modal: boolean;
@@ -85,6 +85,7 @@ interface WoDetail {
   jigItemInfo: jigItemInfo;
   checkList: checklist[];
   fetchWoDetail: (id: number) => Promise<AxiosResponse>;
+  fetchWoUpdateTmp: (id: number, tmpcheckList: checklist[]) => Promise<AxiosResponse>;
 }
 
 export const useWoStore = create<Wo>((set) => ({
@@ -119,6 +120,7 @@ export const useWoDetailStore = create<WoDetail>((set) => ({
     repairCount: 0, // 지그 수리 횟수
   },
   checkList: [],
+  // work order 디테일 정보 불러오기
   fetchWoDetail: async (id: number) => {
     const data = await getWoInfo(id);
     console.log("점검항목", data);
@@ -132,6 +134,12 @@ export const useWoDetailStore = create<WoDetail>((set) => ({
       jigItemInfo: data.data.result.jigItemInfo,
       checkList: data.data.result.checkList,
     });
+    return data.data;
+  },
+  // work oder 임시저장
+  fetchWoUpdateTmp: async (id: number, tmpcheckList: checklist[]) => {
+    const data = await saveWotmp(id, tmpcheckList);
+    console.log("임시저장 성공?", data);
     return data.data;
   },
 }));
@@ -150,18 +158,6 @@ export const useWoGroupStore = create<WoGroup>((set) => ({
     return data.data;
   },
 }));
-
-interface woPut {
-  id: number;
-  checklist: [
-    {
-      uuid: string;
-      measure: string;
-      memo: string;
-      passOrNot: boolean;
-    }
-  ];
-}
 
 interface woUpdate {
   list: [
