@@ -17,19 +17,19 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public interface NotificationClient {
     final String ACCESS_TOKEN_PREFIX = "Authorization";
 
-    @GetMapping(value = "notification/sse/subscribe", produces = "text/event-stream")
+    @GetMapping(value = "/notification/sse/subscribe", produces = "text/event-stream")
     SseEmitter subscribe(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken);
 
-    @PostMapping(value = "notification/sse/send-message")
+    @PostMapping(value = "/notification/sse/send-message")
     Response<Void> sendMessage(@RequestBody MessageRequestDto messageRequestDto);
 
-    @DeleteMapping("notification/sse/disconnect")
+    @DeleteMapping("/notification/sse/disconnect")
     Response<Void> disconnect(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken);
 
-    @GetMapping("notification/search/unchecked")
+    @GetMapping("/notification/search/unchecked")
     Response<UncheckedNotificationListResponseDto> searchUnchecked(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken);
 
-    @GetMapping("notification/search/all")
+    @GetMapping("/notification/search/all")
     Response<NotificationListResponseDto> searchAll(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken,
                                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                                     @RequestParam(value = "size", defaultValue = "10") int size);

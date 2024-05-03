@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "notificationApiClient", url = "${apis.notification-api-base-url}")
 public interface NotificationApiClient {
     final String ACCESS_TOKEN_PREFIX = "Authorization";
-    @PostMapping("request/jig")
+    @PostMapping("/request/jig")
     Response<Void> makeWantRequest(@RequestHeader(name = ACCESS_TOKEN_PREFIX) String accessToken,
                                    @RequestBody RequestJigRequestDto dto);
 
