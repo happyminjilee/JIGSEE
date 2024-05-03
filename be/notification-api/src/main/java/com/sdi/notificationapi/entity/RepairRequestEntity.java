@@ -26,9 +26,9 @@ public class RepairRequestEntity {
     private String memo; // 메모
     private String from; // 요청자
     
-    public static RepairRequestEntity from(RepairJigRequestDto repairJigRequestDto) {
+    public static RepairRequestEntity from(RepairJigRequestDto repairJigRequestDto, String sender) {
         String uuid = UUID.randomUUID().toString();
         LocalDateTime time = LocalDateTime.now();
-        return new RepairRequestEntity(uuid, time, repairJigRequestDto.serialNos(), repairJigRequestDto.memo(), repairJigRequestDto.sender());
+        return new RepairRequestEntity(uuid, time, repairJigRequestDto.serialNos(), repairJigRequestDto.memo(), sender);
     }
 }

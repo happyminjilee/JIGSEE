@@ -53,7 +53,7 @@ public class RequestService {
          * 1. 요청 내용 DB에 저장
          * 2. 알림 서버로 알림 전송 요청 보냄
          */
-        WantRequestEntity content = wantRequestsRepository.save(WantRequestEntity.from(requestJigRequestDto));
+        WantRequestEntity content = wantRequestsRepository.save(WantRequestEntity.from(requestJigRequestDto, memberInfoDto.employeeNo()));
         messageClient.sendMessage(MessageDto.of(SseStatus.REQUEST_JIG, memberInfoDto.employeeNo(), content.getId()), accessToken);
     }
 
@@ -73,7 +73,7 @@ public class RequestService {
         }
         WantRequestEntity originalRequest = wantRequestsRepository.findById(responseJigRequestDto.requestId())
                 .orElseThrow(() -> new IllegalArgumentException("원본 요청을 찾을 수 없습니다."));
-        originalRequest.processRequest(memberInfoDto.employeeNo(), responseJigRequestDto.isAccept());
+        originalRequest.updateWantRequest(memberInfoDto.employeeNo(), responseJigRequestDto.isAccept());
         wantRequestsRepository.save(originalRequest);
         WantResponseEntity content = wantResponsesRepository.save(WantResponseEntity.from(responseJigRequestDto));
         messageClient.sendMessage(MessageDto.of(SseStatus.RESPONSE_JIG, memberInfoDto.employeeNo(), content.getId()), accessToken);
@@ -86,12 +86,12 @@ public class RequestService {
          * 상태 변경은 다른 곳에서 하는거겠지?
          * 2. 알림 서버로 알림 전송 요청 보냄
          */
-        RepairRequestEntity content = repairRequestsRepository.save(RepairRequestEntity.from(repairJigRequestDto));
+        RepairRequestEntity content = repairRequestsRepository.save(RepairRequestEntity.from(repairJigRequestDto, memberInfoDto.employeeNo()));
         messageClient.sendMessage(MessageDto.of(SseStatus.REQUEST_REPAIR, memberInfoDto.employeeNo(), content.getId()), accessToken);
     }
 
     public RequestJigListResponseDto findAllWantJigRequests(String option, int pageNumber, int size) {
-        Pageable pageable = getPageable(pageNumber, size, "time");
+        Pageable pageable = getPageable(pageNumber, size, "createdAt");
         Page<WantRequestEntity> page = switch (option) {
             case "PUBLISH", "FINISH" -> wantRequestsRepository.findAllByStatus(JigRequestStatus.valueOf(option), pageable);
             case "REJECT" -> wantRequestsRepository.findAllByIsAcceptAndStatus(false, JigRequestStatus.FINISH, pageable);
@@ -113,7 +113,7 @@ public class RequestService {
     }
 
     public RepairJigListResponseDto findAllRepairRequests(int pageNumber, int size) {
-        Pageable pageable = getPageable(pageNumber, size, "time");
+        Pageable pageable = getPageable(pageNumber, size, "createdAt");
         Page<RepairRequestEntity> page = repairRequestsRepository.findAll(pageable);
 
         List<RepairJigDetailResponseDto> list = page.getContent().stream()
