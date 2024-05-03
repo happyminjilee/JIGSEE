@@ -32,7 +32,7 @@ public interface WorkOrderClient {
     @PostMapping
     Response<Void> add(@RequestBody WorkOrderCreateRequest dto);
 
-    @PostMapping("/tmp")
+    @PutMapping("/tmp")
     Response<Void> tmp(@RequestBody WorkOrderUpdateRequestDto dto);
 
     @PutMapping("/done")
