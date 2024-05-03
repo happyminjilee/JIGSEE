@@ -40,7 +40,7 @@ interface EditToolbarProps {
 export default function WOtestresult() {
   // const { woId } = useWoStore();
   const [testMethod, setTestMethod] = useState<testMethodItem[]>([]);
-  const { checkList, fetchWoDetail, id, fetchWoUpdateTmp } = useWoDetailStore();
+  const { checkList, fetchWoDetail, id, fetchWoUpdateTmp, fetchWoDone } = useWoDetailStore();
   // id 가 바뀔때마다 새로운 리스트를 불러옴
   useEffect(() => {
     // id를 입력하는 것으로 추후 수정해야함
@@ -187,6 +187,8 @@ export default function WOtestresult() {
       memo: item.memo,
       passOrNot: item.passOrNot,
     }));
+    // 1대신 id를 입력하는 것으로 추후 수정해야함
+    fetchWoDone(1, newList);
   };
   return (
     <div className={styles.container}>

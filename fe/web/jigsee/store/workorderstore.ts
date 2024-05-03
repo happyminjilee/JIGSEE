@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { AxiosResponse } from "axios";
 import { state } from "sucrase/dist/types/parser/traverser/base";
-import { getAllWo, getWogroup, getWoInfo, saveWotmp } from "@/pages/api/workorderAxios";
+import { getAllWo, getWogroup, getWoInfo, saveWotmp, doneWo } from "@/pages/api/workorderAxios";
 
 interface compo {
   modal: boolean;
@@ -86,6 +86,7 @@ interface WoDetail {
   checkList: checklist[];
   fetchWoDetail: (id: number) => Promise<AxiosResponse>;
   fetchWoUpdateTmp: (id: number, tmpcheckList: checklist[]) => Promise<AxiosResponse>;
+  fetchWoDone: (id: number, tmpcheckList: checklist[]) => Promise<AxiosResponse>;
 }
 
 export const useWoStore = create<Wo>((set) => ({
@@ -140,6 +141,11 @@ export const useWoDetailStore = create<WoDetail>((set) => ({
   fetchWoUpdateTmp: async (id: number, tmpcheckList: checklist[]) => {
     const data = await saveWotmp(id, tmpcheckList);
     console.log("임시저장 성공?", data);
+    return data.data;
+  },
+  fetchWoDone: async (id: number, tmpcheckList: checklist[]) => {
+    const data = await doneWo(id, tmpcheckList);
+    console.log("제출성공?", data);
     return data.data;
   },
 }));

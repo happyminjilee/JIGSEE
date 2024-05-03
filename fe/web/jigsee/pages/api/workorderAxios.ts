@@ -48,15 +48,12 @@ export async function saveWotmp(id: number, checklist: checklist[]) {
 }
 
 // Wo 완료
-export async function doneWo(
-  id: number,
-  checklist: [{ uuid: string; measure: string; memo: string; passOrNot: boolean }]
-) {
+export async function doneWo(id: number, checklist: checklist[]) {
   const requestBody = {
     id: id, // wo의 id
     checkList: checklist,
   };
-  return axiosAuthApi().put("/work-order/done", requestBody);
+  return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/work-order/done", requestBody);
 }
 
 // Wo 상태 변경(리스트)
