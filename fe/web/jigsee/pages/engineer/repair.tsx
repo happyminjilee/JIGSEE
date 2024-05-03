@@ -32,7 +32,6 @@ export default function Repair() {
             {rightCompo === "FINISH" && <Information />}
             {rightCompo === "REQUEST" && <Request />}
             {rightCompo === "TEST" && <WOtest />}
-            <WOtest />
           </div>
         </div>
       </DndProvider>
