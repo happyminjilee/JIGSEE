@@ -64,7 +64,7 @@ export default function RepairTotal() {
 
   return (
     <>
-      {Navbar}
+      {/* {Navbar} */}
       <div className={styled.container}>
         {restoreList.map((item, index) => (
           <div key={index} className={styled.fullWidth} onClick={() => cardClick(item.id)}>
