@@ -1,8 +1,6 @@
 package com.sdi.work_order.application;
 
 import com.sdi.work_order.client.response.JigItemResponseDto;
-import com.sdi.work_order.client.response.MemberListResponseDto;
-import com.sdi.work_order.client.response.MemberResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderDetailResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
@@ -78,11 +76,7 @@ public class WorkOrderService {
             Page<WorkOrderRDBEntity> infos = workOrderRDBRepository.findAllByCreatorEmployeeNoOrderByCreatedAtDesc(employeeNo, pageable);
             return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(accessToken, infos));
         } else if (name != null) {
-            // TODO: 사람 이름에 맞는 사용자 검색
-            MemberListResponseDto members = MemberListResponseDto.from(List.of(MemberResponseDto.of(name, "creator1"), MemberResponseDto.of(name, "creator2")));
-            List<String> memberEmployeeNos = members.list().stream()
-                    .map(MemberResponseDto::employeeNo)
-                    .toList();
+            List<String> memberEmployeeNos = memberService.getMemberEmployeeByNames(accessToken, name);
             Page<WorkOrderRDBEntity> infos = workOrderCriteriaRepository.findByMembers(memberEmployeeNos, pageable);
             return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(accessToken, infos));
         }
@@ -99,6 +93,9 @@ public class WorkOrderService {
         // 일련번호로 jig 조회
         JigItemResponseDto jigItem = getJigItem(dto.serialNo());
 
+        // 같은 Jig Item에 대해서 이미 생성된 WO가 있다면 생성 불가
+        isAlreadyExistNotFinishWorkOrderThenThrow(jigItem);
+
         // 저장할 데이터 생성
         String checkListId = UUID.randomUUID().toString();
         WorkOrderRDBEntity rdb = WorkOrderRDBEntity.from(employeeNo, jigItem.serialNo(), jigItem.model(), checkListId);
@@ -107,6 +104,15 @@ public class WorkOrderService {
         // 데이터 저장
         workOrderRDBRepository.save(rdb);
         workOrderNosqlRepository.save(nosql);
+    }
+
+    private void isAlreadyExistNotFinishWorkOrderThenThrow(JigItemResponseDto jigItem) {
+        workOrderRDBRepository.findByJigSerialNoAndStatusNot(jigItem.serialNo(), WorkOrderStatus.FINISH)
+                .ifPresent(item -> {
+                            throw new IllegalArgumentException(
+                                    String.format("Jig \'%s\'는 종료되지 않은 Work Order가 있습니다.", jigItem.serialNo()));
+                        }
+                );
     }
 
     @Transactional
