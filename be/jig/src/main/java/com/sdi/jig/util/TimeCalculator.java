@@ -2,6 +2,7 @@ package com.sdi.jig.util;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 public class TimeCalculator {
 
@@ -9,13 +10,16 @@ public class TimeCalculator {
         return Duration.between(start, end).toMillis();
     }
 
-    public static String millsToString(Long mills) {
-        long days = mills / (1000 * 60 * 60 * 24);
-        long hours = (mills % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
-        long minutes = (mills % (1000 * 60 * 60)) / (1000 * 60);
-        long seconds = ((mills % (1000 * 60 * 60)) % (1000 * 60)) / 1000;
-        long millis = mills % 1000;
+    public static String millsToString(Long millis) {
+        long days = TimeUnit.MILLISECONDS.toDays(millis);
+        millis -= TimeUnit.DAYS.toMillis(days);
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        millis -= TimeUnit.HOURS.toMillis(hours);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+        millis -= TimeUnit.SECONDS.toMillis(seconds);
 
-        return String.format("%dD %02d:%02d:%02d.%03d", days, hours, minutes, seconds, millis);
+        return String.format("%d일 %02d시간 %02d분 %02d초 %03d밀리초", days, hours, minutes, seconds, millis);
     }
 }
