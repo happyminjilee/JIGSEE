@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/wotestresult.module.scss"; // Corrected import
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { getjigMethod } from "@/pages/api/jigAxios";
-import { usewoStore } from "@/store/workorderstore";
+import { useWoDetailStore } from "@/store/workorderstore";
+// import { GridEditCellProps } from "@mui/x-data-grid";
 interface testMethodItem {
+  uuid: string;
   content: string;
   standard: string;
+  measure: string;
+  memo: string;
+  passOrNot: boolean;
 }
 interface RowItem {
-  id: number;
+  id: string;
   contents: string;
   standard: string;
   measure: string;
@@ -20,23 +21,13 @@ interface RowItem {
   passOrNot: boolean;
 }
 export default function WOtestresult() {
-  const { woId, openWotest, setopenWotest } = usewoStore();
+  // const { woId } = useWoStore();
   const [testMethod, setTestMethod] = useState<testMethodItem[]>([]);
-
+  const { checkList, fetchWoDetail, id } = useWoDetailStore();
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("tttt", woId);
-        const result = await getjigMethod("testModelId2");
-        console.log("result-check", result);
-        setTestMethod(result.data.result.checkList);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
-    fetchData();
-  }, [woId]);
+    fetchWoDetail(1);
+    setTestMethod(checkList);
+  }, [id]);
 
   const columns: GridColDef<(typeof rows)[number]>[] = [
     { field: "contents", headerName: "기준 항목", width: 90 },
@@ -53,7 +44,7 @@ export default function WOtestresult() {
     },
     {
       field: "memo",
-      headerName: "비고",
+      headerName: "메모",
       width: 90,
       editable: true,
     },
@@ -62,42 +53,45 @@ export default function WOtestresult() {
       headerName: "판정 결과",
       width: 100,
       type: "boolean",
-      editable: true,
+      editable: false,
     },
   ];
   const [rows, setRows] = useState<RowItem[]>([]);
 
   useEffect(() => {
-    const newRows = testMethod.map((method, index) => ({
-      id: index + 1,
+    const newRows = testMethod.map((method) => ({
+      id: method.uuid,
       contents: method.content,
       standard: method.standard,
-      measure: "",
-      memo: "",
+      measure: method.measure,
+      memo: method.memo,
       passOrNot: false,
     }));
     setRows(newRows);
   }, [testMethod]);
+  const updateTest = () => {
+    console.log("updaterow", updatedRows);
+  };
+  const [updatedRows, setUpdatedRows] = useState<string[]>([]);
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>Test Result</div>
       <div className={styles.body}>
         <div className={styles.inputname}>
-          <label htmlFor="inputname">책임자</label>
+          <label htmlFor="inputname">Technician </label>
           <input type="text" className={styles.inputname} />
         </div>
 
-        <div className={styles.datepicker}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker className={styles.dateInput} label="시작일" format="YYYY-M-D" />
-          </LocalizationProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker className={styles.dateInput} label="종료일" format="YYYY-M-D" />
-          </LocalizationProvider>
-        </div>
-
-        <Box className={styles.box}>
+        <Box
+          className={styles.box}
+          sx={{
+            "& .MuiDataGrid-cell--editable": {
+              bgcolor: "#ffffff",
+              border: "1px solid var(--samsungblue)",
+            },
+          }}
+        >
           <DataGrid
             rows={rows}
             columns={columns}
@@ -106,9 +100,12 @@ export default function WOtestresult() {
             disableColumnResize
             disableVirtualization
             hideFooter
+            editMode="row"
           />
         </Box>
-        <button className={styles.editbtn}>수정</button>
+        <button onClick={updateTest} className={styles.editbtn}>
+          수정
+        </button>
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 import { axiosAuthApi } from "@/utils/instance";
 //work order id로 WO조회 -기술팀
-export async function getWoInfo(WOId: string) {
+export async function getWoInfo(WOId: number) {
   const params = {
-    "wo-order-id": WOId,
+    "work-order-id": WOId,
   };
-  return axiosAuthApi().get("/work-order/detail", { params });
+  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/work-order/detail", { params });
 }
 //WO전체 조회
 export async function getAllWo(state: string, page: number, size: number) {
@@ -21,48 +21,47 @@ export async function getWogroup() {
 }
 // wo 생성
 export async function createWo(serialNo: string) {
+  // 지그 시리얼 넘버 입력 - 생성
   const requestBody = {
-    serialNo: "str",
+    serialNo: serialNo,
   };
   return axiosAuthApi().post("/work-order", requestBody);
 }
 // WO 임시저장
 export async function saveWotmp(
-    id:number,
-    checklist: [{uuid: string, measure: string, memo:string, passOrNot: boolean}]
+  id: number,
+  checklist: [{ uuid: string; measure: string; memo: string; passOrNot: boolean }]
 ) {
   const requestBody = {
     id: id, // wo의 id
-    checkList: checklist
+    checkList: checklist,
   };
   return axiosAuthApi().put("/work-order/tmp", requestBody);
 }
 
-
 // Wo 완료
 export async function doneWo(
-    id:number,
-    checklist: [{uuid: string, measure: string, memo:string, passOrNot: boolean}]
+  id: number,
+  checklist: [{ uuid: string; measure: string; memo: string; passOrNot: boolean }]
 ) {
   const requestBody = {
     id: id, // wo의 id
-    checkList: checklist
+    checkList: checklist,
   };
   return axiosAuthApi().put("/work-order/done", requestBody);
 }
 
-
 // Wo 상태 변경(리스트)
 export async function updateWoList(
-    list: [
-      {
-        id: number, // wo의 id
-        status: string, // 변경될 상태
-      },
-    ],
+  list: [
+    {
+      id: number; // wo의 id
+      status: string; // 변경될 상태
+    }
+  ]
 ) {
   const requestBody = {
-    list: list
+    list: list,
   };
   return axiosAuthApi().put("/work-order/status", requestBody);
 }
