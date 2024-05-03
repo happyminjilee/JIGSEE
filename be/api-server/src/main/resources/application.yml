@@ -26,6 +26,8 @@ apis:
   jig-item-base-url: ${JIG_ITEM_BASE_URL}
   member-base-url: ${MEMBER_BASE_URL}
   work-order-base-url: ${WORK_ORDER_BASE_URL}
+  notification-api-base-url: ${NOTIFICATION_API_BASE_URL}
+  notification-base-url: ${NOTIFICATION_BASE_URL}
 security:
   cors-allowed-origins: ${ALLOWED_ORIGINS}
   max-age: ${MAX_AGE}
