@@ -1,44 +1,54 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/wotestresult.module.scss"; // Corrected import
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { getjigMethod } from "@/pages/api/jigAxios";
-import { useCompoStore } from "@/store/workorderstore";
+import { useWoDetailStore } from "@/store/workorderstore";
+import {
+  GridRowsProp,
+  GridRowModesModel,
+  GridRowModes,
+  GridActionsCellItem,
+  GridEventListener,
+  GridRowId,
+  GridRowModel,
+  GridRowEditStopReasons,
+} from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+
 interface testMethodItem {
+  uuid: string;
   content: string;
-  standard: string;
-}
-interface RowItem {
-  id: number;
-  contents: string;
   standard: string;
   measure: string;
   memo: string;
   passOrNot: boolean;
 }
+interface RowItem {
+  id: string;
+  contents: string;
+  standard: string;
+  measure: string;
+  memo: string;
+  passOrNot: boolean;
+  isNew?: boolean; // Add isNew property here
+}
+interface EditToolbarProps {
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+  setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+}
 export default function WOtestresult() {
-  const { woId, rightCompo, setRightCompo } = useCompoStore();
+  // const { woId } = useWoStore();
   const [testMethod, setTestMethod] = useState<testMethodItem[]>([]);
-
+  const { checkList, fetchWoDetail, id, fetchWoUpdateTmp, fetchWoDone } = useWoDetailStore();
+  // id 가 바뀔때마다 새로운 리스트를 불러옴
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("tttt", woId);
-        const result = await getjigMethod("testModelId2");
-        console.log("result-check", result);
-        setTestMethod(result.data.result.checkList);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
+    // id를 입력하는 것으로 추후 수정해야함
+    fetchWoDetail(1);
+    setTestMethod(checkList);
+  }, [id]);
 
-    fetchData();
-  }, [woId]);
-
-  const columns: GridColDef<(typeof rows)[number]>[] = [
+  const columns: GridColDef[] = [
     { field: "contents", headerName: "기준 항목", width: 90 },
     {
       field: "standard",
@@ -53,7 +63,7 @@ export default function WOtestresult() {
     },
     {
       field: "memo",
-      headerName: "비고",
+      headerName: "메모",
       width: 90,
       editable: true,
     },
@@ -64,40 +74,135 @@ export default function WOtestresult() {
       type: "boolean",
       editable: true,
     },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "수정",
+      width: 100,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: "primary.main",
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
   ];
   const [rows, setRows] = useState<RowItem[]>([]);
 
   useEffect(() => {
-    const newRows = testMethod.map((method, index) => ({
-      id: index + 1,
+    const newRows: RowItem[] = testMethod.map((method) => ({
+      id: method.uuid,
       contents: method.content,
       standard: method.standard,
-      measure: "",
-      memo: "",
+      measure: method.measure,
+      memo: method.memo,
       passOrNot: false,
     }));
     setRows(newRows);
   }, [testMethod]);
 
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+
+  // 행 수정 중지 이벤트 핸들러
+  const handleRowEditStop: GridEventListener<"rowEditStop"> = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
+  // 수정 버튼 클릭 핸들러
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  // 저장 버튼 클릭 핸들러
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  // 행 업데이트 처리 함수
+  const processRowUpdate = (newRow: GridRowModel) => {
+    // id 값으로 있는 행인지 판별
+    const existingRow = rows.find((row) => row.id === newRow.id);
+
+    // row가 있다면 업데이트
+    if (existingRow) {
+      const updatedRow: RowItem = { ...existingRow, ...newRow, isNew: false };
+      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      return updatedRow;
+    }
+
+    // row가 없다면 newRow 리턴
+    return newRow;
+  };
+  // 행 모드 변경 핸들러
+  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+
+  // 임시저장 로직
+  const updateTest = () => {
+    // 바뀐 행 출력
+    console.log("updaterow", rows);
+    const newList = rows.map((item) => ({
+      uuid: item.id,
+      content: item.contents,
+      standard: item.standard,
+      measure: item.measure,
+      memo: item.memo,
+      passOrNot: item.passOrNot,
+    }));
+    console.log("newrow", newList);
+    // 1대신 id를 입력하는 것으로 추후 수정해야함
+    fetchWoUpdateTmp(1, newList);
+  };
+  // 제출 로직
+  const submitTest = () => {
+    const newList = rows.map((item) => ({
+      uuid: item.id,
+      content: item.contents,
+      standard: item.standard,
+      measure: item.measure,
+      memo: item.memo,
+      passOrNot: item.passOrNot,
+    }));
+    // 1대신 id를 입력하는 것으로 추후 수정해야함
+    fetchWoDone(1, newList);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.header}>Test Result</div>
       <div className={styles.body}>
-        <div className={styles.inputname}>
-          <label htmlFor="inputname">책임자</label>
-          <input type="text" className={styles.inputname} />
-        </div>
-
-        <div className={styles.datepicker}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker className={styles.dateInput} label="시작일" format="YYYY-M-D" />
-          </LocalizationProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker className={styles.dateInput} label="종료일" format="YYYY-M-D" />
-          </LocalizationProvider>
-        </div>
-
-        <Box className={styles.box}>
+        <Box
+          className={styles.box}
+          sx={{
+            "& .MuiDataGrid-cell--editable": {
+              bgcolor: "#ffffff",
+              border: "1px solid var(--samsungblue)",
+            },
+          }}
+        >
           <DataGrid
             rows={rows}
             columns={columns}
@@ -106,9 +211,21 @@ export default function WOtestresult() {
             disableColumnResize
             disableVirtualization
             hideFooter
+            editMode="row"
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={handleRowModesModelChange}
+            onRowEditStop={handleRowEditStop}
+            processRowUpdate={processRowUpdate}
           />
         </Box>
-        <button className={styles.editbtn}>수정</button>
+        <div className={styles.btncontianer}>
+          <button onClick={updateTest} className={styles.editbtn}>
+            임시 저장
+          </button>
+          <button onClick={submitTest} className={styles.submitbtn}>
+            제출
+          </button>
+        </div>
       </div>
     </div>
   );
