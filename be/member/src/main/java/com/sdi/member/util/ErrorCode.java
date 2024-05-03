@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "Cannot Access"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"),
     NOT_FOUND(HttpStatus.NOT_FOUND, "Not founded"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Token is invalid"),

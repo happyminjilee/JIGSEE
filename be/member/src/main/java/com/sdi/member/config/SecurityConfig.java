@@ -2,6 +2,7 @@ package com.sdi.member.config;
 
 import com.sdi.member.filter.ExceptionHandlerFilter;
 import com.sdi.member.filter.JwtTokenFilter;
+import com.sdi.member.handler.CustomAccessDeniedHandler;
 import com.sdi.member.jwt.AuthTokenProvider;
 import com.sdi.member.util.HeaderUtils;
 import jakarta.servlet.DispatcherType;
@@ -32,6 +33,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final AuthTokenProvider tokenProvider;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Value("${security.open.all}")
     private String[] openAll;
@@ -65,6 +67,9 @@ public class SecurityConfig {
                         .requestMatchers(openEngineer).hasAuthority("ROLE_ENGINEER")
                         .requestMatchers(openProducer).hasAuthority("ROLE_PRODUCER")
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling((exceptionConfig) ->
+                        exceptionConfig.accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)

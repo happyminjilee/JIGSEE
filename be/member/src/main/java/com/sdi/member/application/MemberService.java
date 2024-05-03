@@ -3,7 +3,6 @@ package com.sdi.member.application;
 import com.sdi.member.dto.MemberDto;
 import com.sdi.member.dto.response.MemberLoginResponseDto;
 import com.sdi.member.dto.response.MemberResponseDto;
-import com.sdi.member.entity.MemberEntity;
 import com.sdi.member.jwt.AuthToken;
 import com.sdi.member.jwt.AuthTokenProvider;
 import com.sdi.member.repository.MemberRepository;
