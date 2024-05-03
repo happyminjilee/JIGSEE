@@ -61,25 +61,28 @@ export default function RepairTotal() {
   useEffect(() => {
     getRestoreDetail();
   }, [restoreId]);
-
+  const [isLoading, setIsLoading] = useState(true);
   return (
     <>
       {/* {Navbar} */}
-      <div className={styled.container}>
-        {restoreList.map((item, index) => (
-          <div key={index} className={styled.fullWidth} onClick={() => cardClick(item.id)}>
-            <h3>
-              생성일 {item.createdAt[0]}년 {item.createdAt[1]}월 {item.createdAt[2]}일
-            </h3>
-            <p>
-              보수 요청 번호 {item.id} | 요청자 {item.from}
-            </p>
-          </div>
-        ))}
+      <div className={styled.bigcontainer}>
+        <div className={styled.container}>
+          {restoreList.map((item, index) => (
+            <div key={index} className={styled.fullWidth} onClick={() => cardClick(item.id)}>
+              <h3>
+                생성일 {item.createdAt[0]}년 {item.createdAt[1]}월 {item.createdAt[2]}일
+              </h3>
+              <p>
+                보수 요청 번호 {item.id} | 요청자 {item.from}
+              </p>
+            </div>
+          ))}
+        </div>
+        <div className={styled.center}>
+          <Pagination onChange={(e) => setPage(e)} total={5} />
+        </div>
       </div>
-      <div className={styled.center}>
-        <Pagination onChange={(e) => setPage(e)} total={endpage} />
-      </div>
+
       <Modal
         open={open} // Corrected from 'open'
         aria-labelledby="modal-modal-title"

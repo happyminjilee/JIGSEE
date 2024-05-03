@@ -44,11 +44,13 @@ export default function RepairTotal() {
     { label: "Onprogress", value: "진행 중" },
     { label: "complete", value: "완료" },
   ];
-  const [values, setValues] = useState<Selection>(new Set(["publish", "onprogress"]));
+  const [values, setValues] = useState<string>("ALL");
 
   // 임시 JIG 데이터
   const jigData: JigData[] = [
     { date: "2024.04.21", serialNumber: "S/N S00000001", model: "Model Name", status: "발행" },
+    { date: "2024.04.22", serialNumber: "S/N S00000002", model: "Model Name", status: "발행" },
+    { date: "2024.04.23", serialNumber: "S/N S00000003", model: "Model Name", status: "발행" },
     { date: "2024.04.22", serialNumber: "S/N S00000002", model: "Model Name", status: "발행" },
     { date: "2024.04.23", serialNumber: "S/N S00000003", model: "Model Name", status: "발행" },
     // 다른 JIG 데이터 객체들...
@@ -60,34 +62,38 @@ export default function RepairTotal() {
   return (
     <>
       {Navbar}
-      <div className={styled.right}>
-        <Select
-          label="선택"
-          selectionMode="multiple"
-          placeholder="선택"
-          selectedKeys={values}
-          onSelectionChange={setValues}
-          className={styled.short}
-        >
-          {lst.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
+      <div className={styled.bigcontainer}>
+        <div className={styled.right}>
+          <Select
+            selectionMode="single"
+            placeholder="선택"
+            onChange={(e) => {
+              setValues(e.target.value);
+            }}
+            color="primary"
+            className={styled.short}
+            labelPlacement="outside"
+          >
+            {lst.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
+        <div className={styled.container}>
+          {jigData.map((jig, index) => (
+            <div key={index} onClick={() => cardClick(jig)} className={styled.fullWidth}>
+              <h3>{jig.date}</h3>
+              <p>
+                {jig.serialNumber} | {jig.model} {jig.status}
+              </p>
+            </div>
           ))}
-        </Select>
-      </div>
-      <div className={styled.container}>
-        {jigData.map((jig, index) => (
-          <div key={index} onClick={() => cardClick(jig)} className={styled.fullWidth}>
-            <h3>{jig.date}</h3>
-            <p>
-              {jig.serialNumber} | {jig.model} {jig.status}
-            </p>
-          </div>
-        ))}
-      </div>
-      <div className={styled.center}>
-        <Pagination total={10} />
+        </div>
+        <div className={styled.center}>
+          <Pagination total={10} />
+        </div>
       </div>
     </>
   );

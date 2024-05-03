@@ -1,4 +1,4 @@
-import { Pagination, Select, SelectItem, Selection } from "@nextui-org/react";
+import { Pagination, Select, SelectItem } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
@@ -74,44 +74,45 @@ export default function RepairTotal() {
   return (
     <>
       {Navbar}
+      <div className={styled.bigcontainer}>
+        <div className={styled.right}>
+          <Select
+            selectionMode="single"
+            placeholder="선택"
+            onChange={(e) => {
+              setValues(e.target.value);
+            }}
+            color="primary"
+            className={styled.short}
+            labelPlacement="outside"
+          >
+            {lst.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
 
-      <div className={styled.right}>
-        <Select
-          label="선택"
-          selectionMode="single"
-          placeholder="ALL"
-          onChange={(e) => {
-            setValues(e.target.value);
-          }}
-          className={styled.short}
-          labelPlacement="outside-left"
-        >
-          {lst.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </Select>
-      </div>
-
-      <div className={styled.container}>
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : releaseList.length > 0 ? (
-          releaseList.map((jig, index) => (
-            <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
-              <p>
-                {jig.id} | 요청자 {jig.from} | 승인자 {jig.to} | 수정일 {jig.updatedAt[0]}년
-                {jig.updatedAt[1]}월{jig.updatedAt[2]}일 status: {jig.status}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p>No data available.</p>
-        )}
-      </div>
-      <div className={styled.center}>
-        <Pagination onChange={(e) => setPage(e)} total={endPage} />
+        <div className={styled.container}>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : releaseList.length > 0 ? (
+            releaseList.map((jig, index) => (
+              <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
+                <p>
+                  {jig.id} | 요청자 {jig.from} | 승인자 {jig.to} | 수정일 {jig.updatedAt[0]}년
+                  {jig.updatedAt[1]}월{jig.updatedAt[2]}일 status: {jig.status}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p>No data available.</p>
+          )}
+        </div>
+        <div className={styled.center}>
+          <Pagination onChange={(e) => setPage(e)} total={5} />
+        </div>
       </div>
     </>
   );
