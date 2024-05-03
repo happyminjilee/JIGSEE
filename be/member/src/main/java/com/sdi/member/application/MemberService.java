@@ -13,6 +13,7 @@ import com.sdi.member.util.HeaderUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +107,8 @@ public class MemberService {
             authRefreshToken.validateOrException();
         } catch (ExpiredJwtException e) {
             throw new CommonException(ErrorCode.EXPIRED_REFRESH_TOKEN);
-        } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+        } catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException |
+                 SignatureException e) {
             throw new CommonException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
