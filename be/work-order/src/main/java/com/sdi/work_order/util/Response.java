@@ -20,7 +20,7 @@ public class Response<T> {
         return new Response<>("SUCCESS", result);
     }
 
-    public static Response<Void> error(String errorCode) {
-        return new Response<>(errorCode, null);
+    public static Response<String> error(String message) {
+        return new Response<>("FAIL", message);
     }
 }

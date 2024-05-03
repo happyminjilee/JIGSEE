@@ -14,13 +14,13 @@ public class GlobalControllerAdvice {
     ResponseEntity<?> handler(CommonException e) {
         log.error("Error occur {}", e.getMessage());
         return ResponseEntity.status(e.getErrorCode().getStatus())
-                .body(Response.error(e.getErrorCode().name()));
+                .body(Response.error(e.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)
     ResponseEntity<?> handler(RuntimeException e) {
         log.error("Error occur {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Response.error(ErrorCode.INTERNAL_SERVER_ERROR.name()));
+                .body(Response.error(e.getMessage()));
     }
 }
