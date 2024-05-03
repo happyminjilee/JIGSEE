@@ -91,7 +91,7 @@ public class RequestService {
     }
 
     public RequestJigListResponseDto findAllWantJigRequests(String option, int pageNumber, int size) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, size, Sort.by("time").descending());
+        Pageable pageable = getPageable(pageNumber, size, "time");
         Page<WantRequestEntity> page = switch (option) {
             case "PUBLISH", "FINISH" -> wantRequestsRepository.findAllByStatus(JigRequestStatus.valueOf(option), pageable);
             case "REJECT" -> wantRequestsRepository.findAllByIsAcceptAndStatus(false, JigRequestStatus.FINISH, pageable);
@@ -113,7 +113,7 @@ public class RequestService {
     }
 
     public RepairJigListResponseDto findAllRepairRequests(int pageNumber, int size) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, size, Sort.by("time").descending());
+        Pageable pageable = getPageable(pageNumber, size, "time");
         Page<RepairRequestEntity> page = repairRequestsRepository.findAll(pageable);
 
         List<RepairJigDetailResponseDto> list = page.getContent().stream()
@@ -121,6 +121,10 @@ public class RequestService {
                 .collect(Collectors.toList());
 
         return RepairJigListResponseDto.of(page.getNumber() + 1, page.getTotalPages(), list);
+    }
+
+    private static PageRequest getPageable(int pageNumber, int size, String sortOption) {
+        return PageRequest.of(Math.max(0, pageNumber - 1), Math.max(1, size), Sort.by(sortOption).descending());
     }
 
     public RepairJigDetailResponseDto findOneRepairRequest(String requestId) {
