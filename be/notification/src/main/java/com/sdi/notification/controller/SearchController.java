@@ -22,7 +22,6 @@ class SearchController {
 
     @GetMapping("/unchecked")
     Response<UncheckedNotificationListResponseDto> searchUnchecked(@RequestHeader("Authorization") String accessToken) {
-        System.out.println("토큰 : " + accessToken);
         MemberResponseDto currentMember = apiService.getMember(accessToken);
         return Response.success(searchService.getUncheckedNotifications(currentMember));
     }
