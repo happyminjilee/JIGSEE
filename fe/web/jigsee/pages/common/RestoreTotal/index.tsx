@@ -7,6 +7,7 @@ import { useRestoreStore } from "@/store/restorestore";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import RestoreDetail from "@/components/restore/RestoreMemo";
+import Loading from "@/pages/loading/index";
 interface Props {
   onClick(): void;
 }
@@ -18,7 +19,7 @@ interface ListData {
 
 export default function RepairTotal() {
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
     const storedRole = localStorage.getItem("role");
@@ -49,7 +50,16 @@ export default function RepairTotal() {
     setOpen,
   } = useRestoreStore();
   useEffect(() => {
-    getRestoreList(); // Fetch list whenever the page changes
+    setIsLoading(true);
+    getRestoreList()
+      .then(() => {
+        if (restoreList.length > 0) {
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   }, [page, getRestoreList]);
 
   function cardClick(jigID: number) {
@@ -61,23 +71,29 @@ export default function RepairTotal() {
   useEffect(() => {
     getRestoreDetail();
   }, [restoreId]);
-  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <>
       {/* {Navbar} */}
       <div className={styled.bigcontainer}>
-        <div className={styled.container}>
-          {restoreList.map((item, index) => (
-            <div key={index} className={styled.fullWidth} onClick={() => cardClick(item.id)}>
-              <h3>
-                생성일 {item.createdAt[0]}년 {item.createdAt[1]}월 {item.createdAt[2]}일
-              </h3>
-              <p>
-                보수 요청 번호 {item.id} | 요청자 {item.from}
-              </p>
-            </div>
-          ))}
-        </div>
+        {isLoading ? (
+          // Display loading indicator while restoreList is being fetched
+          <Loading />
+        ) : (
+          // Render restoreList once it's loaded
+          <div className={styled.container}>
+            {restoreList.map((item, index) => (
+              <div key={index} className={styled.fullWidth} onClick={() => cardClick(item.id)}>
+                <h3>
+                  생성일 {item.createdAt[0]}년 {item.createdAt[1]}월 {item.createdAt[2]}일
+                </h3>
+                <p>
+                  보수 요청 번호 {item.id} | 요청자 {item.from}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
         <div className={styled.center}>
           <Pagination onChange={(e) => setPage(e)} total={5} />
         </div>

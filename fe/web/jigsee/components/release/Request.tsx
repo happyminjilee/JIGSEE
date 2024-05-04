@@ -262,7 +262,7 @@ export default function Request() {
         </CardBody>
         <Divider />
         <CardFooter className={styled.cardfooter}>
-          <button className={styled.addbtn}>제출</button>
+          <button className={styled.addbtn}>요청</button>
         </CardFooter>
       </Card>
     </>
