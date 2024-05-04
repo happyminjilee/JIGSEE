@@ -1,10 +1,10 @@
 import React, {useState, useEffect, ForwardedRef} from "react";
-import { Link, Button } from "@nextui-org/react";
+import { Link, Button, Select, SelectItem, Selection } from "@nextui-org/react";
 import styled from "@/styles/releasestatuslist.module.css";
 import { list } from "postcss";
 import { useCompoStore, useWoDetailStore, useWoGroupStore, useWoStore } from "@/store/workorderstore";
 import {DnDWrapper} from "@/components/workorder/DndWrapper";
-import {useCartStore, useItemStore} from "@/store/repairrequeststore";
+import {useCartStore, useGroupFilter, useItemStore} from "@/store/repairrequeststore";
 import {any} from "prop-types";
 
 interface cardProps {
@@ -20,6 +20,11 @@ interface card {
   dragData: cardProps;
 }
 
+interface Option {
+    label: string;
+    value: string;
+}
+
 
 export default function RequestList() {
   // wo id 상태 변화를 위한 store 변수 선언
@@ -27,7 +32,7 @@ export default function RequestList() {
   // 확인용 함수 - 나중에 api 함수 연결
 
   const {fetchWoDetail, id} = useWoDetailStore()
-  const{fetchWoGroup, publish, progress} = useWoGroupStore()
+  const{fetchWoGroup, publish, progress, finish} = useWoGroupStore()
   useEffect(() => {
     fetchWoGroup()
         .then((res) => {
@@ -63,7 +68,7 @@ export default function RequestList() {
   const wheDragEnd = () => {
     console.log("드래그 끝낫을때!")
   }
-  const [selected, setSelected ]= useState([])
+
 
   const Card = React.forwardRef(
       (
@@ -90,6 +95,31 @@ export default function RequestList() {
       )
   )
 
+  const lst: Option[] = [
+      { label: "PUBLISH", value: "발행" },
+      { label: "PROGRESS", value: "진행 중" },
+      { label: "FINISH", value: "완료" },
+  ];
+  const {select, setSelect, forFilter, clearForFilter, addForFilter} = useGroupFilter();
+
+  useEffect(() => {
+      clearForFilter()
+      // 로딩 로직 추가?
+      for (const e of select.split(',')) {
+          console.log(e)
+          if (e === "PUBLISH") {
+              addForFilter(publish)
+          } else if (e === "PROGRESS") {
+              addForFilter(progress)
+          } else if (e === "FINISH") {
+              addForFilter(finish)
+          }
+      }
+      console.log('forFilter', forFilter)
+  }, [select]);
+
+
+
   return (
       <>
         <div className={styled.box}>
@@ -108,9 +138,29 @@ export default function RequestList() {
               전체 내역 보기
             </Link>
           </div>
+          <div>
+              <Select
+                  label="선택"
+                  selectionMode="multiple"
+                  placeholder="선택"
+                  className={styled.short}
+                  onChange={(e) =>
+                  {
+                      setSelect(e.target.value)}
+                    }
+              >
+                  {lst.map((option) => (
+                      <SelectItem key={option.label} value={option.value}>
+                          {option.value}
+                      </SelectItem>
+                  ))}
+              </Select>
+          </div>
           <div className={styled.contents}>
           {/* card */}
-          <DnDWrapper dragList={selected} onDragEnd={wheDragEnd} onDragging={whenDragging} dragSectionName={"mart"}>
+
+
+        </div><DnDWrapper dragList={forFilter} onDragEnd={wheDragEnd} onDragging={whenDragging} dragSectionName={"mart"}>
             {(item, ref, isDragging) => (
                 <Card
                     dragData={item}
@@ -118,9 +168,7 @@ export default function RequestList() {
                     ref={ref}
                 />
             )}
-          </DnDWrapper>
-
-        </div>
+        </DnDWrapper>
       </div>
     </>
   );

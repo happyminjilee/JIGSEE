@@ -16,9 +16,6 @@ interface JigData {
   status: string; // 가정으로 추가한 속성입니다.
 }
 
-interface Props {
-  onClick(): void;
-}
 
 export default function RepairTotal() {
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정

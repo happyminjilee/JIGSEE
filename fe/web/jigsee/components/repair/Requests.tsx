@@ -109,6 +109,7 @@ export default function RequestList() {
 
     const openModal = () => {
     //     모달 열어서 wo 생성 마무리
+        setModal(true)
     }
 
     const requestPost = () => {
@@ -177,7 +178,7 @@ export default function RequestList() {
                     ref={dropRef}
                     className={styled.contents}
                 >
-                    <DnDWrapper dragList={selected} onDragEnd={wheDragEnd} onDragging={whenDragging} dragSectionName={"mart"}>
+                    <DnDWrapper dragList={selected} onDragEnd={wheDragEnd} onDragging={whenDragging} dragSectionName={"cart"}>
                         {(item, ref, isDragging) => (
                             <Card
                                 dragData={item}
@@ -189,7 +190,6 @@ export default function RequestList() {
                     {/* card */}
                     {lst.map((info, index) => (
                         <div
-                            ref={dragRef}
                             key={index}
                             className={styled.card}
                             onClick={cardClick(info.id)}
