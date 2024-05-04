@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef, ForwardedRef} from "react";
 import { Link, Button } from "@nextui-org/react";
 import styled from "@/styles/repairrequest.module.css";
 import { list } from "postcss";
@@ -9,6 +9,10 @@ import WoModal from "@/components/workorder/CreateWoModal";
 import Report from "@/components/workorder/template";
 import Modal from "@mui/material/Modal";
 import ClearIcon from "@mui/icons-material/Clear";
+import {useDrop, useDrag} from "react-dnd";
+import {useCartStore, useItemStore} from "@/store/repairrequeststore";
+import {DnDWrapper} from "@/components/workorder/DndWrapper";
+
 
 interface lst {
     id: number;
@@ -18,9 +22,17 @@ interface lst {
     status: string;
 }
 
-interface cart {
-    id : number,
-    status: string,
+interface cardProps {
+    id: number;
+    createdAt: string;
+    model: string;
+    serialNo: string;
+    status: string;
+}
+
+interface card {
+    isDragging: boolean;
+    dragData: cardProps;
 }
 
 
@@ -105,24 +117,49 @@ export default function RequestList() {
         // store 설정, 담아있는 리스트를 반환
         updateWoList([{id: 0, status: "PUBLISH"}])
     }
-
-    const [cartList, setCartList] = useState<cart[]>([])
-    const addToCart = (item:cart) => {
-        setCartList(prev => [...prev, item])
-    }
-    const removeFromCart = (item:cart) => {
-        setCartList(prev => prev.filter(ready => ready.id !== item.id))
-    }
-    const clearCart = () => {
-        setCartList([])
-    }
-
-
     const {modalName, setModalName, modal, setModal} = useCompoStore()
     const createWo = () => {
         openModal()
         setModalName("CREATEWO")
     }
+
+    // 수락할 아이템 설정
+    const {item, setItem} = useItemStore()
+    const dropRef = useRef(null);
+    const dragRef = useRef(null);
+    const {cartList, addToCart, clearCartList, removeFromCart} = useCartStore()
+    const whenDragging = () => {
+        console.log("드래그중!")
+    }
+    const wheDragEnd = () => {
+        console.log("드래그 끝낫을때!")
+    }
+    const [selected, setSelected ]= useState([])
+
+    const Card = React.forwardRef(
+        (
+            {dragData, isDragging}:card,
+            ref: ForwardedRef<HTMLElement>
+        ) => (
+            <div
+                key={dragData.id}
+                className={styled.card}
+                onClick={() => {
+                    cardClick(dragData.id)
+                }}>
+                <div className={styled.division1}>
+                    <div className={styled.date}>
+                        {dragData.createdAt[0]}.{dragData.createdAt[1]}.{dragData.createdAt[2]}
+                    </div>
+                    <div className={styled.title}>
+                        {dragData.serialNo} | {dragData.model}
+                    </div>
+                </div>
+
+                <div className={styled.division2}>{dragData.status}</div>
+            </div>
+        )
+    )
 
     return (
         <>
@@ -137,11 +174,22 @@ export default function RequestList() {
                     </div>
                 </div>
                 <div
+                    ref={dropRef}
                     className={styled.contents}
                 >
+                    <DnDWrapper dragList={selected} onDragEnd={wheDragEnd} onDragging={whenDragging} dragSectionName={"mart"}>
+                        {(item, ref, isDragging) => (
+                            <Card
+                                dragData={item}
+                                isDragging={isDragging}
+                                ref={ref}
+                            />
+                        )}
+                    </DnDWrapper>
                     {/* card */}
                     {lst.map((info, index) => (
                         <div
+                            ref={dragRef}
                             key={index}
                             className={styled.card}
                             onClick={cardClick(info.id)}
