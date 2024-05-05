@@ -4,7 +4,7 @@ spring:
 
   batch:
     job:
-      enabled: true
+      enabled: false
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
