@@ -29,17 +29,19 @@ export default function Repair() {
     <>
       <Navbar />
           <div className={styled.container}>
-            <div className={styled.jigrepairlist}>
-              <RepairList />
-            </div>
-            <div className={styled.repairrequest}>
-                {rightCompo === "PUBLISH"  && <Information/>}
-                {rightCompo === "PROGRESS"  && <Information/>}
-                {rightCompo === "FINISH"  && <Information/>}
-                {rightCompo === "REQUEST" && <Request/>}
-                {rightCompo === "TEST" && <WOtest/>}
-            </div>
+              <DndProvider backend={HTML5Backend}>
+                  <div className={styled.jigrepairlist}>
+                      <RepairList/>
+                  </div>
+                  <div className={styled.repairrequest}>
+                      {rightCompo === "PUBLISH" && <Information/>}
+                      {rightCompo === "PROGRESS" && <Information/>}
+                      {rightCompo === "FINISH" && <Information/>}
+                      {rightCompo === "REQUEST" && <Request/>}
+                      {rightCompo === "TEST" && <WOtest/>}
+                  </div>
+              </DndProvider>
           </div>
     </>
-  );
+);
 }

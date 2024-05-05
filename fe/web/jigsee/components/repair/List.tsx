@@ -4,8 +4,9 @@ import styled from "@/styles/releasestatuslist.module.css";
 import { list } from "postcss";
 import { useCompoStore, useWoDetailStore, useWoGroupStore, useWoStore } from "@/store/workorderstore";
 import {DnDWrapper} from "@/components/workorder/DndWrapper";
-import {useCartStore, useGroupFilter, useItemStore} from "@/store/repairrequeststore";
+import {useCartStore, useMartStore, useGroupFilter, useItemStore} from "@/store/repairrequeststore";
 import {any} from "prop-types";
+import {DropBox} from "@/components/workorder/ListDnDbox"
 
 interface cardProps {
   id: number;
@@ -30,7 +31,7 @@ export default function RequestList() {
   // wo id 상태 변화를 위한 store 변수 선언
   const { woId, setWoId, rightCompo, setRightCompo } = useCompoStore();
   // 확인용 함수 - 나중에 api 함수 연결
-
+  const {martList, clearMart, removeFromMart, addToMart} = useMartStore()
   const {fetchWoDetail, id} = useWoDetailStore()
   const{fetchWoGroup, publish, progress, finish} = useWoGroupStore()
   useEffect(() => {
@@ -156,19 +157,12 @@ export default function RequestList() {
                   ))}
               </Select>
           </div>
-          <div className={styled.contents}>
           {/* card */}
+          <DropBox items={martList} boxType={"Mart"}>
+
+          </DropBox>
 
 
-        </div><DnDWrapper dragList={forFilter} onDragEnd={wheDragEnd} onDragging={whenDragging} dragSectionName={"mart"}>
-            {(item, ref, isDragging) => (
-                <Card
-                    dragData={item}
-                    isDragging={isDragging}
-                    ref={ref}
-                />
-            )}
-        </DnDWrapper>
       </div>
     </>
   );
