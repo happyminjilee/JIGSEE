@@ -26,7 +26,8 @@ public class SendToWorkOrderServerTasklet implements Tasklet {
          log.info(">>> sendToWorkOrderServerTasklet 실행");
         List<Long> serialNos = (List<Long>) contribution.getStepExecution().getJobExecution().getExecutionContext().get("ids");
         if (serialNos != null) {
-            workOrderClient.create(WorkOrderAutoCreateRequestDto.from(serialNos));
+            // wo 서버에 wo 생성 요청
+            // workOrderClient.create(WorkOrderAutoCreateRequestDto.from(serialNos));
         }
 
         return RepeatStatus.FINISHED;
