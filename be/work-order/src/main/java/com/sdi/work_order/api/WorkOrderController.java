@@ -3,6 +3,7 @@ package com.sdi.work_order.api;
 import com.sdi.work_order.dto.reponse.WorkOrderDetailResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
+import com.sdi.work_order.dto.request.WorkOrderAutoCreateRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderSaveRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto;
@@ -76,6 +77,12 @@ class WorkOrderController {
     @PutMapping("/status")
     Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto) {
         workOrderService.updateStatus(dto.list());
+        return Response.success();
+    }
+
+    @PostMapping("/auto")
+    Response<Void> autoCreate(@RequestBody WorkOrderAutoCreateRequestDto dto){
+        workOrderService.autoCreate(dto);
         return Response.success();
     }
 

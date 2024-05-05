@@ -4,6 +4,7 @@ import com.sdi.work_order.client.response.JigItemResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderDetailResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
+import com.sdi.work_order.dto.request.WorkOrderAutoCreateRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
 import com.sdi.work_order.entity.WorkOrderNosqlEntity;
 import com.sdi.work_order.entity.WorkOrderRDBEntity;
@@ -101,18 +102,7 @@ public class WorkOrderService {
         WorkOrderRDBEntity rdb = WorkOrderRDBEntity.from(employeeNo, jigItem.serialNo(), jigItem.model(), checkListId);
         WorkOrderNosqlEntity nosql = WorkOrderNosqlEntity.from(checkListId, false, WorkOrderCheckItem.from(jigItem.checkList()));
 
-        // 데이터 저장
-        workOrderRDBRepository.save(rdb);
-        workOrderNosqlRepository.save(nosql);
-    }
-
-    private void isAlreadyExistNotFinishWorkOrderThenThrow(JigItemResponseDto jigItem) {
-        workOrderRDBRepository.findByJigSerialNoAndStatusNot(jigItem.serialNo(), WorkOrderStatus.FINISH)
-                .ifPresent(item -> {
-                            throw new IllegalArgumentException(
-                                    String.format("Jig \'%s\'는 종료되지 않은 Work Order가 있습니다.", jigItem.serialNo()));
-                        }
-                );
+        saveWorkOrder(rdb, nosql);
     }
 
     @Transactional
@@ -138,6 +128,39 @@ public class WorkOrderService {
 
             workOrder.updateStatus(item.status());
         }
+    }
+
+    @Transactional
+    public void autoCreate(WorkOrderAutoCreateRequestDto dto) {
+        for (String serialNo : dto.serialNos()) {
+            JigItemResponseDto jigItem = getJigItem(serialNo);
+
+            try{
+                isAlreadyExistNotFinishWorkOrderThenThrow(jigItem);
+            }catch (IllegalArgumentException e){
+                continue;
+            }
+
+            String checkListId = UUID.randomUUID().toString();
+            WorkOrderRDBEntity rdb = WorkOrderRDBEntity.from(null, jigItem.serialNo(), jigItem.model(), checkListId);
+            WorkOrderNosqlEntity nosql = WorkOrderNosqlEntity.from(checkListId, false, WorkOrderCheckItem.from(jigItem.checkList()));
+
+            saveWorkOrder(rdb, nosql);
+        }
+    }
+
+    private void saveWorkOrder(WorkOrderRDBEntity rdb, WorkOrderNosqlEntity nosql) {
+        workOrderRDBRepository.save(rdb);
+        workOrderNosqlRepository.save(nosql);
+    }
+
+    private void isAlreadyExistNotFinishWorkOrderThenThrow(JigItemResponseDto jigItem) {
+        workOrderRDBRepository.findByJigSerialNoAndStatusNot(jigItem.serialNo(), WorkOrderStatus.FINISH)
+                .ifPresent(item -> {
+                            throw new IllegalArgumentException(
+                                    String.format("Jig \'%s\'는 종료되지 않은 Work Order가 있습니다.", jigItem.serialNo()));
+                        }
+                );
     }
 
     private Pageable getPageable(int page, int size) {
@@ -200,4 +223,5 @@ public class WorkOrderService {
         return workOrderNosqlRepository.findById(checkListId)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("id : %s 로 Work order CheckList를 찾을 수 없습니다.", checkListId)));
     }
+
 }
