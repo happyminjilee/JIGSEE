@@ -19,6 +19,9 @@ spring:
         hibernate:
           format_sql: true
 
+apis:
+  api-base-url: ${API_BASE_URL}
+
 logging:
   level:
     org:
