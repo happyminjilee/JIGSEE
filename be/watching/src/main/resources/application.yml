@@ -2,9 +2,20 @@ spring:
   application:
     name: watching
 
+  main:
+    allow-bean-definition-overriding: true
+
   batch:
     job:
       enabled: false
+
+    jdbc:
+      initialize-schema: always
+
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
