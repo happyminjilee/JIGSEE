@@ -27,6 +27,7 @@ class WorkOrderController {
 
     @GetMapping("/detail")
     Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "work-order-id") Long workOrderId, HttpServletRequest request) {
+        log.info("\'{}\' 상세 조회 요청", workOrderId);
         WorkOrderDetailResponseDto dto = workOrderService.detail(workOrderId, getAccessToken(request));
         return Response.success(dto);
     }
@@ -36,12 +37,14 @@ class WorkOrderController {
                                        @RequestParam(name = "page", defaultValue = "1") int page,
                                        @RequestParam(name = "size", defaultValue = "10") int size,
                                        HttpServletRequest request) {
+        log.info("\'{}\' 페이지 조회 요청 (크기 \'{}\')", page, size);
         WorkOrderResponseDto all = workOrderService.all(getAccessToken(request), status, page, size);
         return Response.success(all);
     }
 
     @GetMapping("/grouping")
     Response<WorkOrderGroupingResponseDto> grouping(HttpServletRequest request) {
+        log.info("그룹핑 조회 요청");
         WorkOrderGroupingResponseDto dto = workOrderService.grouping(getAccessToken(request));
         return Response.success(dto);
     }
@@ -52,36 +55,42 @@ class WorkOrderController {
                                                 @RequestParam(name = "page", defaultValue = "1") int page,
                                                 @RequestParam(name = "size", defaultValue = "10") int size,
                                                 HttpServletRequest request) {
+        log.info("[employeeNo: \'{}\' | name: \'{}\']가 작성한 {} 페이지 조회 요청 (크기 \'{}\')", employeeNo, name, page, size);
         WorkOrderResponseDto byPerson = workOrderService.findByPerson(getAccessToken(request), employeeNo, name, page, size);
         return Response.success(byPerson);
     }
 
     @PostMapping
     Response<Void> create(@RequestBody WorkOrderCreateRequestDto dto, HttpServletRequest request) {
+        log.info("JigItem : \'{}\' Work Order 생성 요청", dto.serialNo());
         workOrderService.create(getAccessToken(request), dto);
         return Response.success();
     }
 
     @PutMapping("/tmp")
     Response<Void> tmpSave(@RequestBody WorkOrderSaveRequestDto dto) {
+        log.info("Work Order Id : \'{}\' 임시 저장 요청", dto.id());
         workOrderService.tmpSave(dto.id(), dto.checkList());
         return Response.success();
     }
 
     @PutMapping("/done")
     Response<Void> save(@RequestBody WorkOrderSaveRequestDto dto, HttpServletRequest request) {
+        log.info("Work Order Id : \'{}\' 저장 요청", dto.id());
         workOrderService.save(getAccessToken(request), dto.id(), dto.checkList());
         return Response.success();
     }
 
     @PutMapping("/status")
     Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto) {
+        log.info("Work Order : [\'{}\'] 상태 변경 요청", dto);
         workOrderService.updateStatus(dto.list());
         return Response.success();
     }
 
     @PostMapping("/auto")
     Response<Void> autoCreate(@RequestBody WorkOrderAutoCreateRequestDto dto){
+        log.info("\'{}\' 자동 저장 요청", dto);
         workOrderService.autoCreate(dto);
         return Response.success();
     }
