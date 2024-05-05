@@ -82,3 +82,7 @@
   align-items: flex-end;
   margin: 10px 1px;
 }
+
+.short {
+  max-width: 200px;
+}

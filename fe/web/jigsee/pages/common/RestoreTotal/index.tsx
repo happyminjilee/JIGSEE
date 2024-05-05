@@ -17,7 +17,7 @@ interface ListData {
   id: number; // 보수 요청 내역 id
 }
 
-export default function RepairTotal() {
+export default function RestoreTotal() {
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {

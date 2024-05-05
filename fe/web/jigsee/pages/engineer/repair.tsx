@@ -14,27 +14,34 @@ import {useReleaseModalStore} from "@/store/releasestore";
 import {useState} from "react"
 import Report from "@/components/workorder/template"
 import Request from "@/components/repair/Requests"
+import {useItemStore} from "@/store/repairrequeststore";
 
 export default function Repair() {
   const { rightCompo } = useCompoStore();
+  const {item, setItem} = useItemStore()
+  const moveCardHandler = (dragIndex: number, hoverIndex: number) => {
+      if (item) {
+          setItem("")
+      }
+  }
 
   return (
     <>
       <Navbar />
-      <DndProvider backend={HTML5Backend}>
           <div className={styled.container}>
-            <div className={styled.jigrepairlist}>
-              <RepairList />
-            </div>
-            <div className={styled.repairrequest}>
-                {rightCompo === "PUBLISH"  && <Information/>}
-                {rightCompo === "PROGRESS"  && <Information/>}
-                {rightCompo === "FINISH"  && <Information/>}
-                {rightCompo === "REQUEST" && <Request/>}
-                {rightCompo === "TEST" && <WOtest/>}
-            </div>
+              <DndProvider backend={HTML5Backend}>
+                  <div className={styled.jigrepairlist}>
+                      <RepairList/>
+                  </div>
+                  <div className={styled.repairrequest}>
+                      {rightCompo === "PUBLISH" && <Information/>}
+                      {rightCompo === "PROGRESS" && <Information/>}
+                      {rightCompo === "FINISH" && <Information/>}
+                      {rightCompo === "REQUEST" && <Request/>}
+                      {rightCompo === "TEST" && <WOtest/>}
+                  </div>
+              </DndProvider>
           </div>
-      </DndProvider>
     </>
-  );
+);
 }

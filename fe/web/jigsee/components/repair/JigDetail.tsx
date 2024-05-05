@@ -10,6 +10,7 @@ import Modal from "@mui/material/Modal";
 import {useCompoStore, useWoDetailStore} from "@/store/workorderstore";
 import {doneWo} from "@/pages/api/workorderAxios";
 import WoModal from "@/components/workorder/CreateWoModal";
+import {useGroupFilter} from "@/store/repairrequeststore";
 
 
 interface APIChecklist {
@@ -41,8 +42,10 @@ export default function RequestList() {
         openModal()
     }
 
+    const {setSelect} = useGroupFilter()
     const goRequest = () => {
         setRightCompo("REQUEST")
+        setSelect("PUBLISH")
     }
 
     const goTest = () => {

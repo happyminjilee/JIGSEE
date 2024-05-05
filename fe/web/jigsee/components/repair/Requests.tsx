@@ -1,16 +1,18 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef, ForwardedRef} from "react";
 import { Link, Button } from "@nextui-org/react";
 import styled from "@/styles/repairrequest.module.css";
-import { list } from "postcss";
 import {updateWoList, createWo} from "@/pages/api/workorderAxios";
 import {useCompoStore} from "@/store/workorderstore";
 import Box from "@mui/material/Box";
 import WoModal from "@/components/workorder/CreateWoModal";
-import Report from "@/components/workorder/template";
 import Modal from "@mui/material/Modal";
 import ClearIcon from "@mui/icons-material/Clear";
+import {useCartStore, useMartStore, useItemStore} from "@/store/repairrequeststore";
+import {DropBox} from "@/components/workorder/ListDnDbox"
 
-interface lst {
+
+
+interface cardProps {
     id: number;
     createdAt: string;
     model: string;
@@ -18,85 +20,15 @@ interface lst {
     status: string;
 }
 
-interface cart {
-    id : number,
-    status: string,
-}
-
 
 export default function RequestList() {
-    const lst = [
-        {
-            createdAt: "2024.04.26",
-            id: 123123,
-            model: "ModelName",
-            serialNo: "S0000001",
-            status: "PUBLISH"
-        },
-        {
-            createdAt: "2024.04.26",
-            id: 123123,
-            model: "ModelName",
-            serialNo: "S0000001",
-            status: "PUBLISH"
-        },
-        {
-            createdAt: "2024.04.26",
-            id: 123123,
-            model: "ModelName",
-            serialNo: "S0000001",
-            status: "PUBLISH"
-        },
-        {
-            createdAt: "2024.04.26",
-            id: 123124,
-            model: "ModelName",
-            serialNo: "S0000002",
-            status: "PROGRESS"
-        },
-        {
-            createdAt: "2024.04.26",
-            id: 123125,
-            model: "ModelName",
-            serialNo: "S0000003",
-            status: "PROGRESS"
-        },
-        {
-            createdAt: "2024.04.26",
-            id: 123125,
-            model: "ModelName",
-            serialNo: "S0000003",
-            status: "PROGRESS"
-        },
-        {
-            createdAt: "2024.04.26",
-            id: 123125,
-            model: "ModelName",
-            serialNo: "S0000003",
-            status: "PROGRESS"
-        },
-        {
-            createdAt: "2024.04.26",
-            id: 123125,
-            model: "ModelName",
-            serialNo: "S0000003",
-            status: "PROGRESS"
-        },
-        {
-            createdAt: "2024.04.26",
-            id: 123125,
-            model: "ModelName",
-            serialNo: "S0000003",
-            status: "PROGRESS"
-        },
-    ];
-    const {setRightCompo} = useCompoStore()
-    const cardClick = (requestId: number) => () => {
-        console.log("clicked", requestId)
-    }
+    const {modalName, setModalName, modal, setModal, setRightCompo} = useCompoStore()
+    const {cartList, clearCartList, removeFromCart, addToCart} = useCartStore()
+
 
     const openModal = () => {
     //     모달 열어서 wo 생성 마무리
+        setModal(true)
     }
 
     const requestPost = () => {
@@ -106,19 +38,6 @@ export default function RequestList() {
         updateWoList([{id: 0, status: "PUBLISH"}])
     }
 
-    const [cartList, setCartList] = useState<cart[]>([])
-    const addToCart = (item:cart) => {
-        setCartList(prev => [...prev, item])
-    }
-    const removeFromCart = (item:cart) => {
-        setCartList(prev => prev.filter(ready => ready.id !== item.id))
-    }
-    const clearCart = () => {
-        setCartList([])
-    }
-
-
-    const {modalName, setModalName, modal, setModal} = useCompoStore()
     const createWo = () => {
         openModal()
         setModalName("CREATEWO")
@@ -139,35 +58,11 @@ export default function RequestList() {
                 <div
                     className={styled.contents}
                 >
-                    {/* card */}
-                    {lst.map((info, index) => (
-                        <div
-                            key={index}
-                            className={styled.card}
-                            onClick={cardClick(info.id)}
-                        >
-                            <div
-                                className={styled.division1}
-                            >
-                                <div
-                                    className={styled.date}
-                                >
-                                    {info.createdAt}
-                                </div>
-                                <div
-                                    className={styled.title}
-                                >
-                                    {info.serialNo} | {info.model}
-                                </div>
-                            </div>
+                    {/* ///////////////////card///////////////////////////////// */}
+                <DropBox items={cartList} boxType={"Cart"}>
 
-                            <div
-                                className={styled.division2}
-                            >
-                                {info.status}
-                            </div>
-                        </div>
-                    ))}
+                </DropBox>
+                    {/* ///////////////////card///////////////////////////////// */}
                 </div>
                 {/*버튼 칸*/}
                 <div className={styled.button}>
