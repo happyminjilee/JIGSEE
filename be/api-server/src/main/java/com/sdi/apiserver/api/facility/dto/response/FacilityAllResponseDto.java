@@ -1,7 +1,5 @@
 package com.sdi.apiserver.api.facility.dto.response;
 
-import lombok.Value;
-
 import java.util.List;
 
 

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface FacilityItemClient {
 
     @GetMapping("/all")
-    FacilityAllResponseDto all();
+    Response<FacilityAllResponseDto> all();
 
     @GetMapping
-    FacilityDetailResponseDto searchByFacilityId(@RequestParam(name = "facility-id") String facilityId);
+    Response<FacilityDetailResponseDto> searchByFacilityId(@RequestParam(name = "facility-id") String facilityId);
 }
