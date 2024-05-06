@@ -1,10 +1,7 @@
 package com.sdi.apiserver.api.jig;
 
 import com.sdi.apiserver.api.jig.client.JigItemClient;
-import com.sdi.apiserver.api.jig.dto.request.JigItemAddRequestDto;
-import com.sdi.apiserver.api.jig.dto.request.JigItemExchangeRequestDto;
-import com.sdi.apiserver.api.jig.dto.request.JigItemSerialNoRequestDto;
-import com.sdi.apiserver.api.jig.dto.request.JigItemUpdateStatusRequestDto;
+import com.sdi.apiserver.api.jig.dto.request.*;
 import com.sdi.apiserver.api.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
@@ -69,5 +66,11 @@ class JigItemController {
             @RequestParam(name = "facility-model") String facilityModel) {
         log.info("{}에 사용 가능한 지그 목록", facilityModel);
         return jigItemClient.facilityAvailable(facilityModel);
+    }
+
+    @PostMapping("/inspection")
+    Response<Void> inspection(@RequestBody JigItemInspectionRequestDto dto) {
+        log.info("{} 점검 항목 등록 요청", dto);
+        return jigItemClient.inspection(dto);
     }
 }
