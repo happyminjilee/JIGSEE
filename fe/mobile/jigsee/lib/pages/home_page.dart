@@ -186,9 +186,14 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             TextButton(
               onPressed: () async {
-                const secureStorage = FlutterSecureStorage();
-                await secureStorage.deleteAll();
-                Navigator.pushNamed(context, "/login");
+                try {
+                  const secureStorage = FlutterSecureStorage();
+                  await secureStorage.deleteAll();
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(context, "/login");
+                } catch (e) {
+                  print('Error: $e');  // 오류 출력
+                }
               },
               child: const Text('확인'),
             ),
