@@ -10,6 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
+import { useFacilityStore } from "@/store/facilitystore";
 
 //transfer list 함수
 // 배열 a에서 배열 b에 없는 항목만 반환
@@ -149,10 +150,14 @@ export default function Request() {
   const [selectedFacility, setSelectedFacility] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   // 설비명 리스트 더미
-  const facilities = ["line cutter", "raser", "metalize"];
+  // const facilities = ["line cutter", "raser", "metalize"];
   // 모델명 리스트 더미
   const models = ["swf235430", "dfdg456872", "ddg24652"];
 
+  const { loadFacilities, facilities } = useFacilityStore();
+  useEffect(() => {
+    loadFacilities();
+  }, []);
   return (
     <>
       <Card className={styled.requestcontainer}>
@@ -169,8 +174,8 @@ export default function Request() {
               className={styled.select}
             >
               {facilities.map((facility) => (
-                <SelectItem key={facility} value={facility}>
-                  {facility}
+                <SelectItem key={facility.id} value={facility.facilitySerialNo}>
+                  {facility.model}
                 </SelectItem>
               ))}
             </Select>
