@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { userStore } from "@/store/memberstore";
 import { releaseGet, releaseDetailGet } from "@/pages/api/releaseAxios";
 import { AxiosResponse } from "axios";
+import * as async_hooks from "async_hooks";
 
 interface lst {
   id: string; // 요청 uuid
@@ -92,4 +93,42 @@ export const useReleaseModalStore = create<modalState>((set) => ({
   },
 }));
 
-export default { useReleaseStore, useReleaseDetailStore };
+
+
+interface buttonClick {
+  showApproveModal: boolean;
+  setApproveShowModal: (n:boolean) => void;
+  showReturnModal: boolean;
+  setReturnShowModal: (n:boolean) => void;
+  id: string,
+  approveClick: (id:string) => void;
+  returnClick: (id:string) => void;
+}
+
+
+export const useButtonClickStore = create<buttonClick>(
+    (set) => ({
+      showApproveModal: false,
+      setApproveShowModal: (n:boolean) => {
+        set({showApproveModal: n})
+      },
+      showReturnModal: false,
+      setReturnShowModal: (n:boolean) => {
+        set({showReturnModal: n})
+      },
+      id: "",
+      approveClick: (id:string) => {
+        set({id: id})
+        set({showApproveModal: true})
+      },
+      returnClick: (id:string) => {
+        set({id: id})
+        set({showReturnModal: true})
+      },
+    })
+)
+
+
+
+
+

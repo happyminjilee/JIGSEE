@@ -30,6 +30,7 @@
 .card {
   display: flex;
   flex-direction: row;
+  margin: auto 10px;
   /*align-items: center;*/
   /*padding: 10px;*/
 }

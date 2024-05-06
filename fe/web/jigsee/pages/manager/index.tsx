@@ -11,16 +11,14 @@ import StockList from "@/components/release/StockList";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
+import {useButtonClickStore} from "@/store/releasestore";
 
 export default function Manager() {
   const router = useRouter();
   const goToJigrestore = () => {
     router.push("/common/RestoreTotal");
   };
-  // 불출 승인 , 반려 모달 표시 상태변수
-  const [showApproveModal, setApproveShowModal] = useState(false);
-  const [showReturnModal, setReturnShowModal] = useState(false);
-  // 불출 승인 모달 오픈, 클로즈 함수
+  const {showApproveModal, setApproveShowModal, showReturnModal, setReturnShowModal, approveClick, returnClick} = useButtonClickStore()
   const openApproveModal = () => setApproveShowModal(true);
   const closeApproveModal = () => setApproveShowModal(false);
   // 불출 반려 모달 오픈, 클로즈 함수
@@ -41,7 +39,7 @@ export default function Manager() {
       <Navbar />
       <div className={styled.container}>
         <div className={styled.releasecontainer}>
-          <RequestList onApproveClick={openApproveModal} onReturnClick={openReturnModal} />
+          <RequestList onApproveClick={approveClick} onReturnClick={returnClick} />
           {showApproveModal && <Approve onClose={closeApproveModal} />}
           {showReturnModal && <Return onClose={closeReturnModal} />}
         </div>
