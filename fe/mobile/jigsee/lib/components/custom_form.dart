@@ -57,7 +57,7 @@ class _FormPageState extends State<CustomForm> {
           },),
           const SizedBox(height: largeGap,),
           // 로그인 버튼
-          TextButton(
+          ElevatedButton(
             onPressed: () async {
               _formkey.currentState!.save();
               log('Logged ID: $id, Password: $password');
@@ -74,7 +74,18 @@ class _FormPageState extends State<CustomForm> {
                 showSnackBar(context);
               }
             },
-            child: const Text("Login", style: TextStyle(color: Colors.white),),
+            child: const Text("로그인", style: TextStyle(
+              color: Color.fromARGB(255, 248, 250, 252)
+            ),),
+            style: ElevatedButton.styleFrom(
+                minimumSize: const Size(1000, 50),
+                foregroundColor: const Color.fromARGB(255, 248, 250, 252),
+                backgroundColor: const Color.fromARGB(255, 47, 118, 255),
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)
+              )
+            ),
           )
         ],
       ),

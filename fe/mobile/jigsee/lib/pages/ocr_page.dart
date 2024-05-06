@@ -4,8 +4,12 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:jigsee/components/header.dart';
+import 'package:jigsee/api/provider.dart';
+import 'package:jigsee/api/dio_instance.dart';
 
 class ReadSerialNum extends StatefulWidget {
   const ReadSerialNum({Key? key, required this.camera}) : super(key: key);
@@ -73,16 +77,75 @@ class _ReadSerialNumState extends State<ReadSerialNum> {
   }
 }
 
-class DisplayPictureScreen extends StatefulWidget {
+// class DisplayPictureScreen extends ConsumerStatefulWidget {
+//   final String imagePath;
+//   const DisplayPictureScreen({Key? key, required this.imagePath}) : super(key: key);
+//
+//   @override
+//   ConsumerState<ConsumerStatefulWidget> createState() => _DisplayPictureScreenState();
+// }
+//
+// class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
+//   late String scannedText = "";
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     getRecognizedText();
+//   }
+//
+//   void getRecognizedText() async {
+//     final InputImage inputImage = InputImage.fromFilePath(widget.imagePath);
+//
+//     final textRecognizer =
+//     GoogleMlKit.vision.textRecognizer(script: TextRecognitionScript.latin);
+//
+//     RecognizedText recognizedText =
+//     await textRecognizer.processImage(inputImage);
+//
+//     await textRecognizer.close();
+//
+//     for (TextBlock block in recognizedText.blocks) {
+//       for (TextLine line in block.lines) {
+//         scannedText = scannedText + line.text + "\n";
+//       }
+//     }
+//     setState(() {});
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final jigName = ref.watch(selectedJigProvider);
+//     return Scaffold(
+//         appBar: const CustomAppBar(),
+//         body: Column(
+//           children: [
+//             const Text('지그 정보'),
+//             Container(
+//               alignment: Alignment.center,
+//               height: 500,
+//               padding: const EdgeInsets.all(12),
+//               child: Image.file(File(widget.imagePath)),
+//             ),
+//             const SizedBox(height: 20),
+//             Text(jigName),
+//             Text(scannedText == "" ? "Error" : scannedText),
+//           ],
+//         )
+//     );
+//   }
+// }
+class DisplayPictureScreen extends ConsumerStatefulWidget {
   final String imagePath;
   const DisplayPictureScreen({Key? key, required this.imagePath}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DisplayPictureScreenState();
+  ConsumerState<DisplayPictureScreen> createState() => _DisplayPictureScreenState();
 }
 
-class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
+class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
   late String scannedText = "";
+  String? verificationImagePath;  // 검증 결과에 따라 변경될 이미지 경로
 
   @override
   void initState() {
@@ -92,35 +155,76 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
   void getRecognizedText() async {
     final InputImage inputImage = InputImage.fromFilePath(widget.imagePath);
-
-    final textRecognizer =
-    GoogleMlKit.vision.textRecognizer(script: TextRecognitionScript.latin);
-
-    RecognizedText recognizedText =
-    await textRecognizer.processImage(inputImage);
-
+    final textRecognizer = GoogleMlKit.vision.textRecognizer(script: TextRecognitionScript.latin);
+    RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
     await textRecognizer.close();
 
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
-        scannedText = scannedText + line.text + "\n";
+        scannedText += line.text + "\n";
       }
     }
     setState(() {});
+    sendJigInfo();  // 텍스트 인식 후 서버에 정보 요청
+  }
+
+  void sendJigInfo() async {
+    final DioClient dioClient = ref.read(dioClientProvider);
+    final jigName = ref.watch(selectedJigProvider);
+
+    try {
+      var response = await dioClient.get(
+          '/jiginfo',
+          queryParameters: {
+            'scannedText': scannedText,
+            'jigName': jigName
+          }
+      );
+      if (response.statusCode == 200) {
+        bool isValid = response.data == 'true';
+        // 응답에 따라 이미지 경로 설정
+        setState(() {
+          verificationImagePath = isValid ? "availableMark" : "notAvailableMark";
+        });
+      } else {
+        setState(() {
+          verificationImagePath = "notAvailableMark";
+        });
+      }
+    } catch (e) {
+      setState(() {
+        verificationImagePath = "notAvailableMark";
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CustomAppBar(),
-        body: Column(
-          children: [
-            const Text('지그 정보'),
-            Image.file(File(widget.imagePath)),
-            const SizedBox(height: 20),
-            Text(scannedText == "" ? "Error" : scannedText),
-          ],
-        )
+      appBar: const CustomAppBar(),
+      body: Column(
+        children: [
+          const Text('Jig Information'),
+          Expanded(
+              child: Column(
+                children: [
+                Container(
+                  alignment: Alignment.center,
+                  height: 228,
+                  padding: const EdgeInsets.all(12),
+                  child: Image.file(File(widget.imagePath)),
+                ),
+                const SizedBox(height: 20),
+                Text(ref.watch(selectedJigProvider)),
+                Text(scannedText.isEmpty ? "Error scanning" : scannedText),
+                if (verificationImagePath != null) SvgPicture.asset('assets/$verificationImagePath.svg'),
+                if (verificationImagePath == "availableMark") const Text('사용 가능')
+                else const Text('사용 할 수 없는 지그 입니다.')
+              ]
+            ),
+          )
+        ],
+      ),
     );
   }
 }

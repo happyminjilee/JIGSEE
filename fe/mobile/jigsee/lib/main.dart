@@ -50,18 +50,9 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
                 visualDensity: VisualDensity.adaptivePlatformDensity,
-                textButtonTheme: TextButtonThemeData(
-                    style: TextButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        // primary: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        minimumSize: const Size(400, 60)
-                    )
-                ),
               ),
-              initialRoute: snapshot.data ?? false ? '/login' : '/home',
+              // initialRoute: snapshot.data ?? false ? '/login' : '/home',
+              initialRoute: '/home',
               onGenerateRoute: (RouteSettings settings) {
                 switch (settings.name) {
                   case '/home':
@@ -78,7 +69,7 @@ class MyApp extends StatelessWidget {
               },
             );
           } else {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
         }
       )
