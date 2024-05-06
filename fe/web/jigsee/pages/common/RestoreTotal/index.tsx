@@ -71,15 +71,40 @@ export default function RepairTotal() {
   useEffect(() => {
     getRestoreDetail();
   }, [restoreId]);
-
+  const restoreDummies = [
+    {
+      createdAt: "2024.04.22", // 요청날짜
+      from: "주준형프로", // 요청자
+      id: 12,
+    },
+    {
+      createdAt: "2024.04.21", // 요청날짜
+      from: "박수형프로", // 요청자
+      id: 1,
+    },
+    {
+      createdAt: "2024.04.23", // 요청날짜
+      from: "차현철프로", // 요청자
+      id: 3,
+    },
+    {
+      createdAt: "2024.04.24", // 요청날짜
+      from: "김용준프로", // 요청자
+      id: 4,
+    },
+    ,
+    {
+      createdAt: "2024.04.25", // 요청날짜
+      from: "강성범프로", // 요청자
+      id: 7,
+    },
+    // 다른 JIG 데이터 객체들...
+  ];
   return (
     <>
-      {/* {Navbar} */}
+      {Navbar}
       <div className={styled.bigcontainer}>
-        {isLoading ? (
-          // Display loading indicator while restoreList is being fetched
-          <Loading />
-        ) : (
+        {restoreList.length > 0 ? (
           // Render restoreList once it's loaded
           <div className={styled.container}>
             {restoreList.map((item, index) => (
@@ -89,6 +114,17 @@ export default function RepairTotal() {
                 </h3>
                 <p>
                   보수 요청 번호 {item.id} | 요청자 {item.from}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className={styled.container}>
+            {restoreDummies.map((item, index) => (
+              <div key={index} className={styled.fullWidth}>
+                <h3>생성일 {item?.createdAt}</h3>
+                <p>
+                  보수 요청 번호 {item?.id} | 요청자 {item?.from}
                 </p>
               </div>
             ))}

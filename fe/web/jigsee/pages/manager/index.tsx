@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 export default function Manager() {
   const router = useRouter();
   const goToJigrestore = () => {
-    router.push("/engineer/restore");
+    router.push("/common/RestoreTotal");
   };
   // 불출 승인 , 반려 모달 표시 상태변수
   const [showApproveModal, setApproveShowModal] = useState(false);
@@ -82,7 +82,23 @@ export default function Manager() {
               justifyContent: "center",
             }}
           >
-            <EditStandard onClose={closeEditStandardModal} />
+            <Box
+              sx={{
+                width: "100%",
+                height: "80%",
+                display: "flex",
+                alignItems: "start",
+                justifyContent: "center",
+              }}
+            >
+              <EditStandard onClose={closeEditStandardModal} />
+              <img
+                src="/images/delete_gray.svg"
+                alt="delete"
+                onClick={closeEditStandardModal}
+                style={{ width: "50px", height: "50px" }}
+              ></img>
+            </Box>
           </Box>
         </Modal>
 

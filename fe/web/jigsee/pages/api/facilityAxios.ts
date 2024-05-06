@@ -6,7 +6,7 @@ export const getfacilitylist = async () => {
   return await http
     .get("http://k10s105.p.ssafy.io/api/v1/facility/all")
     .then((response) => {
-      console.log(response.data.result);
+      console.log(response);
       return response.data.result;
     })
     .catch((error) => {
