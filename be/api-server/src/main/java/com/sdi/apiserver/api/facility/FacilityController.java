@@ -16,11 +16,11 @@ class FacilityController {
 
     @GetMapping("/all")
     Response<FacilityAllResponseDto> all() {
-        return Response.success(facilityItemClient.all());
+        return facilityItemClient.all();
     }
 
     @GetMapping()
     Response<FacilityDetailResponseDto> searchByFacilityId(@RequestParam(name = "facility-id") String facilityId) {
-        return Response.success(facilityItemClient.searchByFacilityId(facilityId));
+        return facilityItemClient.searchByFacilityId(facilityId);
     }
 }
