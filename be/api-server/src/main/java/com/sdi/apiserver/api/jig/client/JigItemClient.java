@@ -1,16 +1,12 @@
 package com.sdi.apiserver.api.jig.client;
 
 
-import com.sdi.apiserver.api.jig.dto.request.JigItemAddRequestDto;
-import com.sdi.apiserver.api.jig.dto.request.JigItemExchangeRequestDto;
-import com.sdi.apiserver.api.jig.dto.request.JigItemSerialNoRequestDto;
-import com.sdi.apiserver.api.jig.dto.request.JigItemUpdateStatusRequestDto;
+import com.sdi.apiserver.api.jig.dto.request.*;
 import com.sdi.apiserver.api.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
 import com.sdi.apiserver.util.Response;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "jigItemClient", url = "${apis.jig-item-base-url}")
@@ -24,7 +20,7 @@ public interface JigItemClient {
 
     @GetMapping("/usable")
     Response<JigItemIsUsableResponseDto> isUsable(@RequestParam(name = "facility-model") String facilityModel,
-                                                                  @RequestParam(name = "jig-serial-no") String jigSerialNo);
+                                                  @RequestParam(name = "jig-serial-no") String jigSerialNo);
 
     @DeleteMapping()
     Response<Void> delete(@RequestBody JigItemSerialNoRequestDto dto);
@@ -41,4 +37,7 @@ public interface JigItemClient {
     @GetMapping("/facility-available")
     Response<JigItemFacilityAvailableResponseDto> facilityAvailable(
             @RequestParam(name = "facility-model") String facilityModel);
+
+    @PostMapping("/inspection")
+    Response<Void> inspection(@RequestBody JigItemInspectionRequestDto dto);
 }
