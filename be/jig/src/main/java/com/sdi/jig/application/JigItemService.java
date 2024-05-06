@@ -132,6 +132,16 @@ public class JigItemService {
                 .toList();
     }
 
+    public List<String> getNeedToInspectionFacilityJigItems(Long facilityId) {
+        List<JigItemInspectionRDBEntity> needToInspectionJigItems = jigItemInspectionRDBRepository.findByIsInspectionFalse();
+        List<JigItemInspectionRDBEntity> filterByFacilityId = needToInspectionJigItems.stream()
+                .filter(i -> i.getJigItem().getFacilityItem().getId().equals(facilityId))
+                .toList();
+        return filterByFacilityId.stream()
+                .map(f -> f.getJigItem().getSerialNo())
+                .toList();
+    }
+
     private List<Long> extractJigIds(FacilityRDBEntity facilityByModel) {
         return getFacilityJigMappingByFacilityId(facilityByModel.getId())
                 .stream()

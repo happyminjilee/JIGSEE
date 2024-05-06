@@ -3,6 +3,7 @@ package com.sdi.jig.api;
 import com.sdi.jig.application.FacilityItemService;
 import com.sdi.jig.dto.response.FacilityItemAllResponseDto;
 import com.sdi.jig.dto.response.FacilityItemDetailResponseDto;
+import com.sdi.jig.dto.response.FacilityItemInspectionJigItemsResponseDto;
 import com.sdi.jig.dto.response.FacilityItemNeedToInspectionResponseDto;
 import com.sdi.jig.util.Response;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,12 @@ class FacilityItemController {
     @GetMapping("/inspection")
     Response<FacilityItemNeedToInspectionResponseDto> inspection(){
         FacilityItemNeedToInspectionResponseDto dto = facilityItemService.inspection();
+        return Response.success(dto);
+    }
+
+    @GetMapping("/inspection/jig-item")
+    Response<FacilityItemInspectionJigItemsResponseDto> inspectionJigItems(@RequestParam(name = "facility-id") Long facilityId){
+        FacilityItemInspectionJigItemsResponseDto dto = facilityItemService.inspectionJigItems(facilityId);
         return Response.success(dto);
     }
 }

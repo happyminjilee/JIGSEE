@@ -1,11 +1,8 @@
 package com.sdi.jig.application;
 
-import com.sdi.jig.dto.response.FacilityItemAllResponseDto;
+import com.sdi.jig.dto.response.*;
 import com.sdi.jig.dto.response.FacilityItemAllResponseDto.FacilityItemSummary;
-import com.sdi.jig.dto.response.FacilityItemDetailResponseDto;
-import com.sdi.jig.dto.response.FacilityItemNeedToInspectionResponseDto;
 import com.sdi.jig.dto.response.FacilityItemNeedToInspectionResponseDto.FacilityItemInfo;
-import com.sdi.jig.dto.response.JigItemResponseDto;
 import com.sdi.jig.entity.rdb.FacilityItemRDBEntity;
 import com.sdi.jig.repository.rdb.FacilityItemRDBRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +43,11 @@ public class FacilityItemService {
         List<FacilityItemInfo> facilityItemInfos = getFacilityInfos(facilityItems);
 
         return FacilityItemNeedToInspectionResponseDto.from(facilityItemInfos);
+    }
+
+    public FacilityItemInspectionJigItemsResponseDto inspectionJigItems(Long facilityId) {
+        List<String> serialNos = jigItemService.getNeedToInspectionFacilityJigItems(facilityId);
+        return FacilityItemInspectionJigItemsResponseDto.from(serialNos);
     }
 
     private static List<FacilityItemInfo> getFacilityInfos(List<FacilityItemRDBEntity> facilityItems) {
