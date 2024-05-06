@@ -1,7 +1,7 @@
 package com.sdi.jig.dto.response;
 
-import com.sdi.jig.entity.FacilityItemRDBEntity;
-import com.sdi.jig.entity.JigItemRDBEntity;
+import com.sdi.jig.entity.rdb.FacilityItemRDBEntity;
+import com.sdi.jig.entity.rdb.JigItemRDBEntity;
 
 import java.util.List;
 

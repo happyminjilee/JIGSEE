@@ -1,6 +1,6 @@
-package com.sdi.jig.repository;
+package com.sdi.jig.repository.rdb;
 
-import com.sdi.jig.entity.JigItemRepairHistoryRDBEntity;
+import com.sdi.jig.entity.rdb.JigItemRepairHistoryRDBEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.sdi.jig.entity;
+package com.sdi.jig.entity.rdb;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -6,20 +6,22 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "facility_jig_mappings")
+@Table(name = "jig_item_repair_histories")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class FacilityJigMappingRDBEntity {
+public class JigItemRepairHistoryRDBEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private JigRDBEntity jig;
+    @Column(name = "repair_time")
+    private LocalDateTime repairTime;
 
     @ManyToOne
-    private FacilityRDBEntity facility;
+    private JigItemRDBEntity jigItem;
 }

@@ -1,4 +1,4 @@
-package com.sdi.jig.entity;
+package com.sdi.jig.entity.rdb;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -27,6 +27,7 @@ public class FacilityItemRDBEntity {
 
     @OneToMany(mappedBy = "facilityItem", fetch = FetchType.LAZY)
     private List<JigItemRDBEntity> jigItems;
+
 
     public void exchangeJigItem(JigItemRDBEntity beforeJigItem, JigItemRDBEntity afterJigItem) {
         if (!this.jigItems.remove(beforeJigItem)) {

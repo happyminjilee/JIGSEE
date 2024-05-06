@@ -4,8 +4,9 @@ import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto.JigItemSummary;
 import com.sdi.jig.dto.response.JigItemResponseDto;
-import com.sdi.jig.entity.*;
-import com.sdi.jig.repository.*;
+import com.sdi.jig.entity.nosql.JigNosqlEntity;
+import com.sdi.jig.entity.rdb.*;
+import com.sdi.jig.repository.rdb.*;
 import com.sdi.jig.util.IOStatus;
 import com.sdi.jig.util.JigStatus;
 import com.sdi.jig.util.TimeCalculator;
@@ -30,6 +31,7 @@ public class JigItemService {
     private final JigItemIOHistoryRepository jigItemIOHistoryRepository;
     private final FacilityJigMappingRDBRepository facilityJigMappingRDBRepository;
     private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
+    private final JigItemInspectionRDBRepository jigItemInspectionRDBRepository;
 
     public JigItemResponseDto findBySerialNo(String serialNo) {
         JigItemRDBEntity rdb = getJigItemBySerialNo(serialNo);
@@ -113,6 +115,23 @@ public class JigItemService {
         return JigItemFacilityAvailableResponseDto.from(serialNos);
     }
 
+    @Transactional
+    public void jigItemInspection(List<String> serialNos) {
+        List<JigItemRDBEntity> bySerialNoIn = jigItemRDBRepository.findBySerialNoIn(serialNos);
+        List<JigItemInspectionRDBEntity> datas = bySerialNoIn.stream()
+                .map(JigItemInspectionRDBEntity::of)
+                .toList();
+
+        jigItemInspectionRDBRepository.saveAll(datas);
+    }
+
+    public List<FacilityItemRDBEntity> getNeedToInspectionFacilityItems(){
+        List<JigItemInspectionRDBEntity> jigItemInspection = jigItemInspectionRDBRepository.findByIsInspectionFalse();
+        return jigItemInspection.stream()
+                .map(j -> j.getJigItem().getFacilityItem())
+                .toList();
+    }
+
     private List<Long> extractJigIds(FacilityRDBEntity facilityByModel) {
         return getFacilityJigMappingByFacilityId(facilityByModel.getId())
                 .stream()
@@ -145,6 +164,14 @@ public class JigItemService {
         // io 이력 추가
         jigItemIOHistoryRepository.save(JigItemIOHistoryRDBEntity.of(IOStatus.OUT, beforeJigItem));
         jigItemIOHistoryRepository.save(JigItemIOHistoryRDBEntity.of(IOStatus.IN, afterJigItem));
+
+        // 지그 점검(inspection) 완료 상태로 변경
+        jigItemInspection(beforeJigItem);
+    }
+
+    private void jigItemInspection(JigItemRDBEntity beforeJigItem) {
+        JigItemInspectionRDBEntity jigItemInspection = getByJigItemSerialNoInInspection(beforeJigItem.getSerialNo());
+        jigItemInspection.updateIsInspection();
     }
 
     private boolean isUsable(JigItemRDBEntity jigItem, FacilityRDBEntity facilityByModel, Long jigId) {
@@ -194,6 +221,11 @@ public class JigItemService {
     private JigItemIOHistoryRDBEntity getRecentIn(Long jigItemId) {
         return jigItemIOHistoryRepository.findFirstByJigItemIdAndStatusOrderByInOutTime(jigItemId, IOStatus.IN)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("\'%d\'의 지그 투입 이력이 없습니다.", jigItemId)));
+    }
+
+    private JigItemInspectionRDBEntity getByJigItemSerialNoInInspection(String serialNo) {
+        return jigItemInspectionRDBRepository.findByJigItemSerialNo(serialNo)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("\'%s\'를 Inspection 항목에서 알맞은 지그를 찾을 수 없습니다.", serialNo)));
     }
 
     private List<JigItemRepairHistoryRDBEntity> getJigItemRepairHistoriesByJigItemId(Long jigItemId) {

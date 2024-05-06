@@ -1,4 +1,4 @@
-package com.sdi.jig.entity;
+package com.sdi.jig.entity.rdb;
 
 import com.sdi.jig.util.JigStatus;
 import com.sdi.jig.util.TimeCalculator;
@@ -47,9 +47,12 @@ public class JigItemRDBEntity {
     @OneToMany(mappedBy = "jigItem")
     private List<JigItemRepairHistoryRDBEntity> repairHistory;
 
+    @OneToMany(mappedBy = "jigItem")
+    private List<JigItemInspectionRDBEntity> inspection;
+
     public static JigItemRDBEntity from(String serialNo, JigRDBEntity jigRDBEntity) {
         return new JigItemRDBEntity(null, serialNo, JigStatus.WAREHOUSE, 0L, false, jigRDBEntity,
-                null, null, null);
+                null, null, null, null);
     }
 
     public void delete() {

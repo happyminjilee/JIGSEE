@@ -1,6 +1,6 @@
-package com.sdi.jig.repository;
+package com.sdi.jig.repository.rdb;
 
-import com.sdi.jig.entity.JigItemIOHistoryRDBEntity;
+import com.sdi.jig.entity.rdb.JigItemIOHistoryRDBEntity;
 import com.sdi.jig.util.IOStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 

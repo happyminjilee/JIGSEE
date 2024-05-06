@@ -1,7 +1,7 @@
 package com.sdi.jig.api;
 
-import com.sdi.jig.entity.FacilityItemRDBEntity;
-import com.sdi.jig.repository.FacilityItemRDBRepository;
+import com.sdi.jig.entity.rdb.FacilityItemRDBEntity;
+import com.sdi.jig.repository.rdb.FacilityItemRDBRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,6 +3,7 @@ package com.sdi.jig.api;
 import com.sdi.jig.application.FacilityItemService;
 import com.sdi.jig.dto.response.FacilityItemAllResponseDto;
 import com.sdi.jig.dto.response.FacilityItemDetailResponseDto;
+import com.sdi.jig.dto.response.FacilityItemNeedToInspectionResponseDto;
 import com.sdi.jig.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,12 @@ class FacilityItemController {
     @GetMapping
     Response<FacilityItemDetailResponseDto> detail(@RequestParam(name = "facility-id") Long facilityId) {
         FacilityItemDetailResponseDto dto = facilityItemService.detail(facilityId);
+        return Response.success(dto);
+    }
+
+    @GetMapping("/inspection")
+    Response<FacilityItemNeedToInspectionResponseDto> inspection(){
+        FacilityItemNeedToInspectionResponseDto dto = facilityItemService.inspection();
         return Response.success(dto);
     }
 }

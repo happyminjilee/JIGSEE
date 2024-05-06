@@ -1,8 +1,8 @@
 package com.sdi.jig.api;
 
-import com.sdi.jig.entity.JigNosqlEntity;
-import com.sdi.jig.repository.JigItemRDBRepository;
-import com.sdi.jig.repository.JigNosqlRepository;
+import com.sdi.jig.entity.nosql.JigNosqlEntity;
+import com.sdi.jig.repository.rdb.JigItemRDBRepository;
+import com.sdi.jig.repository.nosql.JigNosqlRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;

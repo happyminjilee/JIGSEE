@@ -1,10 +1,10 @@
 package com.sdi.jig.application;
 
 import com.sdi.jig.dto.response.JigResponseDto;
-import com.sdi.jig.entity.JigNosqlEntity;
-import com.sdi.jig.entity.JigRDBEntity;
-import com.sdi.jig.repository.JigNosqlRepository;
-import com.sdi.jig.repository.JigRDBRepository;
+import com.sdi.jig.entity.nosql.JigNosqlEntity;
+import com.sdi.jig.entity.rdb.JigRDBEntity;
+import com.sdi.jig.repository.nosql.JigNosqlRepository;
+import com.sdi.jig.repository.rdb.JigRDBRepository;
 import com.sdi.jig.util.CheckItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

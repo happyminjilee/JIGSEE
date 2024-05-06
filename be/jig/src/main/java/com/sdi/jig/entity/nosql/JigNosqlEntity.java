@@ -1,4 +1,4 @@
-package com.sdi.jig.entity;
+package com.sdi.jig.entity.nosql;
 
 import com.sdi.jig.util.CheckItem;
 import jakarta.persistence.Id;

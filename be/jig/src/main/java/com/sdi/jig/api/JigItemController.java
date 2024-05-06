@@ -1,10 +1,7 @@
 package com.sdi.jig.api;
 
 import com.sdi.jig.application.JigItemService;
-import com.sdi.jig.dto.request.JigItemAddRequestDto;
-import com.sdi.jig.dto.request.JigItemExchangeRequestDto;
-import com.sdi.jig.dto.request.JigItemSerialNoRequestDto;
-import com.sdi.jig.dto.request.JigItemUpdateStatusRequestDto;
+import com.sdi.jig.dto.request.*;
 import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemResponseDto;
@@ -24,7 +21,6 @@ class JigItemController {
         return Response.success(jigItemService.findBySerialNo(serialNo));
     }
 
-    // 재고추가
     @PostMapping
     Response<Void> add(@RequestBody JigItemAddRequestDto dto) {
         jigItemService.add(dto.list());
@@ -66,5 +62,11 @@ class JigItemController {
     Response<JigItemFacilityAvailableResponseDto> facilityAvailable(
             @RequestParam(name = "facility-model") String facilityModel){
         return Response.success(jigItemService.facilityAvailable(facilityModel));
+    }
+
+    @PostMapping("/inspection")
+    Response<Void> inspection(@RequestBody JigItemInspectionRequestDto dto){
+        jigItemService.jigItemInspection(dto.serialNos());
+        return Response.success();
     }
 }

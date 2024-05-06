@@ -1,7 +1,7 @@
 package com.sdi.jig.dto.response;
 
-import com.sdi.jig.entity.JigNosqlEntity;
-import com.sdi.jig.entity.JigRDBEntity;
+import com.sdi.jig.entity.nosql.JigNosqlEntity;
+import com.sdi.jig.entity.rdb.JigRDBEntity;
 import com.sdi.jig.util.CheckItem;
 
 import java.util.List;

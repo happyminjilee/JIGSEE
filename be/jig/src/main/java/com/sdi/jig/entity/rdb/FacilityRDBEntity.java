@@ -1,16 +1,19 @@
-package com.sdi.jig.entity;
+package com.sdi.jig.entity.rdb;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Table(name = "jigs")
+@Table(name = "facilities")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class JigRDBEntity {
+public class FacilityRDBEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +22,6 @@ public class JigRDBEntity {
     @Column(length = 50)
     private String model;
 
-    @Column(name = "expect_life", length = 50)
-    private String expectLife;
-
-    @OneToMany(mappedBy = "jig")
+    @OneToMany(mappedBy = "facility")
     private List<FacilityJigMappingRDBEntity> mapping;
 }

@@ -1,4 +1,4 @@
-package com.sdi.jig.entity;
+package com.sdi.jig.entity.rdb;
 
 import com.sdi.jig.util.IOStatus;
 import jakarta.persistence.*;

@@ -1,8 +1,8 @@
 package com.sdi.jig.api;
 
-import com.sdi.jig.entity.JigItemRDBEntity;
-import com.sdi.jig.repository.JigItemIOHistoryRepository;
-import com.sdi.jig.repository.JigItemRDBRepository;
+import com.sdi.jig.entity.rdb.JigItemRDBEntity;
+import com.sdi.jig.repository.rdb.JigItemIOHistoryRepository;
+import com.sdi.jig.repository.rdb.JigItemRDBRepository;
 import com.sdi.jig.util.JigStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -3,14 +3,17 @@ package com.sdi.jig.application;
 import com.sdi.jig.dto.response.FacilityItemAllResponseDto;
 import com.sdi.jig.dto.response.FacilityItemAllResponseDto.FacilityItemSummary;
 import com.sdi.jig.dto.response.FacilityItemDetailResponseDto;
+import com.sdi.jig.dto.response.FacilityItemNeedToInspectionResponseDto;
+import com.sdi.jig.dto.response.FacilityItemNeedToInspectionResponseDto.FacilityItemInfo;
 import com.sdi.jig.dto.response.JigItemResponseDto;
-import com.sdi.jig.entity.FacilityItemRDBEntity;
-import com.sdi.jig.repository.FacilityItemRDBRepository;
+import com.sdi.jig.entity.rdb.FacilityItemRDBEntity;
+import com.sdi.jig.repository.rdb.FacilityItemRDBRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,6 +22,7 @@ public class FacilityItemService {
 
     private final JigItemService jigItemService;
     private final FacilityItemRDBRepository facilityItemRDBRepository;
+
 
     public FacilityItemAllResponseDto all() {
         List<FacilityItemRDBEntity> all = facilityItemRDBRepository.findAll();
@@ -35,6 +39,24 @@ public class FacilityItemService {
                 .toList();
 
         return FacilityItemDetailResponseDto.from(facilityItem, list);
+    }
+
+    public FacilityItemNeedToInspectionResponseDto inspection() {
+        List<FacilityItemRDBEntity> facilityItems = jigItemService.getNeedToInspectionFacilityItems();
+        List<FacilityItemInfo> facilityItemInfos = getFacilityInfos(facilityItems);
+
+        return FacilityItemNeedToInspectionResponseDto.from(facilityItemInfos);
+    }
+
+    private static List<FacilityItemInfo> getFacilityInfos(List<FacilityItemRDBEntity> facilityItems) {
+        ConcurrentHashMap<Long, String> map = new ConcurrentHashMap<>();
+        for (FacilityItemRDBEntity facilityItem : facilityItems) {
+            map.put(facilityItem.getId(), facilityItem.getSerialNo());
+        }
+
+        return map.keySet().stream()
+                .map(key -> FacilityItemInfo.of(key, map.get(key)))
+                .toList();
     }
 
     private FacilityItemRDBEntity getFacilityItem(Long facilityId) {
