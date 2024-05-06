@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:jigsee/pages/will_change_list.dart';
+import 'package:jigsee/pages/change_jig_list.dart';
 import 'package:jigsee/stores/usePreference.dart';
 import 'package:jigsee/components/header.dart';
 

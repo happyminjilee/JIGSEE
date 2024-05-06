@@ -24,7 +24,7 @@ class _WillChangeJigsState extends State<WillChangeJigs> {
         child: FutureBuilder(
             future: getJigList(),
             builder: (context, snapshot) {
-              const Column(
+              return const Column(
                 children: [
                   Text('123')
                 ]
