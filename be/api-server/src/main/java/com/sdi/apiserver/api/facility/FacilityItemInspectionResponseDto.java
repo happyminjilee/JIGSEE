@@ -7,7 +7,7 @@ public record FacilityItemInspectionResponseDto(
 ) {
 
     public record FacilityInspection(Long id,
-                                     String serialNo){
+                                     String facilitySerialNo){
 
     }
 }
