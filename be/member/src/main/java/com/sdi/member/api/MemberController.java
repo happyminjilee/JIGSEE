@@ -65,6 +65,11 @@ class MemberController {
         return Response.success(memberService.searchEmployeeNo(employeeNo));
     }
 
+    @GetMapping("/member/search/role")
+    Response<List<MemberResponseDto>> searchRole(@RequestParam("role") String role) {
+        return Response.success(memberService.searchRole(role));
+    }
+
     @GetMapping("/manager")
     Response<Void> managerCheck() { return Response.success(); }
 
