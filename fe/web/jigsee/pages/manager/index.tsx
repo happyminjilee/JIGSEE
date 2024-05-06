@@ -73,15 +73,7 @@ export default function Manager() {
             justifyContent: "center",
           }}
         >
-          <Box
-            sx={{
-              width: "100%",
-              height: "80%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <Box sx={{ width: "500px", height: "700px", marginTop: "100px" }}>
             <Box
               sx={{
                 width: "100%",
