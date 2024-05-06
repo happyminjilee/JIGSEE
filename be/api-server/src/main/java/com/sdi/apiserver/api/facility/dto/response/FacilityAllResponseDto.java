@@ -4,15 +4,18 @@ import lombok.Value;
 
 import java.util.List;
 
-@Value
-public class FacilityAllResponseDto {
 
-    List<FacilityInfo> list;
+public record FacilityAllResponseDto(
+    List<FacilityInfo> list
+) {
 
-    @Value
-    public static class FacilityInfo{
-        Long id;
-        String model;
-        String facilitySerialNo;
+
+
+    public record FacilityInfo(
+        Long id,
+        String model,
+        String facilitySerialNo,
+        List<String> jigItemSerialNos
+    ){
     }
 }

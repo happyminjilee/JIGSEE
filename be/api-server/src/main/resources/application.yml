@@ -23,6 +23,7 @@ springdoc:
 apis:
   jig-base-url: ${JIG_BASE_URL}
   jig-item-base-url: ${JIG_ITEM_BASE_URL}
+  facility-item-base-url: ${FACILITY_ITEM_BASE_URL}
   member-base-url: ${MEMBER_BASE_URL}
   work-order-base-url: ${WORK_ORDER_BASE_URL}
   notification-api-base-url: ${NOTIFICATION_API_BASE_URL}
