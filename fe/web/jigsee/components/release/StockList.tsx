@@ -28,13 +28,6 @@ export default function StockList() {
         <div className={styled.box}>
             <div style={{display: "flex", justifyContent: "space-between"}}>
                 <div style={{fontWeight: "bold", fontSize: "25px"}}>재고 현황</div>
-                <Link
-                    href="#"
-                    underline="hover"
-                    style={{color: "black"}}
-                >
-                    상세 보기
-                </Link>
             </div>
             {lst.map((mod, index) => (
               <div
