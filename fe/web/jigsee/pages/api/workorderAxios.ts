@@ -62,12 +62,11 @@ export async function doneWo(id: number, checklist: checklist[]) {
 
 // Wo 상태 변경(리스트)
 export async function updateWoList(
-  list: [
+  list:
     {
       id: number; // wo의 id
       status: string; // 변경될 상태
-    }
-  ]
+    } []
 ) {
   const requestBody = {
     list: list,

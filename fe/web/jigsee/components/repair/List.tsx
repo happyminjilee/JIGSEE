@@ -4,7 +4,7 @@ import styled from "@/styles/releasestatuslist.module.css";
 import { list } from "postcss";
 import { useCompoStore, useWoDetailStore, useWoGroupStore, useWoStore } from "@/store/workorderstore";
 import {DnDWrapper} from "@/components/workorder/DndWrapper";
-import {useCartStore, useMartStore, useGroupFilter, useItemStore} from "@/store/repairrequeststore";
+import {useCartStore, useMartStore, useGroupFilter} from "@/store/repairrequeststore";
 import {any} from "prop-types";
 import {DropBox} from "@/components/workorder/ListDnDbox"
 
@@ -44,57 +44,9 @@ export default function RequestList() {
         })
   }, []);
 
-  console.log("publish", publish)
-  console.log("progress", progress)
 
 
-  const cardClick = (Id: number, state: string) => {
-    // 클릭한 S/N로 아이디로 바꾸기 , 추후 수정 예정
-    setWoId("testModelId");
-    setRightCompo(state);
-    console.log("cardclick", state)
-    console.log("cardclick", rightCompo)
-    fetchWoDetail(Id)
-        .then((res) => {
-          console.log('woDetail', res)
-        })
-        .catch((error) => {
-          console.log(error.message)
-        })
-  };
 
-  const whenDragging = () => {
-    console.log("드래그중!")
-  }
-  const wheDragEnd = () => {
-    console.log("드래그 끝낫을때!")
-  }
-
-
-  const Card = React.forwardRef(
-      (
-          {dragData, isDragging}:card,
-          ref: ForwardedRef<HTMLElement>
-       ) => (
-          <div
-              key={dragData.id}
-              className={styled.card}
-              onClick={() => {
-                cardClick(dragData.id, dragData.status)
-              }}>
-            <div className={styled.division1}>
-              <div className={styled.date}>
-                {dragData.createdAt[0]}.{dragData.createdAt[1]}.{dragData.createdAt[2]}
-              </div>
-              <div className={styled.title}>
-                {dragData.serialNo} | {dragData.model}
-              </div>
-            </div>
-
-            <div className={styled.division2}>{dragData.status}</div>
-          </div>
-      )
-  )
 
   const lst: Option[] = [
       { label: "PUBLISH", value: "발행" },
@@ -142,7 +94,7 @@ export default function RequestList() {
           <div>
               <Select
                   label="선택"
-                  selectionMode="multiple"
+                  selectionMode="single"
                   placeholder="선택"
                   className={styled.short}
                   onChange={(e) =>
@@ -158,7 +110,7 @@ export default function RequestList() {
               </Select>
           </div>
           {/* card */}
-          <DropBox items={martList} boxType={"Mart"}>
+          <DropBox items={forFilter} boxType={"Mart"}>
 
           </DropBox>
 

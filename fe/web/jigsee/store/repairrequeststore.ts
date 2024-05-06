@@ -20,6 +20,7 @@ interface Mart {
     addToMart: (n:lst) => void,
     removeFromMart: (n:lst) => void,
     clearMart: () => void,
+    setMart: (n:lst[]) => void,
 }
 
 export const useMartStore = create<Mart>(
@@ -144,6 +145,9 @@ export const useMartStore = create<Mart>(
         },
         clearMart: () => {
             set({martList: []})
+        },
+        setMart: (n: lst[]) => {
+            set({martList: n})
         }
     })
 )
@@ -170,6 +174,8 @@ interface groupFilter {
     forFilter: lst[];
     addForFilter: (n:lst[]) => void;
     clearForFilter: () => void;
+    removeForMart: (n:lst) => void;
+    addForMart: (n:lst) => void;
 }
 
 interface lst {
@@ -195,6 +201,12 @@ export const useGroupFilter = create<groupFilter>(
         },
         clearForFilter: () => {
             set({forFilter:[]})
+        },
+        removeForMart: (n:lst) => {
+            set((state) => ({forFilter: state.forFilter.filter(a => a.id !== n.id)}))
+        },
+        addForMart: (n: lst) => {
+            set((state) => ({forFilter: [...state.forFilter, n]}))
         }
     })
 )
@@ -203,16 +215,3 @@ export const useGroupFilter = create<groupFilter>(
 
 //////////////////////////////for DND/////////////////////////////////
 
-interface dragItem {
-    item: string,
-    setItem: (n:string) => void,
-}
-
-export const useItemStore = create<dragItem>(
-    (set) => ({
-        item: "repair",
-        setItem: (n:string) => {
-            set({item: n})
-        }
-    })
-)
