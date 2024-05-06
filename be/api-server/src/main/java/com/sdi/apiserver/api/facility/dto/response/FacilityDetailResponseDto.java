@@ -7,7 +7,7 @@ public record FacilityDetailResponseDto(
         Long id,
         String model,
         String facilitySerialNo,
-        List<JigItemSummary> jigList
+        List<JigItemSummary> list
 
 ) {
 
