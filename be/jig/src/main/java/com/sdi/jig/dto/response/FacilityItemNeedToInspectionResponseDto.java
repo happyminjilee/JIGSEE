@@ -3,7 +3,7 @@ package com.sdi.jig.dto.response;
 import java.util.List;
 
 public record FacilityItemNeedToInspectionResponseDto(
-        List<FacilityItemInfo> facilitySerialNos
+        List<FacilityItemInfo> list
 ) {
 
     public static FacilityItemNeedToInspectionResponseDto from(List<FacilityItemInfo> facilityItemInfos){
