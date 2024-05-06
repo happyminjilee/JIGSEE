@@ -1,6 +1,6 @@
 package com.sdi.notification.controller;
 
-import com.sdi.notification.dto.MemberResponseDto;
+import com.sdi.notification.dto.MemberInfoDto;
 import com.sdi.notification.dto.response.NotificationListResponseDto;
 import com.sdi.notification.dto.response.UncheckedNotificationListResponseDto;
 import com.sdi.notification.service.ApiService;
@@ -22,7 +22,7 @@ class SearchController {
 
     @GetMapping("/unchecked")
     Response<UncheckedNotificationListResponseDto> searchUnchecked(@RequestHeader("Authorization") String accessToken) {
-        MemberResponseDto currentMember = apiService.getMember(accessToken);
+        MemberInfoDto currentMember = apiService.getMember(accessToken);
         return Response.success(searchService.getUncheckedNotifications(currentMember));
     }
 
@@ -30,7 +30,7 @@ class SearchController {
     Response<NotificationListResponseDto> searchAll(@RequestHeader("Authorization") String accessToken,
                                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                                     @RequestParam(value = "size", defaultValue = "10") int size) {
-        MemberResponseDto currentMember = apiService.getMember(accessToken);
+        MemberInfoDto currentMember = apiService.getMember(accessToken);
         return Response.success(searchService.getNotifications(currentMember, page, size));
     }
 }

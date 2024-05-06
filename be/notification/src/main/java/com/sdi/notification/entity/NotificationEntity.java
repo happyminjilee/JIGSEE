@@ -1,5 +1,6 @@
 package com.sdi.notification.entity;
 
+import com.sdi.notification.dto.request.FcmRequestDto;
 import com.sdi.notification.dto.request.MessageRequestDto;
 import com.sdi.notification.util.NotificationStatus;
 import jakarta.persistence.Column;
@@ -37,5 +38,9 @@ public class NotificationEntity {
     private String contentId;
     public static NotificationEntity of(String sender, String receiver, MessageRequestDto messageRequestDto) {
         return new NotificationEntity(null, false, sender, receiver, messageRequestDto.type(), messageRequestDto.uuid());
+    }
+
+    public static NotificationEntity of(String receiver, FcmRequestDto fcmRequestDto) {
+        return new NotificationEntity(null, false, "SYSTEM", receiver, NotificationStatus.PERIODIC_INSPECTION, fcmRequestDto.uuid());
     }
 }

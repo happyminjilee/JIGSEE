@@ -1,7 +1,6 @@
 package com.sdi.notification.service;
 
 import com.sdi.notification.dto.MemberInfoDto;
-import com.sdi.notification.dto.MemberResponseDto;
 import com.sdi.notification.dto.request.MessageRequestDto;
 import com.sdi.notification.dto.response.MessageResponseDto;
 import com.sdi.notification.entity.NotificationEntity;
@@ -69,7 +68,7 @@ public class SseService {
         }
     }
 
-    public void disconnect(MemberResponseDto memberResponseDto) {
+    public void disconnect(MemberInfoDto memberResponseDto) {
         emitterRepository.deleteAllEmitterStartWithId(makeRoleTypeEmployeeNo(memberResponseDto));
     }
 
@@ -115,9 +114,5 @@ public class SseService {
 
     private static String makeRoleTypeEmployeeNo(MemberInfoDto memberInfo) {
         return memberInfo.roleType() + "_" + memberInfo.employeeNo();
-    }
-
-    private static String makeRoleTypeEmployeeNo(MemberResponseDto memberResponseDto) {
-        return memberResponseDto.role() + "_" + memberResponseDto.employeeNo();
     }
 }

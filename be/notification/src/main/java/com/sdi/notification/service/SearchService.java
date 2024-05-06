@@ -1,6 +1,6 @@
 package com.sdi.notification.service;
 
-import com.sdi.notification.dto.MemberResponseDto;
+import com.sdi.notification.dto.MemberInfoDto;
 import com.sdi.notification.dto.NotificationDto;
 import com.sdi.notification.dto.response.NotificationListResponseDto;
 import com.sdi.notification.dto.response.UncheckedNotificationListResponseDto;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class SearchService {
     private final NotificationRepository notificationRepository;
 
-    public UncheckedNotificationListResponseDto getUncheckedNotifications(MemberResponseDto member) {
+    public UncheckedNotificationListResponseDto getUncheckedNotifications(MemberInfoDto member) {
         List<NotificationEntity> uncheckedNotificationList = notificationRepository.findAllByReceiverAndCheckStatusIsFalseOrderByIdDesc(member.employeeNo())
                 .orElseThrow(() -> new IllegalArgumentException("사번 : " + member.employeeNo() + "의 미확인 알림을 검색하는 과정에서 문제 발생"));
 
@@ -32,7 +32,7 @@ public class SearchService {
                         .collect(Collectors.toList()));
     }
 
-    public NotificationListResponseDto getNotifications(MemberResponseDto member, int pageNumber, int size) {
+    public NotificationListResponseDto getNotifications(MemberInfoDto member, int pageNumber, int size) {
         Pageable pageable = PageRequest.of(pageNumber - 1, size);
         Page<NotificationEntity> page = notificationRepository.findAllByReceiverOrderByIdDesc(member.employeeNo(), pageable);
         List<NotificationDto> notifications = page.getContent().stream()

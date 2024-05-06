@@ -1,7 +1,6 @@
 package com.sdi.notification.controller;
 
 import com.sdi.notification.dto.MemberInfoDto;
-import com.sdi.notification.dto.MemberResponseDto;
 import com.sdi.notification.dto.request.MessageRequestDto;
 import com.sdi.notification.service.ApiService;
 import com.sdi.notification.service.SseService;
@@ -25,9 +24,9 @@ class SseController {
 
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     SseEmitter subscribe(@RequestHeader("Authorization") String accessToken) {
-        MemberResponseDto currentMember = apiService.getMember(accessToken);
-        MemberInfoDto memberInfo = MemberInfoDto.from(currentMember);
-        return sseService.subscribe(memberInfo, ""); // EventSource에 헤더를 달아서 전송받지 못한 이벤트를 트래킹 가능한데 이건 프론트에서 뭔가 뚝딱해야됨
+        MemberInfoDto currentMember = apiService.getMember(accessToken);
+
+        return sseService.subscribe(currentMember, ""); // EventSource에 헤더를 달아서 전송받지 못한 이벤트를 트래킹 가능한데 이건 프론트에서 뭔가 뚝딱해야됨
 //        return sseService.subscribe(employeeNo, lastEventId);
     }
 
@@ -39,7 +38,7 @@ class SseController {
 
     @DeleteMapping("/disconnect")
     Response<Void> disconnect(@RequestHeader("Authorization") String accessToken) {
-        MemberResponseDto currentMember = apiService.getMember(accessToken);
+        MemberInfoDto currentMember = apiService.getMember(accessToken);
         sseService.disconnect(currentMember);
         return Response.success();
     }

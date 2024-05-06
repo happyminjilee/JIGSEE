@@ -1,10 +1,12 @@
 package com.sdi.notification.service;
 
-import com.sdi.notification.dto.MemberResponseDto;
+import com.sdi.notification.dto.MemberInfoDto;
 import com.sdi.notification.util.MemberClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -12,7 +14,11 @@ import org.springframework.stereotype.Service;
 public class ApiService {
     private final MemberClient memberClient;
 
-    public MemberResponseDto getMember(String accessToken) {
+    public MemberInfoDto getMember(String accessToken) {
         return memberClient.getMember(accessToken).getResult();
+    }
+
+    public List<MemberInfoDto> getMembersInRole(String accessToken, String role) {
+        return memberClient.getMembersInRole(accessToken, role).getResult();
     }
 }
