@@ -118,14 +118,21 @@ public class JigItemService {
     @Transactional
     public void jigItemInspection(List<String> serialNos) {
         List<JigItemRDBEntity> bySerialNoIn = jigItemRDBRepository.findBySerialNoIn(serialNos);
-        List<JigItemInspectionRDBEntity> datas = bySerialNoIn.stream()
-                .map(JigItemInspectionRDBEntity::of)
-                .toList();
+        List<JigItemInspectionRDBEntity> datas = new ArrayList<>();
+
+        for (JigItemRDBEntity jigItemRDBEntity : bySerialNoIn) {
+            // 아직 점검 리스트에 포함되지 않은 지그일 경우 데이터 추가 -> 중복 방지
+            boolean empty = jigItemInspectionRDBRepository.findByIsInspectionFalseAndJigItemId(jigItemRDBEntity.getId())
+                    .isEmpty();
+            if (empty) {
+                datas.add(JigItemInspectionRDBEntity.of(jigItemRDBEntity));
+            }
+        }
 
         jigItemInspectionRDBRepository.saveAll(datas);
     }
 
-    public List<FacilityItemRDBEntity> getNeedToInspectionFacilityItems(){
+    public List<FacilityItemRDBEntity> getNeedToInspectionFacilityItems() {
         List<JigItemInspectionRDBEntity> jigItemInspection = jigItemInspectionRDBRepository.findByIsInspectionFalse();
         return jigItemInspection.stream()
                 .map(j -> j.getJigItem().getFacilityItem())

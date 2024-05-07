@@ -11,4 +11,6 @@ public interface JigItemInspectionRDBRepository extends JpaRepository<JigItemIns
     Optional<JigItemInspectionRDBEntity> findByJigItemSerialNo(String serialNo);
 
     List<JigItemInspectionRDBEntity> findByIsInspectionFalse();
+
+    List<JigItemInspectionRDBEntity> findByIsInspectionFalseAndJigItemId(Long id);
 }
