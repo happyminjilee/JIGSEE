@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Button } from "@nextui-org/react";
 import styled from "@/styles/requestlist.module.css";
-import { useDrag } from 'react-dnd';
+import { useDrag } from "react-dnd";
 
 interface lst {
   index: number;
@@ -50,8 +50,11 @@ export default function RequestList({ onApproveClick, onReturnClick }: RequestLi
               <div key={index} className={styled.division}>
                 <div style={{ fontWeight: "bold", fontSize: "30px" }}>{info.title}</div>
                 <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-                  {info.content.map((index) => (
-                    <div style={{ margin: "2px" }} key={index}> {index} </div>
+                  {info.content.map((data, index) => (
+                    <div style={{ margin: "2px" }} key={index}>
+                      {" "}
+                      {data}{" "}
+                    </div>
                   ))}
                 </div>
               </div>
