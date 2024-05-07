@@ -3,6 +3,7 @@ package com.sdi.apiserver.api.jig;
 import com.sdi.apiserver.api.jig.client.JigItemClient;
 import com.sdi.apiserver.api.jig.dto.request.*;
 import com.sdi.apiserver.api.jig.dto.response.JigItemFacilityAvailableResponseDto;
+import com.sdi.apiserver.api.jig.dto.response.JigItemInventoryRequestDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
 import com.sdi.apiserver.util.Response;
@@ -78,5 +79,11 @@ class JigItemController {
     Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto) {
         log.info("{} 불출 승인 요청", dto);
         return jigItemClient.accept(dto);
+    }
+
+    @GetMapping("/inventory")
+    Response<JigItemInventoryRequestDto> inventory() {
+        log.info("모델별 재고 요청");
+        return jigItemClient.inventory();
     }
 }

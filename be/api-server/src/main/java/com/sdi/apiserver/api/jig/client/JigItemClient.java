@@ -3,6 +3,7 @@ package com.sdi.apiserver.api.jig.client;
 
 import com.sdi.apiserver.api.jig.dto.request.*;
 import com.sdi.apiserver.api.jig.dto.response.JigItemFacilityAvailableResponseDto;
+import com.sdi.apiserver.api.jig.dto.response.JigItemInventoryRequestDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
 import com.sdi.apiserver.util.Response;
@@ -43,4 +44,7 @@ public interface JigItemClient {
 
     @PutMapping("/accept")
     Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto);
+
+    @GetMapping("/inventory")
+    Response<JigItemInventoryRequestDto> inventory();
 }
