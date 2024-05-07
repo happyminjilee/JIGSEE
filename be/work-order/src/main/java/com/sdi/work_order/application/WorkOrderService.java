@@ -45,8 +45,8 @@ public class WorkOrderService {
         JigItemResponseDto jigItem = getJigItem(rdb.getJigSerialNo());
         WorkOrderNosqlEntity nosql = getNosqlWorkOrderCheckList(rdb.getCheckListId());
 
-        String creator = getMemberInfo(rdb.getCreatorEmployeeNo(), accessToken);
-        String terminator = getMemberInfo(rdb.getTerminatorEmployeeNo(), accessToken);
+        String creator = getMemberInfo(accessToken, rdb.getCreatorEmployeeNo());
+        String terminator = getMemberInfo(accessToken, rdb.getTerminatorEmployeeNo());
 
         return WorkOrderDetailResponseDto.from(rdb, creator, terminator, jigItem, nosql.getCheckList());
     }
