@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sdi.apiserver.api.member.client.MemberClient;
 import com.sdi.apiserver.api.member.dto.request.LoginRequestDto;
 import com.sdi.apiserver.api.member.dto.response.LoginResponseDto;
+import com.sdi.apiserver.api.member.dto.response.MemberEmailResponseDto;
 import com.sdi.apiserver.api.member.dto.response.MemberResponseDto;
 import com.sdi.apiserver.util.CommonException;
 import com.sdi.apiserver.util.HandleFeignResponse;
@@ -56,6 +57,12 @@ class MemberController {
     Response<LoginResponseDto> searchMyInfo(HttpServletRequest httpServletRequest) {
         String accessToken = HeaderUtils.getAccessToken(httpServletRequest);
         return memberClient.searchMyInfo(accessToken);
+    }
+
+    @GetMapping("/member/email")
+    Response<MemberEmailResponseDto> searchMyEmail(HttpServletRequest httpServletRequest) {
+        String accessToken = HeaderUtils.getAccessToken(httpServletRequest);
+        return memberClient.searchMyEmail(accessToken);
     }
 
     @GetMapping("/member/search/name")
