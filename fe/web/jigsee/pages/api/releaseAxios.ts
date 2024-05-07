@@ -10,6 +10,7 @@ export const releaseRequest = async (serialNos: string[]) => {
     })
     .then((response) => {
       console.log(response, "불출요청 성공");
+      window.alert("불출요청이 완료 되었습니다.");
       return true;
     })
     .catch((error) => {

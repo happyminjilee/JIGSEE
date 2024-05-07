@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import { useFacilityStore } from "@/store/facilitystore";
 import { releaseRequest } from "@/pages/api/releaseAxios";
+import { useRouter } from "next/router";
 //transfer list 함수
 // 배열 a에서 배열 b에 없는 항목만 반환
 function not(a: readonly string[], b: readonly string[]) {
@@ -23,14 +24,15 @@ function intersection(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 export default function Request() {
+  const router = useRouter();
   const [selectedFacility, setSelectedFacility] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
 
-  const { loadFacilities, facilities, getJigModels, jigmodels } = useFacilityStore();
+  const { loadFacilities, facilities, getJigSN, jigmodels } = useFacilityStore();
   useEffect(() => {
     loadFacilities();
     if (selectedFacility) {
-      getJigModels(selectedFacility);
+      getJigSN(selectedFacility);
     }
   }, [selectedFacility]);
   // 체크된 아이템을 관리하는 상태
@@ -44,6 +46,7 @@ export default function Request() {
   // jigmodels가 변경될 때마다 left를 업데이트
   useEffect(() => {
     setLeft(jigmodels);
+    console.log("dsds", jigmodels);
   }, [jigmodels]);
   // 필터에 따라 리스트 업데이트
   useEffect(() => {
@@ -119,7 +122,7 @@ export default function Request() {
                   }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={`${value + 1}`} />
+              <ListItemText id={labelId} primary={`${value}`} />
             </ListItemButton>
           );
         })}
@@ -129,7 +132,16 @@ export default function Request() {
   // 불출 요청
   const sendReleaseList = () => {
     console.log(right);
-    releaseRequest(right);
+    releaseRequest(right)
+      .then(() => {
+        // releaseRequest 함수가 성공적으로 완료되면 새로고침
+        alert("불출 요청이 완료 되었습니다.");
+        window.location.reload();
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.error("Failed to send release request:", error);
+      });
   };
 
   return (

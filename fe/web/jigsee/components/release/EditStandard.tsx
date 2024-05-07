@@ -3,6 +3,7 @@ import styled from "@/styles/jigrequest.module.scss";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 import { Select, SelectItem, Divider, Input } from "@nextui-org/react";
 import { updatejigMethod } from "@/pages/api/jigAxios";
+import { useFacilityStore } from "@/store/facilitystore";
 
 // Step 1: prop types 정의
 interface EditStandardProps {
@@ -14,13 +15,10 @@ interface RowData {
 }
 
 export default function EditStandard({ onClose }: EditStandardProps) {
-  const [selectedFacility, setSelectedFacility] = useState("");
+  const { facilityID, facilities, loadFacilities, setfacilityID, editStandardJigs, setEditJigs } =
+    useFacilityStore();
+  const [selectedFacility, setSelectedFacility] = useState(0);
   const [selectedModel, setSelectedModel] = useState("");
-
-  // 설비명 리스트 더미
-  const facilities = ["line cutter", "raser", "metalize"];
-  // 모델명 리스트 더미
-  const models = ["swf235430", "dfdg456872", "ddg24652"];
 
   // Row 타입의 배열로 rows 상태를 정의합니다.
   const [rows, setRows] = useState<RowData[]>([{ content: "", standard: "" }]);
@@ -44,16 +42,25 @@ export default function EditStandard({ onClose }: EditStandardProps) {
 
   // 지그 점검 항목 제출 버튼
   const submitRow = async () => {
+    console.log("ssmodel", selectedModel);
     try {
       console.log("tttt", rows);
       // jig model도 전달하는 로직으로 수정필요
-      const result = await updatejigMethod(rows);
-      console.log(result);
+      const result = await updatejigMethod(selectedModel, rows);
+      console.log("점검항목수정완", result);
+      window.alert("점검 항목 수정이 완료되었습니다.");
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
     onClose();
   };
+  // 설비 선택이 바뀔때마다 설비 아이디 세팅
+  useEffect(() => {
+    loadFacilities();
+    // loadFacilities()가 완료된 후에 실행되어야 하므로 이를 보장하는 로직 필요
+    setfacilityID(selectedFacility);
+    setEditJigs(selectedFacility);
+  }, [selectedFacility, setfacilityID, setEditJigs, loadFacilities]);
   return (
     <>
       <Card className={styled.requestcontainer}>
@@ -66,12 +73,12 @@ export default function EditStandard({ onClose }: EditStandardProps) {
               label="설비 이름"
               labelPlacement="outside-left"
               placeholder="설비를 선택 하세요"
-              onChange={(e) => setSelectedFacility(e.target.value)}
+              onChange={(e) => setSelectedFacility(+e.target.value)}
               className={styled.select}
             >
               {facilities.map((facility) => (
-                <SelectItem key={facility} value={facility}>
-                  {facility}
+                <SelectItem key={facility.id} value={facility.model}>
+                  {facility.model}
                 </SelectItem>
               ))}
             </Select>
@@ -83,7 +90,7 @@ export default function EditStandard({ onClose }: EditStandardProps) {
               className={styled.select}
               onChange={(e) => setSelectedModel(e.target.value)}
             >
-              {models.map((model) => (
+              {editStandardJigs.map((model) => (
                 <SelectItem key={model} value={model}>
                   {model}
                 </SelectItem>

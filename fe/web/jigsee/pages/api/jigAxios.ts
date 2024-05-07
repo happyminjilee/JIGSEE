@@ -10,9 +10,9 @@ export async function getjigMethod(modelID: string) {
 }
 
 // 지그 점검 항목 수정-관리자
-export async function updatejigMethod(checkList: RowData[]) {
+export async function updatejigMethod(jigmodel: string, checkList: RowData[]) {
   const requestBody = {
-    model: "testModelId2",
+    model: jigmodel,
     checkList: checkList,
   };
   return axiosAuthApi().put("http://k10s105.p.ssafy.io:80/api/v1/jig", requestBody);
