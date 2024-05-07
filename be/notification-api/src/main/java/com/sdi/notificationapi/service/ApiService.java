@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Transactional
 public class ApiService {
-    private MemberClient memberClient;
+    private final MemberClient memberClient;
 
     public MemberInfoDto getCurrentMember(String accessToken) {
         return memberClient.getMember(accessToken).getResult();
