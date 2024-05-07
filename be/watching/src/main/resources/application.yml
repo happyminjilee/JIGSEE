@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: watching
+
+  main:
+    allow-bean-definition-overriding: true
+
+  batch:
+    job:
+      enabled: false
+
+    jdbc:
+      initialize-schema: always
+
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/jig
+    username: root
+    password: 1234
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+
+apis:
+  api-base-url: ${API_BASE_URL}
+
+logging:
+  level:
+    org:
+      springframework:
+        batch: info
