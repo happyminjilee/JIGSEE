@@ -2,6 +2,7 @@ package com.sdi.apiserver.api.member.client;
 
 import com.sdi.apiserver.api.member.dto.request.LoginRequestDto;
 import com.sdi.apiserver.api.member.dto.response.LoginResponseDto;
+import com.sdi.apiserver.api.member.dto.response.MemberEmailResponseDto;
 import com.sdi.apiserver.api.member.dto.response.MemberResponseDto;
 import com.sdi.apiserver.util.Response;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,9 @@ public interface MemberClient {
 
     @GetMapping("/member/search")
     Response<LoginResponseDto> searchMyInfo(@RequestHeader("Authorization") String accessToken);
+
+    @GetMapping("/member/email")
+    Response<MemberEmailResponseDto> searchMyEmail(@RequestHeader("Authorization") String accessToken);
 
     @GetMapping("/member/search/name")
     Response<List<MemberResponseDto>>searchName(@RequestHeader("Authorization") String accessToken, @RequestParam("name") String name);
