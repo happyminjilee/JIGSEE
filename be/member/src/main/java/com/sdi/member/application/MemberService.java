@@ -3,6 +3,7 @@ package com.sdi.member.application;
 import com.sdi.member.dto.MemberDto;
 import com.sdi.member.dto.response.MemberLoginResponseDto;
 import com.sdi.member.dto.response.MemberResponseDto;
+import com.sdi.member.entity.RoleType;
 import com.sdi.member.jwt.AuthToken;
 import com.sdi.member.jwt.AuthTokenProvider;
 import com.sdi.member.repository.MemberRepository;
@@ -19,9 +20,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
@@ -150,5 +153,18 @@ public class MemberService {
         return memberRepository.findByEmployeeNo(employeeNo)
                 .map(MemberResponseDto::fromEntity)
                 .orElse(null);
+    }
+
+    public List<MemberResponseDto> searchRole(String role) {
+        RoleType roleType;
+        try {
+            roleType = RoleType.valueOf(role);
+        } catch (IllegalArgumentException e) {
+            throw new CommonException(ErrorCode.INVALID_ROLE);
+        }
+
+        return memberRepository.findAllByRole(roleType).stream()
+                .map(MemberResponseDto::fromEntity)
+                .toList();
     }
 }
