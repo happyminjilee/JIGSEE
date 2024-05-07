@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,6 +10,7 @@ import 'package:jigsee/components/header.dart';
 import 'package:jigsee/api/provider.dart';
 import 'package:jigsee/api/dio_instance.dart';
 import 'package:jigsee/pages/spe_jig_list.dart';
+import 'package:jigsee/consts/size.dart';
 
 class ReadSerialNum extends StatefulWidget {
   const ReadSerialNum({Key? key, required this.camera}) : super(key: key);
@@ -54,24 +54,35 @@ class _ReadSerialNumState extends State<ReadSerialNum> {
                 return const Center(child: CircularProgressIndicator());
               }
             }),
-          TextButton(onPressed: () async {
-            try {
-              await _initializeControllerFuture;
-              final image = await _controller.takePicture();
-              if(!mounted) return;
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DisplayPictureScreen (
-                    imagePath: image.path,
-                  )
-                )
-              );
-            } catch (e) {
-              if (kDebugMode) {
+          const SizedBox(height: largeGap,),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                await _initializeControllerFuture;
+                final image = await _controller.takePicture();
+                if(!mounted) return;
+                await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => DisplayPictureScreen (
+                          imagePath: image.path,
+                        )
+                    )
+                );
+              } catch (e) {
                 print(e);
-              }
-            };
-          }, child: const Text("촬영"),)
+              };
+            },
+            child: const Text('촬영', style: TextStyle(fontSize: 20)),
+            style: ElevatedButton.styleFrom(
+                minimumSize: const Size(360, 50),
+                foregroundColor: const Color.fromARGB(255, 248, 250, 252),
+                backgroundColor: const Color.fromARGB(255, 47, 118, 255),
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)
+                )
+            ),
+          ),
         ],
       )
     );
@@ -167,13 +178,15 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
                         children: [
                           Image.file(File(widget.imagePath), scale: 2.5,),
                           const SizedBox(height: 20),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(ref.watch(selectedJigProvider)),
-                              Text(scannedText.isEmpty ? "Error scanning" : scannedText),
-                            ]
-                          )
+                          Expanded(
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(ref.watch(selectedJigProvider)),
+                                    Text(scannedText.isEmpty ? "Error scanning" : scannedText),
+                                  ]
+                              )
+                          ),
                         ],
                       ),
                     ),

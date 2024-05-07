@@ -26,7 +26,7 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
         await _storage.write(key: 'accessToken', value: response.headers['authorization']);
         await _storage.write(key: 'refreshToken', value: response.headers['refreshtoken']);
         await _storage.write(key: 'userName', value: data['result']['name']);
