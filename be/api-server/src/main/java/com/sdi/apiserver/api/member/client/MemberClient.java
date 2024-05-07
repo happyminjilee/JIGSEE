@@ -31,7 +31,7 @@ public interface MemberClient {
     @GetMapping("/member/search/employee-no")
     Response<MemberResponseDto> searchEmployeeNo(@RequestHeader("Authorization") String accessToken, @RequestParam("employee-no") String employeeNo);
 
-    @GetMapping("/member/search/role")
+    @GetMapping("/search/role")
     Response<List<MemberResponseDto>> searchRole(@RequestHeader("Authorization") String accessToken, @RequestParam("role") String role);
 
     @GetMapping("/manager")
