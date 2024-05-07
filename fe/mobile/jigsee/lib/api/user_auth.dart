@@ -55,11 +55,12 @@ class AuthService {
       if (response.statusCode == 200) {
         await _storage.write(key:'accessToken', value: response.headers['authorization']);
         await _storage.write(key:'refreshToken', value: response.headers['refreshtoken']);
+        return true;
       } else if (response.statusCode == 401) {
         await logout();
         return false;
       }
-      return true;
+      return false;
     } catch(e) {
       await logout();
       return false;

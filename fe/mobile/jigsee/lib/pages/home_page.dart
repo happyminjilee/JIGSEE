@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jigsee/api/user_auth.dart';
 import 'package:jigsee/components/header.dart';
 import 'package:jigsee/pages/spe_jig_list.dart';
 import 'package:jigsee/api/provider.dart';
@@ -56,8 +56,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                   child: ref.watch(userNameProvider).when(
                     data: (userName) => ListTile(
-                      title: const Text('주감자 프로'),
-                      // title: Text('$userName 프로'),
+                      // title: const Text('주감자 프로'),
+                      title: Text('$userName 프로'),
                       trailing: IconButton(
                         icon: const Icon(Icons.logout),
                         onPressed: _showLogoutDialog,
@@ -187,8 +187,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             TextButton(
               onPressed: () async {
                 try {
-                  const secureStorage = FlutterSecureStorage();
-                  await secureStorage.deleteAll();
+                  await AuthService().logout();
                   Navigator.of(context).pop();
                   Navigator.pushNamed(context, "/login");
                 } catch (e) {
