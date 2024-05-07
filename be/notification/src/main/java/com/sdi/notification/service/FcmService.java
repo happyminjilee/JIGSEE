@@ -5,7 +5,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.sdi.notification.dto.MemberInfoDto;
-import com.sdi.notification.dto.request.FcmRequestDto;
+import com.sdi.notification.dto.request.NotificationFcmInspectionRequestDto;
 import com.sdi.notification.dto.request.FcmTokenRequestDto;
 import com.sdi.notification.entity.FcmEntity;
 import com.sdi.notification.entity.NotificationEntity;
@@ -28,10 +28,10 @@ public class FcmService {
     private final ApiService apiService;
 
     @Transactional
-    public void sendNotificationTo(String accessToken, FcmRequestDto fcmRequestDto) {
-        List<String> receivers = apiService.getMembersInRole(accessToken, "PRODUCER")
+    public void sendNotificationTo(NotificationFcmInspectionRequestDto notificationFcmInspectionRequestDto) {
+        List<String> receivers = apiService.getMembersInRole("PRODUCER")
                 .stream()
-                .map(employee -> employee.employeeNo())
+                .map(MemberInfoDto::employeeNo)
                 .collect(Collectors.toList());
 
         List<FcmEntity> fcmToken = fcmRepository.findAllByEmployeeNoIn(receivers)
@@ -40,7 +40,7 @@ public class FcmService {
         try {
             for (FcmEntity fcmEntity : fcmToken) {
                 Message message = makeMessage(fcmEntity);
-                saveToNotificationDB(fcmRequestDto, fcmEntity.getToken());
+                saveToNotificationDB(notificationFcmInspectionRequestDto, fcmEntity.getToken());
                 firebaseMessaging.send(message);
             }
         } catch (FirebaseMessagingException e) {
@@ -64,8 +64,8 @@ public class FcmService {
         fcmRepository.save(FcmEntity.from(memberInfoDto.employeeNo(), fcmTokenRequestDto));
     }
 
-    private NotificationEntity saveToNotificationDB(FcmRequestDto fcmRequestDto, String receiverId) {
-        NotificationEntity savedNotification = NotificationEntity.of(receiverId, fcmRequestDto);
+    private NotificationEntity saveToNotificationDB(NotificationFcmInspectionRequestDto notificationFcmInspectionRequestDto, String receiverId) {
+        NotificationEntity savedNotification = NotificationEntity.of(receiverId, notificationFcmInspectionRequestDto);
         notificationRepository.save(savedNotification);
         return savedNotification;
     }

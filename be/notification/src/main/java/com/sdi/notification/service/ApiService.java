@@ -18,7 +18,7 @@ public class ApiService {
         return memberClient.getMember(accessToken).getResult();
     }
 
-    public List<MemberInfoDto> getMembersInRole(String accessToken, String role) {
-        return memberClient.getMembersInRole(accessToken, role).getResult();
+    public List<MemberInfoDto> getMembersInRole(String role) {
+        return memberClient.getMembersInRole(role).getResult();
     }
 }

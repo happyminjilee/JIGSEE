@@ -1,6 +1,6 @@
 package com.sdi.notification.controller;
 
-import com.sdi.notification.dto.request.FcmRequestDto;
+import com.sdi.notification.dto.request.NotificationFcmInspectionRequestDto;
 import com.sdi.notification.dto.request.FcmTokenRequestDto;
 import com.sdi.notification.service.FcmService;
 import com.sdi.notification.util.Response;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,9 +23,9 @@ class FcmController {
         return Response.success();
     }
 
-    @PostMapping("/send-message")
-    Response<Void> sendNotification(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken, @RequestBody FcmRequestDto fcmRequestDto) {
-        fcmService.sendNotificationTo(accessToken, fcmRequestDto);
+    @PostMapping("/inspection")
+    Response<Void> sendNotification(@RequestBody NotificationFcmInspectionRequestDto notificationFcmInspectionRequestDto) {
+        fcmService.sendNotificationTo(notificationFcmInspectionRequestDto);
         return Response.success();
     }
 }
