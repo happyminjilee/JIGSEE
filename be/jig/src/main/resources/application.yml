@@ -20,6 +20,9 @@ server:
   servlet:
     context-path: /api
 
+apis:
+  api-base-url: ${API_BASE_URL}
+
 ---
 spring:
   config:

@@ -1,5 +1,7 @@
 package com.sdi.jig.application;
 
+import com.sdi.jig.client.NotificationApiClient;
+import com.sdi.jig.dto.request.NotificationFcmInspectionRequestDto;
 import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto.JigItemSummary;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.sdi.jig.dto.request.JigItemAddRequestDto.JigAddRequest;
 
@@ -32,6 +35,7 @@ public class JigItemService {
     private final FacilityJigMappingRDBRepository facilityJigMappingRDBRepository;
     private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
     private final JigItemInspectionRDBRepository jigItemInspectionRDBRepository;
+    private final NotificationApiClient notificationApiClient;
 
     public JigItemResponseDto findBySerialNo(String serialNo) {
         JigItemRDBEntity rdb = getJigItemBySerialNo(serialNo);
@@ -119,17 +123,31 @@ public class JigItemService {
     public void jigItemInspection(List<String> serialNos) {
         List<JigItemRDBEntity> bySerialNoIn = jigItemRDBRepository.findBySerialNoIn(serialNos);
         List<JigItemInspectionRDBEntity> datas = new ArrayList<>();
+        List<String> newJigInspectionSerialNos = new ArrayList<>();
+        String notificationId = UUID.randomUUID().toString();
 
         for (JigItemRDBEntity jigItemRDBEntity : bySerialNoIn) {
             // 아직 점검 리스트에 포함되지 않은 지그일 경우 데이터 추가 -> 중복 방지
             boolean empty = jigItemInspectionRDBRepository.findByIsInspectionFalseAndJigItemId(jigItemRDBEntity.getId())
                     .isEmpty();
             if (empty) {
-                datas.add(JigItemInspectionRDBEntity.of(jigItemRDBEntity));
+                newJigInspectionSerialNos.add(jigItemRDBEntity.getSerialNo());
+                datas.add(JigItemInspectionRDBEntity.of(jigItemRDBEntity, notificationId));
             }
         }
 
+        // 데이터 저장
         jigItemInspectionRDBRepository.saveAll(datas);
+
+        // 알람 전송
+        sendToNotification(notificationId, newJigInspectionSerialNos);
+    }
+
+    private void sendToNotification(String notificationId, List<String> newJigInspectionSerialNos) {
+        if(!newJigInspectionSerialNos.isEmpty()) {
+            NotificationFcmInspectionRequestDto dto = NotificationFcmInspectionRequestDto.from(notificationId, newJigInspectionSerialNos);
+            notificationApiClient.inspection(dto);
+        }
     }
 
     public List<FacilityItemRDBEntity> getNeedToInspectionFacilityItems() {

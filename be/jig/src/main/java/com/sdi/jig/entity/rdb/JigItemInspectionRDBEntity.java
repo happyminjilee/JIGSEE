@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "jig_item_inspection")
@@ -31,8 +32,11 @@ public class JigItemInspectionRDBEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public static JigItemInspectionRDBEntity of(JigItemRDBEntity jigItem){
-        return new JigItemInspectionRDBEntity(null, false, jigItem, LocalDateTime.now(), null);
+    @Column(name = "notification_id")
+    private String notificationId;
+
+    public static JigItemInspectionRDBEntity of(JigItemRDBEntity jigItem, String notificationId){
+        return new JigItemInspectionRDBEntity(null, false, jigItem, LocalDateTime.now(), null, notificationId);
     }
 
     public void updateIsInspection(){
