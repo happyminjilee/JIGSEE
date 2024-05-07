@@ -73,4 +73,10 @@ class JigItemController {
         log.info("{} 점검 항목 등록 요청", dto);
         return jigItemClient.inspection(dto);
     }
+
+    @PutMapping("/accept")
+    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto) {
+        log.info("{} 불출 승인 요청", dto);
+        return jigItemClient.accept(dto);
+    }
 }

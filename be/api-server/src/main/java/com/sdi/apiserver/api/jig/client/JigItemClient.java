@@ -40,4 +40,7 @@ public interface JigItemClient {
 
     @PostMapping("/inspection")
     Response<Void> inspection(@RequestBody JigItemInspectionRequestDto dto);
+
+    @PutMapping("/accept")
+    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto);
 }
