@@ -15,6 +15,7 @@ public enum ErrorCode {
     EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "RefreshToken is expired"),
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "Permission is invalid"),
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "Request is invalid"),
+    INVALID_ROLE(HttpStatus.BAD_REQUEST, "Role is invalid"),
     INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "Access Token is invalid"),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "Refresh Token is invalid"),
     INVALID_PASSWORD(HttpStatus.NOT_FOUND, "Password is invalid"),
