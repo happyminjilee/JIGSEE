@@ -70,6 +70,12 @@ class MemberController {
         return memberClient.searchEmployeeNo(accessToken, employeeNo);
     }
 
+    @GetMapping("/member/search/role")
+    Response<List<MemberResponseDto>> searchRole(HttpServletRequest httpServletRequest, @RequestParam(name = "role") String role) {
+        String accessToken = HeaderUtils.getAccessToken(httpServletRequest);
+        return memberClient.searchRole(accessToken, role);
+    }
+
     @GetMapping("/manager")
     Response<Void> managerCheck(HttpServletRequest request) {
         String accessToken = HeaderUtils.getAccessToken(request);
