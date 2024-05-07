@@ -43,7 +43,7 @@ public interface JigItemClient {
     Response<Void> inspection(@RequestBody JigItemInspectionRequestDto dto);
 
     @PutMapping("/accept")
-    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto);
+    Response<Void> accept(@RequestHeader("Authorization") String accessToken, @RequestBody JigItemAcceptRequestDto dto);
 
     @GetMapping("/inventory")
     Response<JigItemInventoryRequestDto> inventory();
