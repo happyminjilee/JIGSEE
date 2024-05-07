@@ -19,15 +19,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JobConfiguration {
 
+    private static final String FAILED = "FAILED";
+
     @Bean
-    public Job watchingJigJob(JobRepository jobRepository, Step loadTooMuchUseJigItemStep, Step sendToWorkOrderServerStep, Step sendToNotificationApiServerStep) {
+    public Job watchingJigJob(JobRepository jobRepository, Step loadTooMuchUseJigItemStep, Step sendToWorkOrderServerStep, Step sendToJigItemServerStep, Step sendToNotificationApiServerStep) {
         return new JobBuilder("watchingJigJobTest", jobRepository)
                 .start(loadTooMuchUseJigItemStep)
-                .next(sendToWorkOrderServerStep)
-                .on("FAILED").end()
+                .on(FAILED).end()
 
-                .from(sendToWorkOrderServerStep)
-                .on("*").to(sendToNotificationApiServerStep) // sendToWorkOrderServerStep에서 성공했을 때만 sendToNotificationApiServerStep으로 전환합니다.
+                .from(loadTooMuchUseJigItemStep)
+                .on("*").to(sendToJigItemServerStep)
+
+                .from(sendToJigItemServerStep)
+                .on(FAILED).end()
+                .on("*").to(sendToWorkOrderServerStep)
+
+                .from(sendToJigItemServerStep)
+                .on("*").to(sendToNotificationApiServerStep)
+
                 .end()
                 .build();
     }
@@ -49,6 +58,15 @@ public class JobConfiguration {
                 .tasklet(sendToWorkOrderServerTasklet, platformTransactionManager)
                 .build();
 
+    }
+
+    @Bean
+    public Step sendToJigItemServerStep(JobRepository jobRepository,
+                                        PlatformTransactionManager platformTransactionManager,
+                                        Tasklet sendToJigItemServerTasklet) {
+        return new StepBuilder("sendToJigItemServerStep", jobRepository)
+                .tasklet(sendToJigItemServerTasklet, platformTransactionManager)
+                .build();
     }
 
     @Bean

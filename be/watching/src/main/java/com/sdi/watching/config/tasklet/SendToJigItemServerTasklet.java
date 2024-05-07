@@ -1,6 +1,6 @@
 package com.sdi.watching.config.tasklet;
 
-import com.sdi.watching.client.WorkOrderClient;
+import com.sdi.watching.client.JigItemClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
@@ -14,18 +14,17 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SendToWorkOrderServerTasklet implements Tasklet {
+public class SendToJigItemServerTasklet implements Tasklet {
 
-    private final WorkOrderClient workOrderClient;
+    private final JigItemClient jigItemClient;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        log.info(">>> sendToWorkOrderServerTasklet 실행");
+        log.info(">>> SendToJigServerTasklet 실행");
         List<Long> serialNos = (List<Long>) contribution.getStepExecution().getJobExecution().getExecutionContext().get("ids");
         if (serialNos != null) {
-            // workOrderClient.create(WorkOrderAutoCreateRequestDto.from(serialNos));
+            //jigItemClient.inspection(ClientSerialNosRequestDto.from(serialNos));
         }
-
         return RepeatStatus.FINISHED;
     }
 }
