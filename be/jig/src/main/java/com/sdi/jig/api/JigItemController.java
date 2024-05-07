@@ -78,4 +78,10 @@ class JigItemController {
         jigItemService.accept(accessToken, dto);
         return Response.success();
     }
+
+    @GetMapping("inventory")
+    Response<JigItemInventoryRequestDto> inventory(){
+        JigItemInventoryRequestDto dto = jigItemService.inventory();
+        return Response.success(dto);
+    }
 }

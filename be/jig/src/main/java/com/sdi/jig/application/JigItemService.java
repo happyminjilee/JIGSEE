@@ -3,6 +3,7 @@ package com.sdi.jig.application;
 import com.sdi.jig.client.NotificationApiClient;
 import com.sdi.jig.client.NotificationClient;
 import com.sdi.jig.dto.request.JigItemAcceptRequestDto;
+import com.sdi.jig.dto.request.JigItemInventoryRequestDto;
 import com.sdi.jig.dto.request.NotificationFcmInspectionRequestDto;
 import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
@@ -20,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.sdi.jig.dto.request.JigItemAddRequestDto.JigAddRequest;
 
@@ -180,6 +183,14 @@ public class JigItemService {
         }
 
         notificationApiClient.accept(accessToken, dto);
+    }
+
+    public JigItemInventoryRequestDto inventory() {
+        List<JigItemRDBEntity> byStatus = jigItemRDBRepository.findByStatus(JigStatus.WAREHOUSE);
+        Map<String, List<JigItemRDBEntity>> groupByModel = byStatus.stream()
+                .collect(Collectors.groupingBy(e -> e.getJig().getModel()));
+
+        return JigItemInventoryRequestDto.from(groupByModel);
     }
 
     private List<Long> extractJigIds(FacilityRDBEntity facilityByModel) {
