@@ -1,6 +1,8 @@
 package com.sdi.jig.application;
 
 import com.sdi.jig.client.NotificationApiClient;
+import com.sdi.jig.client.NotificationClient;
+import com.sdi.jig.dto.request.JigItemAcceptRequestDto;
 import com.sdi.jig.dto.request.NotificationFcmInspectionRequestDto;
 import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
@@ -35,6 +37,7 @@ public class JigItemService {
     private final FacilityJigMappingRDBRepository facilityJigMappingRDBRepository;
     private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
     private final JigItemInspectionRDBRepository jigItemInspectionRDBRepository;
+    private final NotificationClient notificationClient;
     private final NotificationApiClient notificationApiClient;
 
     public JigItemResponseDto findBySerialNo(String serialNo) {
@@ -144,9 +147,9 @@ public class JigItemService {
     }
 
     private void sendToNotification(String notificationId, List<String> newJigInspectionSerialNos) {
-        if(!newJigInspectionSerialNos.isEmpty()) {
+        if (!newJigInspectionSerialNos.isEmpty()) {
             NotificationFcmInspectionRequestDto dto = NotificationFcmInspectionRequestDto.from(notificationId, newJigInspectionSerialNos);
-            notificationApiClient.inspection(dto);
+            notificationClient.inspection(dto);
         }
     }
 
@@ -168,11 +171,15 @@ public class JigItemService {
     }
 
     @Transactional
-    public void accept(List<String> serialNos) {
-        List<JigItemRDBEntity> bySerialNoIn = jigItemRDBRepository.findBySerialNoIn(serialNos);
-        for (JigItemRDBEntity jigItemRDBEntity : bySerialNoIn) {
-            jigItemRDBEntity.updateState(JigStatus.READY);
+    public void accept(String accessToken, JigItemAcceptRequestDto dto) {
+        if (dto.isAccept()) {
+            List<JigItemRDBEntity> bySerialNoIn = jigItemRDBRepository.findBySerialNoIn(dto.serialNos());
+            for (JigItemRDBEntity jigItemRDBEntity : bySerialNoIn) {
+                jigItemRDBEntity.updateState(JigStatus.READY);
+            }
         }
+
+        notificationApiClient.accept(accessToken, dto);
     }
 
     private List<Long> extractJigIds(FacilityRDBEntity facilityByModel) {

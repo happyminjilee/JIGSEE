@@ -6,6 +6,8 @@ import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemResponseDto;
 import com.sdi.jig.util.Response;
+import com.sdi.jig.util.TokenHeader;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,8 +73,9 @@ class JigItemController {
     }
 
     @PutMapping("/accept")
-    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto){
-        jigItemService.accept(dto.serialNos());
+    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto, HttpServletRequest request){
+        String accessToken = request.getHeader(TokenHeader.AUTHORIZATION);
+        jigItemService.accept(accessToken, dto);
         return Response.success();
     }
 }
