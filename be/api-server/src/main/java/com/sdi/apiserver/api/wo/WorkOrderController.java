@@ -1,10 +1,7 @@
 package com.sdi.apiserver.api.wo;
 
 import com.sdi.apiserver.api.wo.client.WorkOrderClient;
-import com.sdi.apiserver.api.wo.dto.request.WorkOrderCreateRequest;
-import com.sdi.apiserver.api.wo.dto.request.WorkOrderDoneRequestDto;
-import com.sdi.apiserver.api.wo.dto.request.WorkOrderUpdateRequestDto;
-import com.sdi.apiserver.api.wo.dto.request.WorkOrderUpdateStatusRequestDto;
+import com.sdi.apiserver.api.wo.dto.request.*;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderDetailResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderGroupingResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderResponseDto;
@@ -64,6 +61,11 @@ public class WorkOrderController {
     @PutMapping("/status")
     Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto) {
         return workOrderClient.updateStatus(dto);
+    }
+
+    @PostMapping("/auto")
+    Response<Void> autoCreate(@RequestBody WorkOrderAutoCreateRequestDto dto){
+        return workOrderClient.autoCreate(dto);
     }
 
     private String getAccessToken(HttpServletRequest request) {

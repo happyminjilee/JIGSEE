@@ -1,4 +1,4 @@
-package com.sdi.apiserver.api.facility;
+package com.sdi.apiserver.api.facility.dto.response;
 
 import java.util.List;
 
