@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getfacility, getfacilitylist } from "@/pages/api/facilityAxios";
+import { getfacilityitems, getfacilitylist } from "@/pages/api/facilityAxios";
 
 interface facilities {
   id: number;
@@ -30,8 +30,8 @@ interface FacilityStore {
   facilityID: number;
   loadFacilities: () => Promise<void>;
   setfacilityID: (ID: number) => Promise<void>;
-  jigmodels: jigs[];
-  getJigModels: () => Promise<void>;
+  jigmodels: string[];
+  getJigModels: (faciliityId: string) => Promise<void>;
 }
 export const useFacilityStore = create<FacilityStore>((set) => ({
   facilities: [],
@@ -48,5 +48,9 @@ export const useFacilityStore = create<FacilityStore>((set) => ({
     set({ facilityID: ID }); // 수정: id → ID
   },
   jigmodels: [],
-  getJigModels: async () => {},
+  getJigModels: async (faciliityId: string) => {
+    const data = await getfacilityitems(faciliityId);
+    console.log("getjiglist", data.list);
+    set({ jigmodels: data.list });
+  },
 }));
