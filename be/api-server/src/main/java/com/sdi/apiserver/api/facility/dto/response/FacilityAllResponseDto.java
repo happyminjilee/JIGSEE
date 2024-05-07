@@ -12,6 +12,7 @@ public record FacilityAllResponseDto(
     public record FacilityInfo(
         Long id,
         String model,
+        List<String> jigModels,
         String facilitySerialNo,
         List<String> jigItemSerialNos
     ){
