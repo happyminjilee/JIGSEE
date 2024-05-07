@@ -1,6 +1,8 @@
 package com.sdi.apiserver.api.notification.client;
 
+import com.sdi.apiserver.api.notification.dto.request.FcmTokenRequestDto;
 import com.sdi.apiserver.api.notification.dto.request.MessageRequestDto;
+import com.sdi.apiserver.api.notification.dto.request.NotificationFcmInspectionRequestDto;
 import com.sdi.apiserver.api.notification.dto.response.NotificationListResponseDto;
 import com.sdi.apiserver.api.notification.dto.response.UncheckedNotificationListResponseDto;
 import com.sdi.apiserver.util.Response;
@@ -34,5 +36,9 @@ public interface NotificationClient {
                                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                                     @RequestParam(value = "size", defaultValue = "10") int size);
 
+    @PostMapping(value = "/notification/fcm/token")
+    Response<Void> saveToken(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken, @RequestBody FcmTokenRequestDto fcmTokenRequestDto);
 
+    @PostMapping(value = "/notification/fcm/inspection")
+    Response<Void> sendInspectionNotification(@RequestBody NotificationFcmInspectionRequestDto dto);
 }
