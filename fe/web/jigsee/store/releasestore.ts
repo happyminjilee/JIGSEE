@@ -32,6 +32,7 @@ interface releaseDetail {
   updatedAt: string;
   serialNos: string[]; // 요청 지그 리스트
   fetchReleaseDetail: (id: string) => Promise<AxiosResponse>;
+  setSerialNos: (n:string[]) => void;
 }
 
 interface modalState {
@@ -69,6 +70,9 @@ export const useReleaseDetailStore = create<releaseDetail>((set) => ({
   createdAt: [], // 요청시간
   updatedAt: "",
   serialNos: [], // 요청 지그 리스트
+  setSerialNos: (n:string[]) => {
+    set({serialNos:n})
+  },
   fetchReleaseDetail: async (id: string) => {
     const data = await releaseDetailGet(id);
     console.log("releaseDetail", data);

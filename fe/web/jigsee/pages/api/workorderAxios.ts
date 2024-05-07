@@ -73,3 +73,19 @@ export async function updateWoList(
   };
   return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/work-order/status", requestBody);
 }
+
+
+export async function getUserWoList(
+    employeeNo: string,
+    name: string,
+    page: number,
+    size: number,
+) {
+  const params = {
+    'employee-no': employeeNo,
+    name: name,
+    page: page,
+    size: size
+  };
+  return axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/work-order", {params});
+}

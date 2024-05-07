@@ -1,7 +1,7 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { Divider, Textarea } from "@nextui-org/react";
 import styles from "@/styles/modal/releaseapprove.module.scss";
-import {useButtonClickStore, useReleaseDetailStore} from "@/store/releasestore";
+import {useButtonClickStore, useReleaseDetailStore, useReleaseStore} from "@/store/releasestore";
 import {releaseResponse} from "@/pages/api/releaseAxios"
 import {useEffect} from "react";
 
@@ -13,7 +13,8 @@ interface ApproveProps {
 
 export default function Approve({ onClose }: ApproveProps) {
   const {id} = useButtonClickStore()
-  const {fetchReleaseDetail, serialNos} = useReleaseDetailStore()
+  const {fetchReleaseDetail, serialNos, setSerialNos} = useReleaseDetailStore()
+  const {fetchRelease} = useReleaseStore()
   useEffect(() => {
     fetchReleaseDetail(id)
         .then((res) => {
@@ -36,7 +37,17 @@ export default function Approve({ onClose }: ApproveProps) {
           console.log(error.message)
         })
         .finally(() => {
-          onClose()
+          fetchRelease("PUBLISH", 1, 10)
+              .then((res) => {
+                  console.log('after approve request', res)
+              })
+              .catch((error) => {
+                  console.log(error.message)
+              })
+              .finally(() => {
+                  setSerialNos([])
+                  onClose()
+              })
         })
   }
   return (

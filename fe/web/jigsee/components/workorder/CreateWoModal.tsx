@@ -4,6 +4,7 @@ import {Input} from "@nextui-org/react"
 import {useCompoStore} from "@/store/workorderstore";
 import {useState} from "react";
 import {createWo} from "@/pages/api/workorderAxios";
+import ClearIcon from "@mui/icons-material/Clear";
 
 interface lst {
     model: string;
@@ -18,7 +19,7 @@ export default function createWoModal() {
         modalName, setModalName} = useCompoStore()
 
     const [serialNumber, setSerialNumber] = useState("");
-    const close = () => {
+    const submit = () => {
         if (serialNumber.trim() === "") {
             alert("시리얼 번호를 입력해 주세요");
             return
@@ -38,11 +39,23 @@ export default function createWoModal() {
                 })
         }
     }
+
+    const close = () => {
+
+        setModal(false)
+        setModalName("")
+    }
     return (
         <>
             <div
                 className={styled.container}
             >
+                <div
+                    className={styled.close}
+                    onClick={() => {close()}}
+                >
+                    <ClearIcon/>
+                </div>
                 <div
                     className={styled.title}
                 >
@@ -65,7 +78,7 @@ export default function createWoModal() {
                     margin: "10px auto"
                 }}
                         color="primary"
-                        onPress={() => {close()}}
+                        onPress={() => {submit()}}
                 >
                     확인
                 </Button>

@@ -11,7 +11,7 @@ export default function workorder() {
     const {id, status, createdAt, creator, checkList, jigItemInfo,terminator, updatedAt} = useWoDetailStore()
     const [qualification, setQualification] = useState(false)
     useEffect(() => {
-        const allQualified = checkList.every(item=> item.passOrNot === true)
+        const allQualified = checkList.every(item=> item.passOrNot)
         setQualification(allQualified)
     }, []);
     const WorkOrder =
@@ -161,6 +161,7 @@ export default function workorder() {
                         >
                             Test Result
                         </div>
+                        <div>
                             <table
                                 style={{
                                     width: "80%",
@@ -194,6 +195,7 @@ export default function workorder() {
                                 ))}
                                 </tbody>
                             </table>
+                        </div>
                     </div>
                     <div className={styled.compo41}>
                         <div
@@ -203,7 +205,11 @@ export default function workorder() {
                         >
                             Qualification
                         </div>
-                        {qualification ? <CheckIcon/>: <ClearIcon/>}
+                        <div className={styled.compo42}>
+                            {qualification ? <CheckIcon/>: <ClearIcon/>}
+                        </div>
+                        <div></div>
+
                     </div>
                 </div>
             </div>

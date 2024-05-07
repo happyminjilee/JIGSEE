@@ -1,7 +1,7 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { Divider, Textarea } from "@nextui-org/react";
 import styles from "@/styles/modal/releasereturn.module.css";
-import {useButtonClickStore, useReleaseDetailStore} from "@/store/releasestore";
+import {useButtonClickStore, useReleaseDetailStore, useReleaseStore} from "@/store/releasestore";
 import React, {useEffect, useState} from "react";
 import {releaseResponse} from "@/pages/api/releaseAxios";
 // Props에 대한 인터페이스 정의
@@ -10,7 +10,8 @@ interface ReturnProps {
 }
 export default function Return({ onClose }: ReturnProps) {
   const {id} = useButtonClickStore()
-  const {fetchReleaseDetail,} = useReleaseDetailStore()
+  const {fetchReleaseDetail, } = useReleaseDetailStore()
+  const {fetchRelease, } = useReleaseStore()
   useEffect(() => {
     fetchReleaseDetail(id)
         .then((res) => {
@@ -35,8 +36,17 @@ export default function Return({ onClose }: ReturnProps) {
           console.log(error.message)
         })
         .finally(() => {
-          setMemo("")
-          onClose()
+          fetchRelease("PUBLISH", 1, 10)
+              .then((res) => {
+                  console.log('after return request', res)
+              })
+              .catch((error) => {
+                  console.log(error.message)
+              })
+              .finally(() => {
+                  setMemo("")
+                  onClose()
+              })
         })
   }
     useEffect(() => {

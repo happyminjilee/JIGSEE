@@ -7,10 +7,35 @@
 .container {
     margin: auto;
     width: 600px;
-    height: 800px;
+    height: 100%;
     border: 0.1px solid;
     background-color: var(--realwhite);
+    overflow-y: auto;
+    overflow-x: auto;
 }
+
+
+.container::-webkit-scrollbar {
+    width: 3px;
+}
+
+.container::-webkit-scrollbar-button {
+    display: none;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background-color: var(--realwhite); /* 스크롤바 썸의 배경색 */
+    border-radius: 10px; /* 스크롤바 썸의 모서리 둥글게 */
+    background-clip: padding-box;
+    border: 2px solid var(--realwhite); /* 스크롤바 썸의 테두리 색상 (선택적) */
+}
+
+.container::-webkit-scrollbar-track {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px var(--realwhite);
+}
+
 
 .header {
     display: flex;
@@ -20,6 +45,8 @@
     font-size: 30px;
     margin: 10px auto;
 }
+
+
 
 .checks {
     display: flex;
@@ -112,6 +139,14 @@
     height: auto;
     margin: 10px auto;
 }
+
+.compo42 {
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 .cell {
     border: 1px solid black;

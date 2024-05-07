@@ -84,5 +84,6 @@
 }
 
 .short {
-  max-width: 200px;
+  max-width: 100px;
+  margin-left: 45px;
 }

@@ -73,15 +73,6 @@ export default function RequestList() {
     }, [])
 
 
-    const testPut = () => {
-        doneWo(id, transformed)
-            .then((res) => {
-                console.log(res)
-            })
-            .catch((error) => {
-                console.log(error.message)
-            })
-    }
 
     return (
         <>
@@ -161,15 +152,6 @@ export default function RequestList() {
                                     onPress={() => {goTest()}}
                                 >
                                     Test 결과 입력
-                                </Button>
-                                <Button
-                                    color={"primary"}
-                                    style={{
-                                        width: "180px",
-                                    }}
-                                    onPress={() => {testPut()}}
-                                >
-                                    제출
                                 </Button>
                             </div>
                         }

@@ -11,6 +11,19 @@
     background-color: var(--realwhite);
 }
 
+.close {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 10px 10px auto auto;
+}
+
+.close:hover {
+    color: var(--gray);
+    cursor: pointer;
+}
+
 .title {
     margin: 30px auto 20px auto;
     font-weight: 900;
@@ -24,7 +37,7 @@
     flex-wrap: wrap;
     align-items: center;
     border-radius: 0.5rem;
-    background-color: var(--light-gray);
+    background-color: var(--realwhite);
     overflow-y: auto;
     overflow-x: hidden;
     width: 300px;
