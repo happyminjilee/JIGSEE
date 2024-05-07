@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/notification/fcm")
+@RequestMapping("/v1/notification/fcm")
 @RequiredArgsConstructor
 public class FcmController {
     public static final String ACCESS_TOKEN_PREFIX = "Authorization";

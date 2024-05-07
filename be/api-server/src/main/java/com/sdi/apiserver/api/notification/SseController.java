@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
-@RequestMapping("/notification/sse")
+@RequestMapping("/v1/notification/sse")
 @RequiredArgsConstructor
 public class SseController {
     public static final String ACCESS_TOKEN_PREFIX = "Authorization";
