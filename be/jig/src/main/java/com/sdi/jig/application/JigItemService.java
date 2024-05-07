@@ -167,6 +167,14 @@ public class JigItemService {
                 .toList();
     }
 
+    @Transactional
+    public void accept(List<String> serialNos) {
+        List<JigItemRDBEntity> bySerialNoIn = jigItemRDBRepository.findBySerialNoIn(serialNos);
+        for (JigItemRDBEntity jigItemRDBEntity : bySerialNoIn) {
+            jigItemRDBEntity.updateState(JigStatus.READY);
+        }
+    }
+
     private List<Long> extractJigIds(FacilityRDBEntity facilityByModel) {
         return getFacilityJigMappingByFacilityId(facilityByModel.getId())
                 .stream()

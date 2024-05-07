@@ -69,4 +69,10 @@ class JigItemController {
         jigItemService.jigItemInspection(dto.serialNos());
         return Response.success();
     }
+
+    @PutMapping("/accept")
+    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto){
+        jigItemService.accept(dto.serialNos());
+        return Response.success();
+    }
 }
