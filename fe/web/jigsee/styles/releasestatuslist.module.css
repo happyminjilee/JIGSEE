@@ -25,16 +25,16 @@
 }
 
 .contents::-webkit-scrollbar-thumb {
-  background-color: var(--samsungblue); /* 스크롤바 썸의 배경색 */
+  background-color: var(--realwhite); /* 스크롤바 썸의 배경색 */
   border-radius: 10px; /* 스크롤바 썸의 모서리 둥글게 */
   background-clip: padding-box;
-  border: 2px solid var(--samsungblue); /* 스크롤바 썸의 테두리 색상 (선택적) */
+  border: 2px solid var(--realwhite); /* 스크롤바 썸의 테두리 색상 (선택적) */
 }
 
 .contents::-webkit-scrollbar-track {
   background-color: var(--white);
   border-radius: 10px;
-  box-shadow: inset 0px 0px 5px var(--white);
+  box-shadow: inset 0px 0px 5px var(--realwhite);
 }
 
 .card {

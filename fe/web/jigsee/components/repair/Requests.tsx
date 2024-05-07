@@ -18,7 +18,7 @@ export default function RequestList() {
     const {setMart} = useMartStore()
     const {fetchWoGroup, publish, progress, finish} = useWoGroupStore()
     const {addForFilter, clearForFilter, select, setSelect} = useGroupFilter()
-    const forRequest = cartList.map((a) => ({id: a.id, status: a.status}))
+    const forRequest = cartList.map((a) => ({id: a.id, status: "PROGRESS"}))
 
     const openModal = () => {
     //     모달 열어서 wo 생성 마무리
@@ -27,7 +27,8 @@ export default function RequestList() {
 
     const requestPost = () => {
         // 리스트로 담아서 상태 변화
-
+        console.log('cartList', cartList)
+        console.log('forRequest', forRequest)
         // store 설정, 담아있는 리스트를 반환
         updateWoList(forRequest)
             .then((res) => {

@@ -1,8 +1,9 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { Divider, Textarea } from "@nextui-org/react";
-import styles from "@/styles/modal/release.module.scss";
+import styles from "@/styles/modal/releasereturn.module.css";
 import {useButtonClickStore, useReleaseDetailStore} from "@/store/releasestore";
-import {useEffect} from "react";
+import React, {useEffect, useState} from "react";
+import {releaseResponse} from "@/pages/api/releaseAxios";
 // Props에 대한 인터페이스 정의
 interface ReturnProps {
   onClose: () => void; // 이 함수는 파라미터를 받지 않고 void를 반환함
@@ -18,24 +19,43 @@ export default function Return({ onClose }: ReturnProps) {
         .catch((error) => {
           console.log(error.message)
         })
+        .finally(() => {
+          console.log(id)
+        })
   }, []);
-  const cardClick = () => {
 
-    onClose()
+
+  const [memo, setMemo] = useState("")
+  const cardClick = () => {
+    releaseResponse(id, false, memo, [])
+        .then((res)=> {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error.message)
+        })
+        .finally(() => {
+          setMemo("")
+          onClose()
+        })
   }
+    useEffect(() => {
+        console.log(memo)
+    }, [memo]);
+
   return (
     <Modal className={styles.container} isOpen={true} onClose={onClose}>
       <ModalContent>
         <ModalHeader className={styles.title}>불출 반려</ModalHeader>
         <ModalBody>
           <Divider className={styles.divider} />
-          반려 요청 제목 날짜 영역
           <Textarea
-            isReadOnly
-            variant="flat"
-            placeholder="승인 내역"
-            defaultValue="모델명 수량 NextUI is a React UI library that provides a set of accessible, reusable, and beautiful components."
-            className={styles.content}
+              label="Description"
+              placeholder="반려 사유 입력"
+              className={styles.content}
+              size="lg"
+              minRows={12}
+              onValueChange={(value:string) => setMemo(value)}
           />
         </ModalBody>
         <ModalFooter>

@@ -9,8 +9,8 @@ interface compo {
   modalName: string;
   setModalName: (n: string) => void;
   // wo 조회에 필요한 wo id 변수
-  woId: string;
-  setWoId: (newId: string) => void;
+  woId: number;
+  setWoId: (newId: number) => void;
   // wo test 컴포넌트를 여는 상태변수
   rightCompo: string;
   setRightCompo: (n: string) => void;
@@ -26,8 +26,8 @@ export const useCompoStore = create<compo>((set) => ({
       set({modalName: n})
   },
   // wo 조회에 필요한 wo id 변수
-  woId: "",
-  setWoId: (newId: string) => {
+  woId: 0,
+  setWoId: (newId: number) => {
     set({ woId: newId });
   },
   // wo test 컴포넌트를 여는 상태변수
@@ -131,13 +131,13 @@ export const useWoDetailStore = create<WoDetail>((set) => ({
   // work order 디테일 정보 불러오기
   fetchWoDetail: async (id: number) => {
     const data = await getWoInfo(id);
-    console.log("점검항목", data);
+    console.log("점검항목", data.data);
     set({
       id: data.data.result.id,
       status: data.data.result.status,
       creator: data.data.result.creator, // 생성자
       terminator: data.data.result.terminator, // 완료자
-      createdAt: data.data.result.createAt, // wo 생성일
+      createdAt: data.data.result.createdAt, // wo 생성일
       updatedAt: data.data.result.updatedAt, // wo 수정일
       jigItemInfo: data.data.result.jigItemInfo,
       checkList: data.data.result.checkList,

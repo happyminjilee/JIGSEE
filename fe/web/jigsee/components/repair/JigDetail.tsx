@@ -7,7 +7,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import Box from "@mui/material/Box";
 import Report from "@/components/workorder/template";
 import Modal from "@mui/material/Modal";
-import {useCompoStore, useWoDetailStore} from "@/store/workorderstore";
+import {useCompoStore, useWoDetailStore, useWoGroupStore} from "@/store/workorderstore";
 import {doneWo} from "@/pages/api/workorderAxios";
 import WoModal from "@/components/workorder/CreateWoModal";
 import {useGroupFilter} from "@/store/repairrequeststore";
@@ -35,8 +35,8 @@ export default function RequestList() {
         id, creator, status,
         createdAt, jigItemInfo, checkList
     } = useWoDetailStore()
-
-
+    const {publish} = useWoGroupStore()
+    const {clearForFilter, addForFilter} = useGroupFilter()
     const cardClick = (id: number) => {
         console.log("clicked", id)
         openModal()
@@ -46,6 +46,8 @@ export default function RequestList() {
     const goRequest = () => {
         setRightCompo("REQUEST")
         setSelect("PUBLISH")
+        clearForFilter()
+        addForFilter(publish)
     }
 
     const goTest = () => {
@@ -103,7 +105,7 @@ export default function RequestList() {
                     <div className={styled.card}>Model : {jigItemInfo.model}</div>
                     <div className={styled.card}>S/N : {jigItemInfo.serialNo}</div>
                     <div className={styled.card}>생성자 : {creator}</div>
-                    <div className={styled.card}>생성일 : {createdAt[0]}.{createdAt[1]}.{createdAt[2]} </div>
+                    <div className={styled.card}>생성일 : {createdAt[0]}. {createdAt[1]}. {createdAt[2]} </div>
                 </div>
 
                 {/* Work order 이동 */}

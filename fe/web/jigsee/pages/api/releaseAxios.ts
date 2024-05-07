@@ -23,7 +23,7 @@ export const releaseRequest = async (serialNos: string[]) => {
 // isAccept 로 구분 승인시 serialNos, 반려시 memo
 // boolean 값 반환
 export const releaseResponse = async (
-  requestId: number,
+  requestId: string,
   isAccept: boolean,
   memo: string,
   serialNos: string[]
@@ -31,7 +31,7 @@ export const releaseResponse = async (
   const http = axiosAuthApi();
 
   return await http
-    .post("http://k10s105.p.ssafy.io/api/v1/response/jig", {
+    .put("http://k10s105.p.ssafy.io/api/v1/jig-item/accept", {
       requestId: requestId,
       isAccept: isAccept,
       memo: memo,

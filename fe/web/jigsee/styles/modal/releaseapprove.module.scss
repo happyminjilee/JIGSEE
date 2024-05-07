@@ -22,14 +22,14 @@
 .content {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
   border-radius: 0.5rem;
   background-color: var(--light-gray);
   overflow-y: auto;
   overflow-x: hidden;
   width: 300px;
-  /*height: 400px;*/
+  height: 230px;
   margin: auto;
   max-height: 400px;
 }
@@ -53,6 +53,14 @@
   border-radius: 10px;
   box-shadow: inset 0px 0px 5px var(--realwhite);
 }
+
+.card {
+  margin: 10px auto;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+
 .btn {
   background-color: var(--samsungblue);
   color: white; /* 버튼 텍스트 색상 */

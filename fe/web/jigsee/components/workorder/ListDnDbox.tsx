@@ -96,11 +96,9 @@ export const DropBox = ({items, boxType}: Items ) => {
 
 const DragItem = ({item, originBox} : Item) => {
     const {setWoId, rightCompo, setRightCompo} = useCompoStore()
-    const {fetchWoDetail} = useWoDetailStore()
+    const {fetchWoDetail, id} = useWoDetailStore()
     const cardClick = (Id: number, state: string) => {
         // 클릭한 S/N로 아이디로 바꾸기 , 추후 수정 예정
-        setWoId("testModelId");
-        setRightCompo(state);
         console.log("cardclick", state)
         console.log("cardclick", rightCompo)
         fetchWoDetail(Id)
@@ -109,6 +107,11 @@ const DragItem = ({item, originBox} : Item) => {
             })
             .catch((error) => {
                 console.log(error.message)
+            })
+            .finally(() => {
+                setWoId(Id);
+                setRightCompo(state);
+                console.log(id)
             })
     };
     ////////////////////////////////////////////////////////////////////////////
@@ -138,14 +141,15 @@ const DragItem = ({item, originBox} : Item) => {
             style={{...cardStyle}}
             onClick={() => {
                 cardClick(item.id, item.status)
+                console.log(item.id, item.status)
             }}>
             <div className={styled.division1}>
-                    <div className={styled.date}>
+                <div className={styled.date}>
                     {item.createdAt[0]}.{item.createdAt[1]}.{item.createdAt[2]}
                 </div>
-                    <div className={styled.title}>
-                        {item.serialNo} | {item.model}
-                    </div>
+                <div className={styled.title}>
+                    {item.serialNo} | {item.model}
+                </div>
             </div>
 
             <div className={styled.division2}>{item.status}</div>

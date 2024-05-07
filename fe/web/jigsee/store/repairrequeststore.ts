@@ -191,7 +191,7 @@ interface lst {
 
 export const useGroupFilter = create<groupFilter>(
     (set) => ({
-        select: "PUBLISH",
+        select: "",
         setSelect: (n:string) => {
             set({select:n})
         },
@@ -213,5 +213,6 @@ export const useGroupFilter = create<groupFilter>(
 
 
 
-//////////////////////////////for DND/////////////////////////////////
+
+
 

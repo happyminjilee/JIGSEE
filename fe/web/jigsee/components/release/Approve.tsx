@@ -1,7 +1,8 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { Divider, Textarea } from "@nextui-org/react";
-import styles from "@/styles/modal/release.module.scss";
+import styles from "@/styles/modal/releaseapprove.module.scss";
 import {useButtonClickStore, useReleaseDetailStore} from "@/store/releasestore";
+import {releaseResponse} from "@/pages/api/releaseAxios"
 import {useEffect} from "react";
 
 // Props에 대한 인터페이스 정의
@@ -21,9 +22,22 @@ export default function Approve({ onClose }: ApproveProps) {
         .catch((error) => {
           console.log(error.message)
         })
+        .finally(() => {
+          console.log(id)
+          console.log(serialNos)
+        })
   }, []);
   const cardClick = () => {
-    onClose()
+    releaseResponse(id, true, "", serialNos)
+        .then((res)=> {
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log(error.message)
+        })
+        .finally(() => {
+          onClose()
+        })
   }
   return (
     <Modal className={styles.container} isOpen={true} onClose={onClose}>
@@ -31,7 +45,13 @@ export default function Approve({ onClose }: ApproveProps) {
         <ModalHeader className={styles.title}>불출 승인</ModalHeader>
         <ModalBody>
           <Divider className={styles.divider} />
-          승인 요청 제목 날짜 영역
+          <div className={styles.content}>
+            {serialNos.map((info, index) => (
+                <div className={styles.card}>
+                  {info}
+                </div>
+            ))}
+          </div>
 
         </ModalBody>
         <ModalFooter>

@@ -28,10 +28,11 @@ export default function Login() {
             router.push("/manager")
           } else if (result.role === 'ENGINEER') {
             router.push("/engineer")
-          } 
-          
+          }
+          window.alert("로그인 성공")
       } else {
           console.log('Login failed')
+          window.alert("로그인 실패")
       }
   }
   return (
@@ -50,11 +51,9 @@ export default function Login() {
                         handleLogin(employeeNo, password)
                             .then((res) => {
                                 console.log(res)
-                                window.alert("로그인 성공")
                             })
                             .catch((error) => {
                                 console.log(error.message)
-                                window.alert("로그인 실패")
                             })
                     }
                 }

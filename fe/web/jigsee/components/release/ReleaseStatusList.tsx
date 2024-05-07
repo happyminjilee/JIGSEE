@@ -89,12 +89,12 @@ export default function ReleaseStatusList() {
       <>
         <div className={styled.box}>
           <div style={{display: "flex", justifyContent: "space-between", marginBottom: "15px"}}>
-            <div style={{fontWeight: "bold", fontSize: "15px"}}>재고 불출 요청 내역</div>
+            <div style={{fontWeight: "bold", fontSize: "15px", margin: "10px 10px 5px 10px"}}>재고 불출 요청 내역</div>
             <Link
                 href="/common/ReleaseTotal/"
                 // passHref
                 underline="hover"
-                style={{color: "black", fontSize: "8px", fontWeight: "lighter"}}
+                style={{color: "black", fontSize: "8px", fontWeight: "lighter", margin: "10px 10px 5px 10px"}}
             >
               전체 내역 보기
             </Link>
