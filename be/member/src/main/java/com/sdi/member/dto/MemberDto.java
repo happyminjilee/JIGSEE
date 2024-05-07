@@ -8,7 +8,8 @@ public record MemberDto(
         String name,
         String employeeNo,
         String password,
-        RoleType role
+        RoleType role,
+        String email
 ) {
     public static MemberDto fromEntity(MemberEntity entity) {
         return new MemberDto(
@@ -16,7 +17,8 @@ public record MemberDto(
                 entity.getName(),
                 entity.getEmployeeNo(),
                 entity.getPassword(),
-                entity.getRole()
+                entity.getRole(),
+                entity.getEmail()
         );
     }
 }

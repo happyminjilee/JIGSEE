@@ -21,5 +21,6 @@ public class MemberEntity {
     private String password;
     @Enumerated(EnumType.STRING)
     private RoleType role;
+    private String email;
 
 }

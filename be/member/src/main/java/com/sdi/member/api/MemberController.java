@@ -2,6 +2,7 @@ package com.sdi.member.api;
 
 import com.sdi.member.application.MemberService;
 import com.sdi.member.dto.request.MemberLoginRequestDto;
+import com.sdi.member.dto.response.MemberEmailResponseDto;
 import com.sdi.member.dto.response.MemberLoginResponseDto;
 import com.sdi.member.dto.response.MemberResponseDto;
 import com.sdi.member.util.Response;
@@ -53,6 +54,11 @@ class MemberController {
     @GetMapping("/member/search")
     Response<MemberLoginResponseDto> searchMyInfo(Authentication authentication) {
         return Response.success(memberService.searchMyInfo(authentication));
+    }
+
+    @GetMapping("/member/email")
+    Response<MemberEmailResponseDto> searchMyEmail(Authentication authentication) {
+        return Response.success(memberService.searchMyEmail(authentication));
     }
 
     @GetMapping("/member/search/name")

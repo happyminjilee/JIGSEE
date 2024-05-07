@@ -1,6 +1,7 @@
 package com.sdi.member.application;
 
 import com.sdi.member.dto.MemberDto;
+import com.sdi.member.dto.response.MemberEmailResponseDto;
 import com.sdi.member.dto.response.MemberLoginResponseDto;
 import com.sdi.member.dto.response.MemberResponseDto;
 import com.sdi.member.entity.RoleType;
@@ -143,6 +144,12 @@ public class MemberService {
         String employeeNo = authentication.getName();
         MemberDto memberDto = getMemberOrException(employeeNo);
         return new MemberLoginResponseDto(memberDto.id(), memberDto.name(), memberDto.employeeNo(), memberDto.role());
+    }
+
+    public MemberEmailResponseDto searchMyEmail(Authentication authentication) {
+        String employeeNo = authentication.getName();
+        MemberDto memberDto = getMemberOrException(employeeNo);
+        return new MemberEmailResponseDto(memberDto.email());
     }
 
     public List<MemberResponseDto> searchName(String name) {
