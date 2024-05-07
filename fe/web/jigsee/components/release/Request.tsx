@@ -11,7 +11,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import { useFacilityStore } from "@/store/facilitystore";
-
+import { releaseRequest } from "@/pages/api/releaseAxios";
 //transfer list 함수
 // 배열 a에서 배열 b에 없는 항목만 반환
 function not(a: readonly string[], b: readonly string[]) {
@@ -23,57 +23,37 @@ function intersection(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 export default function Request() {
-  // dummy jig serial 가져오기
-  const serialNo = [
-    "5254-245",
-    "0942-6487",
-    "52125-206",
-    "14783-304",
-    "67692-332",
-    "76237-247",
-    "35356-807",
-    "13668-030",
-    "68306-101",
-    "64141-111",
-    "49647-0001",
-    "42254-178",
-    "36987-1806",
-    "65321-030",
-    "54868-6185",
-    "51531-8365",
-    "13537-108",
-    "55154-3030",
-    "59762-3328",
-    "55154-4798",
-    "54973-1129",
-    "50419-701",
-    "0472-0163",
-    "30142-686",
-    "55292-122",
-    "67253-388",
-    "41250-029",
-    "52544-950",
-    "54738-905",
-    "51079-075",
-  ];
+  const [selectedFacility, setSelectedFacility] = useState("");
+  const [selectedModel, setSelectedModel] = useState("");
 
+  const { loadFacilities, facilities, getJigModels, jigmodels } = useFacilityStore();
+  useEffect(() => {
+    loadFacilities();
+    if (selectedFacility) {
+      getJigModels(selectedFacility);
+    }
+  }, [selectedFacility]);
   // 체크된 아이템을 관리하는 상태
   const [checked, setChecked] = React.useState<readonly string[]>([]);
   // 왼쪽 리스트를 관리하는 상태
-  const [left, setLeft] = React.useState<readonly string[]>(serialNo);
+  const [left, setLeft] = React.useState<readonly string[]>(jigmodels);
   // 입력 필드에서의 사용자 입력 상태
   const [filter, setFilter] = useState("");
   // 오른쪽 리스트를 관리하는 상태
-  const [right, setRight] = React.useState<readonly string[]>([]);
-  // 입력 필드 값이 변경될 때마다 필터링 로직 실행
+  const [right, setRight] = React.useState<string[]>([]);
+  // jigmodels가 변경될 때마다 left를 업데이트
+  useEffect(() => {
+    setLeft(jigmodels);
+  }, [jigmodels]);
+  // 필터에 따라 리스트 업데이트
   useEffect(() => {
     if (filter === "") {
-      setLeft(serialNo); // 필터가 비어있다면 전체 리스트를 보여줌
+      setLeft(jigmodels); // 필터가 비어있다면 전체 리스트를 보여줌
     } else {
-      const filteredSerials = serialNo.filter((s) => s.startsWith(filter));
+      const filteredSerials = jigmodels.filter((s) => s.startsWith(filter));
       setLeft(filteredSerials); // 필터에 맞는 결과로 상태 업데이트
     }
-  }, [filter]);
+  }, [filter, jigmodels]); // filter와 jigmodels 변화에 반응
 
   // 왼쪽 리스트에서 체크된 아이템
   const leftChecked = intersection(checked, left);
@@ -146,18 +126,12 @@ export default function Request() {
       </List>
     </Paper>
   );
+  // 불출 요청
+  const sendReleaseList = () => {
+    console.log(right);
+    releaseRequest(right);
+  };
 
-  const [selectedFacility, setSelectedFacility] = useState("");
-  const [selectedModel, setSelectedModel] = useState("");
-  // 설비명 리스트 더미
-  // const facilities = ["line cutter", "raser", "metalize"];
-  // 모델명 리스트 더미
-  const models = ["swf235430", "dfdg456872", "ddg24652"];
-
-  const { loadFacilities, facilities } = useFacilityStore();
-  useEffect(() => {
-    loadFacilities();
-  }, []);
   return (
     <>
       <Card className={styled.requestcontainer}>
@@ -174,25 +148,27 @@ export default function Request() {
               className={styled.select}
             >
               {facilities.map((facility) => (
-                <SelectItem key={facility.id} value={facility.facilitySerialNo}>
+                <SelectItem key={facility.model} value={facility.model}>
                   {facility.model}
                 </SelectItem>
               ))}
             </Select>
-            <Select
-              variant="bordered"
-              label="Jig model"
-              labelPlacement="outside-left"
-              placeholder="모델을 선택 하세요"
-              className={styled.select}
-              onChange={(e) => setSelectedModel(e.target.value)}
-            >
-              {models.map((model) => (
-                <SelectItem key={model} value={model}>
-                  {model}
-                </SelectItem>
-              ))}
-            </Select>
+            {/* {jigmodels.length > 0 && (
+              <Select
+                variant="bordered"
+                label="Jig model"
+                labelPlacement="outside-left"
+                placeholder="모델을 선택하세요"
+                className={styled.select}
+                onChange={(e) => setSelectedModel(e.target.value)}
+              >
+                {jigmodels.map((jig) => (
+                  <SelectItem key={jig} value={jig}>
+                    {jig}
+                  </SelectItem>
+                ))}
+              </Select>
+            )} */}
             <Input
               type="string"
               variant="bordered"
@@ -267,7 +243,9 @@ export default function Request() {
         </CardBody>
         <Divider />
         <CardFooter className={styled.cardfooter}>
-          <button className={styled.addbtn}>요청</button>
+          <button onClick={sendReleaseList} className={styled.addbtn}>
+            요청
+          </button>
         </CardFooter>
       </Card>
     </>
