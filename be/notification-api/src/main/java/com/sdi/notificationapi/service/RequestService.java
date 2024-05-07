@@ -1,6 +1,5 @@
 package com.sdi.notificationapi.service;
 
-import com.sdi.notificationapi.dto.JigItemStatusUpdateDto;
 import com.sdi.notificationapi.dto.MemberInfoDto;
 import com.sdi.notificationapi.dto.MessageDto;
 import com.sdi.notificationapi.dto.request.RepairJigRequestDto;
@@ -16,7 +15,6 @@ import com.sdi.notificationapi.entity.WantResponseEntity;
 import com.sdi.notificationapi.repository.RepairRequestsRepository;
 import com.sdi.notificationapi.repository.WantRequestsRepository;
 import com.sdi.notificationapi.repository.WantResponsesRepository;
-import com.sdi.notificationapi.util.JigItemClient;
 import com.sdi.notificationapi.util.JigRequestStatus;
 import com.sdi.notificationapi.util.MessageClient;
 import com.sdi.notificationapi.util.SseStatus;
@@ -43,7 +41,7 @@ public class RequestService {
     private final WantResponsesRepository wantResponsesRepository;
     private final RepairRequestsRepository repairRequestsRepository;
     private final MessageClient messageClient;
-    private final JigItemClient jigItemClient;
+//    private final JigItemClient jigItemClient;
 
     // Transactional 왜 적용이 안될까?
     // 알림 전송 실패하면 mongo에도 저장되면 안되는데..
@@ -60,17 +58,11 @@ public class RequestService {
     @Transactional
     public void createWantResponse(ResponseJigRequestDto responseJigRequestDto, MemberInfoDto memberInfoDto, String accessToken) {
         /*
-         * 1. 승인인지 거부인지 판별
-         * 2. 승인이라면 불출된 지그 전부 상태 변경(투입 대기)
-         * 3. 원본 요청의 상태를 FINISH로 변경
-         * 4. 응답 내용 DB에 저장
-         * 5. 알림 서버로 알림 전송 요청 보냄
+         * 1. 원본 요청의 상태를 FINISH로 변경
+         * 2. 응답 내용 DB에 저장
+         * 3. 알림 서버로 알림 전송 요청 보냄
          */
-        if (responseJigRequestDto.isAccept()) {
-            for (String serialNo : responseJigRequestDto.serialNos()) {
-                jigItemClient.changeJigStatusToReady(JigItemStatusUpdateDto.ready(serialNo), accessToken);
-            }
-        }
+
         WantRequestEntity originalRequest = wantRequestsRepository.findById(responseJigRequestDto.requestId())
                 .orElseThrow(() -> new IllegalArgumentException("원본 요청을 찾을 수 없습니다."));
         originalRequest.updateWantRequest(memberInfoDto.employeeNo(), responseJigRequestDto.isAccept());
