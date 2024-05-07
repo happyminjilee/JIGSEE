@@ -102,7 +102,7 @@ export default function RepairTotal() {
   ];
   return (
     <>
-      {Navbar}
+      {/* {Navbar} */}
       <div className={styled.bigcontainer}>
         {restoreList.length > 0 ? (
           // Render restoreList once it's loaded
