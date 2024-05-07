@@ -1,9 +1,6 @@
 package com.sdi.apiserver.api.wo.client;
 
-import com.sdi.apiserver.api.wo.dto.request.WorkOrderCreateRequest;
-import com.sdi.apiserver.api.wo.dto.request.WorkOrderDoneRequestDto;
-import com.sdi.apiserver.api.wo.dto.request.WorkOrderUpdateRequestDto;
-import com.sdi.apiserver.api.wo.dto.request.WorkOrderUpdateStatusRequestDto;
+import com.sdi.apiserver.api.wo.dto.request.*;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderDetailResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderGroupingResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderResponseDto;
@@ -47,4 +44,7 @@ public interface WorkOrderClient {
 
     @PutMapping("/status")
     Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto);
+
+    @PostMapping("/auto")
+    Response<Void> autoCreate(@RequestBody WorkOrderAutoCreateRequestDto dto);
 }

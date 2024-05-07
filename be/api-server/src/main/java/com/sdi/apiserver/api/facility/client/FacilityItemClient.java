@@ -1,6 +1,6 @@
 package com.sdi.apiserver.api.facility.client;
 
-import com.sdi.apiserver.api.facility.FacilityItemInspectionResponseDto;
+import com.sdi.apiserver.api.facility.dto.response.FacilityItemInspectionResponseDto;
 import com.sdi.apiserver.api.facility.dto.response.FacilityAllResponseDto;
 import com.sdi.apiserver.api.facility.dto.response.FacilityDetailResponseDto;
 import com.sdi.apiserver.api.facility.dto.response.FacilityItemInspectionJigItemsResponseDto;

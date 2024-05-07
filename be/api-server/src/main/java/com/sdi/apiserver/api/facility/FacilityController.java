@@ -4,6 +4,7 @@ import com.sdi.apiserver.api.facility.client.FacilityItemClient;
 import com.sdi.apiserver.api.facility.dto.response.FacilityAllResponseDto;
 import com.sdi.apiserver.api.facility.dto.response.FacilityDetailResponseDto;
 import com.sdi.apiserver.api.facility.dto.response.FacilityItemInspectionJigItemsResponseDto;
+import com.sdi.apiserver.api.facility.dto.response.FacilityItemInspectionResponseDto;
 import com.sdi.apiserver.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
