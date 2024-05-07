@@ -44,6 +44,7 @@ export default function Request() {
   // jigmodels가 변경될 때마다 left를 업데이트
   useEffect(() => {
     setLeft(jigmodels);
+    console.log("dsds", jigmodels);
   }, [jigmodels]);
   // 필터에 따라 리스트 업데이트
   useEffect(() => {
@@ -119,7 +120,7 @@ export default function Request() {
                   }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={`${value + 1}`} />
+              <ListItemText id={labelId} primary={`${value}`} />
             </ListItemButton>
           );
         })}
