@@ -16,6 +16,7 @@ import { userStore } from "@/store/memberstore";
 import { useEffect } from "react";
 import Badge from "@mui/material/Badge";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { finishSSE, getUnchecked, getAllalarms } from "@/pages/api/sseAxios";
 // 알람 리스트 api 연결 필요
 const options = [
   "불출요청:121354",
@@ -66,13 +67,30 @@ export default function EngineerNavbar() {
       setName("");
       setRole("");
       console.log("delete zustand info");
-
+      finishSSE();
       router.push("/login");
     } else {
       console.log("로그인이 만료되었습니다.");
       router.push("/login");
     }
   };
+  // 알림 get test
+  useEffect(() => {
+    getUnchecked()
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    getAllalarms()
+      .then((response) => {
+        console.log("전체리스트", response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
   // 현재위치 표시 로직
   const currentPath = router.pathname; // 현재 URL을 가져옵니다.
 
