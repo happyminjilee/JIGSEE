@@ -8,6 +8,7 @@ import com.sdi.notification.service.SearchService;
 import com.sdi.notification.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,7 @@ class SearchController {
         return Response.success(searchService.getNotifications(currentMember, page, size));
     }
 
-    @GetMapping("/check")
+    @PutMapping("/check")
     Response<Void> checkNotification(@RequestParam("notification-id") Long notificationId) {
         searchService.setCheck(notificationId);
         return Response.success();
