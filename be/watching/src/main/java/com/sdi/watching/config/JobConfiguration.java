@@ -22,7 +22,7 @@ public class JobConfiguration {
     private static final String FAILED = "FAILED";
 
     @Bean
-    public Job watchingJigJob(JobRepository jobRepository, Step loadTooMuchUseJigItemStep, Step sendToWorkOrderServerStep, Step sendToJigItemServerStep, Step sendToNotificationApiServerStep) {
+    public Job watchingJigJob(JobRepository jobRepository, Step loadTooMuchUseJigItemStep, Step sendToJigItemServerStep, Step sendToNotificationApiServerStep) {
         return new JobBuilder("watchingJigJobTest", jobRepository)
                 .start(loadTooMuchUseJigItemStep)
                 .on(FAILED).end()
@@ -45,16 +45,6 @@ public class JobConfiguration {
         return new StepBuilder("loadTooMuchUseJigItemDataStep", jobRepository)
                 .tasklet(loadTooMuchUseJigItemTasklet, platformTransactionManager)
                 .build();
-    }
-
-    @Bean
-    public Step sendToWorkOrderServerStep(JobRepository jobRepository,
-                                          PlatformTransactionManager platformTransactionManager,
-                                          Tasklet sendToWorkOrderServerTasklet) {
-        return new StepBuilder("sendToWorkOrderServer", jobRepository)
-                .tasklet(sendToWorkOrderServerTasklet, platformTransactionManager)
-                .build();
-
     }
 
     @Bean
