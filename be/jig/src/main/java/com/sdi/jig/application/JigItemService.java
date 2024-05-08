@@ -159,6 +159,7 @@ public class JigItemService {
     public List<FacilityItemRDBEntity> getNeedToInspectionFacilityItems() {
         List<JigItemInspectionRDBEntity> jigItemInspection = jigItemInspectionRDBRepository.findByIsInspectionFalse();
         return jigItemInspection.stream()
+                .filter(j -> j.getJigItem().getFacilityItem() != null) // 점검 대상 설비 조회에서 쓰이기 때문에, 현재 설비에 투입된 지그 정보가 아니면 제외
                 .map(j -> j.getJigItem().getFacilityItem())
                 .toList();
     }
