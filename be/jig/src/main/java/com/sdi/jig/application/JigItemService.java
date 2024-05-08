@@ -167,6 +167,7 @@ public class JigItemService {
     public List<String> getNeedToInspectionFacilityJigItems(Long facilityId) {
         List<JigItemInspectionRDBEntity> needToInspectionJigItems = jigItemInspectionRDBRepository.findByIsInspectionFalse();
         List<JigItemInspectionRDBEntity> filterByFacilityId = needToInspectionJigItems.stream()
+                .filter(j -> j.getJigItem().getFacilityItem() != null)
                 .filter(i -> i.getJigItem().getFacilityItem().getId().equals(facilityId))
                 .toList();
         return filterByFacilityId.stream()
