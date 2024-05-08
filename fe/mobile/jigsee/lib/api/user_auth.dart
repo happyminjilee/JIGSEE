@@ -48,9 +48,9 @@ class AuthService {
   Future<bool> isLogin() async {
     try {
       final String? refreshToken = await _storage.read(key:'refreshToken');
-      var response = await http.get(
+      var response = await http.post(
         Uri.parse(Constants.backUrl + '/refresh'),
-        headers: {'Authorization' : '$refreshToken'}
+        headers: {'RefreshToken' : '$refreshToken'}
       );
       if (response.statusCode == 200) {
         await _storage.write(key:'accessToken', value: response.headers['authorization']);
