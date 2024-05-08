@@ -1,6 +1,7 @@
 package com.sdi.watching.config.tasklet;
 
 import com.sdi.watching.client.NotificationApiClient;
+import com.sdi.watching.dto.request.ClientSerialNosRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
@@ -23,7 +24,7 @@ public class SendToNotificationApiServerTasklet implements Tasklet {
         log.info(">>> sendToNotificationApiServerTasklet 실행");
         List<Long> serialNos = (List<Long>) contribution.getStepExecution().getJobExecution().getExecutionContext().get("ids");
         if (serialNos != null) {
-            // notificationApiClient.inspection(ClientSerialNosRequestDto.from(serialNos));
+            notificationApiClient.inspection(ClientSerialNosRequestDto.from(serialNos));
         }
         return RepeatStatus.FINISHED;
     }
