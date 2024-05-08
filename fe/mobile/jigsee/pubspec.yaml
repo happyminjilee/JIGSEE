@@ -23,6 +23,8 @@ dependencies:
   google_ml_kit: ^0.14.0
   image_picker: ^1.1.0
   camera: ^0.10.5+9
+  firebase_messaging: ^14.2.0
+  firebase_core: ^2.7.0
 
 dev_dependencies:
   flutter_test:
