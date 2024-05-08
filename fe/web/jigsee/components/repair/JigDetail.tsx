@@ -53,6 +53,7 @@ export default function RequestList() {
     }
 
     const goTest = () => {
+        console.log(id)
         setRightCompo("TEST")
         setModalName("")
     }

@@ -19,10 +19,13 @@ export async function updatejigMethod(jigmodel: string, checkList: RowData[]) {
 }
 
 //지그 상태 수정 - 기술팀
-export async function updatejigStatus(modelID: string) {
+export async function updateJigStatus(
+    serialNo: string,
+    status: string,
+    ) {
   const requestBody = {
-    serialNo: "str",
-    status: "enum(WAREHOUSE, READY, IN, OUT, REPAIR, DELETE)",
+    serialNo: serialNo,
+    status: status,
   };
   return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/jig-item/status", requestBody);
 }

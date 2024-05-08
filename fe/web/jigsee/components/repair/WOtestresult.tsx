@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "@/styles/wotestresult.module.scss"; // Corrected import
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useWoDetailStore } from "@/store/workorderstore";
+import {useCompoStore, useWoDetailStore} from "@/store/workorderstore";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -41,10 +42,11 @@ export default function WOtestresult() {
   // const { woId } = useWoStore();
   const [testMethod, setTestMethod] = useState<testMethodItem[]>([]);
   const { checkList, fetchWoDetail, id, fetchWoUpdateTmp, fetchWoDone } = useWoDetailStore();
+  const {setRightCompo, setWoId} = useCompoStore()
   // id 가 바뀔때마다 새로운 리스트를 불러옴
   useEffect(() => {
     // id를 입력하는 것으로 추후 수정해야함
-    fetchWoDetail(1);
+    fetchWoDetail(id);
     setTestMethod(checkList);
   }, [id]);
 
@@ -175,9 +177,13 @@ export default function WOtestresult() {
     }));
     console.log("newrow", newList);
     // 1대신 id를 입력하는 것으로 추후 수정해야함
-    fetchWoUpdateTmp(1, newList);
+    fetchWoUpdateTmp(id, newList);
   };
+
+
   // 제출 로직
+
+  const {modalName, setModalName, setModal} = useCompoStore()
   const submitTest = () => {
     const newList = rows.map((item) => ({
       uuid: item.id,
@@ -188,10 +194,34 @@ export default function WOtestresult() {
       passOrNot: item.passOrNot,
     }));
     // 1대신 id를 입력하는 것으로 추후 수정해야함
-    fetchWoDone(1, newList);
+    fetchWoDone(id, newList)
+        .then((res) => {
+          console.log('look at me', res)
+          if (res) {
+            setModalName("REUSE")
+            setModal(true)
+          } else {
+            setModalName("DISPOSE")
+            setModal(true)
+          }
+        })
+        .catch((error) => {
+            window.alert("요청 실패!")
+            clear()
+        })
   };
+  const clear = () => {
+    setRightCompo("PROGRESS")
+  }
+
   return (
     <div className={styles.container}>
+      <div
+          className={styles.clear}
+          onClick={clear}
+      >
+        <ClearIcon/>
+      </div>
       <div className={styles.header}>Test Result</div>
       <div className={styles.body}>
         <Box

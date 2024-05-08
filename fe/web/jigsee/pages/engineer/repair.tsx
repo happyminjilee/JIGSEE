@@ -8,7 +8,6 @@ import Information from "@/components/repair/JigDetail"
 import {useWoStore, useCompoStore, useWoGroupStore, useUserWoListStore} from "@/store/workorderstore";
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-
 import React, {useEffect} from "react";
 import {useReleaseModalStore} from "@/store/releasestore";
 import {useState} from "react"
@@ -19,6 +18,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CreateWoModal from "@/components/workorder/CreateWoModal";
 import {userStore} from "@/store/memberstore";
+import ReuseModal from "@/components/repair/ReuseModal";
+import DisposeModal from "@/components/repair/DisposeModal";
 
 export default function Repair() {
   const { rightCompo } = useCompoStore();
@@ -87,8 +88,10 @@ export default function Repair() {
                     justifyContent: "center",
                 }}
             >
-                {modalName === "CREATEWO" ? <CreateWoModal/> : <Report/>}
-
+                {modalName === "CREATEWO" && <CreateWoModal/>}
+                {modalName === "REPORT" && <Report/>}
+                {modalName === "REUSE" && <ReuseModal/>}
+                {modalName === "DISPOSE" && <DisposeModal/>}
             </Box>
         </Modal>
     </>
