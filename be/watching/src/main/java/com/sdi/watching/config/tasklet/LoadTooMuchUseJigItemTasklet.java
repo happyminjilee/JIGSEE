@@ -33,7 +33,7 @@ public class LoadTooMuchUseJigItemTasklet implements Tasklet {
         for (JigItemIOHistoryRDBEntity runningJigItem : runningJigItems) {
             Duration between = Duration.between(runningJigItem.getInOutTime(), now);
             if (between.toHours() >= 1) { // 1시간 이상동안 사용했을 경우
-                inConditionIds.add(runningJigItem.getId());
+                inConditionIds.add(runningJigItem.getJigItemId());
             }
         }
 
