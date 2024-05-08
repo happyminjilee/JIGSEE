@@ -25,7 +25,7 @@ class JigItemController {
 
     @GetMapping
     Response<JigItemResponseDto> findBySerialNo(HttpServletRequest request, @RequestParam(name = "serial-no") String serialNo) {
-        memberController.producerCheck(request);
+        // memberController.producerCheck(request);
         log.info("{}로 Jig-Item정보 조회", serialNo);
         return jigItemClient.findBySerialNo(serialNo);
     }
@@ -39,11 +39,11 @@ class JigItemController {
 
     @GetMapping("/usable")
     Response<JigItemIsUsableResponseDto> isUsable(HttpServletRequest request,
-                                                  @RequestParam(name = "facility-model") String facilityModel,
+                                                  @RequestParam(name = "facility-serial-no") String facilitySerialNo,
                                                   @RequestParam(name = "jig-serial-no") String jigSerialNo) {
         memberController.producerCheck(request);
-        log.info("{}에 {}가 들어갈 수 있는지 확인", facilityModel, jigSerialNo);
-        return jigItemClient.isUsable(facilityModel, jigSerialNo);
+        log.info("{}에 {}가 들어갈 수 있는지 확인", facilitySerialNo, jigSerialNo);
+        return jigItemClient.isUsable(facilitySerialNo, jigSerialNo);
     }
 
     @DeleteMapping()

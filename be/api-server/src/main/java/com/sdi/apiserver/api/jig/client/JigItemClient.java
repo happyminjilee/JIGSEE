@@ -21,7 +21,7 @@ public interface JigItemClient {
     Response<Void> add(@RequestBody JigItemAddRequestDto dto);
 
     @GetMapping("/usable")
-    Response<JigItemIsUsableResponseDto> isUsable(@RequestParam(name = "facility-model") String facilityModel,
+    Response<JigItemIsUsableResponseDto> isUsable(@RequestParam(name = "facility-serial-no") String facilitySerialNo,
                                                   @RequestParam(name = "jig-serial-no") String jigSerialNo);
 
     @DeleteMapping()
