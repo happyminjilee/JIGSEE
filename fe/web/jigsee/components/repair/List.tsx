@@ -6,10 +6,6 @@ import {useCartStore, useMartStore, useGroupFilter} from "@/store/repairrequests
 import {DropBox} from "@/components/workorder/ListDnDbox"
 import {QueryClient, QueryClientProvider, useQuery} from "@tanstack/react-query"
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
-import Box from "@mui/material/Box";
-import Report from "@/components/workorder/template";
-import Modal from "@mui/material/Modal";
-import CreateWoModal from "@/components/workorder/CreateWoModal";
 
 
 
@@ -25,6 +21,7 @@ export default function RequestList() {
   const{fetchWoGroup, publish, progress, finish} = useWoGroupStore()
   const queryClient = new QueryClient()
   const lst: Option[] = [
+      { label: "ALL", value: "전체" },
       { label: "PUBLISH", value: "발행" },
       { label: "PROGRESS", value: "진행 중" },
       { label: "FINISH", value: "완료" },
@@ -44,6 +41,10 @@ export default function RequestList() {
               addForFilter(progress)
           } else if (select === "FINISH") {
               addForFilter(finish)
+          } else if (select == "ALL") {
+              addForFilter(finish)
+              addForFilter(progress)
+              addForFilter(publish)
           }
           console.log('forFilter', forFilter)
       }
@@ -68,16 +69,24 @@ export default function RequestList() {
                       <div className="flex flex-col gap-2">
                           <Switch isSelected={mine} onValueChange={setMine} size={"sm"}>
                               {mine ?
-                                  <div style={{color: "black", fontSize: "8px", fontWeight: "lighter", marginTop: "1px", marginRight: "2px"}}>내 요청 내역</div>
+                                  <Link
+                                      href="/common/ReleaseTotal/MyTotal"
+                                      // passHref
+                                      underline="hover"
+                                      style={{color: "black", fontSize: "8px", fontWeight: "lighter"}}
+                                  >
+                                      나의 내역 보기
+                                  </Link>
                                   :
                                   <Link
-                                      href="/common/ReleaseTotal/"
+                                      href="/common/ReleaseTotal/Total"
                                       // passHref
                                       underline="hover"
                                       style={{color: "black", fontSize: "8px", fontWeight: "lighter"}}
                                   >
                                       전체 내역 보기
-                                  </Link>}
+                                  </Link>
+                              }
                           </Switch>
                           {mine ? <div
                                   style={{margin: "0px"}}
@@ -85,28 +94,29 @@ export default function RequestList() {
                               :
                               <Select
                                   size="sm"
-                                  label="선택"
+                                  // variant="underlined"
+                                  // color="secondary"
+                                  label="상태"
                                   value={select}
                                   selectionMode="single"
-                                  placeholder="선택"
+                                  // placeholder="선택"
                                   className={styled.short}
                                   onChange={(e) => {
                                       setSelect(e.target.value)
                                   }}
                               >
+                                  <SelectItem key="ALL" value="ALL">전체</SelectItem>
                                   <SelectItem key="PUBLISH" value="PUBLISH">발행</SelectItem>
                                   <SelectItem key="PROGRESS" value="PROGRESS">진행 중</SelectItem>
                                   <SelectItem key="FINISH" value="FINISH">완료</SelectItem>
                               </Select>
                           }
                       </div>
-
                   </div>
 
 
                   {/* card */}
                   <DropBox items={forFilter} boxType={"Mart"}>
-
                   </DropBox>
                   {select !== "PUBLISH" ? <div></div> :
                       <Button

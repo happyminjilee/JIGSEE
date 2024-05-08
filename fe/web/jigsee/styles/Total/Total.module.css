@@ -24,7 +24,7 @@
 
 .right {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   /* border: 1px solid black; */
   width: 80%;
 }
