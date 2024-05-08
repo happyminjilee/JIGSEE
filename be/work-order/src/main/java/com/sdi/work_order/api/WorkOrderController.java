@@ -1,6 +1,7 @@
 package com.sdi.work_order.api;
 
 import com.sdi.work_order.dto.reponse.WorkOrderDetailResponseDto;
+import com.sdi.work_order.dto.reponse.WorkOrderDoneResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
 import com.sdi.work_order.dto.request.WorkOrderAutoCreateRequestDto;
@@ -75,10 +76,10 @@ class WorkOrderController {
     }
 
     @PutMapping("/done")
-    Response<Void> save(@RequestBody WorkOrderSaveRequestDto dto, HttpServletRequest request) {
+    Response<WorkOrderDoneResponseDto> save(@RequestBody WorkOrderSaveRequestDto dto, HttpServletRequest request) {
         log.info("Work Order Id : \'{}\' 저장 요청", dto.id());
-        workOrderService.save(getAccessToken(request), dto.id(), dto.checkList());
-        return Response.success();
+        WorkOrderDoneResponseDto save = workOrderService.save(getAccessToken(request), dto.id(), dto.checkList());
+        return Response.success(save);
     }
 
     @PutMapping("/status")

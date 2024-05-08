@@ -1,6 +1,7 @@
 package com.sdi.work_order.application;
 
 import com.sdi.work_order.client.JigItemClient;
+import com.sdi.work_order.client.request.JigItemDeleteRequestDto;
 import com.sdi.work_order.client.response.JigItemResponseDto;
 import com.sdi.work_order.util.Response;
 import lombok.RequiredArgsConstructor;
@@ -14,5 +15,9 @@ public class JigItemService {
 
     public Response<JigItemResponseDto> findBySerialNo(String serialNo){
         return jigItemClient.findBySerialNo(serialNo);
+    }
+
+    public void deleteBySerialNo(String serialNo){
+        jigItemClient.deleteBySerialNo(JigItemDeleteRequestDto.from(serialNo));
     }
 }

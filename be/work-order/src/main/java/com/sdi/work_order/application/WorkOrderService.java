@@ -2,6 +2,7 @@ package com.sdi.work_order.application;
 
 import com.sdi.work_order.client.response.JigItemResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderDetailResponseDto;
+import com.sdi.work_order.dto.reponse.WorkOrderDoneResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
 import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
 import com.sdi.work_order.dto.request.WorkOrderAutoCreateRequestDto;
@@ -108,16 +109,22 @@ public class WorkOrderService {
     @Transactional
     public void tmpSave(Long id, List<WorkOrderCheckItem> updateCheckList) {
         WorkOrderRDBEntity rdb = getRDBWorkOrderById(id);
-        saveData(rdb, updateCheckList);
+        saveDataAndReturnAllPassOrNot(rdb, updateCheckList);
     }
 
     @Transactional
-    public void save(String accessToken, Long id, List<WorkOrderCheckItem> checkList) {
+    public WorkOrderDoneResponseDto save(String accessToken, Long id, List<WorkOrderCheckItem> checkList) {
         String terminatorEmployeeNo = getMemberEmployeeNo(accessToken);
 
         WorkOrderRDBEntity rdb = getRDBWorkOrderById(id);
-        saveData(rdb, checkList);
+        boolean allPassOrNot = saveDataAndReturnAllPassOrNot(rdb, checkList);
         rdb.updateTerminatorEmployeeNo(terminatorEmployeeNo);
+        rdb.updateStatus(WorkOrderStatus.FINISH);
+
+        // allPassOrNot이 false 일 경우 폐기 요청 전송
+        jigItemService.deleteBySerialNo(rdb.getJigSerialNo());
+
+        return WorkOrderDoneResponseDto.from(allPassOrNot);
     }
 
     @Transactional
@@ -184,19 +191,23 @@ public class WorkOrderService {
         return items;
     }
 
-    private void saveData(WorkOrderRDBEntity rdb, List<WorkOrderCheckItem> updateCheckList) {
+    private boolean saveDataAndReturnAllPassOrNot(WorkOrderRDBEntity rdb, List<WorkOrderCheckItem> updateCheckList) {
         WorkOrderNosqlEntity nosql;
+        boolean allPassOrNot = false;
 
         if (rdb.getCheckListId() != null) {
             nosql = getNosqlWorkOrderCheckList(rdb.getCheckListId());
-            nosql.updateCheckList(updateCheckList);
+            allPassOrNot = nosql.updateCheckListAndReturnAllPassOrNot(updateCheckList);
         } else {
+            // 만약 rdb에 점검 리스트가 저장되어 있지 않다면 생성해서 넣음
             String uuid = UUID.randomUUID().toString();
             nosql = WorkOrderNosqlEntity.from(uuid, false, updateCheckList);
             rdb.updatedCheckListId(uuid);
         }
         workOrderNosqlRepository.save(nosql);
         rdb.updateDate();
+
+        return allPassOrNot;
     }
 
     private JigItemResponseDto getJigItem(String serialNo) {

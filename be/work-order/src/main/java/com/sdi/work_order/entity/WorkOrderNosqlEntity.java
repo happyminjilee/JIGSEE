@@ -21,11 +21,19 @@ public class WorkOrderNosqlEntity {
     private Boolean passOrNot; // 전체 통과 유무
     private List<WorkOrderCheckItem> checkList;
 
-    public static WorkOrderNosqlEntity from(String id, Boolean passOrNot, List<WorkOrderCheckItem> checkList){
+    public static WorkOrderNosqlEntity from(String id, Boolean passOrNot, List<WorkOrderCheckItem> checkList) {
         return new WorkOrderNosqlEntity(id, passOrNot, checkList);
     }
 
-    public void updateCheckList(List<WorkOrderCheckItem> checkList){
-        this.checkList = checkList;
+    public boolean updateCheckListAndReturnAllPassOrNot(List<WorkOrderCheckItem> checkList) {
+        if (checkList != null) {
+            this.checkList = checkList;
+            boolean allPassOrNot = checkList.stream().allMatch(WorkOrderCheckItem::passOrNot);
+
+            this.passOrNot = allPassOrNot;
+            return allPassOrNot;
+        }
+
+        return false;
     }
 }
