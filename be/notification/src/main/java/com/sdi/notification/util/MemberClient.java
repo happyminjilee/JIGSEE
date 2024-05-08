@@ -15,6 +15,6 @@ public interface MemberClient {
     @GetMapping("/member/search")
     Response<MemberInfoDto> getMember(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken);
 
-    @GetMapping("/member/role")
+    @GetMapping("/search/role")
     Response<List<MemberInfoDto>> getMembersInRole(@RequestParam("role") String role);
 }
