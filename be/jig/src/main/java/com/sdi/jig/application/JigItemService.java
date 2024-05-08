@@ -1,10 +1,10 @@
 package com.sdi.jig.application;
 
-import com.sdi.jig.client.NotificationApiClient;
-import com.sdi.jig.client.NotificationClient;
+import com.sdi.jig.client.ApiClient;
 import com.sdi.jig.dto.request.JigItemAcceptRequestDto;
 import com.sdi.jig.dto.request.JigItemInventoryRequestDto;
 import com.sdi.jig.dto.request.NotificationFcmInspectionRequestDto;
+import com.sdi.jig.dto.request.WorkOrderAutoCreateRequestDto;
 import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto.JigItemSummary;
@@ -42,8 +42,7 @@ public class JigItemService {
     private final FacilityJigMappingRDBRepository facilityJigMappingRDBRepository;
     private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
     private final JigItemInspectionRDBRepository jigItemInspectionRDBRepository;
-    private final NotificationClient notificationClient;
-    private final NotificationApiClient notificationApiClient;
+    private final ApiClient apiClient;
 
     public JigItemResponseDto findBySerialNo(String serialNo) {
         JigItemRDBEntity rdb = getJigItemBySerialNo(serialNo);
@@ -155,7 +154,7 @@ public class JigItemService {
     private void sendToNotification(String notificationId, List<String> newJigInspectionSerialNos) {
         if (!newJigInspectionSerialNos.isEmpty()) {
             NotificationFcmInspectionRequestDto dto = NotificationFcmInspectionRequestDto.from(notificationId, newJigInspectionSerialNos);
-            notificationClient.inspection(dto);
+            apiClient.inspection(dto);
         }
     }
 
@@ -187,7 +186,7 @@ public class JigItemService {
             }
         }
 
-        notificationApiClient.accept(accessToken, dto);
+        apiClient.accept(accessToken, dto);
     }
 
     public JigItemInventoryRequestDto inventory() {
@@ -233,6 +232,9 @@ public class JigItemService {
 
         // 지그 점검(inspection) 완료 상태로 변경
         jigItemInspection(beforeJigItem.getId());
+
+        // wo 생성 요청
+        apiClient.createWorkOrder(WorkOrderAutoCreateRequestDto.from(List.of(beforeJigItem.getSerialNo())));
     }
 
     private void jigItemInspection(Long id) {
@@ -240,7 +242,7 @@ public class JigItemService {
             JigItemInspectionRDBEntity jigItemInspection = getByJigItemIdInInspection(id);
             jigItemInspection.updateIsInspection();
         }catch (IllegalArgumentException e){
-            log.warn("시스템에서 점검 항목을 만들지 않은 \'{}\'를 교체 했습니다.", id);
+            log.warn("점검 항목이 없는 \'{}\'가 교체 됐습니다.", id);
         }
     }
 
