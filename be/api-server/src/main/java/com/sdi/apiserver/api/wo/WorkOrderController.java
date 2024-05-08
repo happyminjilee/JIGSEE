@@ -4,6 +4,7 @@ import com.sdi.apiserver.api.member.MemberController;
 import com.sdi.apiserver.api.wo.client.WorkOrderClient;
 import com.sdi.apiserver.api.wo.dto.request.*;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderDetailResponseDto;
+import com.sdi.apiserver.api.wo.dto.response.WorkOrderDoneResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderGroupingResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderResponseDto;
 import com.sdi.apiserver.util.Response;
@@ -62,7 +63,7 @@ public class WorkOrderController {
     }
 
     @PutMapping("/done")
-    Response<Void> save(HttpServletRequest request, @RequestBody WorkOrderDoneRequestDto dto) {
+    Response<WorkOrderDoneResponseDto> save(HttpServletRequest request, @RequestBody WorkOrderDoneRequestDto dto) {
         memberController.engineerCheck(request);
         return workOrderClient.save(getAccessToken(request), dto);
     }

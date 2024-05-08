@@ -2,6 +2,7 @@ package com.sdi.apiserver.api.wo.client;
 
 import com.sdi.apiserver.api.wo.dto.request.*;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderDetailResponseDto;
+import com.sdi.apiserver.api.wo.dto.response.WorkOrderDoneResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderGroupingResponseDto;
 import com.sdi.apiserver.api.wo.dto.response.WorkOrderResponseDto;
 import com.sdi.apiserver.util.Response;
@@ -39,8 +40,8 @@ public interface WorkOrderClient {
     Response<Void> tmp(@RequestBody WorkOrderUpdateRequestDto dto);
 
     @PutMapping("/done")
-    Response<Void> save(@RequestHeader(name = ACCESS_TOKEN_PREFIX) String accessToken,
-                        @RequestBody WorkOrderDoneRequestDto dto);
+    Response<WorkOrderDoneResponseDto> save(@RequestHeader(name = ACCESS_TOKEN_PREFIX) String accessToken,
+                                            @RequestBody WorkOrderDoneRequestDto dto);
 
     @PutMapping("/status")
     Response<Void> updateStatus(@RequestBody WorkOrderUpdateStatusRequestDto dto);
