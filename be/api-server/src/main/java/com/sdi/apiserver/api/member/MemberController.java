@@ -30,7 +30,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
-class MemberController {
+public class MemberController {
 
     private final MemberClient memberClient;
 
@@ -84,19 +84,19 @@ class MemberController {
     }
 
     @GetMapping("/manager")
-    Response<Void> managerCheck(HttpServletRequest request) {
+    public Response<Void> managerCheck(HttpServletRequest request) {
         String accessToken = HeaderUtils.getAccessToken(request);
         return memberClient.managerCheck(accessToken);
     }
 
     @GetMapping("/engineer")
-    Response<Void> engineerCheck(HttpServletRequest request) {
+    public Response<Void> engineerCheck(HttpServletRequest request) {
         String accessToken = HeaderUtils.getAccessToken(request);
         return memberClient.engineerCheck(accessToken);
     }
 
     @GetMapping("/producer")
-    Response<Void> producerCheck(HttpServletRequest request) {
+    public Response<Void> producerCheck(HttpServletRequest request) {
         String accessToken = HeaderUtils.getAccessToken(request);
         return memberClient.producerCheck(accessToken);
     }

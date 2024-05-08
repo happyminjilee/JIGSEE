@@ -1,5 +1,6 @@
 package com.sdi.apiserver.api.request_response;
 
+import com.sdi.apiserver.api.member.MemberController;
 import com.sdi.apiserver.api.request_response.client.NotificationApiClient;
 import com.sdi.apiserver.api.request_response.dto.request.ResponseJigRequestDto;
 import com.sdi.apiserver.util.Response;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ResponseController {
     private static final String ACCESS_TOKEN_PREFIX = "Authorization";
     private final NotificationApiClient notificationApiClient;
+    private final MemberController memberController;
 
     @PostMapping("/jig")
-    Response<Void> jig(@RequestBody ResponseJigRequestDto dto, HttpServletRequest request){
+    Response<Void> jig(HttpServletRequest request, @RequestBody ResponseJigRequestDto dto){
+        memberController.managerCheck(request);
         return notificationApiClient.makeWantResponse(getAccessToken(request), dto);
     }
 

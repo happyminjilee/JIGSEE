@@ -5,7 +5,10 @@ import com.sdi.apiserver.api.facility.dto.response.FacilityAllResponseDto;
 import com.sdi.apiserver.api.facility.dto.response.FacilityDetailResponseDto;
 import com.sdi.apiserver.api.facility.dto.response.FacilityItemInspectionJigItemsResponseDto;
 import com.sdi.apiserver.api.facility.dto.response.FacilityItemInspectionResponseDto;
+import com.sdi.apiserver.api.member.MemberController;
+import com.sdi.apiserver.api.member.client.MemberClient;
 import com.sdi.apiserver.util.Response;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,24 +21,29 @@ import org.springframework.web.bind.annotation.RestController;
 class FacilityController {
 
     private final FacilityItemClient facilityItemClient;
+    private final MemberController memberController;
 
     @GetMapping("/all")
-    Response<FacilityAllResponseDto> all() {
+    Response<FacilityAllResponseDto> all(HttpServletRequest request) {
+        memberController.producerCheck(request);
         return facilityItemClient.all();
     }
 
     @GetMapping()
-    Response<FacilityDetailResponseDto> searchByFacilityId(@RequestParam(name = "facility-id") String facilityId) {
+    Response<FacilityDetailResponseDto> searchByFacilityId(HttpServletRequest request, @RequestParam(name = "facility-id") String facilityId) {
+        memberController.producerCheck(request);
         return facilityItemClient.searchByFacilityId(facilityId);
     }
 
     @GetMapping("/inspection")
-    Response<FacilityItemInspectionResponseDto> inspection() {
+    Response<FacilityItemInspectionResponseDto> inspection(HttpServletRequest request) {
+        memberController.producerCheck(request);
         return facilityItemClient.inspection();
     }
 
     @GetMapping("/inspection/jig-item")
-    Response<FacilityItemInspectionJigItemsResponseDto> inspectionJigItem(@RequestParam(name = "facility-id") String facilityId) {
+    Response<FacilityItemInspectionJigItemsResponseDto> inspectionJigItem(HttpServletRequest request, @RequestParam(name = "facility-id") String facilityId) {
+        memberController.producerCheck(request);
         return facilityItemClient.inspectionJigItem(facilityId);
     }
 }
