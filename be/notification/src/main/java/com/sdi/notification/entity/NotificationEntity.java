@@ -1,6 +1,5 @@
 package com.sdi.notification.entity;
 
-import com.sdi.notification.dto.request.NotificationFcmInspectionRequestDto;
 import com.sdi.notification.dto.request.MessageRequestDto;
 import com.sdi.notification.util.NotificationStatus;
 import jakarta.persistence.Column;
@@ -40,7 +39,7 @@ public class NotificationEntity {
         return new NotificationEntity(null, false, sender, receiver, messageRequestDto.type(), messageRequestDto.uuid());
     }
 
-    public static NotificationEntity of(String receiver, NotificationFcmInspectionRequestDto notificationFcmInspectionRequestDto) {
-        return new NotificationEntity(null, false, "SYSTEM", receiver, NotificationStatus.PERIODIC_INSPECTION, notificationFcmInspectionRequestDto.uuid());
+    public void updateCheckStatusTrue() {
+        checkStatus = true;
     }
 }
