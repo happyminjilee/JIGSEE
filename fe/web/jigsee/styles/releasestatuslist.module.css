@@ -11,6 +11,15 @@
   /*width: 100vw;*/
 }
 
+.selection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right : 14px;
+  height: 5%;
+}
+
 .contents {
   overflow-y: auto;
   overflow-x: hidden;
@@ -84,6 +93,6 @@
 }
 
 .short {
+  margin: 0px;
   max-width: 100px;
-  margin-left: 45px;
 }

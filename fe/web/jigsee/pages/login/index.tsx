@@ -8,13 +8,13 @@ import {userStore} from "@/store/memberstore";
 
 
 export default function Login() {
-  const [employeeNo, setEmployeeNo] = useState("")
   const [password, setPassword ]= useState("")
   const router = useRouter()
-  const { setName, setRole } = userStore(state => ({
+  const { setName, setRole, } = userStore(state => ({
       setName: state.setName,
-      setRole: state.setRole
+      setRole: state.setRole,
   }))
+  const {employeeNo, setEmployeeNo} = userStore()
 
     const handleLogin = async (p1:string, p2:string) => {
       console.log("Login Start")

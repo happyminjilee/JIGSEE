@@ -6,6 +6,8 @@ interface user {
   setName: (n: string) => void;
   role: string;
   setRole: (n: string) => void;
+  employeeNo: string;
+  setEmployeeNo: (n:string) => void;
 }
 
 export const userStore = create<user>((set) => ({
@@ -25,4 +27,11 @@ export const userStore = create<user>((set) => ({
       set({ role: newRole });
     }
   },
+  employeeNo: "",
+  setEmployeeNo: (n:string) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("employeeNo", n);
+      set({employeeNo: n})
+    }
+  }
 }));

@@ -90,49 +90,8 @@ export default function RequestList() {
                     >
                         요 청
                     </Button>
-                    <Button
-                        size="lg"
-                        style={{
-                            fontWeight: "bold",
-                            marginBottom: "5px",
-                            margin: "10px, 0px, 0px, 0px",
-                            width: "190px",
-                        }}
-                        onPress={() => {createWo()}}
-                    >
-                        WO 생성
-                    </Button>
                 </div>
             </div>
-            <Modal
-                open={modal} // Corrected from 'open'
-                onClose={()=> {setModal(false)}} // Added onClose handler
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    '& .MuiBox-root': {  // Assuming the box is causing issues
-                        outline: 'none',
-                        border: 'none',
-                        boxShadow: 'none'
-                    }
-                }}
-            >
-
-                <Box
-                    sx={{
-                        width: "100%",
-                        height: "80%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <WoModal/>
-                </Box>
-            </Modal>
         </>
     );
 }

@@ -1,7 +1,7 @@
 import React, {useState, useEffect, } from "react";
 import { Link, Button, Select, SelectItem, Selection, Switch } from "@nextui-org/react";
 import styled from "@/styles/releasestatuslist.module.css";
-import { useCompoStore, useWoDetailStore, useWoGroupStore, useWoStore } from "@/store/workorderstore";
+import {useCompoStore, useUserWoListStore, useWoDetailStore, useWoGroupStore, useWoStore} from "@/store/workorderstore";
 import {useCartStore, useMartStore, useGroupFilter} from "@/store/repairrequeststore";
 import {DropBox} from "@/components/workorder/ListDnDbox"
 import {QueryClient, QueryClientProvider, useQuery} from "@tanstack/react-query"
@@ -30,19 +30,25 @@ export default function RequestList() {
       { label: "FINISH", value: "완료" },
   ];
   const {select, setSelect, forFilter, clearForFilter, addForFilter} = useGroupFilter();
+  const {list, fetchUserWo} = useUserWoListStore()
   // const {data} = useQuery()
   useEffect(() => {
       clearForFilter()
       // 로딩 로직 추가?
-      if (select === "PUBLISH") {
-          addForFilter(publish)
-      } else if (select === "PROGRESS") {
-          addForFilter(progress)
-      } else if (select === "FINISH") {
-          addForFilter(finish)
+      if (mine) {
+          addForFilter(list)
+      } else {
+          if (select === "PUBLISH") {
+              addForFilter(publish)
+          } else if (select === "PROGRESS") {
+              addForFilter(progress)
+          } else if (select === "FINISH") {
+              addForFilter(finish)
+          }
+          console.log('forFilter', forFilter)
       }
-      console.log('forFilter', forFilter)
-  }, [select]);
+
+  }, [select, mine]);
     const createWo = () => {
         setModalName("CREATEWO")
         setModal(true)
@@ -62,7 +68,7 @@ export default function RequestList() {
                       <div className="flex flex-col gap-2">
                           <Switch isSelected={mine} onValueChange={setMine} size={"sm"}>
                               {mine ?
-                                  <div style={{color: "black", fontSize: "8px", fontWeight: "lighter", marginTop: "4px", marginRight: "2px"}}>내 요청 내역</div>
+                                  <div style={{color: "black", fontSize: "8px", fontWeight: "lighter", marginTop: "1px", marginRight: "2px"}}>내 요청 내역</div>
                                   :
                                   <Link
                                       href="/common/ReleaseTotal/"
@@ -73,26 +79,30 @@ export default function RequestList() {
                                       전체 내역 보기
                                   </Link>}
                           </Switch>
+                          {mine ? <div
+                                  style={{margin: "0px"}}
+                              ></div>
+                              :
+                              <Select
+                                  size="sm"
+                                  label="선택"
+                                  value={select}
+                                  selectionMode="single"
+                                  placeholder="선택"
+                                  className={styled.short}
+                                  onChange={(e) => {
+                                      setSelect(e.target.value)
+                                  }}
+                              >
+                                  <SelectItem key="PUBLISH" value="PUBLISH">발행</SelectItem>
+                                  <SelectItem key="PROGRESS" value="PROGRESS">진행 중</SelectItem>
+                                  <SelectItem key="FINISH" value="FINISH">완료</SelectItem>
+                              </Select>
+                          }
                       </div>
 
                   </div>
-                  <div>
-                      <Select
-                          size="sm"
-                          label="선택"
-                          value={select}
-                          selectionMode="single"
-                          placeholder="선택"
-                          className={styled.short}
-                          onChange={(e) => {
-                              setSelect(e.target.value)
-                          }}
-                      >
-                          <SelectItem key="PUBLISH" value="PUBLISH">발행</SelectItem>
-                          <SelectItem key="PROGRESS" value="PROGRESS">진행 중</SelectItem>
-                          <SelectItem key="FINISH" value="FINISH">완료</SelectItem>
-                      </Select>
-                  </div>
+
 
                   {/* card */}
                   <DropBox items={forFilter} boxType={"Mart"}>

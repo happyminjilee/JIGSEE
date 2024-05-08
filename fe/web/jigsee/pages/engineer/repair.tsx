@@ -5,7 +5,7 @@ import WOtest from "@/components/repair/WOtestresult";
 import RepairList from "@/components/repair/List";
 import RepairRequest from "@/components/repair/Requests"
 import Information from "@/components/repair/JigDetail"
-import {useWoStore, useCompoStore, useWoGroupStore} from "@/store/workorderstore";
+import {useWoStore, useCompoStore, useWoGroupStore, useUserWoListStore} from "@/store/workorderstore";
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -18,15 +18,25 @@ import {useGroupFilter} from "@/store/repairrequeststore";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CreateWoModal from "@/components/workorder/CreateWoModal";
+import {userStore} from "@/store/memberstore";
 
 export default function Repair() {
   const { rightCompo } = useCompoStore();
   const {fetchWoGroup, publish, progress, finish} = useWoGroupStore();
-  const {setSelect, addForFilter} = useGroupFilter()
+  const {fetchUserWo} = useUserWoListStore()
   useEffect(() => {
+      const employeeNo = localStorage.getItem("employeeNo") || ""
+      const name = localStorage.getItem("name") || ""
+      fetchUserWo(employeeNo, name, 1, 10)
+          .then((res) => {
+              console.log('on reapir userwo', res)
+          })
+          .catch((error) => {
+              console.log(error.message)
+          })
       fetchWoGroup()
           .then((res) => {
-              console.log('on reapir show', res)
+              console.log('on reapir groupwo', res)
           })
           .catch((error) => {
               console.log(error.message)

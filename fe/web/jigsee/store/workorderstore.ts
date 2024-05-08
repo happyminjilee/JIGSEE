@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { AxiosResponse } from "axios";
 import { state } from "sucrase/dist/types/parser/traverser/base";
-import { getAllWo, getWogroup, getWoInfo, saveWotmp, doneWo } from "@/pages/api/workorderAxios";
+import { getAllWo, getWogroup, getWoInfo, saveWotmp, doneWo, getUserWoList } from "@/pages/api/workorderAxios";
 
 interface compo {
   modal: boolean;
@@ -175,6 +175,33 @@ export const useWoGroupStore = create<WoGroup>(
     })
 )
 
+
+
+interface userWo {
+  currentPage: number,
+  endPage: number,
+  list: lst[],
+  fetchUserWo: (employeeNo: string, name: string, page: number, size: number) => Promise<AxiosResponse>;
+}
+
+export const useUserWoListStore = create<userWo>(
+    (set) => ({
+      currentPage: 1,
+      endPage: 1,
+      list: [],
+      fetchUserWo: async (employeeNo: string, name: string, page: number, size: number) => {
+        const data = await getUserWoList(employeeNo, name, page, size);
+        console.log(employeeNo, name, page, size)
+        console.log("userWo", data.data)
+        set({
+          currentPage: data.data.result.currentPage,
+          endPage: data.data.result.endPage,
+          list: data.data.result.list,
+        })
+        return data.data
+      }
+    })
+)
 
 
 
