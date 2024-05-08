@@ -129,8 +129,8 @@ public class JigItemService {
     }
 
     @Transactional
-    public void jigItemInspection(List<String> serialNos) {
-        List<JigItemRDBEntity> bySerialNoIn = jigItemRDBRepository.findBySerialNoIn(serialNos);
+    public void jigItemInspection(List<Long> jigItemIds) {
+        List<JigItemRDBEntity> bySerialNoIn = jigItemRDBRepository.findAllById(jigItemIds);
         List<JigItemInspectionRDBEntity> datas = new ArrayList<>();
         List<String> newJigInspectionSerialNos = new ArrayList<>();
         String notificationId = UUID.randomUUID().toString();

@@ -68,7 +68,7 @@ class JigItemController {
 
     @PostMapping("/inspection")
     Response<Void> inspection(@RequestBody JigItemInspectionRequestDto dto) {
-        jigItemService.jigItemInspection(dto.serialNos());
+        jigItemService.jigItemInspection(dto.jigItemIds());
         return Response.success();
     }
 
