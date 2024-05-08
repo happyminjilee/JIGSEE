@@ -41,5 +41,11 @@ public class SearchService {
 
         return NotificationListResponseDto.of(page.getNumber() + 1, page.getTotalPages(), notifications);
     }
-}
 
+    public void setCheck(Long notificationId) {
+        NotificationEntity checkedNotification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new IllegalArgumentException(notificationId + "번 알림을 조회하는 중 문제 발생"));
+        checkedNotification.updateCheckStatusTrue();
+        notificationRepository.save(checkedNotification);
+    }
+}

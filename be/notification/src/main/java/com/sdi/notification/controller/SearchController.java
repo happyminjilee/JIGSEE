@@ -14,23 +14,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/notification/search")
+@RequestMapping("/v1/notification")
 @RequiredArgsConstructor
 class SearchController {
     private final ApiService apiService;
     private final SearchService searchService;
 
-    @GetMapping("/unchecked")
+    @GetMapping("/search/unchecked")
     Response<UncheckedNotificationListResponseDto> searchUnchecked(@RequestHeader("Authorization") String accessToken) {
         MemberResponseDto currentMember = apiService.getMember(accessToken);
         return Response.success(searchService.getUncheckedNotifications(currentMember));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/search/all")
     Response<NotificationListResponseDto> searchAll(@RequestHeader("Authorization") String accessToken,
                                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                                     @RequestParam(value = "size", defaultValue = "10") int size) {
         MemberResponseDto currentMember = apiService.getMember(accessToken);
         return Response.success(searchService.getNotifications(currentMember, page, size));
     }
+
+    @GetMapping("/check")
+    Response<Void> checkNotification(@RequestParam("notification-id") Long notificationId) {
+        searchService.setCheck(notificationId);
+        return Response.success();
+    }
+
+
 }

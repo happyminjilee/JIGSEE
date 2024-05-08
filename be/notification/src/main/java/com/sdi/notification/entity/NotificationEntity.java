@@ -38,4 +38,8 @@ public class NotificationEntity {
     public static NotificationEntity of(String sender, String receiver, MessageRequestDto messageRequestDto) {
         return new NotificationEntity(null, false, sender, receiver, messageRequestDto.type(), messageRequestDto.uuid());
     }
+
+    public void updateCheckStatusTrue() {
+        checkStatus = true;
+    }
 }
