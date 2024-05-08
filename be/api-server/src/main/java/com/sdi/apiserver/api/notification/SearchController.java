@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/notification")
+@RequestMapping("/v1/notification")
 @RequiredArgsConstructor
 public class SearchController {
     public static final String ACCESS_TOKEN_PREFIX = "Authorization";
