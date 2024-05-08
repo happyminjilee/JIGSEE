@@ -21,7 +21,7 @@ public interface NotificationClient {
     final String ACCESS_TOKEN_PREFIX = "Authorization";
 
     @GetMapping(value = "/notification/sse/subscribe", produces = "text/event-stream")
-    SseEmitter subscribe(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken);
+    SseEmitter subscribeSSE(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken);
 
     @PostMapping(value = "/notification/sse/send-message")
     Response<Void> sendMessage(@RequestBody MessageRequestDto messageRequestDto);
@@ -45,4 +45,13 @@ public interface NotificationClient {
 
     @PutMapping("/notification/check")
     Response<Void> checkNotification(@RequestParam("notification-id") Long id);
+
+    @PostMapping("/notification/email/subscribe")
+    Response<Void> subscribeEmail(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken);
+
+    @DeleteMapping("/notification/email/unsubscribe")
+    Response<Void> unsubscribeEmail(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken);
+
+    @PostMapping("/notification/email/inspection")
+    Response<Void> sendInspectionEmail(@RequestBody NotificationFcmInspectionRequestDto dto);
 }
