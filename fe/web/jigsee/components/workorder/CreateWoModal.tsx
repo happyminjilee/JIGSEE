@@ -41,7 +41,6 @@ export default function createWoModal() {
     }
 
     const close = () => {
-
         setModal(false)
         setModalName("")
     }

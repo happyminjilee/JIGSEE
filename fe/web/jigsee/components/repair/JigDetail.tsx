@@ -13,6 +13,7 @@ import WoModal from "@/components/workorder/CreateWoModal";
 import {useGroupFilter} from "@/store/repairrequeststore";
 
 
+
 interface APIChecklist {
     uuid: string,
     content: string, // 점검항목
@@ -40,6 +41,7 @@ export default function RequestList() {
     const cardClick = (id: number) => {
         console.log("clicked", id)
         openModal()
+        setModalName("Report")
     }
 
     const {setSelect} = useGroupFilter()
@@ -52,12 +54,9 @@ export default function RequestList() {
 
     const goTest = () => {
         setRightCompo("TEST")
+        setModalName("")
     }
 
-    const createWo = () => {
-        openModal()
-        setModalName("CREATEWO")
-    }
 
     const [transformed, setTransformed ]= useState<APIChecklist[]>([])
     useEffect(() => {
@@ -158,35 +157,6 @@ export default function RequestList() {
                     </div>
                 </div>
             </div>
-            <Modal
-                open={modal} // Corrected from 'open'
-                onClose={()=> {setModal(false)}} // Added onClose handler
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    '& .MuiBox-root': {  // Assuming the box is causing issues
-                        outline: 'none',
-                        border: 'none',
-                        boxShadow: 'none'
-                    }
-                }}
-            >
-
-                <Box
-                    sx={{
-                        width: "100%",
-                        height: "80%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <Report/>
-                </Box>
-            </Modal>
         </>
     );
     }

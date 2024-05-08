@@ -4,6 +4,23 @@
     margin: 20px auto;
 }
 
+.ship {
+    margin: auto;
+    height: 100%;
+}
+
+.close {
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    color: var(--realwhite)
+}
+.close:hover {
+    color: var(--black);
+    cursor: pointer;
+}
+
 .container {
     margin: auto;
     width: 600px;

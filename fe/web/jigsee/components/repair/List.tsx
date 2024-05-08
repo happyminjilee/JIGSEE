@@ -6,6 +6,10 @@ import {useCartStore, useMartStore, useGroupFilter} from "@/store/repairrequests
 import {DropBox} from "@/components/workorder/ListDnDbox"
 import {QueryClient, QueryClientProvider, useQuery} from "@tanstack/react-query"
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
+import Box from "@mui/material/Box";
+import Report from "@/components/workorder/template";
+import Modal from "@mui/material/Modal";
+import CreateWoModal from "@/components/workorder/CreateWoModal";
 
 
 
@@ -40,8 +44,8 @@ export default function RequestList() {
       console.log('forFilter', forFilter)
   }, [select]);
     const createWo = () => {
-        setModal(true)
         setModalName("CREATEWO")
+        setModal(true)
     }
 
 
