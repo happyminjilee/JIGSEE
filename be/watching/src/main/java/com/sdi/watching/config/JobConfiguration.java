@@ -32,9 +32,6 @@ public class JobConfiguration {
 
                 .from(sendToJigItemServerStep)
                 .on(FAILED).end()
-                .on("*").to(sendToWorkOrderServerStep)
-
-                .from(sendToJigItemServerStep)
                 .on("*").to(sendToNotificationApiServerStep)
 
                 .end()
