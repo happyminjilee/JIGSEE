@@ -57,10 +57,14 @@ public class JigItemRDBEntity {
 
     public void delete() {
         this.isDelete = true;
+        this.status = JigStatus.DELETE;
     }
 
     public void updateState(JigStatus status) {
         this.status = status;
+        if(status != JigStatus.DELETE && this.isDelete){ // 삭제되어 있으면 취소
+            this.isDelete = false;
+        }
     }
 
     public void recovery() {
