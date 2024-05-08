@@ -6,6 +6,7 @@ import com.sdi.apiserver.api.jig.dto.response.JigItemFacilityAvailableResponseDt
 import com.sdi.apiserver.api.jig.dto.response.JigItemInventoryRequestDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
+import com.sdi.apiserver.api.member.MemberController;
 import com.sdi.apiserver.util.HeaderUtils;
 import com.sdi.apiserver.util.Response;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,54 +20,64 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 class JigItemController {
 
+    private final MemberController memberController;
     private final JigItemClient jigItemClient;
 
     @GetMapping
-    Response<JigItemResponseDto> findBySerialNo(@RequestParam(name = "serial-no") String serialNo) {
+    Response<JigItemResponseDto> findBySerialNo(HttpServletRequest request, @RequestParam(name = "serial-no") String serialNo) {
+        memberController.producerCheck(request);
         log.info("{}로 Jig-Item정보 조회", serialNo);
         return jigItemClient.findBySerialNo(serialNo);
     }
 
     @PostMapping
-    Response<Void> add(@RequestBody JigItemAddRequestDto dto) {
+    Response<Void> add(HttpServletRequest request, @RequestBody JigItemAddRequestDto dto) {
+        memberController.managerCheck(request);
         log.info("Jig-Item 데이터 삽입{}", dto.list());
         return jigItemClient.add(dto);
     }
 
     @GetMapping("/usable")
-    Response<JigItemIsUsableResponseDto> isUsable(@RequestParam(name = "facility-model") String facilityModel,
+    Response<JigItemIsUsableResponseDto> isUsable(HttpServletRequest request,
+                                                  @RequestParam(name = "facility-model") String facilityModel,
                                                   @RequestParam(name = "jig-serial-no") String jigSerialNo) {
+        memberController.producerCheck(request);
         log.info("{}에 {}가 들어갈 수 있는지 확인", facilityModel, jigSerialNo);
         return jigItemClient.isUsable(facilityModel, jigSerialNo);
     }
 
     @DeleteMapping()
-    Response<Void> delete(@RequestBody JigItemSerialNoRequestDto dto) {
+    Response<Void> delete(HttpServletRequest request, @RequestBody JigItemSerialNoRequestDto dto) {
+        memberController.producerCheck(request);
         log.info("{} 삭제", dto.serialNo());
         return jigItemClient.delete(dto);
     }
 
     @PutMapping("/status")
-    Response<Void> updateStatus(@RequestBody JigItemUpdateStatusRequestDto dto) {
+    Response<Void> updateStatus(HttpServletRequest request, @RequestBody JigItemUpdateStatusRequestDto dto) {
         log.info("{} 상태 변경 {}", dto.serialNo(), dto.status());
         return jigItemClient.updateStatus(dto);
     }
 
     @PutMapping("/exchange")
-    Response<Void> exchange(@RequestBody JigItemExchangeRequestDto dto) {
+    Response<Void> exchange(HttpServletRequest request, @RequestBody JigItemExchangeRequestDto dto) {
+        memberController.producerCheck(request);
         log.info("{}에 {}를 {}로 변경", dto.facilitySerialNo(), dto.beforeSerialNo(), dto.afterSerialNo());
         return jigItemClient.exchange(dto);
     }
 
     @PutMapping("/recovery")
-    Response<Void> recovery(@RequestBody JigItemSerialNoRequestDto dto) {
+    Response<Void> recovery(HttpServletRequest request, @RequestBody JigItemSerialNoRequestDto dto) {
+        memberController.engineerCheck(request);
         log.info("{} 상태 변경", dto.serialNo());
         return jigItemClient.recovery(dto);
     }
 
     @GetMapping("/facility-available")
     Response<JigItemFacilityAvailableResponseDto> facilityAvailable(
+            HttpServletRequest request,
             @RequestParam(name = "facility-model") String facilityModel) {
+        memberController.engineerCheck(request);
         log.info("{}에 사용 가능한 지그 목록", facilityModel);
         return jigItemClient.facilityAvailable(facilityModel);
     }
@@ -78,7 +89,8 @@ class JigItemController {
     }
 
     @PutMapping("/accept")
-    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto, HttpServletRequest request) {
+    Response<Void> accept(HttpServletRequest request, @RequestBody JigItemAcceptRequestDto dto) {
+        memberController.managerCheck(request);
         String accessToken = HeaderUtils.getAccessToken(request);
         log.info("{} 불출 승인 요청", dto);
         return jigItemClient.accept(accessToken, dto);

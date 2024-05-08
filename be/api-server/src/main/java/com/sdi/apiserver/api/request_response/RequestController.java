@@ -1,5 +1,6 @@
 package com.sdi.apiserver.api.request_response;
 
+import com.sdi.apiserver.api.member.MemberController;
 import com.sdi.apiserver.api.request_response.client.NotificationApiClient;
 import com.sdi.apiserver.api.request_response.dto.request.RepairJigRequestDto;
 import com.sdi.apiserver.api.request_response.dto.request.RequestJigRequestDto;
@@ -23,37 +24,48 @@ import org.springframework.web.bind.annotation.RestController;
 public class RequestController {
     public static final String ACCESS_TOKEN_PREFIX = "Authorization";
     private final NotificationApiClient notificationApiClient;
+    private final MemberController memberController;
 
     @PostMapping("/jig")
-    Response<Void> jig(@RequestBody RequestJigRequestDto dto, HttpServletRequest request) {
+    Response<Void> jig(HttpServletRequest request, @RequestBody RequestJigRequestDto dto) {
+        memberController.engineerCheck(request);
         return notificationApiClient.makeWantRequest(getAccessToken(request), dto);
     }
 
     @PostMapping("/repair")
-    Response<Void> repair(@RequestBody RepairJigRequestDto dto, HttpServletRequest request) {
+    Response<Void> repair(HttpServletRequest request, @RequestBody RepairJigRequestDto dto) {
+        memberController.producerCheck(request);
         return notificationApiClient.makeRepairRequest(getAccessToken(request), dto);
     }
 
     @GetMapping("/jig/all")
-    Response<RequestJigListResponseDto> all(@RequestParam(name = "filter") String filter,
+    Response<RequestJigListResponseDto> all(HttpServletRequest request,
+                                            @RequestParam(name = "filter") String filter,
                                             @RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "size", defaultValue = "10") int size) {
+        memberController.engineerCheck(request);
         return notificationApiClient.findAllWantJigRequests(filter, page, size);
     }
 
     @GetMapping("/jig/detail")
-    Response<RequestJigDetailResponseDto> detailRequestJig(@RequestParam(name = "request-jig-id") String id) {
+    Response<RequestJigDetailResponseDto> detailRequestJig(HttpServletRequest request,
+                                                           @RequestParam(name = "request-jig-id") String id) {
+        memberController.engineerCheck(request);
         return notificationApiClient.findOneJigRequest(id);
     }
 
     @GetMapping("/repair")
-    Response<RepairJigListResponseDto> repairRequestJig(@RequestParam(value = "page", defaultValue = "1") int page,
+    Response<RepairJigListResponseDto> repairRequestJig(HttpServletRequest request,
+                                                        @RequestParam(value = "page", defaultValue = "1") int page,
                                                         @RequestParam(value = "size", defaultValue = "10") int size) {
+        memberController.producerCheck(request);
         return notificationApiClient.findAllRepairRequests(page, size);
     }
 
     @GetMapping("/repair/detail")
-    Response<RepairJigDetailResponseDto> detailRepairRequestJig(@RequestParam(name = "repair-jig-id") String id){
+    Response<RepairJigDetailResponseDto> detailRepairRequestJig(HttpServletRequest request,
+                                                                @RequestParam(name = "repair-jig-id") String id){
+        memberController.producerCheck(request);
         return notificationApiClient.findOneRepairRequest(id);
     }
 
