@@ -29,7 +29,7 @@ class WorkOrderController {
     @GetMapping("/detail")
     Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "work-order-id") Long workOrderId, HttpServletRequest request) {
         log.info("\'{}\' 상세 조회 요청", workOrderId);
-        WorkOrderDetailResponseDto dto = workOrderService.detail(workOrderId, getAccessToken(request));
+        WorkOrderDetailResponseDto dto = workOrderService.detail(getAccessToken(request), workOrderId);
         return Response.success(dto);
     }
 
@@ -90,9 +90,9 @@ class WorkOrderController {
     }
 
     @PostMapping("/auto")
-    Response<Void> autoCreate(@RequestBody WorkOrderAutoCreateRequestDto dto){
+    Response<Void> autoCreate(@RequestBody WorkOrderAutoCreateRequestDto dto, HttpServletRequest request){
         log.info("\'{}\' 자동 저장 요청", dto);
-        workOrderService.autoCreate(dto);
+        workOrderService.autoCreate(getAccessToken(request), dto);
         return Response.success();
     }
 
