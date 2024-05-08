@@ -35,13 +35,22 @@ export const finishSSE = () => {
   axiosAuthApi().delete(url);
 };
 // 미확인 알림 조회
-export const getUnchecked = () => {
+export const getUnchecked = async () => {
   const url = "http://k10s105.p.ssafy.io:80/api/v1/notification/search/unchecked";
-  return axiosAuthApi().get(url);
+  const response = await axiosAuthApi().get(url);
+  return response.data.result;
 };
 // 전체 알림 리스트 조회
-export const getAllalarms = () => {
+export const getAllalarms = async (page: number) => {
   const url = "http://k10s105.p.ssafy.io:80/api/v1/notification/search/all";
-  const params = { page: 1, size: 5 };
-  return axiosAuthApi().get(url, { params });
+  const params = { page: page, size: 5 };
+  const response = await axiosAuthApi().get(url, { params });
+  return response.data.result;
+};
+// 알림 체크
+export const checkAlarm = async (ID: number) => {
+  const url = "http://k10s105.p.ssafy.io:80/api/v1/notification/check";
+  const params = { "notification-id": ID };
+  const response = await axiosAuthApi().put(url, null, { params });
+  return response;
 };
