@@ -60,10 +60,6 @@ public class JigItemRDBEntity {
     }
 
     public void updateState(JigStatus status) {
-        if (this.status == JigStatus.IN) {
-            throw new IllegalArgumentException("투입중인 지그의 상태를 변경할 수 없습니다.");
-        }
-
         this.status = status;
     }
 

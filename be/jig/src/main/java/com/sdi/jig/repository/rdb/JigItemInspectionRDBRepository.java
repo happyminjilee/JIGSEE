@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface JigItemInspectionRDBRepository extends JpaRepository<JigItemInspectionRDBEntity, Long> {
 
-    Optional<JigItemInspectionRDBEntity> findByJigItemSerialNo(String serialNo);
+    Optional<JigItemInspectionRDBEntity> findByJigItemIdAndIsInspectionFalse(Long id);
 
     List<JigItemInspectionRDBEntity> findByIsInspectionFalse();
 

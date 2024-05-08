@@ -41,5 +41,6 @@ public class JigItemInspectionRDBEntity {
 
     public void updateIsInspection(){
         this.isInspection = true;
+        this.updatedAt = LocalDateTime.now();
     }
 }

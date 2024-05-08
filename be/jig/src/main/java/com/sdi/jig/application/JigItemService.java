@@ -227,11 +227,11 @@ public class JigItemService {
         jigItemIOHistoryRepository.save(JigItemIOHistoryRDBEntity.of(IOStatus.IN, afterJigItem));
 
         // 지그 점검(inspection) 완료 상태로 변경
-        jigItemInspection(beforeJigItem);
+        jigItemInspection(beforeJigItem.getId());
     }
 
-    private void jigItemInspection(JigItemRDBEntity beforeJigItem) {
-        JigItemInspectionRDBEntity jigItemInspection = getByJigItemSerialNoInInspection(beforeJigItem.getSerialNo());
+    private void jigItemInspection(Long id) {
+        JigItemInspectionRDBEntity jigItemInspection = getByJigItemIdInInspection(id);
         jigItemInspection.updateIsInspection();
     }
 
@@ -284,9 +284,9 @@ public class JigItemService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("\'%d\'의 지그 투입 이력이 없습니다.", jigItemId)));
     }
 
-    private JigItemInspectionRDBEntity getByJigItemSerialNoInInspection(String serialNo) {
-        return jigItemInspectionRDBRepository.findByJigItemSerialNo(serialNo)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("\'%s\'를 Inspection 항목에서 알맞은 지그를 찾을 수 없습니다.", serialNo)));
+    private JigItemInspectionRDBEntity getByJigItemIdInInspection(Long id) {
+        return jigItemInspectionRDBRepository.findByJigItemIdAndIsInspectionFalse(id)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Jig Item Id = \'%d\'를 Inspection 항목에서 알맞은 지그를 찾을 수 없습니다.", id)));
     }
 
     private List<JigItemRepairHistoryRDBEntity> getJigItemRepairHistoriesByJigItemId(Long jigItemId) {
