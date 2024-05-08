@@ -16,6 +16,7 @@ import com.sdi.jig.util.IOStatus;
 import com.sdi.jig.util.JigStatus;
 import com.sdi.jig.util.TimeCalculator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 import static com.sdi.jig.dto.request.JigItemAddRequestDto.JigAddRequest;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -233,8 +235,12 @@ public class JigItemService {
     }
 
     private void jigItemInspection(Long id) {
-        JigItemInspectionRDBEntity jigItemInspection = getByJigItemIdInInspection(id);
-        jigItemInspection.updateIsInspection();
+        try{
+            JigItemInspectionRDBEntity jigItemInspection = getByJigItemIdInInspection(id);
+            jigItemInspection.updateIsInspection();
+        }catch (IllegalArgumentException e){
+            log.warn("시스템에서 점검 항목을 만들지 않은 \'{}\'를 교체 했습니다.", id);
+        }
     }
 
     private boolean isUsable(JigItemRDBEntity jigItem, FacilityRDBEntity facilityByModel, Long jigId) {
