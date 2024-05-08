@@ -1,5 +1,6 @@
 package com.sdi.notification.util;
 
+import com.sdi.notification.dto.MemberEmailDto;
 import com.sdi.notification.dto.MemberInfoDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,4 +18,7 @@ public interface MemberClient {
 
     @GetMapping("/search/role")
     Response<List<MemberInfoDto>> getMembersInRole(@RequestParam("role") String role);
+
+    @GetMapping("/email")
+    MemberEmailDto getMemberEmail(@RequestHeader(ACCESS_TOKEN_PREFIX) String accessToken);
 }

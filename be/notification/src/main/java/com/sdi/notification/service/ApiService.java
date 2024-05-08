@@ -1,5 +1,6 @@
 package com.sdi.notification.service;
 
+import com.sdi.notification.dto.MemberEmailDto;
 import com.sdi.notification.dto.MemberInfoDto;
 import com.sdi.notification.util.MemberClient;
 import jakarta.transaction.Transactional;
@@ -20,5 +21,9 @@ public class ApiService {
 
     public List<MemberInfoDto> getMembersInRole(String role) {
         return memberClient.getMembersInRole(role).getResult();
+    }
+
+    public MemberEmailDto getMemberEmail(String accessToken) {
+        return memberClient.getMemberEmail(accessToken);
     }
 }
