@@ -7,27 +7,34 @@ import com.sdi.apiserver.util.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/notification/search")
+@RequestMapping("/v1/notification")
 @RequiredArgsConstructor
 public class SearchController {
     public static final String ACCESS_TOKEN_PREFIX = "Authorization";
     private final NotificationClient notificationClient;
-    @GetMapping("/unchecked")
+    @GetMapping("/search/unchecked")
     Response<UncheckedNotificationListResponseDto> searchUnchecked(HttpServletRequest request) {
         return notificationClient.searchUnchecked(getAccessToken(request));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/search/all")
     Response<NotificationListResponseDto> searchAll(HttpServletRequest request,
                                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                                     @RequestParam(value = "size", defaultValue = "10") int size) {
         return notificationClient.searchAll(getAccessToken(request), page, size);
     }
+
+    @PutMapping("/check")
+    Response<Void> checkNotification(@RequestParam("notification-id") Long id) {
+        return notificationClient.checkNotification(id);
+    }
+
 
     private String getAccessToken(HttpServletRequest request) {
         return request.getHeader(ACCESS_TOKEN_PREFIX);

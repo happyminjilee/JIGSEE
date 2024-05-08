@@ -3,9 +3,12 @@ package com.sdi.apiserver.api.jig;
 import com.sdi.apiserver.api.jig.client.JigItemClient;
 import com.sdi.apiserver.api.jig.dto.request.*;
 import com.sdi.apiserver.api.jig.dto.response.JigItemFacilityAvailableResponseDto;
+import com.sdi.apiserver.api.jig.dto.response.JigItemInventoryRequestDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.apiserver.api.jig.dto.response.JigItemResponseDto;
+import com.sdi.apiserver.util.HeaderUtils;
 import com.sdi.apiserver.util.Response;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -75,8 +78,15 @@ class JigItemController {
     }
 
     @PutMapping("/accept")
-    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto) {
+    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto, HttpServletRequest request) {
+        String accessToken = HeaderUtils.getAccessToken(request);
         log.info("{} 불출 승인 요청", dto);
-        return jigItemClient.accept(dto);
+        return jigItemClient.accept(accessToken, dto);
+    }
+
+    @GetMapping("/inventory")
+    Response<JigItemInventoryRequestDto> inventory() {
+        log.info("모델별 재고 요청");
+        return jigItemClient.inventory();
     }
 }
