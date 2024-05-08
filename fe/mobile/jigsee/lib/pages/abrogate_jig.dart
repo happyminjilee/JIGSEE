@@ -180,7 +180,7 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(ref.watch(selectedJigProvider)),
+                                Text(ref.watch(selectedJigProvider as ProviderListenable<String>)),
                                 Text(scannedText.isEmpty ? "Error scanning" : scannedText),
                               ]
                             )

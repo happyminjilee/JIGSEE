@@ -10,25 +10,20 @@ class SpeJigList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final equipmentName = ref.watch(equipmentProvider)[0];
+    final equipmentName = ref.watch(equipmentProvider)[0]['facilitySerialNo'];
+    final equipmentId = ref.watch(equipmentProvider)[0]['id'];
     final DioClient dioClient = ref.read(dioClientProvider);
 
-    Future<List<String>> fetchEquipmentDetails() async {
+    Future<List<dynamic>> fetchEquipmentDetails() async {
       try {
         var response = await dioClient.get(
-            '/equipment/details',
-            queryParameters: {'equipmentName': equipmentName}
+            '/facility-item/inspection/jig-item?facility-id=$equipmentId',
         );
-        List<dynamic> data = response.data['details'];
-        return data.map<String>((e) => 'S/N: ${e['serialNumber']}').toList();
+        List<dynamic> data = response.data['result']['serialNos'];
+        // return data;
+        return data;
       } catch (e) {
         return [
-          'A0001234',
-          'A0001234',
-          'A0001234',
-          'A0001234',
-          'A0001234',
-          'A0001234',
           'A0001234',
           'A0001234',
         ];
@@ -55,19 +50,19 @@ class SpeJigList extends ConsumerWidget {
           Expanded(
             child: Container(
               padding: const EdgeInsets.only(left: 12, right: 12),
-              child: FutureBuilder<List<String>>(
+              child: FutureBuilder<List<dynamic>>(
                 future: fetchEquipmentDetails(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasError) {
                       return const Text('불러 오기 실패');
                     }
-                    List<String> details = snapshot.data ?? [];
+                    List<dynamic> details = snapshot.data ?? [];
                     return ListView.builder(
                       itemCount: details.length,
                       itemBuilder: (context, index) => Card(
                         child: ListTile(
-                          title: Text(details[index]),
+                          title: Text('S/N: ${details[index]}'),
                           trailing: const Icon(Icons.arrow_forward_ios),
                           onTap: () {
                             ref.read(selectedJigProvider.notifier).state = details[index];

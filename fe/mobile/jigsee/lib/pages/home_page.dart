@@ -16,7 +16,7 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  late Future<List<String>> _equipmentsFuture;
+  late Future<List<dynamic>> _equipmentsFuture;
 
   @override
   void initState() {
@@ -24,13 +24,15 @@ class _HomePageState extends ConsumerState<HomePage> {
     _equipmentsFuture = _fetchEquipments();
   }
 
-  Future<List<String>> _fetchEquipments() async {
+  Future<List<dynamic>> _fetchEquipments() async {
     try {
       DioClient dioClient = ref.read(dioClientProvider);
-      Response response = await dioClient.get('/equipments');
+      Response response = await dioClient.get('/facility-item/inspection');
       if (response.statusCode == 200) {
-        List<dynamic> data = response.data;
-        return data.map<String>((e) => e.toString()).toList();
+        // List<dynamic> data = response.data;
+        List<dynamic> data = response.data['result']['list'];
+        return data;
+        // return data.map<String>((e) => e.toString()).toList();
       } else {
         throw Exception('Failed to load equipments');
       }
@@ -56,7 +58,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                   child: ref.watch(userNameProvider).when(
                     data: (userName) => ListTile(
-                      // title: const Text('주감자 프로'),
                       title: Text('$userName 프로'),
                       trailing: IconButton(
                         icon: const Icon(Icons.logout),
@@ -85,7 +86,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: FutureBuilder<List<String>>(
+                child: FutureBuilder<List<dynamic>>(
                   future: _equipmentsFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
@@ -115,17 +116,19 @@ class _HomePageState extends ConsumerState<HomePage> {
                           ),
                         );
                       }
-                      List<String> equipments = snapshot.data ?? [];
-                      return ListView.separated(
+                      List<dynamic> equipments = snapshot.data ?? [];
+                      return ListView.builder(
                         itemCount: equipments.length,
-                        itemBuilder: (context, index) => ListTile(
-                          title: Text(equipments[index], style: const TextStyle(fontSize: 20)),
-                          onTap: () {
-                            ref.read(equipmentProvider.notifier).state = [equipments[index]];
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SpeJigList()));
-                          },
+                        itemBuilder: (context, index) => Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: ListTile(
+                            title: Text('설비: ${equipments[index]['facilitySerialNo']}', style: const TextStyle(fontSize: 16)),
+                            onTap: () {
+                              ref.read(equipmentProvider.notifier).state = [equipments[index]];
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const SpeJigList()));
+                            },
+                          ),
                         ),
-                        separatorBuilder: (context, index) => const Divider(),
                       );
                     } else {
                       // 로딩중

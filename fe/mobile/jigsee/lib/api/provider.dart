@@ -1,17 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jigsee/api/dio_instance.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jigsee/consts/constants.dart';
 
-final equipmentProvider = StateProvider<List<String>>((ref) {
+final equipmentProvider = StateProvider<List<dynamic>>((ref) {
   return [];
 });
 
-final selectedJigProvider = StateProvider<String>((ref) {
-  return '';
-});
+final selectedJigProvider = StateProvider<String>((ref) => '');
 
 final dioClientProvider = Provider<DioClient>((ref) {
   const secureStorage = FlutterSecureStorage();

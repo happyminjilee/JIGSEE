@@ -99,7 +99,7 @@ class DisplayPictureScreen extends ConsumerStatefulWidget {
 
 class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
   late String scannedText = "";
-  String? verificationImagePath;  // 검증 결과에 따라 변경될 이미지 경로
+  String? verificationImagePath;
 
   @override
   void initState() {
@@ -118,22 +118,20 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
         scannedText += line.text + "\n";
       }
     }
+    scannedText = scannedText == "" ? "Error" : scannedText;
     setState(() {});
     sendJigInfo();  // 텍스트 인식 후 서버에 정보 요청
   }
 
   void sendJigInfo() async {
     final DioClient dioClient = ref.read(dioClientProvider);
-    final jigName = ref.watch(selectedJigProvider);
+    final equipmentName = ref.watch(equipmentProvider)[0]['facilitySerialNo'];
 
     try {
       var response = await dioClient.get(
-          '/jiginfo',
-          queryParameters: {
-            'scannedText': scannedText,
-            'jigName': jigName
-          }
+          '/jig-item/usable?facility-model=$equipmentName&jig-serial-no=$scannedText',
       );
+      print('Mark!!!!!!!!!!!!!!!${response.data}');
       if (response.statusCode == 200) {
         bool isValid = response.data == 'true';
         // 응답에 따라 이미지 경로 설정
@@ -147,8 +145,34 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
       }
     } catch (e) {
       setState(() {
-        verificationImagePath = "notAvailableMark";
+        verificationImagePath = null;
       });
+    }
+  }
+
+  Future<bool> changeJig() async {
+    final DioClient dioClient = ref.read(dioClientProvider);
+    final equipmentId = ref.watch(equipmentProvider)[0]['id'];
+    final jigName = ref.watch(selectedJigProvider);
+
+    try {
+      var response = await dioClient.put(
+        '/jig-item/exchange',
+        data: {
+          "facilitySerialNo": equipmentId,
+          "beforeSerialNo": jigName,
+          "afterSerialNo": scannedText
+        }
+      );
+      print('Mark!!!!!!!!!!!!!!!${response.data}');
+      if (response.statusCode == 200) {
+        bool isValid = response.data == 'true';
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
     }
   }
 
@@ -160,29 +184,33 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const Text('지그 정보'),
+            const Text('지그 정보', style: TextStyle(fontSize: 28)),
+            const SizedBox(height: sixteen),
             Expanded(
               child: Column(
                   children: [
                     Container(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.all(12),
+                      height: 228,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: const Color.fromARGB(255, 47, 118, 255),
-                          width: 1,
+                          color: const Color.fromARGB(255, 25, 30, 40),
+                          width: 3,
                         ),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
                         children: [
                           Image.file(File(widget.imagePath), scale: 2.5,),
-                          const SizedBox(height: 20),
+                          const SizedBox(width: 20),
                           Expanded(
                               child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(ref.watch(selectedJigProvider)),
+                                    Text('설비 이름 : ${ref.watch(equipmentProvider)[0]['facilitySerialNo']}'),
+                                    Text('기존 지그 S/N: ${ref.watch(selectedJigProvider)}'),
                                     Text(scannedText.isEmpty ? "Error scanning" : scannedText),
                                   ]
                               )
@@ -190,14 +218,31 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
                         ],
                       ),
                     ),
-                    if (verificationImagePath != null) SvgPicture.asset('assets/$verificationImagePath.svg'),
-                    if (verificationImagePath == "availableMark") const Text('사용 가능')
-                    else const Text('사용 할 수 없는 지그 입니다.'),
+                    const SizedBox(height: 28.0,),
+                    if (verificationImagePath != null) SvgPicture.asset('assets/$verificationImagePath.svg')
+                    else SvgPicture.asset('assets/notAvailableMark.svg'),
+                    const SizedBox(height: 32.0,),
+                    if (verificationImagePath == "availableMark") const Text('사용 가능', style: TextStyle(fontSize: 20),)
+                    else if (verificationImagePath == null) const Text('인식 오류 입니다.\n다시 촬영해주세요', style: TextStyle(fontSize: 20),)
+                    else const Text('사용 할 수 없는 지그 입니다.', style: TextStyle(fontSize: 20),),
+                    const SizedBox(height: 32.0,),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SpeJigList()));
+                      onPressed: () async {
+                        if (verificationImagePath == null) {
+                          Navigator.of(context).pop();
+                        }
+                        else {
+                          if (verificationImagePath == 'availableMark') {
+                            changeJig();
+                          }
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const SpeJigList()));
+                        }
                       },
-                      child: const Text('확인', style: TextStyle(fontSize: 20)),
+                      child: Text(verificationImagePath != null ? 
+                        verificationImagePath == 'availableMark' ? '교체' : '확인'
+                        : '재촬영',
+                          style: const TextStyle(fontSize: 20)
+                      ),
                       style: ElevatedButton.styleFrom(
                           minimumSize: const Size(300, 50),
                           foregroundColor: const Color.fromARGB(255, 248, 250, 252),
