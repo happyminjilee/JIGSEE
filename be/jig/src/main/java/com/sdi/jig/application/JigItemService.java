@@ -74,8 +74,9 @@ public class JigItemService {
         jigItemRDBRepository.saveAll(datas);
     }
 
-    public JigItemIsUsableResponseDto isUsable(String facilityModel, String jigSerialNo) {
-        FacilityRDBEntity facilityByModel = getFacilityByModel(facilityModel);
+    public JigItemIsUsableResponseDto isUsable(String facilitySerialNo, String jigSerialNo) {
+        FacilityItemRDBEntity facilityItemBySerialNo = getFacilityItemBySerialNo(facilitySerialNo);
+        FacilityRDBEntity facilityByModel = facilityItemBySerialNo.getFacility();
         JigItemRDBEntity jigItem = getJigItemBySerialNo(jigSerialNo);
         Long jigId = jigItem.getJig().getId();
 
@@ -263,9 +264,7 @@ public class JigItemService {
 
     private boolean checkContain(List<FacilityJigMappingRDBEntity> list, Long jigId) {
         return list.stream()
-                .filter(e -> e.getJig().getId().equals(jigId))
-                .findAny()
-                .isEmpty();
+                .anyMatch(e -> e.getJig().getId().equals(jigId));
     }
 
     private List<FacilityJigMappingRDBEntity> getFacilityJigMappingByFacilityId(Long facilityId) {
