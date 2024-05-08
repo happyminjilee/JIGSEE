@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { axiosAuthApi } from "@/utils/instance";
 
@@ -30,9 +29,10 @@ export const fetchSSE = () => {
     console.error("Access token not available. Please login.");
   }
 };
-export const finishSSE = () => {
+export const finishSSE = async () => {
   const url = "http://k10s105.p.ssafy.io:80/api/v1/notification/sse/disconnect";
-  axiosAuthApi().delete(url);
+  const response = await axiosAuthApi().delete(url);
+  console.log("알람 통신 끊기", response);
 };
 // 미확인 알림 조회
 export const getUnchecked = async () => {

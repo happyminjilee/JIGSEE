@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { logout } from "@/pages/api/memberAxios";
 import Badge from "@mui/material/Badge";
 import { useAlarmStore } from "@/store/ssestore";
-
+import { finishSSE } from "@/pages/api/sseAxios";
 export default function ManagerNavbar() {
   // 알람 스토어 변수 들
   const { uncheckednumber, setUnchecked } = useAlarmStore();
@@ -48,7 +48,7 @@ export default function ManagerNavbar() {
       setName("");
       setRole("");
       console.log("delete zustand info");
-
+      // finishSSE();
       router.push("/login");
     } else {
       console.log("로그인이 만료되었습니다.");

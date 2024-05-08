@@ -20,7 +20,7 @@ interface InfoAlarm {
 }
 export default function Alarm() {
   const [openModal, setOpenModal] = useState(false);
-  const [close, setClose] = useState(true);
+
   const defaultInfoAlarm: InfoAlarm = {
     checkStatus: false, // Default boolean value
     contentId: "", // Default string value
@@ -54,8 +54,11 @@ export default function Alarm() {
   // 알림 get test
   useEffect(() => {
     setUnchecked();
+  }, [checkClick]);
+  // 알림 get test
+  useEffect(() => {
     setAllalarm();
-  }, [alarmId, page, checked]);
+  }, [page, checked]);
 
   // navbar 렌더링 로직
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
