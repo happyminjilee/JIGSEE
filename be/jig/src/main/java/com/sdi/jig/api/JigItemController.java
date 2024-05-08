@@ -43,7 +43,7 @@ class JigItemController {
     }
 
     @PutMapping("/status")
-    Response<Void> ready(@RequestBody JigItemUpdateStatusRequestDto dto) {
+    Response<Void> status(@RequestBody JigItemUpdateStatusRequestDto dto) {
         jigItemService.updateStateBySerialNo(dto.serialNo(), dto.status());
         return Response.success();
     }
@@ -62,25 +62,25 @@ class JigItemController {
 
     @GetMapping("/facility-available")
     Response<JigItemFacilityAvailableResponseDto> facilityAvailable(
-            @RequestParam(name = "facility-model") String facilityModel){
+            @RequestParam(name = "facility-model") String facilityModel) {
         return Response.success(jigItemService.facilityAvailable(facilityModel));
     }
 
     @PostMapping("/inspection")
-    Response<Void> inspection(@RequestBody JigItemInspectionRequestDto dto){
+    Response<Void> inspection(@RequestBody JigItemInspectionRequestDto dto) {
         jigItemService.jigItemInspection(dto.serialNos());
         return Response.success();
     }
 
     @PutMapping("/accept")
-    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto, HttpServletRequest request){
+    Response<Void> accept(@RequestBody JigItemAcceptRequestDto dto, HttpServletRequest request) {
         String accessToken = request.getHeader(TokenHeader.AUTHORIZATION);
         jigItemService.accept(accessToken, dto);
         return Response.success();
     }
 
     @GetMapping("inventory")
-    Response<JigItemInventoryRequestDto> inventory(){
+    Response<JigItemInventoryRequestDto> inventory() {
         JigItemInventoryRequestDto dto = jigItemService.inventory();
         return Response.success(dto);
     }

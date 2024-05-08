@@ -304,5 +304,4 @@ public class JigItemService {
     private Integer getRepairCount(Long jigItemId) {
         return getJigItemRepairHistoriesByJigItemId(jigItemId).size();
     }
-
 }
