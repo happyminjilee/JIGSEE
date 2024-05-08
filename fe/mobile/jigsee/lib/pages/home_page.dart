@@ -91,32 +91,20 @@ class _HomePageState extends ConsumerState<HomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {
-                        List<String> equipments = [
-                          '6 Lane Cutter',
-                          '6 Lane GasInjector',
-                          '6 Lane LineCutter',
-                          '6 Lane LineCutter',
-                          '6 Lane LineCutter',
-                          '6 Lane LineCutter',
-                          '6 Lane LineCutter',
-                          '6 Lane LineCutter',
-                          '6 Lane LineCutter',
-                        ];
-                        return ListView.builder(
-                          itemCount: equipments.length,
-                          itemBuilder: (context, index) => Card(
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            child: ListTile(
-                              title: Text('설비: ${equipments[index]}', style: const TextStyle(fontSize: 16)),
-                              onTap: () {
-                                ref.read(equipmentProvider.notifier).state = [equipments[index]];
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const SpeJigList()));
-                              },
-                            ),
-                          ),
+                        return Container(
+                          width: 1000,
+                          alignment: Alignment.center,
+                          child: const Text('네트워크 오류 발생')
                         );
                       }
                       List<dynamic> equipments = snapshot.data ?? [];
+                      if (equipments.isEmpty) {
+                        return Container(
+                            width: 1000,
+                            alignment: Alignment.center,
+                            child: const Text('점검 대상 지그가 없습니다.')
+                        );
+                      }
                       return ListView.builder(
                         itemCount: equipments.length,
                         itemBuilder: (context, index) => Card(

@@ -24,8 +24,7 @@ class SpeJigList extends ConsumerWidget {
         return data;
       } catch (e) {
         return [
-          'A0001234',
-          'A0001234',
+          'Error'
         ];
       }
     }
@@ -58,6 +57,13 @@ class SpeJigList extends ConsumerWidget {
                       return const Text('불러 오기 실패');
                     }
                     List<dynamic> details = snapshot.data ?? [];
+                    if (details.isNotEmpty && details[0] == 'Error') {
+                      return Container(
+                          width: 1000,
+                          alignment: Alignment.center,
+                          child: const Text('네트워크 오류 발생')
+                      );
+                    }
                     return ListView.builder(
                       itemCount: details.length,
                       itemBuilder: (context, index) => Card(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -100,6 +101,7 @@ class DisplayPictureScreen extends ConsumerStatefulWidget {
 class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
   late String scannedText = "";
   String? verificationImagePath;
+  static Map<String, dynamic> jigData = {};
 
   @override
   void initState() {
@@ -113,12 +115,15 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
     RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
     await textRecognizer.close();
 
+
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
-        scannedText += line.text + "\n";
+        scannedText += line.text;
+        break;
       }
+      break;
     }
-    scannedText = scannedText == "" ? "Error" : scannedText;
+    scannedText = scannedText == "" ? "Error" : scannedText.toLowerCase();
     setState(() {});
     sendJigInfo();  // 텍스트 인식 후 서버에 정보 요청
   }
@@ -129,21 +134,23 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
 
     try {
       var response = await dioClient.get(
-          '/jig-item/usable?facility-model=$equipmentName&jig-serial-no=$scannedText',
+      '/jig-item/usable?facility-serial-no=$equipmentName&jig-serial-no=$scannedText',
       );
-      print('Mark!!!!!!!!!!!!!!!${response.data}');
       if (response.statusCode == 200) {
-        bool isValid = response.data == 'true';
-        // 응답에 따라 이미지 경로 설정
+        bool isValid = response.data['result']['isUsable'] == true;
         setState(() {
           verificationImagePath = isValid ? "availableMark" : "notAvailableMark";
+          jigData['isUsable'] = response.data['result']['isUsable'];
+          jigData['useCount'] = response.data['result']['data']['useCount'];
+          jigData['useTime'] = response.data['result']['data']['useAccumulationTime'];
+          jigData['repairCount'] = response.data['result']['data']['repairCount'];
         });
       } else {
         setState(() {
           verificationImagePath = "notAvailableMark";
         });
       }
-    } catch (e) {
+    } on DioException catch (e) {
       setState(() {
         verificationImagePath = null;
       });
@@ -152,9 +159,8 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
 
   Future<bool> changeJig() async {
     final DioClient dioClient = ref.read(dioClientProvider);
-    final equipmentId = ref.watch(equipmentProvider)[0]['id'];
+    final equipmentId = ref.watch(equipmentProvider)[0]['facilitySerialNo'];
     final jigName = ref.watch(selectedJigProvider);
-
     try {
       var response = await dioClient.put(
         '/jig-item/exchange',
@@ -164,9 +170,7 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
           "afterSerialNo": scannedText
         }
       );
-      print('Mark!!!!!!!!!!!!!!!${response.data}');
       if (response.statusCode == 200) {
-        bool isValid = response.data == 'true';
         return true;
       } else {
         return false;
@@ -174,6 +178,28 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
     } catch (e) {
       return false;
     }
+  }
+  
+  showSnackBar(BuildContext context) {
+    final snackBar = SnackBar(
+      content:  const Text(
+        '다시 시도해 주세요',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          height: 1,
+        ),
+      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),	//	둥글게
+      backgroundColor: const Color(0xff9E9E9E),
+      behavior: SnackBarBehavior.floating,	//	아래 플로팅 띄우기
+      duration: const Duration(seconds: 2),
+      action:
+      SnackBarAction(label: '', textColor: Colors.white, onPressed: () {}),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -206,12 +232,28 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
                           const SizedBox(width: 20),
                           Expanded(
                               child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('설비 이름 : ${ref.watch(equipmentProvider)[0]['facilitySerialNo']}'),
-                                    Text('기존 지그 S/N: ${ref.watch(selectedJigProvider)}'),
-                                    Text(scannedText.isEmpty ? "Error scanning" : scannedText),
+                                    Text(scannedText.isEmpty ?
+                                      "Error scanning" :
+                                      'S/N : $scannedText'
+                                    ),
+                                    if (verificationImagePath != null) Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 12),
+                                        Container( height:1.0,
+                                          width:500.0,
+                                          color:Colors.black),
+                                        const SizedBox(height: 12),
+                                        Text('사용 횟수: ${jigData['useCount']}'),
+                                        Text('수리 횟수${jigData['repairCount']}'),
+                                        Text('사용량: ${jigData['useTime'].toString().substring(0, 11)}'),
+                                      ],
+                                    ),
                                   ]
                               )
                           ),
@@ -219,23 +261,41 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
                       ),
                     ),
                     const SizedBox(height: 28.0,),
+                    // SvgPicture.asset('assets/raiseErrorMark.svg'),
                     if (verificationImagePath != null) SvgPicture.asset('assets/$verificationImagePath.svg')
-                    else SvgPicture.asset('assets/notAvailableMark.svg'),
-                    const SizedBox(height: 32.0,),
-                    if (verificationImagePath == "availableMark") const Text('사용 가능', style: TextStyle(fontSize: 20),)
-                    else if (verificationImagePath == null) const Text('인식 오류 입니다.\n다시 촬영해주세요', style: TextStyle(fontSize: 20),)
-                    else const Text('사용 할 수 없는 지그 입니다.', style: TextStyle(fontSize: 20),),
+                    else SvgPicture.asset('assets/raiseErrorMark.svg'),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 32.0,),
+                        if (verificationImagePath == "availableMark") const Text('사용 가능', style: TextStyle(fontSize: 20),)
+                        else if (verificationImagePath == null) const Text('인식 오류 입니다.\n다시 촬영해주세요', style: TextStyle(fontSize: 20),)
+                        else const Text('다른 지그를 사용해 주세요', style: TextStyle(fontSize: 20),),
+                      ],
+                    ),
                     const SizedBox(height: 32.0,),
                     ElevatedButton(
                       onPressed: () async {
+                        jigData = {};
+                        // 인식 에러
                         if (verificationImagePath == null) {
                           Navigator.of(context).pop();
                         }
+                        // 인식 성공
                         else {
+                          // 적합
                           if (verificationImagePath == 'availableMark') {
-                            changeJig();
+                            if (await changeJig()) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const SpeJigList()));
+                            } else {
+                              showSnackBar(context);
+                            }
                           }
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const SpeJigList()));
+                          // 부적합
+                          else {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SpeJigList()));
+                          }
                         }
                       },
                       child: Text(verificationImagePath != null ? 
