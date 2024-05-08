@@ -41,7 +41,9 @@ public class LoadTooMuchUseJigItemTasklet implements Tasklet {
         contribution.getStepExecution()
                 .getJobExecution()
                 .getExecutionContext()
-                .put("ids", inConditionIds);
+                .put("jigItemIds", inConditionIds);
+
+        log.info(">>> 점검 대상 jigItemIds : {}", inConditionIds);
         return RepeatStatus.FINISHED;
     }
 }

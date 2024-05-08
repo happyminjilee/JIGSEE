@@ -1,6 +1,6 @@
 package com.sdi.watching.client;
 
-import com.sdi.watching.dto.request.ClientSerialNosRequestDto;
+import com.sdi.watching.dto.request.ClientJigItemIdsRequestDto;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface WorkOrderClient {
 
     @GetMapping("/work-order/auto")
-    void create(@RequestBody ClientSerialNosRequestDto dto);
+    void create(@RequestBody ClientJigItemIdsRequestDto dto);
 }

@@ -1,7 +1,7 @@
 package com.sdi.watching.config.tasklet;
 
 import com.sdi.watching.client.JigItemClient;
-import com.sdi.watching.dto.request.ClientSerialNosRequestDto;
+import com.sdi.watching.dto.request.ClientJigItemIdsRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
@@ -22,9 +22,9 @@ public class SendToJigItemServerTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         log.info(">>> SendToJigServerTasklet 실행");
-        List<Long> serialNos = (List<Long>) contribution.getStepExecution().getJobExecution().getExecutionContext().get("ids");
-        if (serialNos != null) {
-            jigItemClient.inspection(ClientSerialNosRequestDto.from(serialNos));
+        List<Long> jigItemIds = (List<Long>) contribution.getStepExecution().getJobExecution().getExecutionContext().get("jigItemIds");
+        if (jigItemIds != null) {
+            jigItemClient.inspection(ClientJigItemIdsRequestDto.from(jigItemIds));
         }
         return RepeatStatus.FINISHED;
     }
