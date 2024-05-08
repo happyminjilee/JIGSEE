@@ -149,7 +149,7 @@ public class MemberService {
     public MemberEmailResponseDto searchMyEmail(Authentication authentication) {
         String employeeNo = authentication.getName();
         MemberDto memberDto = getMemberOrException(employeeNo);
-        return new MemberEmailResponseDto(memberDto.email());
+        return new MemberEmailResponseDto(memberDto.employeeNo(), memberDto.email());
     }
 
     public List<MemberResponseDto> searchName(String name) {
