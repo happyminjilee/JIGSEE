@@ -23,9 +23,9 @@ server:
 ---
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/notification?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: jigsee
-    password: jigseeadmin!
+    url: ${MYSQL_NOTIFICATION_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -41,9 +41,9 @@ spring:
 spring:
   mail:
     host: smtp.gmail.com
-    port: 587
-    username: SamsungSDIJigKing123@gmail.com
-    password: fvjtjjbwznzdtivg
+    port: ${EMAIL_NOTIFICATION_PORT}
+    username: ${EMAIL_NOTIFICATION_USERNAME}
+    password: ${EMAIL_NOTIFICATION_PASSWORD}
     properties:
       mail:
         smtp:
@@ -52,4 +52,4 @@ spring:
             enable: true
 ---
 apis:
-  api-base-url: "http://k10s105.p.ssafy.io/api/v1"
+  api-base-url: ${API_BASE_URL}
