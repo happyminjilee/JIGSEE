@@ -46,7 +46,7 @@ class JigItemControllerTest {
     public void findBySerialNo() throws Exception {
         // given
         String serialNo = "869db53f-e9ba-4886-aa06-52d57b5ff07d";
-        JigItemRDBEntity rdb = jigItemRDBRepository.findBySerialNo(serialNo).get();
+        JigItemRDBEntity rdb = jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(serialNo).get();
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get("/v1/jig-item")
@@ -156,7 +156,7 @@ class JigItemControllerTest {
 
         // then
         perform.andExpect(status().isOk());
-        assertEquals(jigStatus, jigItemRDBRepository.findBySerialNo(serialNo).get().getStatus());
+        assertEquals(jigStatus, jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(serialNo).get().getStatus());
     }
 
     @Test
@@ -166,7 +166,7 @@ class JigItemControllerTest {
         String facilitySerialNo = "s1";
         String beforeSerialNo = "db3a1720-9a95-4563-92ef-8fb3b5576b9a";
         String afterSerialNo = "872cd4a1-5dd7-47a3-81ae-13ae86d336f2";
-        Long runBeforeAccumulateTime = jigItemRDBRepository.findBySerialNo(beforeSerialNo).get().getUseAccumulateTime();
+        Long runBeforeAccumulateTime = jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(beforeSerialNo).get().getUseAccumulateTime();
         long runBeforeIOHistorySize = jigItemIOHistoryRepository.count();
 
         JSONObject body = new JSONObject();
@@ -183,8 +183,8 @@ class JigItemControllerTest {
         ResultActions perform = mockMvc.perform(request);
 
         // then
-        JigItemRDBEntity before = jigItemRDBRepository.findBySerialNo(beforeSerialNo).get();
-        JigItemRDBEntity after = jigItemRDBRepository.findBySerialNo(afterSerialNo).get();
+        JigItemRDBEntity before = jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(beforeSerialNo).get();
+        JigItemRDBEntity after = jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(afterSerialNo).get();
 
         perform.andExpect(status().isOk());
         assertEquals(JigStatus.OUT, before.getStatus());

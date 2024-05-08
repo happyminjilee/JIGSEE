@@ -115,6 +115,6 @@ class JigControllerTest {
 
         // then
         perform.andExpect(status().isOk());
-        assertTrue(jigItemRDBRepository.findBySerialNo(serialNo).get().getIsDelete());
+        assertTrue(jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(serialNo).get().getIsDelete());
     }
 }
