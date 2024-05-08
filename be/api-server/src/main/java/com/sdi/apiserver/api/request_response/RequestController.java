@@ -28,7 +28,7 @@ public class RequestController {
 
     @PostMapping("/jig")
     Response<Void> jig(HttpServletRequest request, @RequestBody RequestJigRequestDto dto) {
-        // memberController.engineerCheck(request);
+        memberController.engineerCheck(request);
         return notificationApiClient.makeWantRequest(getAccessToken(request), dto);
     }
 
