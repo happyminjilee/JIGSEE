@@ -19,7 +19,7 @@ public record FacilityDetailResponseDto(
             String status,
             String expectLife,
             Integer useCount,
-            Integer useAccumulationTime,
+            String useAccumulationTime,
             Integer repairCount
 
     ) {
