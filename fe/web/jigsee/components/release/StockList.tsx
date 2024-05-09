@@ -1,44 +1,33 @@
-import {useState} from "react";
-import {Link} from "@nextui-org/react";
-import styled from "@/styles/stocklist.module.css"
+import { useEffect, useState } from "react";
 
-// interface Option {
-//   model: string;
-//   count: number;
-// }
-
-interface lst {
-  model: string;
-  count: number;
-}
+import styled from "@/styles/stocklist.module.css";
+import { usejigStore } from "@/store/jigstore";
 
 export default function StockList() {
-  const lst = [
-      {model: '회전 지그', count: 4},
-      {model: '충돌 지그', count: 3},
-      {model: '집게 지그', count: 2},
-  ]
-
-  // function wordclick() {
-  //     console.log("clicked")
-  // }
+  const { stockList, setStockList } = usejigStore();
+  useEffect(() => {
+    setStockList(); // 예: 서버에서 재고 데이터를 가져와 상태를 설정
+  }, []);
 
   return (
-      <>
-        <div className={styled.box}>
-            <div style={{display: "flex", justifyContent: "space-between"}}>
-                <div style={{fontWeight: "bold", fontSize: "25px"}}>재고 현황</div>
-            </div>
-            {lst.map((mod, index) => (
-              <div
-                key={index}
-                className={styled.card}
-              >
-                <p style={{fontWeight: "bold"}}>{mod.model}</p>
-                <p>{mod.count}개</p>
-              </div>
-            ))}
+    <>
+      <div className={styled.box}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ fontWeight: "bold", fontSize: "20px" }}>재고 현황</div>
         </div>
-      </>
-  )
+        <div className={styled.contents}>
+          {stockList.length > 0 ? (
+            stockList.map((stock, index) => (
+              <div key={index} className={styled.card}>
+                <p style={{ fontWeight: "bold" }}>{stock.model}</p>
+                <p>{stock.count}개</p>
+              </div>
+            ))
+          ) : (
+            <div className={styled.card}>재고 없음</div>
+          )}
+        </div>
+      </div>
+    </>
+  );
 }
