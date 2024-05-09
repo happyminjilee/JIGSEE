@@ -51,7 +51,7 @@ export default function RequestList({ onApproveClick, onReturnClick }: RequestLi
                 <div style={{ marginTop: "10px", marginLeft: "15px" }}>{info.createdAt[0]}.{info.createdAt[1]}.{info.createdAt[2]}</div>
                 <div className={styled.card}>
                   <div key={index} className={styled.division}>
-                    <div style={{ fontWeight: "bold", fontSize: "30px" }}>{info.id}</div>
+                    <div style={{ fontWeight: "bold", fontSize: "20px" }}>{info.id}</div>
                     <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
                       <div style={{ margin: "2px" }}> 요청자 : {info.from} </div>
                       <div style={{ margin: "2px" }}> {info.to} </div>
@@ -59,7 +59,7 @@ export default function RequestList({ onApproveClick, onReturnClick }: RequestLi
                   </div>
                   <div className={styled.division}>
                     <Button
-                        size="lg"
+                        size="md"
                         color="primary"
                         style={{ fontWeight: "bold", marginBottom: "5px" }}
                         onClick={() => onApproveClick(info.id)}
@@ -67,7 +67,7 @@ export default function RequestList({ onApproveClick, onReturnClick }: RequestLi
                       승인
                     </Button>
                     <Button
-                        size="lg"
+                        size="md"
                         style={{ fontWeight: "bold" }}
                         onClick={() => onReturnClick(info.id)}
                     >
