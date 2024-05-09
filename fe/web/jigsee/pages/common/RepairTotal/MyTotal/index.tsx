@@ -1,6 +1,6 @@
 import {Link, Pagination, Select, SelectItem} from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
-import styled from "@/styles/Total/Total.module.css";
+import styled from "@/styles/Total/MyTotal.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
 import { useReleaseStore } from "@/store/releasestore";

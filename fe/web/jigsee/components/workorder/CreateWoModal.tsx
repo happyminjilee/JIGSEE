@@ -1,7 +1,7 @@
 import styled from "@/styles/modal/createwo.module.css"
 import {Button} from "@nextui-org/react"
 import {Input} from "@nextui-org/react"
-import {useCompoStore} from "@/store/workorderstore";
+import {useCompoStore, useUserWoListStore, useWoGroupStore} from "@/store/workorderstore";
 import {useState} from "react";
 import {createWo} from "@/pages/api/workorderAxios";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -17,7 +17,7 @@ export default function createWoModal() {
     const {
         modal, setModal,
         modalName, setModalName} = useCompoStore()
-
+    const {fetchWoGroup} = useWoGroupStore()
     const [serialNumber, setSerialNumber] = useState("");
     const submit = () => {
         if (serialNumber.trim() === "") {
@@ -34,6 +34,7 @@ export default function createWoModal() {
                     alert("요청 실패")
                 })
                 .finally(() => {
+                    fetchWoGroup()
                     setModal(false)
                     setModalName("")
                 })

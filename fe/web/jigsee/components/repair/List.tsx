@@ -73,7 +73,7 @@ export default function RequestList() {
                                       href="/common/RepairTotal/MyTotal"
                                       // passHref
                                       underline="hover"
-                                      style={{color: "black", fontSize: "8px", fontWeight: "lighter"}}
+                                      style={{color: "black", fontSize: "12px", fontWeight: "lighter"}}
                                   >
                                       나의 내역 보기
                                   </Link>
@@ -82,7 +82,7 @@ export default function RequestList() {
                                       href="/common/RepairTotal"
                                       // passHref
                                       underline="hover"
-                                      style={{color: "black", fontSize: "8px", fontWeight: "lighter"}}
+                                      style={{color: "black", fontSize: "12px", fontWeight: "lighter"}}
                                   >
                                       전체 내역 보기
                                   </Link>
@@ -118,23 +118,28 @@ export default function RequestList() {
                   {/* card */}
                   <DropBox items={forFilter} boxType={"Mart"}>
                   </DropBox>
-                  {select !== "PUBLISH" ? <div></div> :
-                      <Button
-                          color="primary"
-                          size="lg"
-                          style={{
-                              fontWeight: "bold",
-                              marginBottom: "5px",
-                              margin: "15px auto",
-                              width: "190px",
-                          }}
-                          onPress={() => {
-                              createWo()
-                          }}
-                      >
-                          바로 수리 신청
-                      </Button>
-                  }
+                  <div className={styled.bottom}>
+                      {(select === "PUBLISH" || mine) ?
+                          <Button
+                              color="primary"
+                              size="lg"
+                              style={{
+                                  fontWeight: "bold",
+                                  marginBottom: "5px",
+                                  margin: "auto auto 10px auto",
+                                  width: "190px",
+                                  height: "40px",
+                              }}
+                              onPress={() => {
+                                  createWo()
+                              }}
+                          >
+                              바로 수리 신청
+                          </Button>
+                          :
+                          <div></div>
+                      }
+                  </div>
               </div>
               <ReactQueryDevtools/>
           </QueryClientProvider>

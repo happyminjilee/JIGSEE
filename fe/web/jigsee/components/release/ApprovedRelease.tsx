@@ -22,7 +22,7 @@ export default function ApprovedRelease() {
       {model: 'A100520', model_name: 'repulse', count: 5},
       {model: 'A100521', model_name: 'captain', count: 5},
   ]
-  const {serialNos} = useReleaseDetailStore()
+  const {serialNos, status, updatedAt} = useReleaseDetailStore()
   const {isClose, setClose} = useReleaseModalStore()
   return (
       <>
@@ -32,14 +32,17 @@ export default function ApprovedRelease() {
               <div
                   className={styled.title}
               >
-                  불출 승인
+                  { status === "FINISH" ? "불출 승인": status === "PUBLISH" ? "승인 대기" :""}
               </div>
               <div
                   style={{margin: "0px auto 20px auto",
                       fontWeight: "bold",
                       fontSize: "medium"}}
               >
-                  수량 : {lst.length}
+                  { status === "PUBLISH" ? `수량 : ${lst.length}` :
+                      status ==="FINISH" ? `결재일 : ${updatedAt[0]}. ${updatedAt[1]}. ${updatedAt[2]}`:
+                          <div></div>
+                }
               </div>
               <div
                   className={styled.content}
