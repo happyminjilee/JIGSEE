@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/notification")
+@RequestMapping("/v1/notification/search")
 @RequiredArgsConstructor
 public class SearchController {
     public static final String ACCESS_TOKEN_PREFIX = "Authorization";
     private final NotificationClient notificationClient;
-    @GetMapping("/search/unchecked")
+    @GetMapping("/unchecked")
     Response<UncheckedNotificationListResponseDto> searchUnchecked(HttpServletRequest request) {
         return notificationClient.searchUnchecked(getAccessToken(request));
     }
 
-    @GetMapping("/search/all")
+    @GetMapping("/all")
     Response<NotificationListResponseDto> searchAll(HttpServletRequest request,
                                                     @RequestParam(value = "page", defaultValue = "1") int page,
                                                     @RequestParam(value = "size", defaultValue = "10") int size) {

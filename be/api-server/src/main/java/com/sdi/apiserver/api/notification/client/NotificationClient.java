@@ -43,7 +43,7 @@ public interface NotificationClient {
     @PostMapping(value = "/notification/fcm/inspection")
     Response<Void> sendInspectionNotification(@RequestBody NotificationFcmInspectionRequestDto dto);
 
-    @PutMapping("/notification/check")
+    @PutMapping("/notification/search/check")
     Response<Void> checkNotification(@RequestParam("notification-id") Long id);
 
     @PostMapping("/notification/email/subscribe")
