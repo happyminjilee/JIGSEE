@@ -33,9 +33,15 @@ export default function RequestList() {
     const openModal = () => setModal(true);
     const closeModal = () => setModal(false);
     const {
-        id, creator, status,
+        id, creator, status, updatedAt,
         createdAt, jigItemInfo, checkList
     } = useWoDetailStore()
+    const [qualification, setQualification] = useState(false)
+    useEffect(() => {
+        const allQualified = checkList.every(item=> item.passOrNot)
+        setQualification(allQualified)
+    }, [checkList]);
+
     const {publish} = useWoGroupStore()
     const {clearForFilter, addForFilter} = useGroupFilter()
     const cardClick = (id: number) => {
@@ -96,7 +102,11 @@ export default function RequestList() {
                     <div className={styled.card}>Model : {jigItemInfo.model}</div>
                     <div className={styled.card}>S/N : {jigItemInfo.serialNo}</div>
                     <div className={styled.card}>생성자 : {creator}</div>
-                    <div className={styled.card}>생성일 : {createdAt[0]}. {createdAt[1]}. {createdAt[2]} </div>
+                    <div className={styled.card}>{status !== "FINISH" ?
+                        `생성일 : ${createdAt[0]}. ${createdAt[1]}. ${createdAt[2]}`
+                        :
+                        `완료일 : ${updatedAt[0]}. ${updatedAt[1]}. ${updatedAt[2]}`
+                    } </div>
                 </div>
 
                 {/* Work order 이동 */}
@@ -153,6 +163,14 @@ export default function RequestList() {
                                 >
                                     Test 결과 입력
                                 </Button>
+                            </div>
+                        }
+
+                        {status === 'FINISH' &&
+                            <div
+                                className={styled.notification}
+                            >
+                                {qualification? "재사용 투입 되었습니다." : "폐기 처리 되었습니다."}
                             </div>
                         }
                     </div>

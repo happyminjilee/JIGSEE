@@ -100,8 +100,17 @@
 .button {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     width: 400px;
     margin: 25px auto 10px auto;
     font-weight: 900;
+}
+
+.notification {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 400px;
+    margin: 25px auto 10px auto;
+    font-weight: 500;
 }
