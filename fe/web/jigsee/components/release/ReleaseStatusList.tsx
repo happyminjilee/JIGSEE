@@ -96,7 +96,7 @@ export default function ReleaseStatusList() {
                 href="/common/ReleaseTotal/"
                 // passHref
                 underline="hover"
-                style={{color: "black", fontSize: "8px", fontWeight: "lighter", margin: "10px 10px 5px 10px"}}
+                style={{color: "black", fontSize: "12px", fontWeight: "lighter", margin: "10px 10px 5px 10px"}}
             >
               전체 내역 보기
             </Link>

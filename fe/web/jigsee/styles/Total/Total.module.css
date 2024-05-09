@@ -6,7 +6,7 @@
 
   /* 패딩과 마진 */
   margin: 10px 0;
-  padding: 20px;
+  padding: 8px;
 
   /* 테두리와 라운드 */
   border: 1px solid var(--samsungblue);
@@ -15,11 +15,25 @@
   cursor: pointer;
   /*transition: box-shadow 0.3s ease;*/
   height: 70px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .fullWidth:hover {
   /* 그림자를 더 도드라지게 하여 클릭 가능함을 나타냄 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.inCard {
+  margin: 1px;
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .right {

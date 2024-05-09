@@ -39,6 +39,7 @@ export default function RepairTotal() {
   }
   // 수리요청온 지그의 WO 에 따른 상태 데이터
   const lst: Option[] = [
+    { label: "전체", value: "" },
     { label: "발행", value: "PUBLISH" },
     { label: "진행 중", value: "PROGRESS" },
     { label: "완료", value: "FINISH" },
@@ -109,10 +110,16 @@ export default function RepairTotal() {
         <div className={styled.container}>
           {list.map((jig, index) => (
             <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
-              <h3>{jig.createdAt}</h3>
-              <p>
-                {jig.serialNo} | {jig.model} {jig.status}
-              </p>
+              <h3>{jig.createdAt[0]}. {jig.createdAt[1]}. {jig.createdAt[2]}</h3>
+              <div className={styled.inCard}>
+                <div>
+                  {jig.serialNo} | {jig.model}
+                </div>
+                <div>
+                  {jig.status}
+                </div>
+              </div>
+
             </div>
           ))}
         </div>

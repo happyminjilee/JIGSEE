@@ -39,7 +39,15 @@ export default function RequestList({ onApproveClick, onReturnClick }: RequestLi
       <div className={styled.box}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ fontWeight: "bold", fontSize: "20px", margin: "auto 10px" }}>불출 요청</div>
-          <Link onClick={linkClick} underline="hover" style={{ color: "black", cursor: "pointer", margin: "auto 10px" }}>
+          <Link
+              onClick={linkClick}
+              underline="hover"
+              style={{
+                color: "black",
+                cursor: "pointer",
+                margin: "auto 10px" ,
+                fontSize: "12px",
+          }}>
             상세 보기
           </Link>
         </div>
