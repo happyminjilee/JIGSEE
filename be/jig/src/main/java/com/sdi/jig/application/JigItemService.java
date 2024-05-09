@@ -57,6 +57,17 @@ public class JigItemService {
         );
     }
 
+    public JigItemResponseDto findBySerialNoIncludeDelete(String serialNo) {
+        JigItemRDBEntity rdb = getJigItemIncludeDeleteBySerialNo(serialNo);
+        JigNosqlEntity nosql = jigService.getJigNosqlEntityByModel(rdb.getJig().getModel());
+        return JigItemResponseDto.from(
+                rdb,
+                nosql,
+                getUseCount(rdb.getId()),
+                getUseAccumulationTime(rdb.getUseAccumulateTime()),
+                getRepairCount(rdb.getId())
+        );
+    }
 
     @Transactional
     public void add(List<JigAddRequest> list) {
@@ -236,10 +247,10 @@ public class JigItemService {
     }
 
     private void jigItemInspection(Long id) {
-        try{
+        try {
             JigItemInspectionRDBEntity jigItemInspection = getByJigItemIdInInspection(id);
             jigItemInspection.updateIsInspection();
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             log.warn("시스템에서 점검 항목을 만들지 않은 \'{}\'를 교체 했습니다.", id);
         }
     }
@@ -278,6 +289,11 @@ public class JigItemService {
 
     private JigItemRDBEntity getJigItemBySerialNo(String jigSerialNo) {
         return jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(jigSerialNo)
+                .orElseThrow(() -> new IllegalArgumentException("serial 번호로 JIG ITEM을 찾을 수 없습니다."));
+    }
+
+    private JigItemRDBEntity getJigItemIncludeDeleteBySerialNo(String jigSerialNo) {
+        return jigItemRDBRepository.findBySerialNo(jigSerialNo)
                 .orElseThrow(() -> new IllegalArgumentException("serial 번호로 JIG ITEM을 찾을 수 없습니다."));
     }
 

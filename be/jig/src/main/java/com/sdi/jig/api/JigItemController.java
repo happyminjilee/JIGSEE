@@ -23,6 +23,11 @@ class JigItemController {
         return Response.success(jigItemService.findBySerialNo(serialNo));
     }
 
+    @GetMapping("/include-delete")
+    Response<JigItemResponseDto> findBySerialNoIncludeDelete(@RequestParam(name = "serial-no") String serialNo) {
+        return Response.success(jigItemService.findBySerialNoIncludeDelete(serialNo));
+    }
+
     @PostMapping
     Response<Void> add(@RequestBody JigItemAddRequestDto dto) {
         jigItemService.add(dto.list());
