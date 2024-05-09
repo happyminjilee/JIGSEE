@@ -16,7 +16,7 @@ import { userStore } from "@/store/memberstore";
 import { useEffect } from "react";
 import Badge from "@mui/material/Badge";
 import { useAlarmStore } from "@/store/ssestore";
-
+import { finishSSE } from "@/pages/api/sseAxios";
 export default function EngineerNavbar() {
   // 알람 스토어 변수 들
   const { uncheckednumber, setUnchecked } = useAlarmStore();
@@ -46,6 +46,8 @@ export default function EngineerNavbar() {
     if (result) {
       setName("");
       setRole("");
+      //로그아웃 해제
+      finishSSE();
       console.log("delete zustand info");
 
       router.push("/login");

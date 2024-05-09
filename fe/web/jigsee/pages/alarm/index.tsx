@@ -54,7 +54,7 @@ export default function Alarm() {
   // 알림 get test
   useEffect(() => {
     setUnchecked();
-  }, [checkClick]);
+  }, []);
   // 알림 get test
   useEffect(() => {
     setAllalarm();

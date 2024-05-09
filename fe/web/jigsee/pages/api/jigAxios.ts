@@ -19,18 +19,15 @@ export async function updatejigMethod(jigmodel: string, checkList: RowData[]) {
 }
 
 //지그 상태 수정 - 기술팀
-export async function updateJigStatus(
-    serialNo: string,
-    status: string,
-    ) {
+export async function updateJigStatus(serialNo: string, status: string) {
   const requestBody = {
     serialNo: serialNo,
     status: status,
   };
   return axiosAuthApi().put("http://k10s105.p.ssafy.io/api/v1/jig-item/status", requestBody);
 }
-
-// export async function getJiginfo() {
-//   let data = {};
-//   return axiosAuthApi().post(`${http://k10s105.p.ssafy.io/api/v1/jig-item}+${}`, data);
-// }
+// 지그 재고 현황 리스트 불러오기
+export const getStockList = async () => {
+  const response = await axiosAuthApi().get("http://k10s105.p.ssafy.io/api/v1/jig-item/inventory");
+  return response.data.result;
+};

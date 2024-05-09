@@ -47,6 +47,8 @@ export default function ManagerNavbar() {
     if (result) {
       setName("");
       setRole("");
+      //sse연결 해제
+      finishSSE();
       console.log("delete zustand info");
       // finishSSE();
       router.push("/login");

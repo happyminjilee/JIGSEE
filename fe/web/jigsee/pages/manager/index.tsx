@@ -11,14 +11,21 @@ import StockList from "@/components/release/StockList";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
-import {useButtonClickStore} from "@/store/releasestore";
+import { useButtonClickStore } from "@/store/releasestore";
 
 export default function Manager() {
   const router = useRouter();
   const goToJigrestore = () => {
     router.push("/common/RestoreTotal");
   };
-  const {showApproveModal, setApproveShowModal, showReturnModal, setReturnShowModal, approveClick, returnClick} = useButtonClickStore()
+  const {
+    showApproveModal,
+    setApproveShowModal,
+    showReturnModal,
+    setReturnShowModal,
+    approveClick,
+    returnClick,
+  } = useButtonClickStore();
   const openApproveModal = () => setApproveShowModal(true);
   const closeApproveModal = () => setApproveShowModal(false);
   // 불출 반려 모달 오픈, 클로즈 함수
@@ -56,7 +63,7 @@ export default function Manager() {
           </button>
 
           <button onClick={openEditStandardModal} className={styled.jigbtn}>
-            Jig 정보 입력 <ArrowForwardIosIcon color="primary" />
+            Jig 점검 항목 입력 <ArrowForwardIosIcon color="primary" />
           </button>
         </div>
         {/* jig 정보 입력 컴포넌트 모달 창  */}

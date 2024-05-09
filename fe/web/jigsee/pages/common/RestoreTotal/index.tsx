@@ -31,10 +31,6 @@ export default function RestoreTotal() {
   let Navbar;
   if (role === "MANAGER") {
     Navbar = <ManagerNav />;
-  } else if (role === "ENGINEER") {
-    Navbar = <EngineerNav />;
-  } else {
-    Navbar = <ManagerNav />; // 기본값으로 ManagerNav 설정
   }
 
   const {
@@ -119,16 +115,7 @@ export default function RestoreTotal() {
             ))}
           </div>
         ) : (
-          <div className={styled.container}>
-            {restoreDummies.map((item, index) => (
-              <div key={index} className={styled.fullWidth}>
-                <h3>생성일 {item?.createdAt}</h3>
-                <p>
-                  보수 요청 번호 {item?.id} | 요청자 {item?.from}
-                </p>
-              </div>
-            ))}
-          </div>
+          <div className={styled.container}>No data</div>
         )}
         <div className={styled.center}>
           <Pagination onChange={(e) => setPage(e)} total={5} />
