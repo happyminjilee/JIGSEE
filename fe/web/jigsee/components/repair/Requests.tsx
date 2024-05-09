@@ -49,10 +49,6 @@ export default function RequestList() {
 
     }
 
-    const createWo = () => {
-        openModal()
-        setModalName("CREATEWO")
-    }
 
     return (
         <>

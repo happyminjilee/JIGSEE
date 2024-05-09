@@ -113,7 +113,7 @@ export const useWoStore = create<Wo>((set) => ({
 
 export const useWoDetailStore = create<WoDetail>((set) => ({
   id: 0,
-  status: "PUBLISH",
+  status: "PROGRESS",
   creator: "", // 생성자
   terminator: "", // 완료자
   createdAt: [], // wo 생성일
@@ -152,8 +152,8 @@ export const useWoDetailStore = create<WoDetail>((set) => ({
   },
   fetchWoDone: async (id: number, tmpcheckList: checklist[]) => {
     const data = await doneWo(id, tmpcheckList);
-    console.log("제출성공?", data);
-    return data.data;
+    console.log("제출성공?", data.data.result.passOrNot);
+    return data.data.result.passOrNot;
   },
 }));
 

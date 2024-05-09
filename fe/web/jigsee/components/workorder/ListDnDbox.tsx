@@ -111,7 +111,7 @@ const DragItem = ({item, originBox} : Item) => {
             .finally(() => {
                 setWoId(Id);
                 setRightCompo(state);
-                console.log(id)
+                console.log(Id)
             })
     };
     ////////////////////////////////////////////////////////////////////////////
