@@ -17,6 +17,10 @@ public class JigItemService {
         return jigItemClient.findBySerialNo(accessToken, serialNo);
     }
 
+    public Response<JigItemResponseDto> findBySerialNoIncludeDelete(String accessToken, String serialNo){
+        return jigItemClient.findBySerialNoIncludeDelete(accessToken, serialNo);
+    }
+
     public void deleteBySerialNo(String accessToken, String serialNo){
         jigItemClient.deleteBySerialNo(accessToken, JigItemDeleteRequestDto.from(serialNo));
     }
