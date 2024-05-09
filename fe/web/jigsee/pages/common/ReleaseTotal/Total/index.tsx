@@ -4,17 +4,22 @@ import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
 import { useReleaseStore } from "@/store/releasestore";
-
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
+interface item {
+  createdAt: any;
+  from: string;
+  id: string;
+  isAccept: boolean;
+  serialNos: any;
+  status: string;
+  to: string;
+  updatedAt: any;
+}
 interface Option {
   label: string;
   value: string;
-}
-
-interface JigData {
-  date: string;
-  serialNumber: string;
-  model: string;
-  status: string; // 가정으로 추가한 속성입니다.
 }
 
 interface Props {
@@ -22,8 +27,21 @@ interface Props {
 }
 
 export default function RepairTotal() {
+  const [open, setOpen] = useState(false);
   const { releaseList, fetchRelease, endPage } = useReleaseStore();
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
+  const defaultRelease: item = {
+    createdAt: [2024, 5, 9],
+    from: "기술팀",
+    id: "string",
+    isAccept: false,
+    serialNos: [],
+    status: "string",
+    to: "string",
+    updatedAt: [],
+  };
+  const [detail, setDetail] = useState<item>(defaultRelease);
+
   useEffect(() => {
     // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
     const storedRole = localStorage.getItem("role");
@@ -61,33 +79,31 @@ export default function RepairTotal() {
       });
   }, [page, values, fetchRelease]);
   // 임시 JIG 데이터- api 요청으로 불러오기
-  const jigData: JigData[] = [
-    { date: "2024.04.21", serialNumber: "S/N S00000001", model: "Model Name", status: "PUBLISH" },
-    { date: "2024.04.22", serialNumber: "S/N S00000002", model: "Model Name", status: "PUBLISH" },
-    { date: "2024.04.23", serialNumber: "S/N S00000003", model: "Model Name", status: "REJECT" },
-    { date: "2024.04.21", serialNumber: "S/N S00000004", model: "Model Name", status: "REJECT" },
-    { date: "2024.04.22", serialNumber: "S/N S00000005", model: "Model Name", status: "FINISH" },
-    // 다른 JIG 데이터 객체들...
-  ];
+
   // 선택한 값에 따라 필터링된 jigData를 저장할 상태 변수
-  const [filteredJigData, setFilteredJigData] = useState<JigData[]>([]);
+  const [filteredJigData, setFilteredJigData] = useState<any[]>([]);
   // 값이 변경될 때마다 필터링된 데이터 업데이트
   useEffect(() => {
     console.log("vvv", values);
     if (values === "ALL") {
       // "ALL"이면 전체 데이터 표시
-      setFilteredJigData(jigData);
+      setFilteredJigData(releaseList || []); // releaseList가 undefined인 경우 빈 배열을 사용
     } else {
       // 선택한 값에 따라 jigData 필터링
-      const filteredData = jigData.filter((jig) => jig.status === values);
+      const filteredData = releaseList ? releaseList.filter((jig) => jig.status === values) : [];
       setFilteredJigData(filteredData);
     }
-  }, [values]);
+  }, [values, releaseList]);
 
-  function cardClick(jigid: string) {
-    console.log("clicked", jigid);
+  function cardClick(jig: item) {
+    console.log("clicked", jig);
+    setOpen(true);
+    setDetail(jig);
   }
   const [isLoading, setIsLoading] = useState(true);
+  const detailChecked = () => {
+    setOpen(false);
+  };
   return (
     <>
       {Navbar}
@@ -124,34 +140,121 @@ export default function RepairTotal() {
         <div className={styled.container}>
           {isLoading ? (
             <p>Loading...</p>
-          ) : releaseList.length > 0 ? (
-            releaseList.map((jig, index) => (
-              <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
+          ) : filteredJigData.length > 0 ? (
+            filteredJigData.map((jig, index) => (
+              <div key={index} onClick={() => cardClick(jig)} className={styled.fullWidth}>
                 <p>
-                  {jig.id} | 요청자 {jig.from} | 승인자 {jig.to} | 수정일 {jig.updatedAt[0]}년
-                  {jig.updatedAt[1]}월{jig.updatedAt[2]}일 status: {jig.status}
+                  {jig.id} | 요청자 {jig.from} | status: {jig.status}
                 </p>
               </div>
             ))
           ) : (
-            filteredJigData.map((jig, index) => (
-              <div
-                key={index}
-                onClick={() => cardClick(jig.serialNumber)}
-                className={styled.fullWidth}
-              >
-                <p>
-                  {jig.serialNumber}
-                  {jig.model} status: {jig.status}
-                </p>
-              </div>
-            ))
+            <p>No Data</p> // 데이터가 없을 때 "No Data" 메시지 표시
           )}
         </div>
         <div className={styled.center}>
           <Pagination onChange={(e) => setPage(e)} total={5} />
         </div>
       </div>
+      <Modal
+        open={open} // Corrected from 'open'
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          "& .MuiBox-root": {
+            // Assuming the box is causing issues
+            outline: "none",
+            border: "none",
+            boxShadow: "none",
+          },
+        }}
+      >
+        <Box
+          sx={{
+            width: "100%",
+            height: "80%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: "400px",
+              height: "80%",
+              backgroundColor: "var(--realwhite)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "start",
+              flexDirection: "column",
+              padding: "30px 30px",
+              borderRadius: "10px",
+              border: "solid 5px var(--samsungblue)",
+            }}
+          >
+            <Typography color="primary" sx={{ width: "100%", fontSize: "15px" }} align="left">
+              {detail.createdAt.length > 0 &&
+                `요청일 : ${detail.createdAt[0]}년 ${detail.createdAt[1]}월 ${detail.createdAt[2]}일 `}
+            </Typography>
+            <Typography color="primary" sx={{ width: "100%", fontSize: "15px" }} align="left">
+              {detail.updatedAt.length > 0 &&
+                `최종 승인 : ${detail.updatedAt[0]}년 ${detail.updatedAt[1]}월 ${detail.updatedAt[2]}일 `}
+            </Typography>
+            <Typography color="primary" sx={{ width: "100%", fontSize: "15px" }} align="left">
+              {detail.from && `요청자 : ${detail.from} `}
+            </Typography>
+            <Typography color="primary" sx={{ width: "100%", fontSize: "15px" }} align="left">
+              {detail.to && `승인자 : ${detail.to} `}
+            </Typography>
+            <Box
+              sx={{
+                width: "400px",
+                height: "80px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {detail.id}
+            </Box>
+
+            <Box
+              sx={{
+                width: "300px",
+                height: "100px",
+                backgroundColor: "var(--light-gray)",
+                display: "flex", // Flexbox 레이아웃 사용
+                flexDirection: "column", // 자식 요소를 세로로 정렬
+                justifyContent: "center", // 자식 요소를 센터에 위치
+                alignItems: "center", // 가로 방향에서도 중앙에 위치
+                overflow: "auto", // 내용이 넘칠 경우 스크롤 생성
+                padding: "8px", // 안쪽 여백 제공
+              }}
+            >
+              {detail.serialNos.map((jig: string, index: number) => (
+                <div key={index} style={{ width: "100%", textAlign: "center" }}>
+                  {jig}
+                </div>
+              ))}
+            </Box>
+
+            <Typography
+              color="primary"
+              sx={{ width: "100%", fontSize: "30px", marginTop: "20px", marginBottom: "10px" }}
+              align="center"
+            >
+              {detail.isAccept && `승인 완료 `}
+              {detail.isAccept === false && `미승인`}
+            </Typography>
+            <button className={styled.btn} onClick={detailChecked}>
+              확인
+            </button>
+          </Box>
+        </Box>
+      </Modal>
     </>
   );
 }
