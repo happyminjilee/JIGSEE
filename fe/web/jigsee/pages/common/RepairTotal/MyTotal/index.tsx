@@ -23,8 +23,7 @@ interface Props {
 }
 
 export default function RepairTotal() {
-  const { releaseList, fetchRelease, endPage } = useReleaseStore();
-  const { list,fetchUserWo} = useUserWoListStore()
+  const { list,fetchUserWo, endPage} = useUserWoListStore()
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
   useEffect(() => {
     // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
@@ -93,6 +92,7 @@ export default function RepairTotal() {
   }
   const [isLoading, setIsLoading] = useState(true);
 
+
   return (
     <>
       {Navbar}
@@ -123,7 +123,7 @@ export default function RepairTotal() {
           }
         </div>
         <div className={styled.center}>
-          <Pagination onChange={(e) => setPage(e)} total={5} />
+          <Pagination onChange={(e) => setPage(e)} total={endPage} />
         </div>
       </div>
     </>

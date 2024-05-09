@@ -39,7 +39,7 @@ export default function ReleaseStatusList() {
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
-  const {fetchRelease, ...rest} = useReleaseStore()
+  const {fetchRelease, releaseList} = useReleaseStore()
   const {fetchReleaseDetail, ...content} = useReleaseDetailStore()
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function ReleaseStatusList() {
       <>
         <div className={styled.box}>
           <div style={{display: "flex", justifyContent: "space-between", marginBottom: "15px"}}>
-            <div style={{fontWeight: "bold", fontSize: "15px", margin: "10px 10px 5px 10px"}}>재고 불출 요청 내역</div>
+            <div style={{fontWeight: "bold", fontSize: "15px", margin: "10px 10px 5px 10px"}}>불출 요청 내역</div>
             <Link
                 href="/common/ReleaseTotal/"
                 // passHref
@@ -103,11 +103,11 @@ export default function ReleaseStatusList() {
               className={styled.contents}
           >
             {/* card */}
-            {lst.map((info, index) => (
+            {releaseList.map((info, index) => (
                 <div
                     key={index}
                     className={styled.card}
-                    onClick={cardClick(info.requestId)}
+                    onClick={cardClick(info.id)}
                 >
                   <div
                       className={styled.division1}
@@ -115,19 +115,19 @@ export default function ReleaseStatusList() {
                     <div
                         className={styled.date}
                     >
-                      {info.requestedAt}
+                      {info.createdAt[0]}.{info.createdAt[1]}.{info.createdAt[2]}
                     </div>
                     <div
                         className={styled.title}
                     >
-                      {info.requestId}
+                      {info.from}
                     </div>
                   </div>
 
                   <div
                       className={styled.division2}
                   >
-                    {info.state}
+                    {info.status}
                   </div>
                 </div>
             ))}
