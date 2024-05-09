@@ -17,6 +17,9 @@ public interface JigItemClient {
     @GetMapping()
     Response<JigItemResponseDto> findBySerialNo(@RequestParam(name = "serial-no") String serialNo);
 
+    @GetMapping("/include-delete")
+    Response<JigItemResponseDto> findBySerialNoIncludeDelete(@RequestParam(name = "serial-no") String serialNo);
+
     @PostMapping()
     Response<Void> add(@RequestBody JigItemAddRequestDto dto);
 
