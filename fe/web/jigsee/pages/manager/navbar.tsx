@@ -43,6 +43,8 @@ export default function ManagerNavbar() {
   }, [name, role]);
 
   const handlelogout = async () => {
+    //로그아웃 해제
+    finishSSE();
     const result = await logout();
     if (result) {
       setName("");

@@ -12,9 +12,7 @@ export const fetchSSE = () => {
     });
     // sse 연결 시작
     eventSource.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      console.log("Received SSE data:", data);
-      alert(`New Notification: ${data.message}`);
+      console.log("eeeee", e.data);
     };
 
     eventSource.onerror = (e) => {
@@ -49,7 +47,7 @@ export const getAllalarms = async (page: number) => {
 };
 // 알림 체크
 export const checkAlarm = async (ID: number) => {
-  const url = "http://k10s105.p.ssafy.io/api/v1/notification/check";
+  const url = "http://k10s105.p.ssafy.io/api/v1/notification/search/check";
   const params = { "notification-id": ID };
   const response = await axiosAuthApi().put(url, null, { params });
   return response;

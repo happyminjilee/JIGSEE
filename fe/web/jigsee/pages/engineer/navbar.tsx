@@ -42,12 +42,13 @@ export default function EngineerNavbar() {
     console.log("Updated role:", role);
   }, [name, role]);
   const handlelogout = async () => {
+    //로그아웃 해제
+    finishSSE();
     const result = await logout();
     if (result) {
       setName("");
       setRole("");
-      //로그아웃 해제
-      finishSSE();
+
       console.log("delete zustand info");
 
       router.push("/login");
