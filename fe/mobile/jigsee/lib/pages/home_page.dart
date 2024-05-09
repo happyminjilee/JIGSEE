@@ -131,7 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               onPressed: () {
                 Navigator.pushNamed(context, '/abrogate');
               },
-              child: const Text('지그 폐기', style: TextStyle(fontSize: 20)),
+              child: const Text('지그 조회', style: TextStyle(fontSize: 20)),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(10000, 50),
                 foregroundColor: const Color.fromARGB(255, 248, 250, 252),

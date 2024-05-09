@@ -98,7 +98,8 @@ class DisplayPictureScreen extends ConsumerStatefulWidget {
 
 class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
   late String scannedText = "";
-  String? verificationImagePath;  // 검증 결과에 따라 변경될 이미지 경로
+  String? verificationImagePath;
+  static Map<String, dynamic> jigData = {};
 
   @override
   void initState() {
@@ -114,39 +115,46 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
 
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
-        scannedText += line.text + "\n";
+        scannedText += line.text;
+        break;
       }
+      break;
     }
     setState(() {});
-    sendJigInfo();  // 텍스트 인식 후 서버에 정보 요청
+    searchJigInfo();  // 텍스트 인식 후 서버에 정보 요청
   }
 
-  void sendJigInfo() async {
+  void searchJigInfo() async {
     final DioClient dioClient = ref.read(dioClientProvider);
-    final jigName = ref.watch(selectedJigProvider);
 
     try {
       var response = await dioClient.get(
-          '/jiginfo',
-          queryParameters: {
-            'scannedText': scannedText,
-            'jigName': jigName
-          }
+          '/jig-item?serial-no=$scannedText',
       );
       if (response.statusCode == 200) {
-        bool isValid = response.data == 'true';
+        print(response.data);
         // 응답에 따라 이미지 경로 설정
         setState(() {
-          verificationImagePath = isValid ? "availableMark" : "notAvailableMark";
+          jigData = {
+            "model": response.data['result']['model'],
+            "serialNo": response.data['result']['serialNo'],
+            "status": response.data['result']['status'],
+            "expectLife": response.data['result']['expectLife'],
+            "useCount": response.data['result']['useCount'],
+            "useTime": response.data['result']['useAccumulationTime'],
+            "repairCount": response.data['result']['repairCount'],
+          };
         });
       } else {
         setState(() {
-          verificationImagePath = "notAvailableMark";
+          jigData = {};
         });
       }
     } catch (e) {
       setState(() {
-        verificationImagePath = "notAvailableMark";
+        jigData = {
+          'Error': 'Error'
+        };
       });
     }
   }
@@ -159,38 +167,61 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Text('지그 정보'),
+              const Text('지그 정보', style: TextStyle(
+                  fontSize: 32,
+                ),
+              ),
+              const SizedBox(height: 20),
               Expanded(
                 child: Column(
                     children: [
                       Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.all(12),
+                        height: 300,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: const Color.fromARGB(255, 47, 118, 255),
-                            width: 1,
+                            color: const Color.fromARGB(255, 25, 30, 40),
+                            width: 3,
                           ),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
                           children: [
-                            Image.file(File(widget.imagePath), scale: 2.5,),
-                            const SizedBox(height: 20),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(ref.watch(selectedJigProvider as ProviderListenable<String>)),
-                                Text(scannedText.isEmpty ? "Error scanning" : scannedText),
-                              ]
-                            )
+                            Image.file(File(widget.imagePath), scale: 3,),
+                            const SizedBox(width: 10),
+                            Expanded(
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      if (jigData.isNotEmpty && jigData['Error'] == null) Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('제품 명: ${jigData['model']}'),
+                                          Text('S / N : ${jigData['serialNo']}'),
+                                          Text('현 상태: ${jigData['status']}'),
+                                          Text('예상 수명: ${jigData['useCount']}'),
+                                          Text('사용 횟수: ${jigData['useCount']}'),
+                                          Text('수리 횟수: ${jigData['repairCount']}'),
+                                          // Text('현 사용량: ${jigData['useTime'].toString().substring(0, 11)}'),
+                                        ],
+                                      )
+                                      else if (jigData.isEmpty) const Text('인식 오류')
+                                      else const Text('네트 워크 오류'),
+                                    ]
+                                )
+                            ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: largeGap),
+                      const SizedBox(height: 100),
                       ElevatedButton(
-                        onPressed: _showDeleteDialog,
-                        child: const Text('폐기', style: TextStyle(fontSize: 20)),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/home');
+                        },
+                        child: const Text('확인', style: TextStyle(fontSize: 20)),
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(360, 50),
                             foregroundColor: const Color.fromARGB(255, 248, 250, 252),
@@ -203,8 +234,10 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
                       ),
                       const SizedBox(height: largeGap),
                       ElevatedButton(
-                        onPressed: () => Navigator.pushNamed(context, '/home'),
-                        child: const Text('취소', style: TextStyle(fontSize: 20)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('재촬영', style: TextStyle(fontSize: 20)),
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(360, 50),
                             foregroundColor: const Color.fromARGB(255, 25, 30, 40),
@@ -221,68 +254,6 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
             ],
           ),
         )
-    );
-  }
-
-  Future<void> deleteJig(String serialNum) async {
-    final DioClient dioClient = ref.read(dioClientProvider);
-    try {
-      var response = await dioClient.delete(
-          '/jig-item',
-          data: {
-            'serialNo': serialNum,
-          }
-      );
-      if (response.statusCode != 200) {
-        log(response.data);
-      }
-    } catch (e) {
-      log(e as String);
-    }
-  }
-
-  void _showDeleteDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            '폐기 하시겠습니까?',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color.fromARGB(255, 25, 30, 40),
-              fontSize: 20,
-            ),
-          ),
-          content: Text(
-            'S/N: $scannedText',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Color.fromARGB(255, 25, 30, 40),
-              fontSize: 16,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                try {
-                  await deleteJig(scannedText);
-                  Navigator.of(context).pop();
-                  Navigator.pushNamed(context, "/home");
-                } catch (e) {
-                  print('Error: $e');  // 오류 출력
-                }
-              },
-              child: const Text('폐기'),
-            ),
-            const SizedBox(height: smallGap,),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('취소'),
-            ),
-          ],
-        );
-      },
     );
   }
 }
