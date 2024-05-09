@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
+import {useWoStore} from "@/store/workorderstore";
 
 interface Option {
   label: string;
@@ -25,6 +26,7 @@ export default function RepairTotal() {
     const storedRole = localStorage.getItem("role");
     if (storedRole !== null) {
       setRole(storedRole); // 로컬 스토리지의 값이 null이 아닌 경우에만 상태 업데이트
+      fetchWo(values, 1, 5 )
     }
   }, []);
   let Navbar;
@@ -37,12 +39,23 @@ export default function RepairTotal() {
   }
   // 수리요청온 지그의 WO 에 따른 상태 데이터
   const lst: Option[] = [
-    { label: "Publish", value: "발행" },
-    { label: "Onprogress", value: "진행 중" },
-    { label: "complete", value: "완료" },
+    { label: "발행", value: "PUBLISH" },
+    { label: "진행 중", value: "PROGRESS" },
+    { label: "완료", value: "FINISH" },
   ];
-  const [values, setValues] = useState<string>("ALL");
-
+  const [values, setValues] = useState<string>("");
+  const [page, setPage] = useState(1)
+  useEffect(() => {
+    fetchWo(values, page, 5 )
+        .then((res) => {
+          console.log(res)
+          console.log(values)
+          console.log(list)
+        })
+        .catch((error) => {
+          console.log(error.message)
+        })
+  }, [page, values]);
   // 임시 JIG 데이터
   const jigData: JigData[] = [
     { date: "2024.04.21", serialNumber: "S/N S00000001", model: "Model Name", status: "발행" },
@@ -52,23 +65,29 @@ export default function RepairTotal() {
     { date: "2024.04.23", serialNumber: "S/N S00000003", model: "Model Name", status: "발행" },
     // 다른 JIG 데이터 객체들...
   ];
-  function cardClick(jig: JigData) {
-    console.log("clicked", jig);
+  const cardClick = (id: number) => {
+
   }
+  const {endPage, list, fetchWo} = useWoStore()
+
 
   return (
     <>
       {Navbar}
       <div className={styled.bigcontainer}>
         <div className={styled.right}>
-          <Link
-              href="/common/RepairTotal/MyTotal"
-              // passHref
-              underline="hover"
-              style={{color: "black", fontSize: "12px", fontWeight: "lighter"}}
-          >
-            나의 내역 보기
-          </Link>
+          {role === "ENGINEER" ?
+              <Link
+                  href="/common/RepairTotal/MyTotal"
+                  // passHref
+                  underline="hover"
+                  style={{color: "black", fontSize: "12px", fontWeight: "lighter"}}
+              >
+                나의 내역 보기
+              </Link>
+              :
+              <div></div>
+          }
           <Select
             selectionMode="single"
             placeholder="선택"
@@ -78,6 +97,7 @@ export default function RepairTotal() {
             color="primary"
             className={styled.short}
             labelPlacement="outside"
+            aria-label="status label"
           >
             {lst.map((option) => (
               <SelectItem key={option.value} value={option.value}>
@@ -87,17 +107,17 @@ export default function RepairTotal() {
           </Select>
         </div>
         <div className={styled.container}>
-          {jigData.map((jig, index) => (
-            <div key={index} onClick={() => cardClick(jig)} className={styled.fullWidth}>
-              <h3>{jig.date}</h3>
+          {list.map((jig, index) => (
+            <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
+              <h3>{jig.createdAt}</h3>
               <p>
-                {jig.serialNumber} | {jig.model} {jig.status}
+                {jig.serialNo} | {jig.model} {jig.status}
               </p>
             </div>
           ))}
         </div>
         <div className={styled.center}>
-          <Pagination total={10} />
+          <Pagination onChange={(e) => setPage(e)} total={endPage} />
         </div>
       </div>
     </>

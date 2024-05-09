@@ -102,6 +102,7 @@ export const useWoStore = create<Wo>((set) => ({
   list: [],
   fetchWo: async (state: string, page: number, size: number) => {
     const data = await getAllWo(state, page, size);
+    console.log('요청 보낸 내용', state)
     set({
       currentPage: data.data.result.currentPage,
       endPage: data.data.result.endPage,
