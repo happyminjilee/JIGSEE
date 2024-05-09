@@ -55,7 +55,7 @@ public class SseService {
         return "SSE Connected : \n" +
                 "[ emitterId : " + emitterId + " ]\n" +
                 "[ eventId : " + eventId + " ]\n" +
-                "[ roleType : " + memberInfo.roleType() + ", employeeNo : " + memberInfo.employeeNo() + " ]";
+                "[ role : " + memberInfo.role() + ", employeeNo : " + memberInfo.employeeNo() + " ]";
     }
 
     public void sendToReceiver(MessageRequestDto messageRequestDto) {
@@ -113,6 +113,6 @@ public class SseService {
     }
 
     private static String makeRoleTypeEmployeeNo(MemberInfoDto memberInfo) {
-        return memberInfo.roleType() + "_" + memberInfo.employeeNo();
+        return memberInfo.role() + "_" + memberInfo.employeeNo();
     }
 }
