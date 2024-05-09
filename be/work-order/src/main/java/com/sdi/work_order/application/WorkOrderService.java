@@ -43,7 +43,7 @@ public class WorkOrderService {
 
     public WorkOrderDetailResponseDto detail(String accessToken, Long workOrderId) {
         WorkOrderRDBEntity rdb = getRDBWorkOrderById(workOrderId);
-        JigItemResponseDto jigItem = getJigItem(accessToken, rdb.getJigSerialNo());
+        JigItemResponseDto jigItem = getJigItemIncludeDelete(accessToken, rdb.getJigSerialNo());
         WorkOrderNosqlEntity nosql = getNosqlWorkOrderCheckList(rdb.getCheckListId());
 
         String creator = getMemberInfo(accessToken, rdb.getCreatorEmployeeNo());
@@ -122,7 +122,9 @@ public class WorkOrderService {
         rdb.updateStatus(WorkOrderStatus.FINISH);
 
         // allPassOrNot이 false 일 경우 폐기 요청 전송
-        jigItemService.deleteBySerialNo(accessToken, rdb.getJigSerialNo());
+        if(!allPassOrNot){
+            jigItemService.deleteBySerialNo(accessToken, rdb.getJigSerialNo());
+        }
 
         return WorkOrderDoneResponseDto.from(allPassOrNot);
     }
@@ -212,6 +214,10 @@ public class WorkOrderService {
 
     private JigItemResponseDto getJigItem(String accessToken, String serialNo) {
         return jigItemService.findBySerialNo(accessToken, serialNo).getResult();
+    }
+
+    private JigItemResponseDto getJigItemIncludeDelete(String accessToken, String serialNo) {
+        return jigItemService.findBySerialNoIncludeDelete(accessToken, serialNo).getResult();
     }
 
     private String getMemberInfo(String accessToken, String employeeNo) {

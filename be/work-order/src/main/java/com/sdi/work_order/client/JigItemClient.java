@@ -16,6 +16,10 @@ public interface JigItemClient {
     Response<JigItemResponseDto> findBySerialNo(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String accessToken,
                                                 @RequestParam(name = SERIAL_NO) String serialNo);
 
+    @GetMapping("/jig-item/include-delete")
+    Response<JigItemResponseDto> findBySerialNoIncludeDelete(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String accessToken,
+                                                @RequestParam(name = SERIAL_NO) String serialNo);
+
     @DeleteMapping("/jig-item")
     void deleteBySerialNo(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String accessToken,
                           @RequestBody JigItemDeleteRequestDto dto);
