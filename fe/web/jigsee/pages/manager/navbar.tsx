@@ -15,33 +15,11 @@ import { userStore } from "@/store/memberstore";
 import { useEffect } from "react";
 import { logout } from "@/pages/api/memberAxios";
 import Badge from "@mui/material/Badge";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-// 알람 리스트 api 연결 필요
-const options = [
-  "불출요청:121354",
-  "수리요청:2354",
-  "보수요청:12345",
-  "보수요청:5546",
-  // "수리요청:882354",
-  // "불출요청:786412",
-  // "불출요청:354456",
-  // "수리요청:03754",
-  // "수리요청:8354",
-  // "보수요청:32245",
-];
-
-const ITEM_HEIGHT = 48;
-
+import { useAlarmStore } from "@/store/ssestore";
+import { finishSSE } from "@/pages/api/sseAxios";
 export default function ManagerNavbar() {
-  // 알람 리스트 보기 핸들러
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // 알람 스토어 변수 들
+  const { uncheckednumber, setUnchecked } = useAlarmStore();
 
   // profile logo 선택 메뉴 보기 핸들러
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -70,19 +48,30 @@ export default function ManagerNavbar() {
       setName("");
       setRole("");
       console.log("delete zustand info");
-
+      // finishSSE();
       router.push("/login");
     } else {
       console.log("로그인이 만료되었습니다.");
       router.push("/login");
-    }
+    } // 알림 get test
   };
+  const [UserName, setUsername] = React.useState("");
+  // 알림 get test
+  useEffect(() => {
+    setUnchecked();
+    const storedName = localStorage.getItem("name");
+    setUsername(storedName ?? ""); // localStorage에서 값이 null이면 빈 문자열을 사용
+  }, []);
   // 현재위치 표시 로직
   const currentPath = router.pathname; // 현재 URL을 가져옵니다.
 
   // 페이지에 따라 스타일을 동적으로 적용합니다.
   const isManagerPage = currentPath === "/manager";
   const isRepairTotalPage = currentPath === "/common/RepairTotal";
+  // 알람 보기로 이동
+  const navigateToAlarm = () => {
+    router.push("/alarm");
+  };
   return (
     <>
       <Box style={{ paddingTop: "5px" }}>
@@ -131,12 +120,19 @@ export default function ManagerNavbar() {
           </ListItem>
 
           <ListItem sx={{ paddingTop: "10px", paddingBottom: "0px" }}>
-            <Badge badgeContent={4} color="primary">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/images/account.svg" />
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar alt="Remy Sharp" src="/images/userprofile.svg" />
+            </IconButton>
+            {UserName}
+            <Badge badgeContent={uncheckednumber} color="primary">
+              <IconButton onClick={navigateToAlarm} sx={{ p: 0, marginLeft: "10px" }}>
+                <Avatar
+                  alt="Remy Sharp"
+                  src="/images/bell.svg"
+                  sx={{ width: "30px", height: "30px" }}
+                />
               </IconButton>
             </Badge>
-            UserName
           </ListItem>
 
           <Menu
@@ -158,44 +154,6 @@ export default function ManagerNavbar() {
             <MenuItem onClick={handleCloseUserMenu}>
               <Typography textAlign="center" onClick={handlelogout}>
                 Logout
-              </Typography>
-            </MenuItem>
-            <MenuItem>
-              <Typography textAlign="center">
-                <Badge badgeContent={4} variant="dot" color="primary">
-                  알림
-                </Badge>
-                <IconButton
-                  aria-label="more"
-                  id="long-button"
-                  aria-controls={open ? "long-menu" : undefined}
-                  aria-expanded={open ? "true" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleClick}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-                <Menu
-                  id="long-menu"
-                  MenuListProps={{
-                    "aria-labelledby": "long-button",
-                  }}
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  PaperProps={{
-                    style: {
-                      maxHeight: ITEM_HEIGHT * 4.5,
-                      width: "20ch",
-                    },
-                  }}
-                >
-                  {options.map((option) => (
-                    <MenuItem key={option} selected={option === "Pyxis"} onClick={handleClose}>
-                      {option}
-                    </MenuItem>
-                  ))}
-                </Menu>
               </Typography>
             </MenuItem>
           </Menu>
