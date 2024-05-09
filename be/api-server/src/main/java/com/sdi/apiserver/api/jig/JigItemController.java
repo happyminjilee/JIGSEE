@@ -30,6 +30,13 @@ class JigItemController {
         return jigItemClient.findBySerialNo(serialNo);
     }
 
+    @GetMapping("/include-delete")
+    Response<JigItemResponseDto> findBySerialNoIncludeDelete(@RequestParam(name = "serial-no") String serialNo) {
+        // memberController.producerCheck(request);
+        log.info("{}로 Jig-Item정보 조회", serialNo);
+        return jigItemClient.findBySerialNoIncludeDelete(serialNo);
+    }
+
     @PostMapping
     Response<Void> add(HttpServletRequest request, @RequestBody JigItemAddRequestDto dto) {
         memberController.managerCheck(request);
