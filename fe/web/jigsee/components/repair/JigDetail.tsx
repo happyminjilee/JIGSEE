@@ -41,7 +41,7 @@ export default function RequestList() {
     const cardClick = (id: number) => {
         console.log("clicked", id)
         openModal()
-        setModalName("Report")
+        setModalName("REPORT")
     }
 
     const {setSelect} = useGroupFilter()
