@@ -18,7 +18,7 @@ public interface WorkOrderClient {
     Response<WorkOrderDetailResponseDto> detail(@RequestHeader(name = ACCESS_TOKEN_PREFIX) String accessToken,
                                                 @RequestParam(name = "work-order-id") Long workOrderId);
 
-    @GetMapping
+    @GetMapping("/all")
     Response<WorkOrderResponseDto> all(@RequestHeader(name = ACCESS_TOKEN_PREFIX) String accessToken,
                                        @RequestParam(name = "status") String status,
                                        @RequestParam(name = "page", required = false) Integer page,
