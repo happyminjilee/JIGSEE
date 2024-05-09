@@ -7,6 +7,7 @@ import RejectedRelease from "@/components/release/RejectedRelease"
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { useDrag } from 'react-dnd';
+import {useCompoStore} from "@/store/workorderstore";
 
 
 interface lst {
@@ -35,6 +36,7 @@ export default function ReleaseStatusList() {
   ]
   // 지그점검항목 입력 모달
   const [showModal, setShowModal] = useState(false);
+  const {setModal, setModalName} = useCompoStore()
   // Jig 정보 입력 모달 오픈, 클로즈 함수
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -58,7 +60,7 @@ export default function ReleaseStatusList() {
       fetchReleaseDetail(requestId)
           .then((response) => {
             if (content.status === "PUBLISH") {
-                window.alert('결재 대기중')
+                setDecision(true)
             } else {
                 if (content.memo) {
                     setDecision(false)
@@ -72,7 +74,7 @@ export default function ReleaseStatusList() {
           .catch((error) => {
               console.log(error.message)
               if (content.status === "PUBLISH") {
-                  window.alert('결재 대기중')
+                  setDecision(true)
               } else {
                   if (content.memo) {
                       setDecision(false)
@@ -127,7 +129,7 @@ export default function ReleaseStatusList() {
                   <div
                       className={styled.division2}
                   >
-                    {info.status}
+                    {info.status === "PUBLISH" ? "결재 대기" : info.status === "FINISH" ? "승인 완료" : ""}
                   </div>
                 </div>
             ))}

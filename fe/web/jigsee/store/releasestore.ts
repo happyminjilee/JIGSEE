@@ -29,7 +29,7 @@ interface releaseDetail {
   to: string; // 승인자
   memo: string; // 사유
   createdAt: number[]; // 요청시간
-  updatedAt: string;
+  updatedAt: number[];
   serialNos: string[]; // 요청 지그 리스트
   fetchReleaseDetail: (id: string) => Promise<AxiosResponse>;
   setSerialNos: (n:string[]) => void;
@@ -68,7 +68,7 @@ export const useReleaseDetailStore = create<releaseDetail>((set) => ({
   to: "", // 승인자
   memo: "", // 사유
   createdAt: [], // 요청시간
-  updatedAt: "",
+  updatedAt: [],
   serialNos: [], // 요청 지그 리스트
   setSerialNos: (n:string[]) => {
     set({serialNos:n})
