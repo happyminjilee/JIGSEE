@@ -70,7 +70,7 @@ export default function RequestList() {
                           <Switch isSelected={mine} onValueChange={setMine} size={"sm"}>
                               {mine ?
                                   <Link
-                                      href="/common/ReleaseTotal/MyTotal"
+                                      href="/common/RepairTotal/MyTotal"
                                       // passHref
                                       underline="hover"
                                       style={{color: "black", fontSize: "8px", fontWeight: "lighter"}}
@@ -79,7 +79,7 @@ export default function RequestList() {
                                   </Link>
                                   :
                                   <Link
-                                      href="/common/ReleaseTotal/Total"
+                                      href="/common/RepairTotal"
                                       // passHref
                                       underline="hover"
                                       style={{color: "black", fontSize: "8px", fontWeight: "lighter"}}

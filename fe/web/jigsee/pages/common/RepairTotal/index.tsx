@@ -1,5 +1,5 @@
-import { Pagination, Select, SelectItem, Selection } from "@nextui-org/react";
-import { useState, useEffect } from "react";
+import {Pagination, Select, SelectItem, Selection, Link} from "@nextui-org/react";
+import React, { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
@@ -61,6 +61,14 @@ export default function RepairTotal() {
       {Navbar}
       <div className={styled.bigcontainer}>
         <div className={styled.right}>
+          <Link
+              href="/common/RepairTotal/MyTotal"
+              // passHref
+              underline="hover"
+              style={{color: "black", fontSize: "12px", fontWeight: "lighter"}}
+          >
+            나의 내역 보기
+          </Link>
           <Select
             selectionMode="single"
             placeholder="선택"

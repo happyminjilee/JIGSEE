@@ -109,15 +109,6 @@ export default function RepairTotal() {
       {Navbar}
       <div className={styled.bigcontainer}>
         <div className={styled.right}>
-          <Link
-              href="/common/ReleaseTotal/MyTotal"
-              // passHref
-              underline="hover"
-              style={{color: "black", fontSize: "12px", fontWeight: "lighter"}}
-          >
-            나의 내역 보기
-          </Link>
-
           <Select
             selectionMode="single"
             placeholder="선택"

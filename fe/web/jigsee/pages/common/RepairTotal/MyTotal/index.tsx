@@ -99,7 +99,7 @@ export default function RepairTotal() {
       <div className={styled.bigcontainer}>
         <div className={styled.right}>
           <Link
-              href="/common/ReleaseTotal/Total"
+              href="/common/RepairTotal"
               // passHref
               underline="hover"
               style={{color: "black", fontSize: "12px", fontWeight: "lighter"}}
