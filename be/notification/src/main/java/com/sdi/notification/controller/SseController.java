@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/notification/sse")
@@ -42,5 +42,16 @@ class SseController {
         MemberInfoDto currentMember = apiService.getMember(accessToken);
         sseService.disconnect(currentMember);
         return Response.success();
+    }
+
+    @DeleteMapping("/disconnect-all")
+    Response<Void> disconnectAll() {
+        sseService.disconnectAll();
+        return Response.success();
+    }
+
+    @GetMapping("/search-all-connection")
+    Response<List<String>> searchAllConnection() {
+        return Response.success(sseService.searchAllConnection());
     }
 }

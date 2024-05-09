@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -72,6 +73,10 @@ public class SseService {
         emitterRepository.deleteAllEmitterStartWithId(makeRoleTypeEmployeeNo(memberResponseDto));
     }
 
+    public void disconnectAll() {
+        emitterRepository.deleteAllEmitter();
+    }
+
     // Header의 LastEventId가 있을 때 이벤트 재전송하는 로직
     /*
         private void sendLostData(String lastEventId, RoleType roleType, String emitterId, SseEmitter emitter) {
@@ -114,5 +119,10 @@ public class SseService {
 
     private static String makeRoleTypeEmployeeNo(MemberInfoDto memberInfo) {
         return memberInfo.role() + "_" + memberInfo.employeeNo();
+    }
+
+
+    public List<String> searchAllConnection() {
+        return emitterRepository.findAllEmitter();
     }
 }

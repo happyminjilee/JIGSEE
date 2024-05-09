@@ -3,6 +3,7 @@ package com.sdi.notification.repository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -71,5 +72,14 @@ public class EmitterRepositoryImpl implements EmitterRepository {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
+    @Override
+    public void deleteAllEmitter() {
+        emitters.clear();
+    }
+
+    @Override
+    public List<String> findAllEmitter() {
+        return emitters.keySet().stream().toList();
+    }
 
 }

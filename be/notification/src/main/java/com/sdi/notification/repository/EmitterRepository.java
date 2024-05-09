@@ -2,6 +2,7 @@ package com.sdi.notification.repository;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.List;
 import java.util.Map;
 
 public interface EmitterRepository {
@@ -13,4 +14,7 @@ public interface EmitterRepository {
     Map<String, SseEmitter> findAllEmitterStartsWithMemberId(String memberId); // 해당 회원과 관련된 모든 emitter 조회
     Map<String, Object> findAllEventCacheStartsWithMemberId(String memberId); // 해당 회원과 관련된 모든 이벤트 조회
     Map<String, SseEmitter> findAllEmitterStartWithRoleType(String role); // 권한 별 조회
+    void deleteAllEmitter(); // 현재 모든 connection 삭제
+
+    List<String> findAllEmitter(); // 모든 connection 조회
 }
