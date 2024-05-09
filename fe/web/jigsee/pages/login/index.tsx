@@ -34,7 +34,10 @@ export default function Login() {
   };
   return (
     <>
-      <div className={styled.container}>
+      <div
+          className={styled.container}
+          onKeyUp={(e) => {e.key === "Enter" ? handlelogin(employeeNo, password) : console.log("타닥")}}
+      >
         <div className={styled.logincontainer}>
           <img
             src="/images/userprofile.svg"
@@ -42,7 +45,9 @@ export default function Login() {
             style={{ width: "50px", height: "50px" }}
           />
           {/* 로그인 인풋 영역 */}
-          <div style={{ marginBottom: "1rem" }}>
+          <div
+              style={{ marginBottom: "1rem" }}
+          >
             <Input
               type="id"
               variant={"underlined"}
