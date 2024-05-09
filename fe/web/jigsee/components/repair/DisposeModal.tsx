@@ -1,7 +1,7 @@
 import styled from "@/styles/modal/disposeModal.module.css"
 import {Button} from "@nextui-org/react"
 import {Input} from "@nextui-org/react"
-import {useCompoStore, useWoDetailStore} from "@/store/workorderstore";
+import {useCompoStore, useWoDetailStore, useWoGroupStore} from "@/store/workorderstore";
 import {useState} from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import {updateJigStatus} from "@/pages/api/jigAxios"
@@ -19,9 +19,19 @@ export default function disposeModal() {
         setModal(false)
         setModalName("")
     }
-
+    const {fetchWoGroup} = useWoGroupStore()
     const disposeBtn = () => {
-        updateJigStatus(jigItemInfo.serialNo, "DELETE")
+        fetchWoGroup()
+            .then(() => {
+            })
+            .catch((error) => {
+                console.log(error.message)
+
+            })
+            .finally(() => {
+                close()
+                window.location.reload()
+            })
     }
 
     return (
@@ -38,18 +48,13 @@ export default function disposeModal() {
                 <div
                     className={styled.title}
                 >
-                    지그 폐기
-                </div>
-
-                <div
-                    className={styled.content}
-                >
                     Test 결과 재사용 부적합 판정
                 </div>
 
+
                 <Button style={{
-                    width: "300px",
-                    height: "60px",
+                    width: "250px",
+                    height: "40px",
                     margin: "10px auto"
                 }}
                         color="primary"

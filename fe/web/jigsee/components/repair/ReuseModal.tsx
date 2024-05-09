@@ -1,7 +1,7 @@
 import styled from "@/styles/modal/reuseModal.module.css"
 import {Button} from "@nextui-org/react"
 import {Input} from "@nextui-org/react"
-import {useCompoStore, useWoDetailStore} from "@/store/workorderstore";
+import {useCompoStore, useWoDetailStore, useWoGroupStore} from "@/store/workorderstore";
 import {useState} from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import {updateJigStatus} from "@/pages/api/jigAxios"
@@ -15,8 +15,9 @@ interface lst {
 
 
 export default function reuseModal() {
-    const {setModal, setModalName} = useCompoStore()
+    const {setModal, setModalName, setRightCompo} = useCompoStore()
     const {jigItemInfo} = useWoDetailStore()
+    const {fetchWoGroup} = useWoGroupStore()
     const close = () => {
         setModal(false)
         setModalName("")
@@ -26,6 +27,25 @@ export default function reuseModal() {
 
     const reUseBtn = () => {
         updateJigStatus(jigItemInfo.serialNo, jigPos)
+            .then((res) => {
+            })
+            .catch((error) => {
+                console.log(error.message)
+            })
+            .finally(() => {
+                fetchWoGroup()
+                    .then(() => {
+                        window.alert("요청 완료!")
+                    })
+                    .catch((error) => {
+                        console.log(error.message)
+                        window.alert("요청 실패!")
+                    })
+                    .finally(() => {
+                        close()
+                        window.location.reload()
+                    })
+            })
     }
 
     return (
@@ -60,8 +80,8 @@ export default function reuseModal() {
 
 
                 <Button style={{
-                    width: "300px",
-                    height: "60px",
+                    width: "250px",
+                    height: "40px",
                     margin: "10px auto"
                 }}
                         color="primary"
