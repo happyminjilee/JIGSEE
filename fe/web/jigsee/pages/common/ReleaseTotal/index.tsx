@@ -1,4 +1,4 @@
-import {Link, Pagination, Select, SelectItem} from "@nextui-org/react";
+import { Link, Pagination, Select, SelectItem } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
@@ -158,7 +158,7 @@ export default function RepairTotal() {
           "& .MuiBox-root": {
             // Assuming the box is causing issues
             outline: "none",
-            border: "none",
+
             boxShadow: "none",
           },
         }}
@@ -175,7 +175,7 @@ export default function RepairTotal() {
           <Box
             sx={{
               width: "400px",
-              height: "80%",
+              height: "500px",
               backgroundColor: "var(--realwhite)",
               display: "flex",
               alignItems: "center",
@@ -183,46 +183,68 @@ export default function RepairTotal() {
               flexDirection: "column",
               padding: "30px 30px",
               borderRadius: "10px",
-              border: "solid 5px var(--samsungblue)",
+              border: "solid 3px var(--samsungblue)",
             }}
           >
-            <Typography color="primary" sx={{ width: "100%", fontSize: "15px" }} align="left">
-              {detail.createdAt.length > 0 &&
-                `요청일 : ${detail.createdAt[0]}년 ${detail.createdAt[1]}월 ${detail.createdAt[2]}일 `}
-            </Typography>
-            <Typography color="primary" sx={{ width: "100%", fontSize: "15px" }} align="left">
-              {detail.updatedAt.length > 0 &&
-                `최종 승인 : ${detail.updatedAt[0]}년 ${detail.updatedAt[1]}월 ${detail.updatedAt[2]}일 `}
-            </Typography>
-            <Typography color="primary" sx={{ width: "100%", fontSize: "15px" }} align="left">
-              {detail.from && `요청자 : ${detail.from} `}
-            </Typography>
-            <Typography color="primary" sx={{ width: "100%", fontSize: "15px" }} align="left">
-              {detail.to && `승인자 : ${detail.to} `}
-            </Typography>
-            <Box
+            <Typography
+              color="primary"
               sx={{
-                width: "400px",
-                height: "80px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                width: "100%",
+                fontSize: "40px",
+                marginTop: "10px",
+                marginBottom: "10px",
+                fontWeight: "5px",
               }}
+              align="center"
             >
-              {detail.id}
-            </Box>
+              {detail.isAccept && `승인 완료 `}
+              {detail.isAccept === false && `미승인`}
+            </Typography>
 
             <Box
               sx={{
-                width: "300px",
-                height: "100px",
-                backgroundColor: "var(--light-gray)",
+                width: "200px",
+                height: "150px",
                 display: "flex", // Flexbox 레이아웃 사용
                 flexDirection: "column", // 자식 요소를 세로로 정렬
                 justifyContent: "center", // 자식 요소를 센터에 위치
                 alignItems: "center", // 가로 방향에서도 중앙에 위치
                 overflow: "auto", // 내용이 넘칠 경우 스크롤 생성
                 padding: "8px", // 안쪽 여백 제공
+                gap: "5px",
+                marginTop: "20px",
+              }}
+            >
+              <Typography sx={{ width: "100%", fontSize: "15px" }} align="left">
+                {detail.createdAt.length > 0 &&
+                  `요청일 : ${detail.createdAt[0]}년 ${detail.createdAt[1]}월 ${detail.createdAt[2]}일 `}
+              </Typography>
+              <Typography sx={{ width: "100%", fontSize: "15px" }} align="left">
+                {detail.updatedAt.length > 0 &&
+                  `최종승인 : ${detail.updatedAt[0]}년 ${detail.updatedAt[1]}월 ${detail.updatedAt[2]}일 `}
+              </Typography>
+              <Typography sx={{ width: "100%", fontSize: "15px" }} align="left">
+                {detail.from && `요청자 : ${detail.from} `}
+              </Typography>
+              <Typography sx={{ width: "100%", fontSize: "15px" }} align="left">
+                {detail.to && `승인자 : ${detail.to} `}
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                width: "300px",
+                height: "100px",
+                display: "flex", // Flexbox 레이아웃 사용
+                flexDirection: "column", // 자식 요소를 세로로 정렬
+                justifyContent: "center", // 자식 요소를 센터에 위치
+                alignItems: "center", // 가로 방향에서도 중앙에 위치
+                overflow: "auto", // 내용이 넘칠 경우 스크롤 생성
+                padding: "8px", // 안쪽 여백 제공
+                marginTop: "10px",
+                marginBottom: "20px",
+                border: "1px solid var(--black)",
+                borderRadius: "10px",
               }}
             >
               {detail.serialNos.map((jig: string, index: number) => (
@@ -231,15 +253,6 @@ export default function RepairTotal() {
                 </div>
               ))}
             </Box>
-
-            <Typography
-              color="primary"
-              sx={{ width: "100%", fontSize: "30px", marginTop: "20px", marginBottom: "10px" }}
-              align="center"
-            >
-              {detail.isAccept && `승인 완료 `}
-              {detail.isAccept === false && `미승인`}
-            </Typography>
             <button className={styled.btn} onClick={detailChecked}>
               확인
             </button>
