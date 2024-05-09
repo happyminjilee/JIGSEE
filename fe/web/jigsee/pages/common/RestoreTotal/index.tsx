@@ -7,7 +7,7 @@ import { useRestoreStore } from "@/store/restorestore";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import RestoreDetail from "@/components/restore/RestoreMemo";
-import Loading from "@/pages/loading/index";
+
 interface Props {
   onClick(): void;
 }
@@ -102,7 +102,7 @@ export default function RestoreTotal() {
   ];
   return (
     <>
-      {/* {Navbar} */}
+      {Navbar}
       <div className={styled.bigcontainer}>
         {restoreList.length > 0 ? (
           // Render restoreList once it's loaded
