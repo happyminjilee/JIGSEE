@@ -1,13 +1,13 @@
 import axios, { AxiosInstance } from "axios";
 import { headers } from "next/headers";
 
-const api = "http://k10s105.p.ssafy.io/api/v1";
+const api = process.env.NEXT_PUBLIC_API_URI;
 
 const axiosAuthApi = (): AxiosInstance => {
   const accessToken = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
   const instance = axios.create({
-    baseURL: "",
+    baseURL: api,
     headers: { Authorization: accessToken },
   });
 
@@ -28,7 +28,7 @@ const axiosAuthApi = (): AxiosInstance => {
           originRequest._retry = true;
 
           try {
-            const response = await axiosAuthApi().post("http://k10s105.p.ssafy.io/api/v1/refresh", {
+            const response = await axiosAuthApi().post("/refresh", {
               headers: {
                 RefreshToken: "Bearer " + refreshToken,
               },

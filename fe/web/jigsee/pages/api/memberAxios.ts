@@ -5,7 +5,7 @@ export const login = async (employeeNo: string, password: string) => {
   const http = axiosApi();
 
   return await http
-    .post("http://k10s105.p.ssafy.io/api/v1/login", {
+    .post("/login", {
       employeeNo: employeeNo,
       password: password,
     })
@@ -34,7 +34,7 @@ export const logout = async () => {
   console.log("want to logout?");
   const request = axiosAuthApi();
   return await request
-    .post("http://k10s105.p.ssafy.io/api/v1/member/logout")
+    .post("/logout")
     // 로그아웃 성공 시 local storage 삭제
     .then((response) => {
       localStorage.removeItem("access_token");

@@ -5,7 +5,7 @@ import { axiosApi, axiosAuthApi } from "@/utils/instance";
 export const releaseRequest = async (serialNos: string[]) => {
   const http = axiosAuthApi();
   return await http
-    .post("http://k10s105.p.ssafy.io/api/v1/request/jig", {
+    .post("/request/jig", {
       serialNos: serialNos,
     })
     .then((response) => {
@@ -31,7 +31,7 @@ export const releaseResponse = async (
   const http = axiosAuthApi();
 
   return await http
-    .put("http://k10s105.p.ssafy.io/api/v1/jig-item/accept", {
+    .put("/jig-item/accept", {
       requestId: requestId,
       isAccept: isAccept,
       memo: memo,
@@ -55,7 +55,7 @@ export const releaseGet = async (
 ) => {
   const http = axiosAuthApi();
   return await http
-    .get("http://k10s105.p.ssafy.io/api/v1/request/jig/all", {
+    .get("/request/jig/all", {
       params: {
         filter: status,
         page: page,
@@ -77,7 +77,7 @@ export const releaseDetailGet = async (
 ) => {
   const http = axiosAuthApi();
   return await http
-    .get("http://k10s105.p.ssafy.io/api/v1/request/jig/detail", {
+    .get("/request/jig/detail", {
       params: {
         "request-jig-id": id,
       },
