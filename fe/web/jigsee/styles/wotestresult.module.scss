@@ -8,7 +8,7 @@
   border: 1px solid var(--samsungblue);
   border-radius: 20px;
   background-color: var(--white);
-  padding-top: 20px;
+  padding-top: 10px;
 }
 .clear {
   width: 100%;
@@ -20,12 +20,17 @@
 }
 .clear:hover {
   cursor: pointer;
-  color: var(--light-gray)
+  color: var(--light-gray);
 }
 .header {
   font-weight: bolder;
-  font-size: 30px;
-  margin-top: 5px;
+  font-size: 25px;
+  margin-top: 0px;
+  p {
+    text-align: center;
+    font-size: 13px;
+    font-weight: normal;
+  }
 }
 .body {
   display: flex;
