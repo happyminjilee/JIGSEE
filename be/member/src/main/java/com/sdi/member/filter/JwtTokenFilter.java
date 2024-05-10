@@ -26,7 +26,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getRequestURI().equals("/api/v1/login") ||
                 request.getRequestURI().equals("/api/v1/refresh") ||
-                request.getRequestURI().equals("/api/v1/search/role")) {
+                request.getRequestURI().equals("/api/v1/search/role") ||
+                request.getRequestURI().equals("/api/v1/health")) {
             filterChain.doFilter(request, response);
             return;
         }
