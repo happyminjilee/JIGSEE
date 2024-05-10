@@ -15,7 +15,6 @@ export default function workorder() {
         setQualification(allQualified)
     }, []);
 
-
     const {setModal, setModalName} = useCompoStore()
     const close = ()=> {
         setModalName("")
@@ -36,7 +35,7 @@ export default function workorder() {
                     </div>
                     <div className={styled.body1}>
                         <div>요청인 : {creator}</div>
-                        <div>요청일 : {createdAt[0]}. {createdAt[1]}. {createdAt[2]} </div>
+                        <div>요청일 : {createdAt}</div>
                         <div>NO. {id}</div>
                     </div>
                     <div className={styled.checks}>

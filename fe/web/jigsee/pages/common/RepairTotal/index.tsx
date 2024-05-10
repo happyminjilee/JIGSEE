@@ -3,7 +3,12 @@ import React, { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
-import {useWoStore} from "@/store/workorderstore";
+import {useCompoStore, useWoDetailStore, useWoStore} from "@/store/workorderstore";
+import TotalCardModal from "@/components/repair/TotalCardModal";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import WoModal from "@/components/workorder/template"
+
 
 interface Option {
   label: string;
@@ -66,11 +71,22 @@ export default function RepairTotal() {
     { date: "2024.04.23", serialNumber: "S/N S00000003", model: "Model Name", status: "발행" },
     // 다른 JIG 데이터 객체들...
   ];
-  const cardClick = (id: number) => {
 
-  }
   const {endPage, list, fetchWo} = useWoStore()
-
+  const {fetchWoDetail} = useWoDetailStore()
+  const {setWoId, setModalName, setModal, modal, modalName} = useCompoStore()
+  const cardClick = (id: number) => {
+    fetchWoDetail(id)
+        .then((res) => {
+            console.log(res)
+            setWoId(id)
+            setModalName("TOTAL")
+            setModal(true)
+        })
+        .catch((error) => {
+            console.log(error.message)
+        })
+  }
 
   return (
     <>
@@ -110,23 +126,60 @@ export default function RepairTotal() {
         <div className={styled.container}>
           {list.map((jig, index) => (
             <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
-              <h3>{jig.createdAt[0]}. {jig.createdAt[1]}. {jig.createdAt[2]}</h3>
               <div className={styled.inCard}>
-                <div>
-                  {jig.serialNo} | {jig.model}
-                </div>
-                <div>
-                  {jig.status}
-                </div>
+
+                  <div className={styled.inInCard}>
+                      <div>
+                          {jig.createdAt[0]}. {jig.createdAt[1]}. {jig.createdAt[2]}
+                      </div>
+                      <div>
+                          {jig.serialNo} | {jig.model}
+                      </div>
+                  </div>
+
+                  <div>
+                      {jig.status}
+                  </div>
               </div>
 
             </div>
           ))}
         </div>
-        <div className={styled.center}>
+          <div className={styled.center}>
           <Pagination onChange={(e) => setPage(e)} total={endPage} />
         </div>
       </div>
+      <Modal
+          open={modal} // Corrected from 'open'
+          onClose={() => {
+            setModal(false);
+          }} // Added onClose handler
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            "& .MuiBox-root": {
+              // Assuming the box is causing issues
+              outline: "none",
+              border: "none",
+              boxShadow: "none",
+            },
+          }}
+      >
+        <Box
+            sx={{
+              width: "100%",
+              height: "80%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+        >
+          {modalName === "TOTAL" && <WoModal/>}
+        </Box>
+      </Modal>
     </>
   );
 }

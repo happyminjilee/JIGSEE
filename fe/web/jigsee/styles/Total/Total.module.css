@@ -36,6 +36,14 @@
   align-items: center;
 }
 
+.inInCard {
+  margin: 1px auto auto 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 .right {
   display: flex;
   justify-content: space-between;
