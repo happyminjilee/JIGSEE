@@ -1,11 +1,12 @@
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { axiosAuthApi } from "@/utils/instance";
 
+const ALARM_API = process.env.NEXT_PUBLIC_ALARM_API_URI;
 export const fetchSSE = () => {
   const accessToken = localStorage.getItem("access_token");
   if (accessToken) {
     const EventSource = EventSourcePolyfill;
-    const url = "http://k10s105.p.ssafy.io:8084/api/v1/notification/sse/subscribe";
+    const url = `${ALARM_API}/notification/sse/subscribe`;
     const eventSource = new EventSource(url, {
       headers: { Authorization: accessToken },
       heartbeatTimeout: 90000, // 밀리초 단위로 타임아웃을 90초로 설정
@@ -28,26 +29,26 @@ export const fetchSSE = () => {
   }
 };
 export const finishSSE = async () => {
-  const url = "http://k10s105.p.ssafy.io/api/v1/notification/sse/disconnect";
+  const url = "/notification/sse/disconnect";
   const response = await axiosAuthApi().delete(url);
   console.log("알람 통신 끊기", response);
 };
 // 미확인 알림 조회
 export const getUnchecked = async () => {
-  const url = "http://k10s105.p.ssafy.io/api/v1/notification/search/unchecked";
+  const url = "/notification/search/unchecked";
   const response = await axiosAuthApi().get(url);
   return response.data.result;
 };
 // 전체 알림 리스트 조회
 export const getAllalarms = async (page: number) => {
-  const url = "http://k10s105.p.ssafy.io/api/v1/notification/search/all";
+  const url = "/notification/search/all";
   const params = { page: page, size: 5 };
   const response = await axiosAuthApi().get(url, { params });
   return response.data.result;
 };
 // 알림 체크
 export const checkAlarm = async (ID: number) => {
-  const url = "http://k10s105.p.ssafy.io/api/v1/notification/search/check";
+  const url = "/notification/search/check";
   const params = { "notification-id": ID };
   const response = await axiosAuthApi().put(url, null, { params });
   return response;

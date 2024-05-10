@@ -4,7 +4,7 @@ import { axiosApi, axiosAuthApi } from "@/utils/instance";
 export const getfacilitylist = async () => {
   const http = axiosAuthApi();
   return await http
-    .get("http://k10s105.p.ssafy.io/api/v1/facility-item/all")
+    .get("/facility-item/all")
     .then((response) => {
       console.log("tytyty", response);
       return response.data.result;
@@ -17,7 +17,7 @@ export const getfacilitylist = async () => {
 export const getfacility = async (id: string) => {
   const http = axiosAuthApi();
   return await http
-    .get("http://k10s105.p.ssafy.io/api/v1/facility", {
+    .get("/facility", {
       params: {
         "facility-id": id,
       },
@@ -34,7 +34,7 @@ export const getfacility = async (id: string) => {
 export const getfacilityitems = async (id: string) => {
   const http = axiosAuthApi();
   return await http
-    .get("http://k10s105.p.ssafy.io/api/v1/jig-item/facility-available", {
+    .get("/jig-item/facility-available", {
       params: {
         "facility-model": id,
       },
