@@ -36,8 +36,8 @@ public class EmailController {
     }
 
     @PostMapping("/inspection")
-    Response<Void> sendInspectionEmail(@RequestBody NotificationFcmInspectionRequestDto dto) {
-        emailService.sendInspectionEmail(dto);
+    Response<Void> sendStyledInspectionEmail(@RequestBody NotificationFcmInspectionRequestDto dto) {
+        emailService.sendStyledInspectionEmail(dto);
         return Response.success();
     }
 
