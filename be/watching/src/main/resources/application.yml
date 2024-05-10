@@ -39,3 +39,8 @@ logging:
     org:
       springframework:
         batch: info
+
+server:
+  port: 8089
+  servlet:
+    context-path: /api
