@@ -41,7 +41,8 @@ interface EditToolbarProps {
 export default function WOtestresult() {
   // const { woId } = useWoStore();
   const [testMethod, setTestMethod] = useState<testMethodItem[]>([]);
-  const { checkList, fetchWoDetail, id, fetchWoUpdateTmp, fetchWoDone } = useWoDetailStore();
+  const { checkList, fetchWoDetail, id, fetchWoUpdateTmp, fetchWoDone, jigItemInfo } =
+    useWoDetailStore();
   const { setRightCompo, setWoId } = useCompoStore();
   // id 가 바뀔때마다 새로운 리스트를 불러옴
   useEffect(() => {
@@ -225,7 +226,13 @@ export default function WOtestresult() {
       <div className={styles.clear} onClick={clear}>
         <ClearIcon />
       </div>
-      <div className={styles.header}>Test Result</div>
+
+      <div className={styles.header}>
+        Test Result
+        <p>S/N : {jigItemInfo.serialNo}</p>
+        <p>Model : {jigItemInfo.model}</p>
+      </div>
+
       <div className={styles.body}>
         <Box
           className={styles.box}
