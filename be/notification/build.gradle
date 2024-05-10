@@ -39,6 +39,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
     implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 tasks.named('test') {
