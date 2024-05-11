@@ -1,6 +1,7 @@
 package com.sdi.jig.api;
 
 import com.sdi.jig.entity.nosql.JigNosqlEntity;
+import com.sdi.jig.entity.rdb.JigItemRDBEntity;
 import com.sdi.jig.repository.rdb.JigItemRDBRepository;
 import com.sdi.jig.repository.nosql.JigNosqlRepository;
 import org.json.JSONArray;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
@@ -27,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Transactional
 class JigControllerTest {
 
     @Autowired
@@ -101,7 +104,8 @@ class JigControllerTest {
     @DisplayName("JIG ITEM 폐기")
     public void delete() throws Exception {
         // given
-        String serialNo = "14d51713-3eb5-4d38-af87-31ae7d4c19f3";
+        JigItemRDBEntity jigItemRDB = jigItemRDBRepository.findAll().get(0);
+        String serialNo = jigItemRDB.getSerialNo();
         JSONObject body = new JSONObject();
         body.put("serialNo", serialNo);
 

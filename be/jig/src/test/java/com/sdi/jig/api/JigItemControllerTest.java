@@ -1,9 +1,12 @@
 package com.sdi.jig.api;
 
+import com.sdi.jig.entity.rdb.FacilityItemRDBEntity;
 import com.sdi.jig.entity.rdb.JigItemRDBEntity;
+import com.sdi.jig.repository.rdb.FacilityItemRDBRepository;
 import com.sdi.jig.repository.rdb.JigItemIOHistoryRepository;
 import com.sdi.jig.repository.rdb.JigItemRDBRepository;
 import com.sdi.jig.util.JigStatus;
+import com.sdi.jig.util.TimeCalculator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,16 +45,18 @@ class JigItemControllerTest {
     @Autowired
     private JigItemIOHistoryRepository jigItemIOHistoryRepository;
 
+    @Autowired
+    private FacilityItemRDBRepository facilityItemRDBRepository;
+
     @Test
     @DisplayName("지그 serial-no로 검색")
     public void findBySerialNo() throws Exception {
         // given
-        String serialNo = "869db53f-e9ba-4886-aa06-52d57b5ff07d";
-        JigItemRDBEntity rdb = jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(serialNo).get();
+        JigItemRDBEntity rdb = jigItemRDBRepository.findAll().get(0);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get("/v1/jig-item")
-                .param("serial-no", serialNo)
+                .param("serial-no", rdb.getSerialNo())
                 .contentType(MediaType.APPLICATION_JSON);
 
         // when
@@ -114,12 +120,12 @@ class JigItemControllerTest {
     @DisplayName("지그 사용 가능 확인")
     public void isUsable() throws Exception {
         // given
-        String facilityModel = "f1";
-        String serialNo = "869db53f-e9ba-4886-aa06-52d57b5ff07d";
+        String facilitySerialNo = "fs1";
+        String serialNo = "js1";
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get("/v1/jig-item/usable")
-                .param("facility-model", facilityModel)
+                .param("facility-serial-no", facilitySerialNo)
                 .param("jig-serial-no", serialNo)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -128,10 +134,10 @@ class JigItemControllerTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.result.isUsable").value(false))
-                .andExpect(jsonPath("$.result.data.useCount").value(1))
-                .andExpect(jsonPath("$.result.data.useAccumulationTime").value("24:00:00.000"))
-                .andExpect(jsonPath("$.result.data.repairCount").value(1));
+                .andExpect(jsonPath("$.result.isUsable").value(Optional.of(false)))
+                .andExpect(jsonPath("$.result.data.useCount").value(Optional.of(5)))
+                .andExpect(jsonPath("$.result.data.useAccumulationTime").value(TimeCalculator.millsToString(12789515060L)))
+                .andExpect(jsonPath("$.result.data.repairCount").value(Optional.of(1)));
 
     }
 
@@ -139,11 +145,11 @@ class JigItemControllerTest {
     @DisplayName("지그 상태 변경")
     public void updateStatus() throws Exception {
         // given
-        String serialNo = "14d51713-3eb5-4d38-af87-31ae7d4c19f3";
+        JigItemRDBEntity jigItemRDB = jigItemRDBRepository.findAll().get(0);
         JigStatus jigStatus = JigStatus.OUT;
 
         JSONObject body = new JSONObject();
-        body.put("serialNo", serialNo);
+        body.put("serialNo", jigItemRDB.getSerialNo());
         body.put("status", jigStatus);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
@@ -156,7 +162,7 @@ class JigItemControllerTest {
 
         // then
         perform.andExpect(status().isOk());
-        assertEquals(jigStatus, jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(serialNo).get().getStatus());
+        assertEquals(jigStatus, jigItemRDBRepository.findBySerialNo(jigItemRDB.getSerialNo()).get().getStatus());
     }
 
     @Test
