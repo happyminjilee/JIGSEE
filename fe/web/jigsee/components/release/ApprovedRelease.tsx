@@ -10,18 +10,7 @@ interface lst {
 
 
 export default function ApprovedRelease() {
-  const lst = [
-      {model: 'A100512', model_name: 'razer', count: 5},
-      {model: 'A100513', model_name: 'hammer', count: 5},
-      {model: 'A100514', model_name: 'gas', count: 5},
-      {model: 'A100515', model_name: 'nozzle', count: 5},
-      {model: 'A100516', model_name: 'pad', count: 5},
-      {model: 'A100517', model_name: 'bolts', count: 5},
-      {model: 'A100518', model_name: 'nuts', count: 5},
-      {model: 'A100519', model_name: 'mulnir', count: 5},
-      {model: 'A100520', model_name: 'repulse', count: 5},
-      {model: 'A100521', model_name: 'captain', count: 5},
-  ]
+
   const {serialNos, status, updatedAt} = useReleaseDetailStore()
   const {isClose, setClose} = useReleaseModalStore()
   return (
@@ -39,7 +28,7 @@ export default function ApprovedRelease() {
                       fontWeight: "bold",
                       fontSize: "medium"}}
               >
-                  { status === "PUBLISH" ? `수량 : ${lst.length}` :
+                  { status === "PUBLISH" ? `수량 : ${serialNos.length}` :
                       status ==="FINISH" ? `결재일 : ${updatedAt[0]}. ${updatedAt[1]}. ${updatedAt[2]}`:
                           <div></div>
                 }
