@@ -120,7 +120,7 @@ export default function WOtestresult() {
       standard: method.standard,
       measure: method.measure,
       memo: method.memo,
-      passOrNot: false,
+      passOrNot: method.passOrNot,
     }));
     setRows(newRows);
   }, [testMethod]);
