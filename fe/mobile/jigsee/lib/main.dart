@@ -98,9 +98,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/*Hompage 클래스에 이식 필요
-*
-* */
+/* ==================Hompage 클래스에 이식 필요================== */
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
