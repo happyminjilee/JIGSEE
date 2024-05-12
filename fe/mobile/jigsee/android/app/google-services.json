@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "147584167300",
+    "project_id": "jigsee",
+    "storage_bucket": "jigsee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147584167300:android:1828749e03715087b7c1d1",
+        "android_client_info": {
+          "package_name": "com.example.fcmtest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTuzI5uIn_0EhGRs39jGBNIGNHIfvLjO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147584167300:android:9cdc5509aba4e445b7c1d1",
+        "android_client_info": {
+          "package_name": "com.example.jigsee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTuzI5uIn_0EhGRs39jGBNIGNHIfvLjO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

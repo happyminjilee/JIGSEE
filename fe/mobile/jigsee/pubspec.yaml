@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -23,6 +23,9 @@ dependencies:
   google_ml_kit: ^0.14.0
   image_picker: ^1.1.0
   camera: ^0.10.5+9
+  firebase_core: ^2.8.0
+  firebase_messaging: ^14.3.0
+  flutter_local_notifications: ^13.0.0
 
 dev_dependencies:
   flutter_test:
