@@ -15,7 +15,8 @@ final dioClientProvider = Provider<DioClient>((ref) {
 });
 
 final userNameProvider = FutureProvider<String>((ref) async {
+  String? userName = '';
   const secureStorage = FlutterSecureStorage();
-  String? userName = await secureStorage.read(key: 'userName');
+  userName = await secureStorage.read(key: 'userName');
   return userName ?? 'Unknown User';
 });

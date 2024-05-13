@@ -132,7 +132,6 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
           '/jig-item?serial-no=$scannedText',
       );
       if (response.statusCode == 200) {
-        print(response.data);
         // 응답에 따라 이미지 경로 설정
         setState(() {
           jigData = {

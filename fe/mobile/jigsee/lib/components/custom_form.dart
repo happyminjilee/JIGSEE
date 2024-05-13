@@ -1,16 +1,18 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jigsee/api/provider.dart';
 import 'package:jigsee/components/custom_text_form_field.dart';
 import 'package:jigsee/api/user_auth.dart';
 import 'package:jigsee/consts/size.dart';
 
-class CustomForm extends StatefulWidget {
+class CustomForm extends ConsumerStatefulWidget {
   const CustomForm({Key? key}) : super(key: key);
 
   @override
   _FormPageState createState() => _FormPageState();
 }
-class _FormPageState extends State<CustomForm> {
+class _FormPageState extends ConsumerState<CustomForm> {
   // global key
   final _formkey = GlobalKey<FormState>();
 
@@ -65,6 +67,7 @@ class _FormPageState extends State<CustomForm> {
               /// 유효성 검사
               if (_formkey.currentState!.validate()) {
                 if (await AuthService().login(id, password)) {
+                  ref.refresh(userNameProvider);
                   /// 네비게이터로 화면 이동, routes의 이름을 적어 이동한다
                   Navigator.pushNamed(context, "/home");
                 } else {

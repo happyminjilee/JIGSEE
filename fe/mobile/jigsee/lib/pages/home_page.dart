@@ -24,7 +24,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Future<String?> getMyDeviceToken() async {
     final token = await FirebaseMessaging.instance.getToken();
-    print("내 디바이스 토큰: $token");
     return token;
   }
 
@@ -43,7 +42,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         }
       );
     } catch (e) {
-      print("!!!!!!!!!!!!!!!!!!!!!!!!!!!$e");
+      print("$e");
     }
   }
 
@@ -284,6 +283,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   await storage.delete(key: 'userName');
                   await storage.delete(key: 'employeeNo');
                   await storage.delete(key: 'role');
+                  ref.refresh(userNameProvider);
                   Navigator.of(context).pop();
                   Navigator.pushNamed(context, "/login");
                 } catch (e) {
