@@ -70,12 +70,12 @@ public class WorkOrderService {
 
     public WorkOrderResponseDto findByPerson(String accessToken, String employeeNo, String name, int page, int size) {
         Pageable pageable = getPageable(page, size);
-        if (employeeNo != null) {
+        if (employeeNo != null && !employeeNo.isBlank()) {
             Page<WorkOrderRDBEntity> infos = workOrderRDBRepository.findAllByCreatorEmployeeNoOrderByCreatedAtDesc(employeeNo, pageable);
             return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(accessToken, infos));
-        } else if (name != null) {
+        } else if (name != null && !name.isBlank()) {
             List<String> memberEmployeeNos = memberService.getMemberEmployeeByNames(accessToken, name);
-            Page<WorkOrderRDBEntity> infos = workOrderCriteriaRepository.findByMembers(memberEmployeeNos, pageable);
+            Page<WorkOrderRDBEntity> infos = workOrderRDBRepository.findByCreatorEmployeeNoIn(memberEmployeeNos, pageable);
             return mapToWorkOrderResponseDto(infos, mapToWorkOrderItems(accessToken, infos));
         }
 
@@ -118,7 +118,7 @@ public class WorkOrderService {
         rdb.updateStatus(WorkOrderStatus.FINISH);
 
         // allPassOrNot이 false 일 경우 폐기 요청 전송
-        if(!allPassOrNot){
+        if (!allPassOrNot) {
             jigItemService.deleteBySerialNo(accessToken, rdb.getJigSerialNo());
         }
 
@@ -140,9 +140,9 @@ public class WorkOrderService {
         for (String serialNo : dto.serialNos()) {
             JigItemResponseDto jigItem = getJigItem(accessToken, serialNo);
 
-            try{
+            try {
                 isAlreadyExistNotFinishWorkOrderThenThrow(jigItem);
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 continue;
             }
 
@@ -175,7 +175,7 @@ public class WorkOrderService {
             // 수리완료 - FINISH && TRUE
             Optional<WorkOrderNosqlEntity> workOrderNosql = workOrderNosqlRepository.findById(workOrder.getCheckListId());
             if (Boolean.TRUE.equals(workOrderNosql.get().getPassOrNot())) countRepairFinish++;
-            // 폐기 - FINISH && FALSE
+                // 폐기 - FINISH && FALSE
             else if (Boolean.FALSE.equals(workOrderNosql.get().getPassOrNot())) countDelete++;
         }
 
@@ -214,7 +214,7 @@ public class WorkOrderService {
     }
 
     private WorkOrderResponseDto mapToWorkOrderResponseDto(Page<WorkOrderRDBEntity> infos, List<WorkOrderItem> workOrderItems) {
-        return WorkOrderResponseDto.of(infos.getNumber() + 1, infos.getTotalPages(), workOrderItems);
+        return WorkOrderResponseDto.of(infos.getNumber() + 1, Math.max(1, infos.getTotalPages()), workOrderItems);
     }
 
     private List<WorkOrderItem> mapToWorkOrderItems(String accessToken, Iterable<WorkOrderRDBEntity> infos) {
