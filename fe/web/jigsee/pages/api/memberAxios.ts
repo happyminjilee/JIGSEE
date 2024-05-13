@@ -49,3 +49,15 @@ export const logout = async () => {
       return false;
     });
 };
+
+export const searchUser = async () => {
+  const request = axiosAuthApi();
+  return await request
+      .get("/member/search", {})
+      .then((res) => {
+        return res.data.result
+      })
+      .catch((error) => {
+        console.log(error.message)
+      })
+}

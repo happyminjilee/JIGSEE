@@ -1,5 +1,7 @@
 import { create } from "zustand";
+import {searchUser} from "@/pages/api/memberAxios";
 import { useEffect, useState } from "react";
+import {AxiosResponse} from "axios";
 
 interface user {
   name: string;
@@ -35,3 +37,45 @@ export const userStore = create<user>((set) => ({
     }
   }
 }));
+
+interface searchUser {
+  id: number,
+  name: string,
+  employeeNo: string,
+  role: string,
+  fetchSearchUser: () => void;
+}
+
+
+export const useSearchUser = create<searchUser>((set) => ({
+  id: 0,
+  name: "",
+  employeeNo: "",
+  role: "",
+  fetchSearchUser: async() => {
+    const data = await searchUser();
+    set({
+      id: data.id,
+      name: data.name,
+      employeeNo: data.employeeNo,
+      role: data.role,
+    })
+  }
+}))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

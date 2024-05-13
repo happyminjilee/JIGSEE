@@ -13,6 +13,7 @@ import ReuseModal from "@/components/repair/ReuseModal";
 import DisposeModal from "@/components/repair/DisposeModal";
 import Modal from "@mui/material/Modal";
 import WoModal from "@/components/workorder/template";
+import {useSearchUser} from "@/store/memberstore";
 
 
 interface Option {
@@ -33,6 +34,7 @@ interface Props {
 
 export default function RepairTotal() {
   const { list,fetchUserWo, endPage} = useUserWoListStore()
+  const {employeeNo, fetchSearchUser} = useSearchUser()
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
   useEffect(() => {
     // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
@@ -61,7 +63,7 @@ export default function RepairTotal() {
   const [page, setPage] = useState<number>(1);
   // page와 선택 옵션이 바뀜에 따라 api 호출
   useEffect(() => {
-    const employeeNo = localStorage.getItem("employeeNo") || ""
+    fetchSearchUser()
     const name = localStorage.getItem("name") || ""
     setIsLoading(true); // API 호출 시작 전에 로딩 상태를 true로 설정
     fetchUserWo(employeeNo, name, page, 5)

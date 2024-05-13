@@ -22,7 +22,7 @@ import { useGroupFilter } from "@/store/repairrequeststore";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CreateWoModal from "@/components/workorder/CreateWoModal";
-import { userStore } from "@/store/memberstore";
+import {userStore, useSearchUser} from "@/store/memberstore";
 import ReuseModal from "@/components/repair/ReuseModal";
 import DisposeModal from "@/components/repair/DisposeModal";
 
@@ -30,9 +30,11 @@ export default function Repair() {
   const { rightCompo } = useCompoStore();
   const { fetchWoGroup, publish, progress, finish } = useWoGroupStore();
   const { fetchUserWo } = useUserWoListStore();
+  const {employeeNo,id, name, role, fetchSearchUser} = useSearchUser()
   useEffect(() => {
-    const employeeNo = localStorage.getItem("employeeNo") || "";
+    fetchSearchUser()
     const name = localStorage.getItem("name") || "";
+    console.log('employeeNo', employeeNo, role, name, id)
     fetchUserWo(employeeNo, name, 1, 10)
       .then((res) => {
         console.log("on reapir userwo", res);
