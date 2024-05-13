@@ -36,23 +36,27 @@ public class FcmService {
 
         List<FcmEntity> fcmToken = fcmRepository.findAllByEmployeeNoIn(receivers)
                 .orElseThrow(() -> new IllegalArgumentException("권한 : " + RoleType.PRODUCER + "를 검색하는 데 실패했습니다."));
+        FcmEntity nowFcmEntity = null;
 
         try {
             for (FcmEntity fcmEntity : fcmToken) {
+                nowFcmEntity = fcmEntity;
                 Message message = makeMessage(fcmEntity);
-                saveToNotificationDB(notificationFcmInspectionRequestDto, fcmEntity.getToken());
                 firebaseMessaging.send(message);
+                saveToNotificationDB(notificationFcmInspectionRequestDto, fcmEntity.getToken());
             }
         } catch (FirebaseMessagingException e) {
-            throw new IllegalArgumentException("메시지 전송 중 오류 발생");
+            String errorMessage = "사번 : " + nowFcmEntity.getEmployeeNo() + "메시지 전송 중 오류 발생";
+            fcmRepository.delete(nowFcmEntity);
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 
     private Message makeMessage(FcmEntity fcmEntity) {
         return Message.builder()
                 .setNotification(Notification.builder()
-                        .setTitle("Title")
-                        .setBody("body")
+                        .setTitle("지그 정기 점검 리스트")
+                        .setBody("알림을 눌러 확인해주세요.")
                         .build())
                 .putData("Data1", "Value1")
                 .setToken(fcmEntity.getToken())
@@ -61,7 +65,14 @@ public class FcmService {
 
     public void saveToken(String accessToken, FcmTokenRequestDto fcmTokenRequestDto) {
         MemberInfoDto memberInfoDto = apiService.getMember(accessToken);
-        fcmRepository.save(FcmEntity.from(memberInfoDto.employeeNo(), fcmTokenRequestDto));
+        FcmEntity nowMember = fcmRepository.findByEmployeeNo(memberInfoDto.employeeNo())
+                .orElseThrow(() -> new IllegalArgumentException("사번 : " + memberInfoDto.employeeNo() + "를 검색하는 데 실패했습니다."));
+        if (nowMember == null) {
+            nowMember = FcmEntity.from(memberInfoDto.employeeNo(), fcmTokenRequestDto);
+        } else {
+            nowMember = nowMember.updateToken(fcmTokenRequestDto.token());
+        }
+        fcmRepository.save(nowMember);
     }
 
     private NotificationEntity saveToNotificationDB(NotificationFcmInspectionRequestDto notificationFcmInspectionRequestDto, String receiverId) {

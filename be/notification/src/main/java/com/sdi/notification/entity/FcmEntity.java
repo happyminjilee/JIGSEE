@@ -31,4 +31,9 @@ public class FcmEntity {
     public static FcmEntity from(String employeeNo, FcmTokenRequestDto fcmTokenRequestDto) {
         return new FcmEntity(null, employeeNo, fcmTokenRequestDto.token());
     }
+
+    public FcmEntity updateToken(String token) {
+        this.token = token;
+        return this;
+    }
 }
