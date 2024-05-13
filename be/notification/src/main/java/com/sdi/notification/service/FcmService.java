@@ -46,9 +46,7 @@ public class FcmService {
                 saveToNotificationDB(notificationFcmInspectionRequestDto, fcmEntity.getToken());
             }
         } catch (FirebaseMessagingException e) {
-            String errorMessage = "사번 : " + nowFcmEntity.getEmployeeNo() + "메시지 전송 중 오류 발생";
             fcmRepository.delete(nowFcmEntity);
-            throw new IllegalArgumentException(errorMessage);
         }
     }
 
