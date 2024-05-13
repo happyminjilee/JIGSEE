@@ -30,7 +30,7 @@ public interface JigClient {
                                               @RequestParam(name = "month", required = false) Integer month);
 
     @GetMapping("/count")
-    Response<JigModelCountResponseDto> jigCountStatus(@RequestParam(name = "status") JigStatus status);
+    Response<JigModelCountResponseDto> jigCountStatus();
 
     @GetMapping("/update-check-list")
     Response<JigUpdatedCheckListResponseDto> updatedCheckList(@RequestParam(name = "year", required = false) Integer year,

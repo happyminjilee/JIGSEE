@@ -51,11 +51,9 @@ class JigController {
     }
 
     @GetMapping("/count")
-    Response<JigModelCountResponseDto> jigCountStatus(HttpServletRequest request,
-                                                      @RequestParam(name = "status") JigStatus status) {
+    Response<JigModelCountResponseDto> jigCountStatus(HttpServletRequest request) {
         memberController.producerCheck(request);
-        log.info("{} 모델별 상태 갯수 조회 요청", status);
-        return jigClient.jigCountStatus(status);
+        return jigClient.jigCountStatus();
     }
 
     @GetMapping("/update-check-list")

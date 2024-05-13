@@ -8,7 +8,8 @@ public record JigModelCountResponseDto(
 ) {
     public record JigModelCount(
             String model,
-            int count
+            int countReady,
+            int countWarehouse
     ){
 
     }
