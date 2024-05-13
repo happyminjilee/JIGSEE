@@ -3,6 +3,7 @@ package com.sdi.apiserver.api.member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sdi.apiserver.api.member.client.MemberClient;
 import com.sdi.apiserver.api.member.dto.request.LoginRequestDto;
+import com.sdi.apiserver.api.member.dto.request.MemberSearchByMemberListRequestDto;
 import com.sdi.apiserver.api.member.dto.response.LoginResponseDto;
 import com.sdi.apiserver.api.member.dto.response.MemberEmailResponseDto;
 import com.sdi.apiserver.api.member.dto.response.MemberResponseDto;
@@ -99,5 +100,10 @@ public class MemberController {
     public Response<Void> producerCheck(HttpServletRequest request) {
         String accessToken = HeaderUtils.getAccessToken(request);
         return memberClient.producerCheck(accessToken);
+    }
+
+    @PostMapping("/member/search/name/list")
+    Response<List<MemberResponseDto>> searchByNameList(@RequestBody MemberSearchByMemberListRequestDto dto){
+        return memberClient.searchByNameList(dto);
     }
 }
