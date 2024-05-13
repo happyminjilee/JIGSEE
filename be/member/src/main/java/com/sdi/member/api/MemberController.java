@@ -2,6 +2,7 @@ package com.sdi.member.api;
 
 import com.sdi.member.application.MemberService;
 import com.sdi.member.dto.request.MemberLoginRequestDto;
+import com.sdi.member.dto.request.MemberSearchByMemberListRequestDto;
 import com.sdi.member.dto.response.MemberEmailResponseDto;
 import com.sdi.member.dto.response.MemberLoginResponseDto;
 import com.sdi.member.dto.response.MemberResponseDto;
@@ -84,4 +85,9 @@ class MemberController {
 
     @GetMapping("/producer")
     Response<Void> producerCheck() { return Response.success(); }
+
+    @PostMapping("/member/search/name/list")
+    Response<List<MemberResponseDto>> searchByNameList(@RequestBody MemberSearchByMemberListRequestDto dto){
+        return Response.success(memberService.searchByNameList(dto.list()));
+    }
 }
