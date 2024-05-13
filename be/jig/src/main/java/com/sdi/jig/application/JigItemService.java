@@ -126,7 +126,7 @@ public class JigItemService {
 
     @Transactional
     public void recoveryBySerialNo(String serialNo) {
-        JigItemRDBEntity jigItem = getJigItemBySerialNo(serialNo);
+        JigItemRDBEntity jigItem = getDeletedJigItemBySerialNo(serialNo);
         jigItem.recovery();
     }
 
@@ -289,6 +289,11 @@ public class JigItemService {
 
     private JigItemRDBEntity getJigItemBySerialNo(String jigSerialNo) {
         return jigItemRDBRepository.findBySerialNoAndIsDeleteFalse(jigSerialNo)
+                .orElseThrow(() -> new IllegalArgumentException("serial 번호로 JIG ITEM을 찾을 수 없습니다."));
+    }
+
+    private JigItemRDBEntity getDeletedJigItemBySerialNo(String jigSerialNo) {
+        return jigItemRDBRepository.findBySerialNoAndIsDeleteTrue(jigSerialNo)
                 .orElseThrow(() -> new IllegalArgumentException("serial 번호로 JIG ITEM을 찾을 수 없습니다."));
     }
 

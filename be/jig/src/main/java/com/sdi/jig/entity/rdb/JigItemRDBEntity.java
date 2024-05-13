@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -50,25 +51,31 @@ public class JigItemRDBEntity {
     @OneToMany(mappedBy = "jigItem")
     private List<JigItemInspectionRDBEntity> inspection;
 
+    @Column(name = "deleted_time")
+    private LocalDateTime deletedTime;
+
     public static JigItemRDBEntity from(String serialNo, JigRDBEntity jigRDBEntity) {
         return new JigItemRDBEntity(null, serialNo, JigStatus.WAREHOUSE, 0L, false, jigRDBEntity,
-                null, null, null, null);
+                null, null, null, null, null);
     }
 
     public void delete() {
         this.isDelete = true;
         this.status = JigStatus.DELETE;
+        this.deletedTime = LocalDateTime.now();
     }
 
     public void updateState(JigStatus status) {
         this.status = status;
         if(status != JigStatus.DELETE && this.isDelete){ // 삭제되어 있으면 취소
             this.isDelete = false;
+            this.deletedTime = null;
         }
     }
 
     public void recovery() {
         this.isDelete = false;
+        this.deletedTime = null;
     }
 
     public void addAccumulateTime(JigItemIOHistoryRDBEntity recentIn) {
