@@ -49,5 +49,5 @@ public interface MemberClient {
     Response<Void> producerCheck(@RequestHeader("Authorization") String accessToken);
 
     @PostMapping("/member/search/name/list")
-    Response<List<MemberResponseDto>> searchByNameList(@RequestBody MemberSearchByMemberListRequestDto dto);
+    Response<List<MemberResponseDto>> searchByNameList(@RequestHeader("Authorization") String accessToken, @RequestBody MemberSearchByMemberListRequestDto dto);
 }

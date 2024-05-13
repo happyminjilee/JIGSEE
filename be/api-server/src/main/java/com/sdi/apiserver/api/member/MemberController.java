@@ -103,7 +103,8 @@ public class MemberController {
     }
 
     @PostMapping("/member/search/name/list")
-    Response<List<MemberResponseDto>> searchByNameList(@RequestBody MemberSearchByMemberListRequestDto dto){
-        return memberClient.searchByNameList(dto);
+    Response<List<MemberResponseDto>> searchByNameList(HttpServletRequest httpServletRequest, @RequestBody MemberSearchByMemberListRequestDto dto){
+        String accessToken = HeaderUtils.getAccessToken(httpServletRequest);
+        return memberClient.searchByNameList(accessToken, dto);
     }
 }
