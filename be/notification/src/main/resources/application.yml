@@ -56,6 +56,5 @@ security:
   max-age: ${MAX_AGE}
   refresh-token-prefix: ${REFRESH_TOKEN_PREFIX}
 ---
-
 apis:
   api-base-url: ${API_BASE_URL}
