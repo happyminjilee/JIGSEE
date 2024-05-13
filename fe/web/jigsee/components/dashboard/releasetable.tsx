@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import styled from "@/styles/dashboard/releasetable.module.scss";
 
 interface Item {
   name: string;
@@ -24,6 +25,7 @@ export default function Releasetable() {
         aria-label="Example table with client side sorting"
         selectionMode="single"
         color="primary"
+        className={styled.table}
       >
         <TableHeader>
           <TableColumn key="name">모델</TableColumn>

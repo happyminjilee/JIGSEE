@@ -76,11 +76,14 @@ export default function EngineerNavbar() {
   const navigateToAlarm = () => {
     router.push("/alarm");
   };
+  const navigateToDashboard = () => {
+    router.push("/dashboard/engineer");
+  };
   return (
     <>
       <Box style={{ paddingTop: "5px" }}>
         <List sx={{ display: "flex", paddingTop: "5px" }}>
-          <ListItem>
+          <ListItem onClick={navigateToDashboard}>
             <img
               src="/images/sdi-logo.svg"
               alt="Logo"
