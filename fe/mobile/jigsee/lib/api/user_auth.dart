@@ -27,6 +27,7 @@ class AuthService {
 
       if (response.statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
+        print(data);
         await _storage.write(key: 'accessToken', value: response.headers['authorization']);
         await _storage.write(key: 'refreshToken', value: response.headers['refreshtoken']);
         await _storage.write(key: 'userName', value: data['result']['name']);
@@ -69,6 +70,5 @@ class AuthService {
 
   Future<void> logout() async {
     await _storage.deleteAll();
-    // Additional logout operations like navigating to the login screen
   }
 }
