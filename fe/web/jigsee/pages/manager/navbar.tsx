@@ -76,7 +76,7 @@ export default function ManagerNavbar() {
     router.push("/alarm");
   };
   const navigateToDashboard = () => {
-    router.push("/dashboard/engineer");
+    router.push("/dashboard/manager");
   };
   return (
     <>
