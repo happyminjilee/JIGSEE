@@ -9,12 +9,10 @@ import com.sdi.apiserver.api.request_response.dto.response.RequestJigDetailRespo
 import com.sdi.apiserver.api.request_response.dto.response.RequestJigListResponseDto;
 import com.sdi.apiserver.util.Response;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-
 @FeignClient(name = "notificationApiClient", url = "${apis.notification-api-base-url}")
 public interface NotificationApiClient {
     final String ACCESS_TOKEN_PREFIX = "Authorization";
@@ -44,4 +42,5 @@ public interface NotificationApiClient {
 
     @GetMapping("/request/repair/detail")
     Response<RepairJigDetailResponseDto> findOneRepairRequest(@RequestParam(value = "repair-jig-id") String requestId);
+
 }
