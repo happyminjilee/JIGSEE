@@ -1,10 +1,7 @@
 package com.sdi.work_order.application;
 
 import com.sdi.work_order.client.response.JigItemResponseDto;
-import com.sdi.work_order.dto.reponse.WorkOrderDetailResponseDto;
-import com.sdi.work_order.dto.reponse.WorkOrderDoneResponseDto;
-import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
-import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
+import com.sdi.work_order.dto.reponse.*;
 import com.sdi.work_order.dto.request.WorkOrderAutoCreateRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
 import com.sdi.work_order.entity.WorkOrderNosqlEntity;
@@ -22,10 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.UpdateStatusItem;
@@ -158,6 +154,47 @@ public class WorkOrderService {
         }
     }
 
+    public WorkOrderStatusResponseDto getStatus(String employeeNo, Integer year, Integer month) {
+        Map<String, LocalDateTime> startAndEndDate = integerToLocalDateTime(year, month);
+
+        LocalDateTime startDate = startAndEndDate.get("startDate");
+        LocalDateTime endDate = startAndEndDate.get("endDate");
+
+        List<WorkOrderRDBEntity> monthFinishWorkOrderList =
+                workOrderRDBRepository.findAllByCreatorEmployeeNoAndStatusAndCreatedAtBetween(
+                        employeeNo,
+                        WorkOrderStatus.FINISH,
+                        startDate,
+                        endDate
+                );
+
+        int countRepairFinish = 0;
+        int countDelete = 0;
+
+        for (WorkOrderRDBEntity workOrder : monthFinishWorkOrderList) {
+            // 수리완료 - FINISH && TRUE
+            Optional<WorkOrderNosqlEntity> workOrderNosql = workOrderNosqlRepository.findById(workOrder.getCheckListId());
+            if (Boolean.TRUE.equals(workOrderNosql.get().getPassOrNot())) countRepairFinish++;
+            // 폐기 - FINISH && FALSE
+            else if (Boolean.FALSE.equals(workOrderNosql.get().getPassOrNot())) countDelete++;
+        }
+
+        // 수리중 - PROGRESS
+        int countRepairing = workOrderRDBRepository.countByCreatorEmployeeNoAndStatus(employeeNo, WorkOrderStatus.PROGRESS);
+
+        return WorkOrderStatusResponseDto.of(countRepairFinish, countDelete, countRepairing);
+    }
+
+    public WorkOrderCountResponseDto countRepairRequest(Integer year, Integer month) {
+        Map<String, LocalDateTime> startAndEndDate = integerToLocalDateTime(year, month);
+
+        LocalDateTime startDate = startAndEndDate.get("startDate");
+        LocalDateTime endDate = startAndEndDate.get("endDate");
+
+        int count = workOrderRDBRepository.countByStatusNotAndCreatedAtBetween(WorkOrderStatus.PUBLISH, startDate, endDate);
+        return new WorkOrderCountResponseDto(count);
+    }
+
     private void saveWorkOrder(WorkOrderRDBEntity rdb, WorkOrderNosqlEntity nosql) {
         workOrderRDBRepository.save(rdb);
         workOrderNosqlRepository.save(nosql);
@@ -239,6 +276,25 @@ public class WorkOrderService {
     private WorkOrderNosqlEntity getNosqlWorkOrderCheckList(String checkListId) {
         return workOrderNosqlRepository.findById(checkListId)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("id : %s 로 Work order CheckList를 찾을 수 없습니다.", checkListId)));
+    }
+
+    private Map<String, LocalDateTime> integerToLocalDateTime(Integer year, Integer month) {
+        if (year == null) {
+            year = Calendar.getInstance().get(Calendar.YEAR);
+        }
+        if (month == null) {
+            month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        }
+
+        // 월의 시작과 끝
+        LocalDateTime startDate = YearMonth.of(year, month).atDay(1).atStartOfDay();
+        LocalDateTime endDate = YearMonth.of(year, month).atEndOfMonth().atTime(23, 59, 59);
+
+        Map<String, LocalDateTime> startAndEndDate = new HashMap<>();
+        startAndEndDate.put("startDate", startDate);
+        startAndEndDate.put("endDate", endDate);
+
+        return startAndEndDate;
     }
 
 }
