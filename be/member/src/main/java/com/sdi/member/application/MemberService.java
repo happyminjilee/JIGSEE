@@ -174,4 +174,10 @@ public class MemberService {
                 .map(MemberResponseDto::fromEntity)
                 .toList();
     }
+
+    public List<MemberResponseDto> searchByNameList(List<String> names) {
+        return memberRepository.findByNameIn(names).stream()
+                .map(MemberResponseDto::fromEntity)
+                .toList();
+    }
 }
