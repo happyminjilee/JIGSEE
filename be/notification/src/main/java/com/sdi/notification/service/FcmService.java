@@ -66,12 +66,9 @@ public class FcmService {
     public void saveToken(String accessToken, FcmTokenRequestDto fcmTokenRequestDto) {
         MemberInfoDto memberInfoDto = apiService.getMember(accessToken);
         FcmEntity nowMember = fcmRepository.findByEmployeeNo(memberInfoDto.employeeNo())
-                .orElseThrow(() -> new IllegalArgumentException("사번 : " + memberInfoDto.employeeNo() + "를 검색하는 데 실패했습니다."));
-        if (nowMember == null) {
-            nowMember = FcmEntity.from(memberInfoDto.employeeNo(), fcmTokenRequestDto);
-        } else {
-            nowMember = nowMember.updateToken(fcmTokenRequestDto.token());
-        }
+                .orElse(FcmEntity.from(memberInfoDto.employeeNo(), fcmTokenRequestDto));
+        nowMember = nowMember.updateToken(fcmTokenRequestDto.token());
+        
         fcmRepository.save(nowMember);
     }
 
