@@ -1,6 +1,6 @@
 package com.sdi.jig.application;
 
-import com.sdi.jig.client.NotificationApiClient;
+import com.sdi.jig.client.WorkOrderClient;
 import com.sdi.jig.dto.response.JigModelCountResponseDto;
 import com.sdi.jig.dto.response.JigModelCountResponseDto.JigModelCount;
 import com.sdi.jig.dto.response.JigMonthResponseDto;
@@ -38,7 +38,7 @@ public class JigService {
     private final JigNosqlRepository jigNosqlRepository;
     private final JigItemIOHistoryRepository jigItemIOHistoryRepository;
     private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
-    private final NotificationApiClient notificationApiClient;
+    private final WorkOrderClient workOrderClient;
 
     public JigResponseDto findByModel(String model) {
         JigRDBEntity rdb = getJigRdbEntityByModel(model);
@@ -55,7 +55,7 @@ public class JigService {
     }
 
     public JigMonthResponseDto monthStatus(String accessToken, Integer year, Integer month) {
-        TreeMap<String, LocalDateTime> startAndEndDate = integerToLocalDateTime(year, month);
+        Map<String, LocalDateTime> startAndEndDate = integerToLocalDateTime(year, month);
 
         LocalDateTime startDate = startAndEndDate.get("startDate");
         LocalDateTime endDate = startAndEndDate.get("endDate");
@@ -67,7 +67,7 @@ public class JigService {
         int countChange = jigItemIOHistoryRepository.countByInOutTimeBetweenAndStatus(startDate, endDate, IOStatus.OUT);
 
         // 보수 요청 갯수
-        int countRepairRequest = notificationApiClient.countRepairRequest(accessToken, year, month).getResult().count();
+        int countRepairRequest = workOrderClient.countRepairRequest(accessToken, year, month).getResult().count();
 
         // 보수 완료 갯수
         int countRepairFinish = jigItemRepairHistoryRepository.countByRepairTimeBetween(startDate, endDate);
@@ -89,7 +89,7 @@ public class JigService {
     }
 
     public JigUpdatedCheckListResponseDto updatedCheckList(Integer year, Integer month) {
-        TreeMap<String, LocalDateTime> startAndEndDate = integerToLocalDateTime(year, month);
+        Map<String, LocalDateTime> startAndEndDate = integerToLocalDateTime(year, month);
 
         LocalDateTime startDate = startAndEndDate.get("startDate");
         LocalDateTime endDate = startAndEndDate.get("endDate");
@@ -114,7 +114,7 @@ public class JigService {
                 .orElseThrow(() -> new IllegalArgumentException("모델을 찾을 수 없습니다."));
     }
 
-    private TreeMap<String, LocalDateTime> integerToLocalDateTime(Integer year, Integer month) {
+    private Map<String, LocalDateTime> integerToLocalDateTime(Integer year, Integer month) {
         if (year == null) {
             year = Calendar.getInstance().get(Calendar.YEAR);
         }
@@ -126,7 +126,7 @@ public class JigService {
         LocalDateTime startDate = YearMonth.of(year, month).atDay(1).atStartOfDay();
         LocalDateTime endDate = YearMonth.of(year, month).atEndOfMonth().atTime(23, 59, 59);
 
-        TreeMap<String, LocalDateTime> startAndEndDate = new TreeMap<>();
+        Map<String, LocalDateTime> startAndEndDate = new HashMap<>();
         startAndEndDate.put("startDate", startDate);
         startAndEndDate.put("endDate", endDate);
 
