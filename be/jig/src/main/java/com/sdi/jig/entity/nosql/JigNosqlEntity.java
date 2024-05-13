@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "jigs")
@@ -19,8 +20,10 @@ public class JigNosqlEntity {
     @Id
     private String id; // model명이 id
     private List<CheckItem> checkList;
+    private LocalDateTime updatedAt;
 
     public void updateCheckList(List<CheckItem> checkList) {
         this.checkList = checkList;
+        this.updatedAt = LocalDateTime.now();
     }
 }
