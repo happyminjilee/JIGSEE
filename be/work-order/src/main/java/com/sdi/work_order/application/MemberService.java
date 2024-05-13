@@ -25,13 +25,12 @@ public class MemberService {
 
     public List<String> getMemberEmployeeByNames(String accessToken, String name) {
         return getMemberListResponseDtoByName(accessToken, name)
-                .list()
                 .stream()
-                .map(MemberResponseDto::name)
+                .map(MemberResponseDto::employeeNo)
                 .toList();
     }
 
-    private MemberListResponseDto getMemberListResponseDtoByName(String accessToken, String name) {
+    private List<MemberResponseDto> getMemberListResponseDtoByName(String accessToken, String name) {
         return memberClient.findMemberByName(accessToken, name).getResult();
     }
 

@@ -20,6 +20,8 @@ public interface WorkOrderRDBRepository extends JpaRepository<WorkOrderRDBEntity
 
     Page<WorkOrderRDBEntity> findByStatusOrderByCreatedAtDesc(WorkOrderStatus status, Pageable pageable);
 
+    Page<WorkOrderRDBEntity> findByCreatorEmployeeNoIn(List<String> employeeNo, Pageable pageable);
+
     Optional<WorkOrderRDBEntity> findByJigSerialNoAndStatusNot(String jigSerialNo, WorkOrderStatus status);
 
     List<WorkOrderRDBEntity> findAllByCreatorEmployeeNoAndStatusAndCreatedAtBetween(String employeeNo, WorkOrderStatus workOrderStatus, LocalDateTime startDate, LocalDateTime endDate);
