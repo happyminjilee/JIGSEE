@@ -1,14 +1,12 @@
 package com.sdi.work_order.api;
 
-import com.sdi.work_order.dto.reponse.WorkOrderDetailResponseDto;
-import com.sdi.work_order.dto.reponse.WorkOrderDoneResponseDto;
-import com.sdi.work_order.dto.reponse.WorkOrderGroupingResponseDto;
-import com.sdi.work_order.dto.reponse.WorkOrderResponseDto;
+import com.sdi.work_order.application.WorkOrderService;
+import com.sdi.work_order.client.MemberClient;
+import com.sdi.work_order.dto.reponse.*;
 import com.sdi.work_order.dto.request.WorkOrderAutoCreateRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderCreateRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderSaveRequestDto;
 import com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto;
-import com.sdi.work_order.application.WorkOrderService;
 import com.sdi.work_order.util.Response;
 import com.sdi.work_order.util.WorkOrderStatus;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +23,7 @@ class WorkOrderController {
     private static final String ACCESS_TOKEN_PREFIX = "Authorization";
 
     private final WorkOrderService workOrderService;
+    private final MemberClient memberClient;
 
     @GetMapping("/detail")
     Response<WorkOrderDetailResponseDto> detail(@RequestParam(name = "work-order-id") Long workOrderId, HttpServletRequest request) {
@@ -94,6 +93,15 @@ class WorkOrderController {
         log.info("\'{}\' 자동 저장 요청", dto);
         workOrderService.autoCreate(getAccessToken(request), dto);
         return Response.success();
+    }
+
+    @GetMapping("/member/status")
+    Response<WorkOrderStatusResponseDto> getStatus(HttpServletRequest request,
+                                                   @RequestParam(name = "year", required = false) Integer year,
+                                                   @RequestParam(name = "month", required = false) Integer month) {
+        String employeeNo = memberClient.findMemberByToken(getAccessToken(request)).getResult().employeeNo();
+        log.info("{} 사용자의 {}년 {}월 WO 현황 조회", employeeNo, year, month);
+        return Response.success(workOrderService.getStatus(employeeNo, year, month));
     }
 
     private String getAccessToken(HttpServletRequest request) {
