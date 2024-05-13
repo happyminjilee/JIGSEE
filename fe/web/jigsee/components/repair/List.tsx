@@ -141,9 +141,7 @@ export default function RequestList() {
                       }
                   </div>
               </div>
-              <ReactQueryDevtools/>
           </QueryClientProvider>
-
       </>
   );
 }
