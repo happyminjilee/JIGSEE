@@ -155,7 +155,7 @@ public class WorkOrderService {
     }
 
     public WorkOrderStatusResponseDto getStatus(String employeeNo, Integer year, Integer month) {
-        TreeMap<String, LocalDateTime> startAndEndDate = integerToLocalDateTime(year, month);
+        Map<String, LocalDateTime> startAndEndDate = integerToLocalDateTime(year, month);
 
         LocalDateTime startDate = startAndEndDate.get("startDate");
         LocalDateTime endDate = startAndEndDate.get("endDate");
@@ -183,6 +183,16 @@ public class WorkOrderService {
         int countRepairing = workOrderRDBRepository.countByCreatorEmployeeNoAndStatus(employeeNo, WorkOrderStatus.PROGRESS);
 
         return WorkOrderStatusResponseDto.of(countRepairFinish, countDelete, countRepairing);
+    }
+
+    public WorkOrderCountResponseDto countRepairRequest(Integer year, Integer month) {
+        Map<String, LocalDateTime> startAndEndDate = integerToLocalDateTime(year, month);
+
+        LocalDateTime startDate = startAndEndDate.get("startDate");
+        LocalDateTime endDate = startAndEndDate.get("endDate");
+
+        int count = workOrderRDBRepository.countByStatusNotAndCreatedAtBetween(WorkOrderStatus.PUBLISH, startDate, endDate);
+        return new WorkOrderCountResponseDto(count);
     }
 
     private void saveWorkOrder(WorkOrderRDBEntity rdb, WorkOrderNosqlEntity nosql) {
@@ -268,7 +278,7 @@ public class WorkOrderService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("id : %s 로 Work order CheckList를 찾을 수 없습니다.", checkListId)));
     }
 
-    private TreeMap<String, LocalDateTime> integerToLocalDateTime(Integer year, Integer month) {
+    private Map<String, LocalDateTime> integerToLocalDateTime(Integer year, Integer month) {
         if (year == null) {
             year = Calendar.getInstance().get(Calendar.YEAR);
         }
@@ -280,7 +290,7 @@ public class WorkOrderService {
         LocalDateTime startDate = YearMonth.of(year, month).atDay(1).atStartOfDay();
         LocalDateTime endDate = YearMonth.of(year, month).atEndOfMonth().atTime(23, 59, 59);
 
-        TreeMap<String, LocalDateTime> startAndEndDate = new TreeMap<>();
+        Map<String, LocalDateTime> startAndEndDate = new HashMap<>();
         startAndEndDate.put("startDate", startDate);
         startAndEndDate.put("endDate", endDate);
 

@@ -104,6 +104,13 @@ class WorkOrderController {
         return Response.success(workOrderService.getStatus(employeeNo, year, month));
     }
 
+    @GetMapping("/count/repair-request")
+    Response<WorkOrderCountResponseDto> countRepairRequest(@RequestParam(name = "year", required = false) Integer year,
+                                                            @RequestParam(name = "month", required = false) Integer month) {
+        log.info("{}년 {}월 수리 요청 갯수 조회", year, month);
+        return Response.success(workOrderService.countRepairRequest(year, month));
+    }
+
     private String getAccessToken(HttpServletRequest request) {
         return request.getHeader(ACCESS_TOKEN_PREFIX);
     }

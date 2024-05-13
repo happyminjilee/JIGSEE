@@ -25,4 +25,6 @@ public interface WorkOrderRDBRepository extends JpaRepository<WorkOrderRDBEntity
     List<WorkOrderRDBEntity> findAllByCreatorEmployeeNoAndStatusAndCreatedAtBetween(String employeeNo, WorkOrderStatus workOrderStatus, LocalDateTime startDate, LocalDateTime endDate);
 
     int countByCreatorEmployeeNoAndStatus(String employeeNo, WorkOrderStatus workOrderStatus);
+
+    int countByStatusNotAndCreatedAtBetween(WorkOrderStatus workOrderStatus, LocalDateTime startDate, LocalDateTime endDate);
 }
