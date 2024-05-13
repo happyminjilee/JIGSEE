@@ -1,3 +1,4 @@
+import { eraseCookie, setCookie } from "@/utils/cookie";
 import { axiosApi, axiosAuthApi } from "@/utils/instance";
 
 export const login = async (employeeNo: string, password: string) => {
@@ -14,6 +15,8 @@ export const login = async (employeeNo: string, password: string) => {
     .then((response) => {
       localStorage.setItem("access_token", response.headers["authorization"]);
       localStorage.setItem("refresh_token", response.headers["refreshtoken"]);
+      setCookie("refresh_token", response.headers["refreshtoken"], 7);
+      setCookie("role", response.data.result.role.toLowerCase(), 7);
       // console.log('response login', response.headers)
       // console.log(localStorage.getItem('refresh_token'))
       return {
@@ -39,6 +42,8 @@ export const logout = async () => {
     .post("/logout", {}, {})
     // 로그아웃 성공 시 local storage 삭제
     .then((response) => {
+      eraseCookie("refresh_token");
+      eraseCookie("role");
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
       return true;
