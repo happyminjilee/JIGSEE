@@ -50,4 +50,8 @@ public interface WorkOrderClient {
     Response<WorkOrderStatusResponseDto> getStatus(@RequestHeader(name = ACCESS_TOKEN_PREFIX) String accessToken,
                                                    @RequestParam(name = "year") Integer year,
                                                    @RequestParam(name = "month") Integer month);
+
+    @GetMapping("/count/repair-request")
+    Response<WorkOrderCountResponseDto> countRepairRequest(@RequestParam(name = "year", required = false) Integer year,
+                                                           @RequestParam(name = "month", required = false) Integer month);
 }

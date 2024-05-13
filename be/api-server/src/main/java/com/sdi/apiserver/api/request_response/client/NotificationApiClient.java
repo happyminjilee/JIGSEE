@@ -3,17 +3,17 @@ package com.sdi.apiserver.api.request_response.client;
 import com.sdi.apiserver.api.request_response.dto.request.RepairJigRequestDto;
 import com.sdi.apiserver.api.request_response.dto.request.RequestJigRequestDto;
 import com.sdi.apiserver.api.request_response.dto.request.ResponseJigRequestDto;
-import com.sdi.apiserver.api.request_response.dto.response.*;
+import com.sdi.apiserver.api.request_response.dto.response.RepairJigDetailResponseDto;
+import com.sdi.apiserver.api.request_response.dto.response.RepairJigListResponseDto;
+import com.sdi.apiserver.api.request_response.dto.response.RequestJigDetailResponseDto;
+import com.sdi.apiserver.api.request_response.dto.response.RequestJigListResponseDto;
 import com.sdi.apiserver.util.Response;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-
 @FeignClient(name = "notificationApiClient", url = "${apis.notification-api-base-url}")
-
 public interface NotificationApiClient {
     final String ACCESS_TOKEN_PREFIX = "Authorization";
     @PostMapping("/request/jig")
@@ -43,7 +43,4 @@ public interface NotificationApiClient {
     @GetMapping("/request/repair/detail")
     Response<RepairJigDetailResponseDto> findOneRepairRequest(@RequestParam(value = "repair-jig-id") String requestId);
 
-    @GetMapping("/request/count/repair")
-    Response<RequestCountRepairResponseDto> countRepair(@RequestParam(name = "year") Integer year,
-                                                        @RequestParam(name = "month") Integer month);
 }

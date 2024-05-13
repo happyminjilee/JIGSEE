@@ -66,14 +66,6 @@ public class RequestController {
         return notificationApiClient.findOneRepairRequest(id);
     }
 
-    @GetMapping("/count/repair")
-    Response<RequestCountRepairResponseDto> countRepair(HttpServletRequest request,
-                                                        @RequestParam(name = "year", required = false) Integer year,
-                                                        @RequestParam(name = "month", required = false) Integer month) {
-        memberController.producerCheck(request);
-        return notificationApiClient.countRepair(year, month);
-    }
-
     private String getAccessToken(HttpServletRequest request) {
         return request.getHeader(ACCESS_TOKEN_PREFIX);
     }

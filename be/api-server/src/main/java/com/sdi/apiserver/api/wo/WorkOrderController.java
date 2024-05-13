@@ -85,6 +85,14 @@ public class WorkOrderController {
         return workOrderClient.getStatus(accessToken, year, month);
     }
 
+    @GetMapping("/count/repair-request")
+    Response<WorkOrderCountResponseDto> countRepairRequest(HttpServletRequest request,
+                                                           @RequestParam(name = "year", required = false) Integer year,
+                                                           @RequestParam(name = "month", required = false) Integer month) {
+        memberController.producerCheck(request);
+        return workOrderClient.countRepairRequest(year, month);
+    }
+
     private String getAccessToken(HttpServletRequest request) {
         return request.getHeader(HttpHeaders.AUTHORIZATION);
     }
