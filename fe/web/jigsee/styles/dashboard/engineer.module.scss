@@ -5,7 +5,7 @@
   height: 85vh; /* Full viewport height */
   width: 100%;
   flex-direction: column;
-  border: 1px solid black;
+  // border: 1px solid black;
 }
 .report {
   display: flex;
@@ -18,12 +18,14 @@
 }
 .middle {
   display: flex;
-  justify-content: space-between; /* Center horizontally */
+  justify-content: center; /* Center horizontally */
   align-items: center;
   flex-direction: row;
   // border: 1px solid blue;
   height: 40vh; /* Full viewport height */
   width: 100%;
+  padding-left: 70px;
+  margin-top: 20px;
 }
 .jiglocation {
   display: flex;
@@ -48,7 +50,7 @@
   justify-content: space-between; /* Center horizontally */
   align-items: center;
   flex-direction: row;
-  border: 1px solid blue;
+  // border: 1px solid blue;
   height: 30vh; /* Full viewport height */
   width: 100%;
 }
@@ -57,7 +59,7 @@
   justify-content: center; /* Center horizontally */
   align-items: center;
   flex-direction: row;
-  border: 1px solid blue;
+  // border: 1px solid blue;
   height: 30vh; /* Full viewport height */
   width: 30vw;
 }
@@ -66,7 +68,7 @@
   justify-content: center; /* Center horizontally */
   align-items: center;
   flex-direction: row;
-  border: 1px solid blue;
+  // border: 1px solid blue;
   height: 30vh; /* Full viewport height */
   width: 70vw;
 }
