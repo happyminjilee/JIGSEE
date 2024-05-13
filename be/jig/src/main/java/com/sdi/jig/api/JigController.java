@@ -40,8 +40,8 @@ class JigController {
     }
 
     @GetMapping("/count")
-    Response<JigModelCountResponseDto> jigCountStatus(@RequestParam(name = "status") JigStatus status) {
-        return Response.success(jigService.jigCountStatus(status));
+    Response<JigModelCountResponseDto> jigCountStatus() {
+        return Response.success(jigService.jigCountStatus());
     }
 
     @GetMapping("/update-check-list")

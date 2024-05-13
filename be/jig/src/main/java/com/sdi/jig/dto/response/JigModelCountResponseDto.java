@@ -12,10 +12,11 @@ public record JigModelCountResponseDto(
 
     public record JigModelCount(
             String model,
-            int count
+            int countReady,
+            int countWarehouse
     ){
-        public static JigModelCount of(String model, int count){
-            return new JigModelCount(model, count);
+        public static JigModelCount of(String model, int countReady, int countWarehouse){
+            return new JigModelCount(model, countReady, countWarehouse);
         }
     }
 }

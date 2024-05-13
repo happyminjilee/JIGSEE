@@ -75,14 +75,14 @@ public class JigService {
         return new JigMonthResponseDto(countDelete, countChange, countRepairRequest, countRepairFinish);
     }
 
-    public JigModelCountResponseDto jigCountStatus(JigStatus status) {
+    public JigModelCountResponseDto jigCountStatus() {
         List<JigRDBEntity> jigList = jigRDBRepository.findAll();
         List<JigModelCount> jigModelCountList = new ArrayList<>();
 
         for (JigRDBEntity jig : jigList) {
-            int count = jigItemRDBRepository.countByStatusAndJigId(status, jig.getId());
-            if (count == 0) continue;
-            jigModelCountList.add(JigModelCount.of(jig.getModel(), count));
+            int countReady = jigItemRDBRepository.countByStatusAndJigId(JigStatus.READY, jig.getId());
+            int countWarehouse = jigItemRDBRepository.countByStatusAndJigId(JigStatus.WAREHOUSE, jig.getId());
+            jigModelCountList.add(JigModelCount.of(jig.getModel(), countReady, countWarehouse));
         }
 
         return JigModelCountResponseDto.from(MAX_COUNT, jigModelCountList);
