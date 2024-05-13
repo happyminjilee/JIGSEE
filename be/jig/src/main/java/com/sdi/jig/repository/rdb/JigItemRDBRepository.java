@@ -15,6 +15,8 @@ public interface JigItemRDBRepository extends JpaRepository<JigItemRDBEntity, Lo
 
     Optional<JigItemRDBEntity> findBySerialNoAndIsDeleteFalse(String serialNo);
 
+    Optional<JigItemRDBEntity> findBySerialNoAndIsDeleteTrue(String serialNo);
+
     List<JigItemRDBEntity> findByStatusAndJigIdIn(JigStatus status, List<Long> ids);
 
     List<JigItemRDBEntity> findBySerialNoIn(List<String> serialNos);

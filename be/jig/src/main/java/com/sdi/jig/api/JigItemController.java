@@ -84,7 +84,7 @@ class JigItemController {
         return Response.success();
     }
 
-    @GetMapping("inventory")
+    @GetMapping("/inventory")
     Response<JigItemInventoryRequestDto> inventory() {
         JigItemInventoryRequestDto dto = jigItemService.inventory();
         return Response.success(dto);
