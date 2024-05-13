@@ -1,0 +1,24 @@
+.card {
+  display: flex;
+  justify-content: start; /* Center horizontally */
+  align-items: start;
+  flex-direction: column;
+  border: 1px solid var(--light-gray);
+  height: 170px; /* Full viewport height */
+  width: 400px;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  padding: 20px 30px; /* 패딩 */
+}
+.title {
+  font-size: 16px; /* 제목 폰트 크기 */
+  color: var(--samsungblue); /* 제목 색상 */
+  margin-bottom: 10px; /* 제목 아래 마진 */
+  font-weight: bolder;
+}
+.views {
+  font-size: 30px; /* 조회수 폰트 크기 */
+  font-weight: bold; /* 굵기 */
+  color: #000; /* 조회수 색상 */
+  justify-content: space-between;
+}
