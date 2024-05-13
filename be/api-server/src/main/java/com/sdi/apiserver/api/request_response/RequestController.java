@@ -4,10 +4,7 @@ import com.sdi.apiserver.api.member.MemberController;
 import com.sdi.apiserver.api.request_response.client.NotificationApiClient;
 import com.sdi.apiserver.api.request_response.dto.request.RepairJigRequestDto;
 import com.sdi.apiserver.api.request_response.dto.request.RequestJigRequestDto;
-import com.sdi.apiserver.api.request_response.dto.response.RepairJigDetailResponseDto;
-import com.sdi.apiserver.api.request_response.dto.response.RepairJigListResponseDto;
-import com.sdi.apiserver.api.request_response.dto.response.RequestJigDetailResponseDto;
-import com.sdi.apiserver.api.request_response.dto.response.RequestJigListResponseDto;
+import com.sdi.apiserver.api.request_response.dto.response.*;
 import com.sdi.apiserver.util.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +64,14 @@ public class RequestController {
                                                                 @RequestParam(name = "repair-jig-id") String id){
         memberController.producerCheck(request);
         return notificationApiClient.findOneRepairRequest(id);
+    }
+
+    @GetMapping("/count/repair")
+    Response<RequestCountRepairResponseDto> countRepair(HttpServletRequest request,
+                                                        @RequestParam(name = "year", required = false) Integer year,
+                                                        @RequestParam(name = "month", required = false) Integer month) {
+        memberController.producerCheck(request);
+        return notificationApiClient.countRepair(year, month);
     }
 
     private String getAccessToken(HttpServletRequest request) {

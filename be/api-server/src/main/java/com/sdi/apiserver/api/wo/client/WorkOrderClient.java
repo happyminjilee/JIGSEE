@@ -1,10 +1,7 @@
 package com.sdi.apiserver.api.wo.client;
 
 import com.sdi.apiserver.api.wo.dto.request.*;
-import com.sdi.apiserver.api.wo.dto.response.WorkOrderDetailResponseDto;
-import com.sdi.apiserver.api.wo.dto.response.WorkOrderDoneResponseDto;
-import com.sdi.apiserver.api.wo.dto.response.WorkOrderGroupingResponseDto;
-import com.sdi.apiserver.api.wo.dto.response.WorkOrderResponseDto;
+import com.sdi.apiserver.api.wo.dto.response.*;
 import com.sdi.apiserver.util.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -48,4 +45,9 @@ public interface WorkOrderClient {
 
     @PostMapping("/auto")
     Response<Void> autoCreate(@RequestBody WorkOrderAutoCreateRequestDto dto);
+
+    @GetMapping("/member/status")
+    Response<WorkOrderStatusResponseDto> getStatus(@RequestHeader(name = ACCESS_TOKEN_PREFIX) String accessToken,
+                                                   @RequestParam(name = "year") Integer year,
+                                                   @RequestParam(name = "month") Integer month);
 }

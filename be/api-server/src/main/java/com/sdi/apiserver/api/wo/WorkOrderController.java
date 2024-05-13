@@ -3,10 +3,7 @@ package com.sdi.apiserver.api.wo;
 import com.sdi.apiserver.api.member.MemberController;
 import com.sdi.apiserver.api.wo.client.WorkOrderClient;
 import com.sdi.apiserver.api.wo.dto.request.*;
-import com.sdi.apiserver.api.wo.dto.response.WorkOrderDetailResponseDto;
-import com.sdi.apiserver.api.wo.dto.response.WorkOrderDoneResponseDto;
-import com.sdi.apiserver.api.wo.dto.response.WorkOrderGroupingResponseDto;
-import com.sdi.apiserver.api.wo.dto.response.WorkOrderResponseDto;
+import com.sdi.apiserver.api.wo.dto.response.*;
 import com.sdi.apiserver.util.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +74,15 @@ public class WorkOrderController {
     @PostMapping("/auto")
     Response<Void> autoCreate(@RequestBody WorkOrderAutoCreateRequestDto dto){
         return workOrderClient.autoCreate(dto);
+    }
+
+    @GetMapping("/member/status")
+    Response<WorkOrderStatusResponseDto> getStatus(HttpServletRequest request,
+                                                   @RequestParam(name = "year", required = false) Integer year,
+                                                   @RequestParam(name = "month", required = false) Integer month) {
+        memberController.producerCheck(request);
+        String accessToken = getAccessToken(request);
+        return workOrderClient.getStatus(accessToken, year, month);
     }
 
     private String getAccessToken(HttpServletRequest request) {
