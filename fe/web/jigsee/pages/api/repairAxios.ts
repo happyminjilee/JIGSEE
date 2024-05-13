@@ -6,7 +6,7 @@ export const repairRequest = async (memo: string, serialNos: string[]) => {
     .post("/request/repair", {
       memo: memo,
       serialNos: serialNos,
-    })
+    }, {})
     .then((response) => {
       return true;
     })

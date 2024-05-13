@@ -7,7 +7,7 @@ export const releaseRequest = async (serialNos: string[]) => {
   return await http
     .post("/request/jig", {
       serialNos: serialNos,
-    })
+    }, {})
     .then((response) => {
       console.log(response, "불출요청 성공");
       return true;

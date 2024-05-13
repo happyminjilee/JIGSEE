@@ -38,7 +38,7 @@ export async function createWo(serialNo: string) {
   const requestBody = {
     serialNo: serialNo,
   };
-  return axiosAuthApi().post("/work-order", requestBody);
+  return axiosAuthApi().post("/work-order", requestBody, {});
 }
 
 // WO 임시저장

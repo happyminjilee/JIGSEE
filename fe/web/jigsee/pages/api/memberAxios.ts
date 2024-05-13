@@ -5,10 +5,12 @@ export const login = async (employeeNo: string, password: string) => {
   const http = axiosApi();
 
   return await http
-    .post("/login", {
+    .post("/login",
+        {
       employeeNo: employeeNo,
       password: password,
-    })
+    },
+        {})
     .then((response) => {
       localStorage.setItem("access_token", response.headers["authorization"]);
       localStorage.setItem("refresh_token", response.headers["refreshtoken"]);
@@ -34,7 +36,7 @@ export const logout = async () => {
   console.log("want to logout?");
   const request = axiosAuthApi();
   return await request
-    .post("/logout")
+    .post("/logout", {}, {})
     // 로그아웃 성공 시 local storage 삭제
     .then((response) => {
       localStorage.removeItem("access_token");
