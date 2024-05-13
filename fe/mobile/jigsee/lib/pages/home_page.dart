@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jigsee/api/user_auth.dart';
 import 'package:jigsee/components/header.dart';
 import 'package:jigsee/pages/spe_jig_list.dart';
@@ -17,9 +20,103 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   late Future<List<dynamic>> _equipmentsFuture;
+  var messageString = "";
+
+  Future<String?> getMyDeviceToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    print("내 디바이스 토큰: $token");
+    return token;
+  }
+
+  /*
+  * POST
+  * /api/v1/notification/fcm/token
+  * body => "token" : {deviceToken}
+  */
+  void sendTokenToServer(String deviceToken) async {
+    try {
+      DioClient dioClient = ref.read(dioClientProvider);
+      Response response = await dioClient.post(
+          '/notification/fcm/token',
+        data: {
+            'token': deviceToken
+        }
+      );
+    } catch (e) {
+      print("!!!!!!!!!!!!!!!!!!!!!!!!!!!$e");
+    }
+  }
 
   @override
   void initState() {
+    Future<String?> token = getMyDeviceToken(); // device-token 가져옴
+    token
+        .then((value) => sendTokenToServer(value!)); // 가져온 deveice-token을 서버에 저장함
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      RemoteNotification? notification = message.notification;
+
+      if (notification != null) {
+        FlutterLocalNotificationsPlugin().show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'high_importance_channel',
+              'high_importance_notification',
+              importance: Importance.max,
+            ),
+          ),
+        );
+        setState(() {
+          messageString = message.notification!.body!;
+          print("Foreground 메시지 수신: $messageString");
+        });
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
+      if (message != null) {
+        RemoteNotification? notification = message.notification;
+        if (notification != null) {
+          FlutterLocalNotificationsPlugin().show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            const NotificationDetails(
+              android: AndroidNotificationDetails(
+                'high_importance_channel',
+                'high_importance_notification',
+                importance: Importance.max,
+              ),
+            ),
+          );
+        }
+      }
+    });
+
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        RemoteNotification? notification = message.notification;
+        if (notification != null) {
+          FlutterLocalNotificationsPlugin().show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            const NotificationDetails(
+              android: AndroidNotificationDetails(
+                'high_importance_channel',
+                'high_importance_notification',
+                importance: Importance.max,
+              ),
+            ),
+          );
+        }
+      }
+    });
     super.initState();
     _equipmentsFuture = _fetchEquipments();
   }
@@ -150,6 +247,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void _showLogoutDialog() {
+    const storage = FlutterSecureStorage();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -178,7 +277,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             TextButton(
               onPressed: () async {
                 try {
-                  await AuthService().logout();
+                  // await AuthService().logout();
+                  // await storage.deleteAll();
+                  await storage.delete(key: 'authorization');
+                  await storage.delete(key: 'refreshToken');
+                  await storage.delete(key: 'userName');
+                  await storage.delete(key: 'employeeNo');
+                  await storage.delete(key: 'role');
                   Navigator.of(context).pop();
                   Navigator.pushNamed(context, "/login");
                 } catch (e) {
