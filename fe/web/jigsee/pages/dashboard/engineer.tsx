@@ -4,10 +4,13 @@ import Report from "@/components/dashboard/report";
 import MyWoList from "@/components/dashboard/myWo";
 import { useEffect, useState } from "react";
 import { useUserWoListStore } from "@/store/workorderstore";
-
+import Editmethod from "@/components/dashboard/editedmethod";
 import ReleaseTable from "@/components/dashboard/releasetable";
 import dynamic from "next/dynamic";
 const DonutChart = dynamic(() => import("@/components/dashboard/repairdonut"), {
+  ssr: false, // 이 옵션은 서버 사이드 렌더링을 비활성화합니다.
+});
+const Lifetime = dynamic(() => import("@/components/dashboard/lifetime"), {
   ssr: false, // 이 옵션은 서버 사이드 렌더링을 비활성화합니다.
 });
 export default function Engineerdashboard() {
@@ -36,6 +39,7 @@ export default function Engineerdashboard() {
         <div className={styled.middle}>
           <div className={styled.jiglocation}>
             <ReleaseTable />
+            <Lifetime />
           </div>
           <div className={styled.percent}>
             <DonutChart />
