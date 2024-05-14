@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-
+import { useDashboardstore } from "@/store/dashboardstore";
 export default function Lifetime() {
+  const [model, setModel] = useState("");
+  const { jigmodel } = useDashboardstore();
+  useEffect(() => {
+    setModel(jigmodel);
+  }, [jigmodel]);
   // 차트에 표시할 데이터
   const series = [
     {
@@ -27,7 +32,7 @@ export default function Lifetime() {
       curve: "straight",
     },
     title: {
-      text: "수리 횟수에 따른 예상 생명주기",
+      text: `수리 횟수에 따른 예상 생명주기 ${model}`,
       align: "left",
     },
     grid: {

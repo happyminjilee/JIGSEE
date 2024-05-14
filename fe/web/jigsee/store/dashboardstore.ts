@@ -28,6 +28,9 @@ interface dashboardstore {
   //점검항목 수정된 지그 리스트
   getJigupdated: () => Promise<void>;
   updatedList: Updated[];
+  // Jig model
+  jigmodel: string;
+  setJigmodel: (jigmodel: string) => void;
 }
 
 export const useDashboardstore = create<dashboardstore>((set) => ({
@@ -58,5 +61,10 @@ export const useDashboardstore = create<dashboardstore>((set) => ({
   getJigupdated: async () => {
     const data = await updateChecked();
     set({ updatedList: data.updatedJigList });
+  },
+  //jig model 아이디 변수 변경
+  jigmodel: "",
+  setJigmodel: (newjig: string) => {
+    set({ jigmodel: newjig });
   },
 }));
