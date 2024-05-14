@@ -6,7 +6,11 @@ function setCookie(name: string, value: string, days: number) {
     expires = "; expires=" + date.toUTCString();
   }
   document.cookie =
-    name + "=" + encodeURIComponent(value) + expires + "; path=/";
+    name +
+    "=" +
+    encodeURIComponent(value).replace(/%20/g, " ") +
+    expires +
+    "; path=/";
 }
 function getCookie(name: string) {
   var nameEQ = name + "=";
