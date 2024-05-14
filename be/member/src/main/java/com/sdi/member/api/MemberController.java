@@ -88,6 +88,6 @@ class MemberController {
 
     @PostMapping("/member/search/name/list")
     Response<List<MemberResponseDto>> searchByNameList(@RequestBody MemberSearchByMemberListRequestDto dto){
-        return Response.success(memberService.searchByNameList(dto.list()));
+        return Response.success(memberService.searchByNameList(dto.names()));
     }
 }
