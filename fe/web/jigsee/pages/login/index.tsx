@@ -24,9 +24,9 @@ export default function Login() {
       // console.log('what you want')
       // console.log(localStorage.getItem('access_token'))
       if (result.role === "MANAGER") {
-        router.push("/manager");
+        router.push("/dashboard/manager");
       } else if (result.role === "ENGINEER") {
-        router.push("/engineer");
+        router.push("/dashboard/engineer");
       }
     } else {
       console.log("Login failed");
@@ -35,8 +35,10 @@ export default function Login() {
   return (
     <>
       <div
-          className={styled.container}
-          onKeyUp={(e) => {e.key === "Enter" ? handlelogin(employeeNo, password) : console.log("타닥")}}
+        className={styled.container}
+        onKeyUp={(e) => {
+          e.key === "Enter" ? handlelogin(employeeNo, password) : console.log("타닥");
+        }}
       >
         <div className={styled.logincontainer}>
           <img
@@ -45,9 +47,7 @@ export default function Login() {
             style={{ width: "50px", height: "50px" }}
           />
           {/* 로그인 인풋 영역 */}
-          <div
-              style={{ marginBottom: "1rem" }}
-          >
+          <div style={{ marginBottom: "1rem" }}>
             <Input
               type="id"
               variant={"underlined"}
