@@ -51,6 +51,9 @@ public class RequestService {
          * 1. 요청 내용 DB에 저장
          * 2. 알림 서버로 알림 전송 요청 보냄
          */
+        if (requestJigRequestDto.serialNos() == null || requestJigRequestDto.serialNos().isEmpty()) {
+            throw new IllegalArgumentException("불출 요청 리스트가 없습니다.");
+        }
         WantRequestEntity content = wantRequestsRepository.save(WantRequestEntity.from(requestJigRequestDto, memberInfoDto.employeeNo()));
         messageClient.sendMessage(MessageDto.of(SseStatus.REQUEST_JIG, memberInfoDto.employeeNo(), content.getId()), accessToken);
     }
