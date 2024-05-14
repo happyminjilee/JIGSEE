@@ -27,13 +27,12 @@ class SseController {
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     SseEmitter subscribe(@RequestHeader("Authorization") String accessToken) {
         MemberInfoDto currentMember = apiService.getMember(accessToken);
-        return sseService.subscribe(currentMember, ""); // EventSource에 헤더를 달아서 전송받지 못한 이벤트를 트래킹 가능한데 이건 프론트에서 뭔가 뚝딱해야됨
-//        return sseService.subscribe(employeeNo, lastEventId);
+        return sseService.subscribe(currentMember);
     }
 
     @PostMapping(value = "/send-message")
     Response<Void> sendMessage(@RequestBody MessageRequestDto messageRequestDto) {
-        sseService.sendToReceiver(messageRequestDto);
+        sseService.sendNotification(messageRequestDto);
         return Response.success();
     }
 

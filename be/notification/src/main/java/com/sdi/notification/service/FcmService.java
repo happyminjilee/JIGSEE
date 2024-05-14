@@ -43,7 +43,7 @@ public class FcmService {
                 nowFcmEntity = fcmEntity;
                 Message message = makeMessage(fcmEntity);
                 firebaseMessaging.send(message);
-                saveToNotificationDB(notificationFcmInspectionRequestDto, fcmEntity.getToken());
+                saveToNotificationDB(notificationFcmInspectionRequestDto, fcmEntity.getEmployeeNo());
             }
         } catch (FirebaseMessagingException e) {
             fcmRepository.delete(nowFcmEntity);

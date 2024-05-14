@@ -37,6 +37,12 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
     open-in-view: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+
 ---
 spring:
   mail:
