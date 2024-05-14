@@ -31,16 +31,17 @@
   align-items: center;
   flex-direction: row;
   border: 1px solid black;
-  height: 28vh; /* Full viewport height */
+  height: 400px; /* Full viewport height */
   width: 100%;
+  padding-top: 30px;
 }
 .jiglocation {
   display: flex;
-  justify-content: space-between; /* Center horizontally */
+  justify-content: center; /* Center horizontally */
   align-items: center;
   flex-direction: row;
-  border: 1px solid blue;
-  height: 28vh; /* Full viewport height */
+  // border: 1px solid blue;
+  height: 100%; /* Full viewport height */
   width: 60vw;
 }
 .jigalarm {
@@ -48,7 +49,7 @@
   justify-content: space-between; /* Center horizontally */
   align-items: center;
   flex-direction: row;
-  border: 1px solid blue;
-  height: 28vh; /* Full viewport height */
+  // border: 1px solid blue;
+  height: 90%; /* Full viewport height */
   width: 40vw;
 }
