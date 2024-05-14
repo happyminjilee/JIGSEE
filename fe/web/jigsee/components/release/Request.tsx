@@ -133,10 +133,17 @@ export default function Request() {
   const sendReleaseList = () => {
     console.log(right);
     releaseRequest(right)
-      .then(() => {
-        // releaseRequest 함수가 성공적으로 완료되면 새로고침
-        alert("불출 요청이 완료 되었습니다.");
-        window.location.reload();
+      .then((res) => {
+        console.log("resresrser", res);
+        if (res === true) {
+          // releaseRequest 함수가 성공적으로 완료되면 새로고침
+          alert("불출 요청이 완료 되었습니다.");
+          window.location.reload();
+        } else if (res === false) {
+          // releaseRequest 함수가 성공적으로 완료되면 새로고침
+          alert("요청 사항을 다시 검토 해주세요");
+          window.location.reload();
+        }
       })
       .catch((error) => {
         // 오류 처리
