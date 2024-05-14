@@ -9,6 +9,7 @@
   border-radius: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   padding: 20px 30px; /* 패딩 */
+  position: relative;
 }
 .title {
   font-size: 16px; /* 제목 폰트 크기 */
@@ -16,9 +17,21 @@
   margin-bottom: 10px; /* 제목 아래 마진 */
   font-weight: bolder;
 }
-.views {
-  font-size: 30px; /* 조회수 폰트 크기 */
-  font-weight: bold; /* 굵기 */
-  color: #000; /* 조회수 색상 */
-  justify-content: space-between;
+.cardbody {
+  /* 새로운 스타일 추가 */
+  max-height: 370px; /* 원하는 고정 높이 설정 */
+  overflow-x: auto;
+  padding-right: 10px; /* 스크롤바 공간 확보 */
+  padding-top: 10px;
+  min-width: 340px;
+  button {
+    width: 300px;
+    height: 80px;
+    border: 1px solid var(--samsungblue);
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: var(--white);
+  }
+}
+.dropdown {
 }
