@@ -29,15 +29,15 @@ class _CustomAppBar extends State<CustomAppBar> {
           ),
         ),
       ),
-      actions: [
-        IconButton(
-          icon: SvgPicture.asset('assets/notification.svg'),
-          onPressed: () {
-            // Navigator.pushNamed(context, '/notifications');
-          },
-        ),
-      ],
-      elevation: 2.0,
+      // actions: [
+      //   IconButton(
+      //     icon: SvgPicture.asset('assets/notification.svg'),
+      //     onPressed: () {
+      //       // Navigator.pushNamed(context, '/notifications');
+      //     },
+      //   ),
+      // ],
+      // elevation: 2.0,
     );
   }
 }

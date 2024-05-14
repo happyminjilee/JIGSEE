@@ -208,7 +208,7 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
                                         ],
                                       )
                                       else if (jigData.isEmpty) const Text('인식 오류')
-                                      else const Text('네트 워크 오류'),
+                                      else const Text('인식 오류'),
                                     ]
                                 )
                             ),
