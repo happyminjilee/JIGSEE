@@ -16,7 +16,7 @@ export default function MyWoList() {
         <div className={styled.title}> 나의 수리 진행 내역</div>
         <div className={styled.content}>
           {list.map((lst, index) => (
-            <div className={styled.card}>
+            <div className={styled.card} key={index}>
               {lst.status === "PUBLISH" && (
                 <div>
                   <RadioButtonUncheckedIcon color="primary" /> 발행
@@ -33,10 +33,10 @@ export default function MyWoList() {
                 </div>
               )}
               <div>{lst.model}</div>
-              {lst.updatedAt === "" ? (
-                <div>lst.createdAt</div>
+              {lst.terminator === "" ? (
+                <div>{lst.createdAt[0]}.{lst.createdAt[1]}.{lst.createdAt[2]} | {lst.creator}</div>
               ) : (
-                <div>lst.updatedAt | lst.terminator</div>
+                <div>{lst.updatedAt[0]}.{lst.updatedAt[1]}.{lst.updatedAt[2]} | {lst.terminator}</div>
               )}
             </div>
           ))}

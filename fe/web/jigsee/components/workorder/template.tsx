@@ -8,7 +8,15 @@ import {useCompoStore, useWoDetailStore} from "@/store/workorderstore"
 
 
 export default function workorder() {
-    const {id, status, createdAt, creator, checkList, jigItemInfo,terminator, updatedAt} = useWoDetailStore()
+    const {
+        id,
+        status,
+        createdAt,
+        creator,
+        checkList,
+        jigItemInfo,
+        terminator,
+        updatedAt} = useWoDetailStore()
     const [qualification, setQualification] = useState(false)
     useEffect(() => {
         const allQualified = checkList.every(item=> item.passOrNot)
@@ -110,7 +118,7 @@ export default function workorder() {
                                 Test End
                             </div>
                             <div>
-                                {updatedAt}
+                                {updatedAt[0]}. {updatedAt[1]}. {updatedAt[2]}
                             </div>
                         </div>
                     </div>
