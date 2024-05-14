@@ -7,7 +7,6 @@ const ManagerGraph = dynamic(() => import("@/components/dashboard/managergraph")
     }
 )
 import ReleaseTable from "@/components/dashboard/releasetable";
-import dynamic from "next/dynamic";
 const Lifetime = dynamic(() => import("@/components/dashboard/lifetime"), {
   ssr: false, // 이 옵션은 서버 사이드 렌더링을 비활성화합니다.
 });
