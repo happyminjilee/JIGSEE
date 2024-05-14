@@ -1,64 +1,72 @@
 .box {
-    position: relative;
-    border: 1px solid var(--samsungblue);
-    border-radius: 0.5rem;
-    width: 100%;
-    height: 100%;
+  position: relative;
+  border: 1px solid var(--light-gray);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  height: 90%;
 }
-
+.title {
+  font-size: 15px;
+  /* color: var(--samsungblue); */
+  font-weight: bolder;
+  margin: 10px 15px;
+}
 .content {
-    margin: 5px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    overflow-y: auto;
-    height: 200px;
-    width : 90%;
-    padding-bottom: 40px; /* 여기에 추가된 하단 패딩 */
+  margin: 5px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-y: auto;
+  height: 200px;
+  width: 90%;
+  padding-bottom: 40px; /* 여기에 추가된 하단 패딩 */
 }
 
 .content::-webkit-scrollbar {
-    width: 3px;
+  width: 3px;
 }
 
 .content::-webkit-scrollbar-button {
-    display: none;
+  display: none;
 }
 
 .content::-webkit-scrollbar-thumb {
-    background-color: var(--realwhite); /* 스크롤바 썸의 배경색 */
-    border-radius: 10px; /* 스크롤바 썸의 모서리 둥글게 */
-    background-clip: padding-box;
-    border: 2px solid var(--realwhite); /* 스크롤바 썸의 테두리 색상 (선택적) */
+  background-color: var(--realwhite); /* 스크롤바 썸의 배경색 */
+  border-radius: 10px; /* 스크롤바 썸의 모서리 둥글게 */
+  background-clip: padding-box;
+  border: 2px solid var(--realwhite); /* 스크롤바 썸의 테두리 색상 (선택적) */
 }
 
 .content::-webkit-scrollbar-track {
-    background-color: var(--white);
-    border-radius: 10px;
-    box-shadow: inset 0px 0px 5px var(--realwhite);
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px var(--realwhite);
 }
 
-
 .card {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid var(--samsungblue);
-    border-radius: 0.5rem;
-    margin: 5px;
-    width: 70%;
-    height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--gray);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  margin: 5px;
+  width: 70%;
+  height: 40px;
+  padding: 10px 20px;
+  background-color: var(--white);
 }
 
 .link {
-    position: absolute; /* 이 변경 사항을 추가 */
-    bottom: 10px; /* 하단 위치를 고정 */
-    right: 10px; /* 우측 위치를 고정 */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    width: 100%; /* 전체 너비 */
+  position: absolute; /* 이 변경 사항을 추가 */
+  bottom: 10px; /* 하단 위치를 고정 */
+  right: 10px; /* 우측 위치를 고정 */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%; /* 전체 너비 */
 }
