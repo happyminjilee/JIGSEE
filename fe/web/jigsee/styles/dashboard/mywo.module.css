@@ -3,7 +3,7 @@
   border: 1px solid var(--light-gray);
   border-radius: 0.5rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 80%;
+  width: 85%;
   height: 90%;
 }
 .title {
@@ -22,6 +22,7 @@
   height: 200px;
   width: 90%;
   padding-bottom: 40px; /* 여기에 추가된 하단 패딩 */
+  max-height: 400px;
 }
 
 .content::-webkit-scrollbar {
