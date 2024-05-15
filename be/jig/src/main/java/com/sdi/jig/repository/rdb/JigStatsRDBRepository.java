@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface JigStatsRDBRepository extends JpaRepository<JigStatsRDBEntity, Long> {
     List<JigStatsRDBEntity> findAllByJigOrderByRepairCount(JigRDBEntity jig);
+
+    JigStatsRDBEntity findByJigIdAndRepairCount(Long id, int countRepair);
 }

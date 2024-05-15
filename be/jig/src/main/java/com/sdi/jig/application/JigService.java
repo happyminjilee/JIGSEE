@@ -5,6 +5,7 @@ import com.sdi.jig.dto.response.*;
 import com.sdi.jig.dto.response.JigModelCountResponseDto.JigModelCount;
 import com.sdi.jig.dto.response.JigUpdatedCheckListResponseDto.UpdatedJig;
 import com.sdi.jig.entity.nosql.JigNosqlEntity;
+import com.sdi.jig.entity.rdb.JigItemRDBEntity;
 import com.sdi.jig.entity.rdb.JigRDBEntity;
 import com.sdi.jig.entity.rdb.JigStatsRDBEntity;
 import com.sdi.jig.repository.nosql.JigNosqlRepository;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -27,7 +29,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JigService {
 
-    private static final int MAX_COUNT = 100;
+    private final int MAX_COUNT = 100;
+    private final int PRODUCTION_HOUR = 1000;
+    private final int PRODUCTION_PROFIT = 100;
+    private final int FACILITY_HOUR_OPERATING_COST = 1000;
+    private final int BREAKEDOWN_COST = 500;
 
     private final JigRDBRepository jigRDBRepository;
     private final JigItemRDBRepository jigItemRDBRepository;
@@ -112,6 +118,62 @@ public class JigService {
         return JigOptimalIntervalResponseDto.of(data);
     }
 
+    public List<JigGraphResponseDto> jigGraph() {
+        int startDay = 10;
+        int endDay = 30;
+
+        // 응답 리스트
+        List<JigGraphResponseDto> jigGraphResponseDtoList = new ArrayList<>();
+
+        // 지그 모델 별 적정 점검 주기 List
+        List<Float> optimalIntervalList = getOptimalIntervalList();
+
+        // 날짜 별 값을 확인하기 위한 for 문
+        for (int day = startDay; day <= endDay; day++) {
+            // 해당 점검 주기에 따른 예상 점검 횟수
+            double monthCheckNumber = (double) 30 / day;
+
+            int finalDay = day;
+            // 점검을 놓친 지그 갯수
+            int countMissingJig = (int) optimalIntervalList.stream()
+                    .filter(cycle -> cycle < finalDay)
+                    .count();
+
+            // 점검 대상 지그 갯수
+            int countCheckJig = optimalIntervalList.size() - countMissingJig;
+
+            // 비정규 점검 소요 시간
+            Integer downTime = getDownTime(countMissingJig);
+            if (downTime == null) {
+                jigGraphResponseDtoList.add(JigGraphResponseDto.of(day, -1, -1, -1, -1));
+                continue;
+            }
+
+            // 정규 유지 보수 소요 시간
+            int maintenanceTime = getMaintenanceTime(countCheckJig);
+
+            // 한달 소요 되는 총 비정규 점검 시간
+            Double monthDownTime = downTime * monthCheckNumber;
+            // 한달 소요 되는 정규 유지 보수 소요 시간
+            Double monthMaintenanceTime = maintenanceTime * monthCheckNumber;
+            // 한달 간 설비 총 가동 시간
+            double monthOperatingTime = 30 * 24 - (monthDownTime + monthMaintenanceTime);
+
+            // 생산량
+            double outputValue = monthOperatingTime * PRODUCTION_HOUR;
+
+            // 생산 비용
+            double costValue = monthOperatingTime * FACILITY_HOUR_OPERATING_COST + downTime * BREAKEDOWN_COST;
+
+            // 차이
+            double yieldValue = outputValue * PRODUCTION_PROFIT - costValue;
+
+            jigGraphResponseDtoList.add(JigGraphResponseDto.of(day, outputValue, costValue, yieldValue, countMissingJig));
+        }
+
+        return jigGraphResponseDtoList;
+    }
+
     public JigRDBEntity getJigRdbEntityByModel(String model) {
         return jigRDBRepository.findByModel(model)
                 .orElseThrow(() -> new IllegalArgumentException("모델을 찾을 수 없습니다."));
@@ -139,5 +201,43 @@ public class JigService {
         startAndEndDate.put("endDate", endDate);
 
         return startAndEndDate;
+    }
+
+    private List<Float> getOptimalIntervalList() {
+        List<JigItemRDBEntity> jigItemList = jigItemRDBRepository.findByStatus(JigStatus.IN);
+
+        // 지그 모델 별 적정 점검 주기 List
+        List<Float> optimalIntervalList = new ArrayList<>();
+
+        for (JigItemRDBEntity jigItem : jigItemList) {
+            int countRepair = jigItemRepairHistoryRepository.countByJigItemId(jigItem.getJig().getId());
+            BigDecimal optimalInterval = jigStatsRDBRepository.findByJigIdAndRepairCount(jigItem.getJig().getId(), countRepair).getOptimalInterval();
+            float optimalIntervalFloat = roundToTwoDecimalPlaces(optimalInterval);
+            optimalIntervalList.add(optimalIntervalFloat);
+        }
+
+        return optimalIntervalList;
+    }
+
+    private Integer getDownTime(int count) {
+        if (count <= 2) {
+            return 1;
+        } else if (count <= 7) {
+            return 4;
+        } else if (count <= 19) {
+            return 24;
+        } else if (20 <= count) {
+            return null;
+        }
+        return null;
+    }
+
+    private Integer getMaintenanceTime(int count) {
+        return count * 4 / 20;
+    }
+
+    private static float roundToTwoDecimalPlaces(BigDecimal value) {
+        BigDecimal bd = value.setScale(2, RoundingMode.HALF_UP);
+        return bd.floatValue();
     }
 }
