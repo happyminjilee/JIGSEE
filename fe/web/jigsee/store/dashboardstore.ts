@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { getMonthJig, getJigcount, updateChecked } from "@/pages/api/dashboard";
-
+import { getMonthJig, getJigcount, updateChecked, getOptimal } from "@/pages/api/dashboard";
+import { AxiosResponse } from "axios";
 interface Jiglocation {
   model: string;
   countReady: number;
@@ -31,6 +31,10 @@ interface dashboardstore {
   // Jig model
   jigmodel: string;
   setJigmodel: (jigmodel: string) => void;
+  //jig 수리 횟수별 수명
+  getInterval: (id: string) => Promise<void>;
+  optimalList: [];
+  xlabelList: string[];
 }
 
 export const useDashboardstore = create<dashboardstore>((set) => ({
@@ -66,5 +70,18 @@ export const useDashboardstore = create<dashboardstore>((set) => ({
   jigmodel: "",
   setJigmodel: (newjig: string) => {
     set({ jigmodel: newjig });
+  },
+  optimalList: [],
+  xlabelList: [],
+  getInterval: async (id: string) => {
+    const data = await getOptimal(id);
+    console.log("jig graphphphp", data);
+    set({ optimalList: data.data });
+    // optimalList의 길이 가져오기
+    const optimalListLength = data.data.length;
+
+    // ["0회", "1회", ..., "length회"] 리스트 생성
+    const countList = Array.from({ length: optimalListLength }, (_, i) => `${i}회`);
+    set({ xlabelList: countList });
   },
 }));
