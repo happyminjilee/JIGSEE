@@ -2,9 +2,11 @@ package com.sdi.jig.application;
 
 import com.sdi.jig.client.NotificationApiClient;
 import com.sdi.jig.client.NotificationClient;
+import com.sdi.jig.client.WorkOrderClient;
 import com.sdi.jig.dto.request.JigItemAcceptRequestDto;
 import com.sdi.jig.dto.request.JigItemInventoryRequestDto;
 import com.sdi.jig.dto.request.NotificationFcmInspectionRequestDto;
+import com.sdi.jig.dto.request.WorkOrderAutoCreateRequestDto;
 import com.sdi.jig.dto.response.JigItemFacilityAvailableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto;
 import com.sdi.jig.dto.response.JigItemIsUsableResponseDto.JigItemSummary;
@@ -44,6 +46,7 @@ public class JigItemService {
     private final JigItemInspectionRDBRepository jigItemInspectionRDBRepository;
     private final NotificationClient notificationClient;
     private final NotificationApiClient notificationApiClient;
+    private final WorkOrderClient workOrderClient;
 
     public JigItemResponseDto findBySerialNo(String serialNo) {
         JigItemRDBEntity rdb = getJigItemBySerialNo(serialNo);
@@ -122,6 +125,9 @@ public class JigItemService {
         JigItemRDBEntity afterJigItem = getJigItemBySerialNo(afterSerialNo);
 
         updateBecauseExchange(facilityItem, beforeJigItem, afterJigItem);
+
+        // wo 생성 요청
+        workOrderClient.auto(WorkOrderAutoCreateRequestDto.from(List.of(beforeJigItem.getSerialNo())));
     }
 
     @Transactional
