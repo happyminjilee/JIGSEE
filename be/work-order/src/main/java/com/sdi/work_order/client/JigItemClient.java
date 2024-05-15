@@ -3,6 +3,7 @@ package com.sdi.work_order.client;
 import com.sdi.work_order.client.request.JigItemDeleteRequestDto;
 import com.sdi.work_order.client.request.JigItemRepairRequestDto;
 import com.sdi.work_order.client.response.JigItemResponseDto;
+import com.sdi.work_order.dto.request.JigItemDeleteAndRepairRequestDto;
 import com.sdi.work_order.util.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
@@ -27,4 +28,7 @@ public interface JigItemClient {
 
     @PutMapping("/jig-item/repair")
     void repair(@RequestBody JigItemRepairRequestDto dto);
+
+    @PutMapping("/jig-item/delete-and-repair")
+    void deleteAndRepair(@RequestBody JigItemDeleteAndRepairRequestDto dto);
 }

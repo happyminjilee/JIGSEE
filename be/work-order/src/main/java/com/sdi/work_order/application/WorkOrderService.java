@@ -119,13 +119,8 @@ public class WorkOrderService {
         rdb.updateTerminatorEmployeeNo(terminatorEmployeeNo);
         rdb.updateStatus(WorkOrderStatus.FINISH);
 
-        // 수리 이력 생성
-        jigItemService.repair(rdb.getJigSerialNo());
-
-        // allPassOrNot이 false 일 경우 폐기 요청 전송
-        if (!allPassOrNot) {
-            jigItemService.deleteBySerialNo(accessToken, rdb.getJigSerialNo());
-        }
+        // 수리 이력 생성 및 폐기 판단 요청
+        jigItemService.deleteAndRepair(rdb.getJigSerialNo(), allPassOrNot);
 
         return WorkOrderDoneResponseDto.from(allPassOrNot);
     }

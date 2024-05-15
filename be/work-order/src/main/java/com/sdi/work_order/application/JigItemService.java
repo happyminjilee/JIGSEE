@@ -4,6 +4,7 @@ import com.sdi.work_order.client.JigItemClient;
 import com.sdi.work_order.client.request.JigItemDeleteRequestDto;
 import com.sdi.work_order.client.request.JigItemRepairRequestDto;
 import com.sdi.work_order.client.response.JigItemResponseDto;
+import com.sdi.work_order.dto.request.JigItemDeleteAndRepairRequestDto;
 import com.sdi.work_order.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,9 @@ public class JigItemService {
 
     public void repair(String serialNo){
         jigItemClient.repair(JigItemRepairRequestDto.from(serialNo));
+    }
+
+    public void deleteAndRepair(String serialNo, Boolean isAllPass){
+        jigItemClient.deleteAndRepair(JigItemDeleteAndRepairRequestDto.of(serialNo, isAllPass));
     }
 }
