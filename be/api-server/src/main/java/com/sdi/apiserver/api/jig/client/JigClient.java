@@ -2,18 +2,11 @@ package com.sdi.apiserver.api.jig.client;
 
 
 import com.sdi.apiserver.api.jig.dto.request.JigUpdateRequestDto;
-import com.sdi.apiserver.api.jig.dto.response.JigModelCountResponseDto;
-import com.sdi.apiserver.api.jig.dto.response.JigMonthResponseDto;
-import com.sdi.apiserver.api.jig.dto.response.JigResponseDto;
-import com.sdi.apiserver.api.jig.dto.response.JigUpdatedCheckListResponseDto;
-import com.sdi.apiserver.api.jig.dto.util.JigStatus;
+import com.sdi.apiserver.api.jig.dto.response.*;
 import com.sdi.apiserver.util.Response;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "jigClient", url = "${apis.jig-base-url}")
 public interface JigClient {
@@ -35,4 +28,7 @@ public interface JigClient {
     @GetMapping("/update-check-list")
     Response<JigUpdatedCheckListResponseDto> updatedCheckList(@RequestParam(name = "year", required = false) Integer year,
                                                               @RequestParam(name = "month", required = false) Integer month);
+
+    @GetMapping("/optimal-interval")
+    Response<JigOptimalIntervalResponseDto> jigOptimalInterval(@RequestParam(name = "model") String model);
 }
