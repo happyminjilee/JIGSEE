@@ -4,6 +4,7 @@ import ChickBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import styled from "@/styles/modal/workorder.module.css";
+import dynamic from "next/dynamic";
 import {useCompoStore, useWoDetailStore} from "@/store/workorderstore"
 
 
@@ -118,7 +119,8 @@ export default function workorder() {
                                 Test End
                             </div>
                             <div>
-                                {updatedAt[0]}. {updatedAt[1]}. {updatedAt[2]}
+                                {updatedAt ? `${updatedAt[0]}. ${updatedAt[1]}. ${updatedAt[2]}` : ""}
+
                             </div>
                         </div>
                     </div>

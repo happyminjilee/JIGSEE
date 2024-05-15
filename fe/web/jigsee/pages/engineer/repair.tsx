@@ -16,7 +16,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import React, { useEffect } from "react";
 import { useReleaseModalStore } from "@/store/releasestore";
 import { useState } from "react";
-import Report from "@/components/workorder/template";
 import Request from "@/components/repair/Requests";
 import { useGroupFilter } from "@/store/repairrequeststore";
 import Modal from "@mui/material/Modal";
@@ -25,6 +24,9 @@ import CreateWoModal from "@/components/workorder/CreateWoModal";
 import {userStore, useSearchUser} from "@/store/memberstore";
 import ReuseModal from "@/components/repair/ReuseModal";
 import DisposeModal from "@/components/repair/DisposeModal";
+import dynamic from "next/dynamic";
+const Report = dynamic(import("@/components/workorder/template"))
+
 
 export default function Repair() {
   const { rightCompo } = useCompoStore();
