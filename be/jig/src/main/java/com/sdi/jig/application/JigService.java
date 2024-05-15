@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.*;
@@ -104,8 +104,10 @@ public class JigService {
     public JigOptimalIntervalResponseDto jigOptimalInterval(String model) {
         JigRDBEntity jig = getJigRdbEntityByModel(model);
 
-        List<BigDecimal> data = jigStatsRDBRepository.findAllByJigOrderByRepairCount(jig).stream()
-                .map(JigStatsRDBEntity::getOptimalInterval).collect(Collectors.toList());
+        List<Float> data = jigStatsRDBRepository.findAllByJigOrderByRepairCount(jig).stream()
+                .map(JigStatsRDBEntity::getOptimalInterval)
+                .map(value -> value.setScale(2, RoundingMode.HALF_UP).floatValue()) // 소수점 두 번째 자리에서 반올림하고 float로 변환
+                .collect(Collectors.toList());
 
         return JigOptimalIntervalResponseDto.of(data);
     }
