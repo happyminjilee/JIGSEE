@@ -24,4 +24,8 @@ public class JigItemRepairHistoryRDBEntity {
 
     @ManyToOne
     private JigItemRDBEntity jigItem;
+
+    public static JigItemRepairHistoryRDBEntity of(JigItemRDBEntity jigItem){
+        return new JigItemRepairHistoryRDBEntity(null, LocalDateTime.now(), jigItem);
+    }
 }
