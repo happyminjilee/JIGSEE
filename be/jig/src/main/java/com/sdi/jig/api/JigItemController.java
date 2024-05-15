@@ -93,8 +93,14 @@ class JigItemController {
     }
 
     @PutMapping("/repair")
-    Response<Void> repair(@RequestBody JigItemRepairRequestDto dto){
+    Response<Void> repair(@RequestBody JigItemRepairRequestDto dto) {
         jigItemService.repair(dto.serialNo());
+        return Response.success();
+    }
+
+    @PutMapping("delete-and-repair")
+    Response<Void> deleteAndRepair(@RequestBody JigItemDeleteAndRepairRequestDto dto) {
+        jigItemService.deleteAndRepair(dto.serialNo(), dto.isAllPass());
         return Response.success();
     }
 }

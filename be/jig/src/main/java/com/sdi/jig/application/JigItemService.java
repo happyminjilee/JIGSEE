@@ -223,6 +223,14 @@ public class JigItemService {
         jigItemRepairHistoryRepository.save(entity);
     }
 
+    @Transactional
+    public void deleteAndRepair(String serialNo, Boolean isAllPass) {
+        repair(serialNo);
+        if (!isAllPass) {
+            deleteBySerialNo(serialNo);
+        }
+    }
+
     private List<Long> extractJigIds(FacilityRDBEntity facilityByModel) {
         return getFacilityJigMappingByFacilityId(facilityByModel.getId())
                 .stream()
@@ -264,7 +272,7 @@ public class JigItemService {
     }
 
     private void isNotSameModelAndThrow(Long beforeJigModeId, Long afterJigModelId) {
-        if(!beforeJigModeId.equals(afterJigModelId)){
+        if (!beforeJigModeId.equals(afterJigModelId)) {
             throw new IllegalArgumentException("같은 모델이 아니어서 교체할 수 없습니다.");
         }
     }
