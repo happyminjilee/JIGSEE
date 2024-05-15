@@ -19,5 +19,5 @@ public interface WorkOrderClient {
                                                            @RequestParam(name = "month") Integer month);
 
     @PostMapping("/work-order/auto")
-    Response<Void> auto(WorkOrderAutoCreateRequestDto dto);
+    Response<Void> auto(@RequestHeader(name = TokenHeader.AUTHORIZATION) String accessToken, WorkOrderAutoCreateRequestDto dto);
 }

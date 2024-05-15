@@ -54,8 +54,10 @@ class JigItemController {
     }
 
     @PutMapping("/exchange")
-    Response<Void> exchange(@RequestBody JigItemExchangeRequestDto dto) {
-        jigItemService.exchangeBySerialNo(dto.facilitySerialNo(), dto.beforeSerialNo(), dto.afterSerialNo());
+    Response<Void> exchange(HttpServletRequest request,
+                            @RequestBody JigItemExchangeRequestDto dto) {
+        String accessToken = request.getHeader(TokenHeader.AUTHORIZATION);
+        jigItemService.exchangeBySerialNo(accessToken, dto.facilitySerialNo(), dto.beforeSerialNo(), dto.afterSerialNo());
         return Response.success();
     }
 

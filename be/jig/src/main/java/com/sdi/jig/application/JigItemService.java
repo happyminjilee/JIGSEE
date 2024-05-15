@@ -119,7 +119,7 @@ public class JigItemService {
     }
 
     @Transactional
-    public void exchangeBySerialNo(String facilitySerialNo, String beforeSerialNo, String afterSerialNo) {
+    public void exchangeBySerialNo(String accessToken, String facilitySerialNo, String beforeSerialNo, String afterSerialNo) {
         FacilityItemRDBEntity facilityItem = getFacilityItemBySerialNo(facilitySerialNo);
         JigItemRDBEntity beforeJigItem = getJigItemBySerialNo(beforeSerialNo);
         JigItemRDBEntity afterJigItem = getJigItemBySerialNo(afterSerialNo);
@@ -127,7 +127,7 @@ public class JigItemService {
         updateBecauseExchange(facilityItem, beforeJigItem, afterJigItem);
 
         // wo 생성 요청
-        workOrderClient.auto(WorkOrderAutoCreateRequestDto.from(List.of(beforeJigItem.getSerialNo())));
+        workOrderClient.auto(accessToken, WorkOrderAutoCreateRequestDto.from(List.of(beforeJigItem.getSerialNo())));
     }
 
     @Transactional
