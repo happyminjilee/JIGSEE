@@ -124,6 +124,9 @@ public class WorkOrderService {
             jigItemService.deleteBySerialNo(accessToken, rdb.getJigSerialNo());
         }
 
+        // 수리 이력 생성
+        jigItemService.repair(rdb.getJigSerialNo());
+
         return WorkOrderDoneResponseDto.from(allPassOrNot);
     }
 
