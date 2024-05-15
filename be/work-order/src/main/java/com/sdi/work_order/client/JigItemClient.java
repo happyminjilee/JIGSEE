@@ -25,6 +25,6 @@ public interface JigItemClient {
     void deleteBySerialNo(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String accessToken,
                           @RequestBody JigItemDeleteRequestDto dto);
 
-    @PutMapping("/repair")
+    @PutMapping("/jig-item/repair")
     void repair(@RequestBody JigItemRepairRequestDto dto);
 }
