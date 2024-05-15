@@ -51,4 +51,7 @@ public interface JigItemClient {
 
     @GetMapping("/inventory")
     Response<JigItemInventoryRequestDto> inventory();
+
+    @PutMapping("/repair")
+    Response<Void> repair(@RequestBody JigItemRepairRequestDto dto);
 }

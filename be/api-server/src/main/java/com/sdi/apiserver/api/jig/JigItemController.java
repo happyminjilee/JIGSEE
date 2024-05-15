@@ -108,4 +108,10 @@ class JigItemController {
         log.info("모델별 재고 요청");
         return jigItemClient.inventory();
     }
+
+    @PutMapping("/repair")
+    Response<Void> repair(@RequestBody JigItemRepairRequestDto dto){
+        log.info("{} 수리 이력 생성 요청", dto.serialNo());
+        return jigItemClient.repair(dto);
+    }
 }
