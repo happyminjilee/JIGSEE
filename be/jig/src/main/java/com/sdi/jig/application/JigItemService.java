@@ -215,6 +215,14 @@ public class JigItemService {
         return JigItemInventoryRequestDto.from(groupByModel);
     }
 
+    @Transactional
+    public void repair(String serialNo) {
+        JigItemRDBEntity jigItemBySerialNo = getJigItemBySerialNo(serialNo);
+        JigItemRepairHistoryRDBEntity entity = JigItemRepairHistoryRDBEntity.of(jigItemBySerialNo);
+
+        jigItemRepairHistoryRepository.save(entity);
+    }
+
     private List<Long> extractJigIds(FacilityRDBEntity facilityByModel) {
         return getFacilityJigMappingByFacilityId(facilityByModel.getId())
                 .stream()

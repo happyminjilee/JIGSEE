@@ -91,4 +91,10 @@ class JigItemController {
         JigItemInventoryRequestDto dto = jigItemService.inventory();
         return Response.success(dto);
     }
+
+    @PutMapping("/repair")
+    Response<Void> repair(@RequestBody JigItemRepairRequestDto dto){
+        jigItemService.repair(dto.serialNo());
+        return Response.success();
+    }
 }
