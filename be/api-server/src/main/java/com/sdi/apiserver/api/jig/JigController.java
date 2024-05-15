@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/jig")
 @RequiredArgsConstructor
@@ -65,5 +67,12 @@ class JigController {
         memberController.producerCheck(request);
         log.info("{}모델의 지그 적정 주기 조회 요청", model);
         return jigClient.jigOptimalInterval(model);
+    }
+
+    @GetMapping("/graph")
+    Response<List<JigGraphResponseDto>> jigGraph(HttpServletRequest request) {
+        memberController.producerCheck(request);
+        log.info("그래프 정보 조회 요청");        
+        return jigClient.jigGraph();
     }
 }
