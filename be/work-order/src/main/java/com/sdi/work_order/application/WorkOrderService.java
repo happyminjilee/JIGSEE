@@ -31,6 +31,8 @@ import static com.sdi.work_order.dto.request.WorkOrderUpdateStatusRequestDto.Upd
 @RequiredArgsConstructor
 public class WorkOrderService {
 
+    private final static String SYSTEM = "SYSTEM";
+
     private final JigItemService jigItemService;
     private final MemberService memberService;
     private final WorkOrderRDBRepository workOrderRDBRepository;
@@ -96,7 +98,7 @@ public class WorkOrderService {
 
         // 저장할 데이터 생성
         String checkListId = UUID.randomUUID().toString();
-        WorkOrderRDBEntity rdb = WorkOrderRDBEntity.from(employeeNo, jigItem.serialNo(), jigItem.model(), checkListId);
+        WorkOrderRDBEntity rdb = WorkOrderRDBEntity.from(employeeNo, jigItem.serialNo(), jigItem.model(), WorkOrderStatus.PROGRESS, checkListId);
         WorkOrderNosqlEntity nosql = WorkOrderNosqlEntity.from(checkListId, false, WorkOrderCheckItem.from(jigItem.checkList()));
 
         saveWorkOrder(rdb, nosql);
@@ -147,7 +149,7 @@ public class WorkOrderService {
             }
 
             String checkListId = UUID.randomUUID().toString();
-            WorkOrderRDBEntity rdb = WorkOrderRDBEntity.from(null, jigItem.serialNo(), jigItem.model(), checkListId);
+            WorkOrderRDBEntity rdb = WorkOrderRDBEntity.from(SYSTEM, jigItem.serialNo(), jigItem.model(), WorkOrderStatus.PUBLISH, checkListId);
             WorkOrderNosqlEntity nosql = WorkOrderNosqlEntity.from(checkListId, false, WorkOrderCheckItem.from(jigItem.checkList()));
 
             saveWorkOrder(rdb, nosql);
