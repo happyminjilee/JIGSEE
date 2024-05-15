@@ -45,13 +45,13 @@ public class WorkOrderRDBEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public static WorkOrderRDBEntity from(String creatorEmployeeNo, String jigSerialNo, String model, String checkListId){
+    public static WorkOrderRDBEntity from(String creatorEmployeeNo, String jigSerialNo, String model, WorkOrderStatus status, String checkListId){
         return new WorkOrderRDBEntity(null,
                 creatorEmployeeNo,
                 null,
                 jigSerialNo,
                 model,
-                WorkOrderStatus.PROGRESS,
+                status,
                 checkListId,
                 LocalDateTime.now(),
                 null
