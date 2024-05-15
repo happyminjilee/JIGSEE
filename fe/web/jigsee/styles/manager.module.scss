@@ -7,6 +7,7 @@
   flex-direction: row; /* Stack children vertically */
   padding-left: 100px;
   padding-right: 100px;
+  // border: 1px solid black;
 }
 .releasecontainer {
   display: flex;
@@ -15,6 +16,7 @@
   width: 500px;
   height: 100%;
   flex-direction: column; /* Stack children vertically */
+  // border: 1px solid black;
 }
 .stockcontainer {
   display: flex;
@@ -23,6 +25,7 @@
   width: 400px;
   height: 100%;
   flex-direction: column; /* Stack children vertically */
+  // border: 1px solid black;
 }
 .btncontainer {
   display: flex;

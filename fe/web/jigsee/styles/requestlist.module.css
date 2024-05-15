@@ -5,7 +5,7 @@
   border-radius: 0.5rem;
   width: 100%;
   height: 100%;
-  margin: 10px auto;
+  /* margin: 10px auto; */
   padding: 5px;
   box-shadow: 4px 4px var(--light-gray);
   /*align-content: center;*/
@@ -39,7 +39,7 @@
   width: 3px;
 }
 
-.contents::-webkit-scrollbar-button{
+.contents::-webkit-scrollbar-button {
   display: none;
 }
 
