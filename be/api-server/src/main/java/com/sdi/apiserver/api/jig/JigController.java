@@ -2,11 +2,7 @@ package com.sdi.apiserver.api.jig;
 
 import com.sdi.apiserver.api.jig.client.JigClient;
 import com.sdi.apiserver.api.jig.dto.request.JigUpdateRequestDto;
-import com.sdi.apiserver.api.jig.dto.response.JigModelCountResponseDto;
-import com.sdi.apiserver.api.jig.dto.response.JigMonthResponseDto;
-import com.sdi.apiserver.api.jig.dto.response.JigResponseDto;
-import com.sdi.apiserver.api.jig.dto.response.JigUpdatedCheckListResponseDto;
-import com.sdi.apiserver.api.jig.dto.util.JigStatus;
+import com.sdi.apiserver.api.jig.dto.response.*;
 import com.sdi.apiserver.api.member.MemberController;
 import com.sdi.apiserver.util.Response;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Calendar;
 
 @RestController
 @RequestMapping("/v1/jig")
@@ -63,5 +57,13 @@ class JigController {
         memberController.producerCheck(request);
         log.info("{}년 {}월 WO 현황 조회 요청", year, month);
         return jigClient.updatedCheckList(year, month);
+    }
+
+    @GetMapping("/optimal-interval")
+    Response<JigOptimalIntervalResponseDto> jigOptimalInterval(HttpServletRequest request,
+                                                               @RequestParam(name = "model") String model) {
+        memberController.producerCheck(request);
+        log.info("{}모델의 지그 적정 주기 조회 요청", model);
+        return jigClient.jigOptimalInterval(model);
     }
 }
