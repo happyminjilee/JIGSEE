@@ -224,6 +224,9 @@ public class JigItemService {
     }
 
     private void updateBecauseExchange(FacilityItemRDBEntity facilityItem, JigItemRDBEntity beforeJigItem, JigItemRDBEntity afterJigItem) {
+        // 같은 지그 모델인지 확인
+        isNotSameModelAndThrow(beforeJigItem.getJig().getId(), afterJigItem.getJig().getId());
+
         // 지그 교체
         facilityItem.exchangeJigItem(beforeJigItem, afterJigItem);
 
@@ -244,6 +247,12 @@ public class JigItemService {
 
         // 지그 점검(inspection) 완료 상태로 변경
         jigItemInspection(beforeJigItem.getId());
+    }
+
+    private void isNotSameModelAndThrow(Long beforeJigModeId, Long afterJigModelId) {
+        if(!beforeJigModeId.equals(afterJigModelId)){
+            throw new IllegalArgumentException("같은 모델이 아니어서 교체할 수 없습니다.");
+        }
     }
 
     private void jigItemInspection(Long id) {
