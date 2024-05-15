@@ -114,4 +114,10 @@ class JigItemController {
         log.info("{} 수리 이력 생성 요청", dto.serialNo());
         return jigItemClient.repair(dto);
     }
+
+    @PutMapping("/delete-and-repair")
+    Response<Void> deleteAndRepair(@RequestBody JigItemDeleteAndRepairRequestDto dto){
+        log.info("{} 상태에 따른 삭제 및 수리 이력 생성. 상태 : {}", dto.serialNo(), dto.isAllPass());
+        return jigItemClient.deleteAndRepair(dto);
+    }
 }
