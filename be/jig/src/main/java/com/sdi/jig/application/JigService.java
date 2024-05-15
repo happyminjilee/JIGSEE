@@ -1,19 +1,14 @@
 package com.sdi.jig.application;
 
 import com.sdi.jig.client.WorkOrderClient;
-import com.sdi.jig.dto.response.JigModelCountResponseDto;
+import com.sdi.jig.dto.response.*;
 import com.sdi.jig.dto.response.JigModelCountResponseDto.JigModelCount;
-import com.sdi.jig.dto.response.JigMonthResponseDto;
-import com.sdi.jig.dto.response.JigResponseDto;
-import com.sdi.jig.dto.response.JigUpdatedCheckListResponseDto;
 import com.sdi.jig.dto.response.JigUpdatedCheckListResponseDto.UpdatedJig;
 import com.sdi.jig.entity.nosql.JigNosqlEntity;
 import com.sdi.jig.entity.rdb.JigRDBEntity;
+import com.sdi.jig.entity.rdb.JigStatsRDBEntity;
 import com.sdi.jig.repository.nosql.JigNosqlRepository;
-import com.sdi.jig.repository.rdb.JigItemIOHistoryRepository;
-import com.sdi.jig.repository.rdb.JigItemRDBRepository;
-import com.sdi.jig.repository.rdb.JigItemRepairHistoryRepository;
-import com.sdi.jig.repository.rdb.JigRDBRepository;
+import com.sdi.jig.repository.rdb.*;
 import com.sdi.jig.util.CheckItem;
 import com.sdi.jig.util.IOStatus;
 import com.sdi.jig.util.JigStatus;
@@ -21,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.*;
@@ -38,6 +34,7 @@ public class JigService {
     private final JigNosqlRepository jigNosqlRepository;
     private final JigItemIOHistoryRepository jigItemIOHistoryRepository;
     private final JigItemRepairHistoryRepository jigItemRepairHistoryRepository;
+    private final JigStatsRDBRepository jigStatsRDBRepository;
     private final WorkOrderClient workOrderClient;
 
     public JigResponseDto findByModel(String model) {
@@ -102,6 +99,15 @@ public class JigService {
                         )
                         .orElse(Collections.emptyList());
         return JigUpdatedCheckListResponseDto.from(updatedJigList);
+    }
+
+    public JigOptimalIntervalResponseDto jigOptimalInterval(String model) {
+        JigRDBEntity jig = getJigRdbEntityByModel(model);
+
+        List<BigDecimal> data = jigStatsRDBRepository.findAllByJigOrderByRepairCount(jig).stream()
+                .map(JigStatsRDBEntity::getOptimalInterval).collect(Collectors.toList());
+
+        return JigOptimalIntervalResponseDto.of(data);
     }
 
     public JigRDBEntity getJigRdbEntityByModel(String model) {

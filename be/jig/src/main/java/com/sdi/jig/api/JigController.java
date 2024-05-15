@@ -2,11 +2,7 @@ package com.sdi.jig.api;
 
 import com.sdi.jig.application.JigService;
 import com.sdi.jig.dto.request.JigUpdateRequestDto;
-import com.sdi.jig.dto.response.JigModelCountResponseDto;
-import com.sdi.jig.dto.response.JigMonthResponseDto;
-import com.sdi.jig.dto.response.JigResponseDto;
-import com.sdi.jig.dto.response.JigUpdatedCheckListResponseDto;
-import com.sdi.jig.util.JigStatus;
+import com.sdi.jig.dto.response.*;
 import com.sdi.jig.util.Response;
 import com.sdi.jig.util.TokenHeader;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,5 +44,10 @@ class JigController {
     Response<JigUpdatedCheckListResponseDto> updatedCheckList(@RequestParam(name = "year", required = false) Integer year,
                                                               @RequestParam(name = "month", required = false) Integer month) {
         return Response.success(jigService.updatedCheckList(year, month));
+    }
+
+    @GetMapping("/optimal-interval")
+    Response<JigOptimalIntervalResponseDto> jigOptimalInterval(@RequestParam(name = "model") String model) {
+        return Response.success(jigService.jigOptimalInterval(model));
     }
 }
