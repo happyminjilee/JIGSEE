@@ -36,7 +36,7 @@ public class JigService {
     private final int DAY_TIME = 24;
     private final int CHECK_PEOPLE = 20;
     private final int CHECK_REQUIRED_TIME = 4;
-    private final int SPLIT_NUMBER = 10000;
+    private final int SPLIT_NUMBER = 100000;
 
     private final JigRDBRepository jigRDBRepository;
     private final JigItemRDBRepository jigItemRDBRepository;
