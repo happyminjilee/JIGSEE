@@ -1,13 +1,10 @@
 package com.sdi.jig.dto.response;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 public record JigGraphResponseDto(
         int day,
-        float output,
-        float cost,
-        float yield,
+        double output,
+        double cost,
+        double yield,
         int countMissingJig
 ) {
     public static JigGraphResponseDto of(int day,
@@ -16,16 +13,10 @@ public record JigGraphResponseDto(
                                          double yieldValue,
                                          int countMissingJig
     ) {
-        float output = roundToTwoDecimalPlaces(outputValue);
-        float cost = roundToTwoDecimalPlaces(costValue);
-        float yield = roundToTwoDecimalPlaces(yieldValue);
+        double roundedOutputValue = Math.round(outputValue * 100.0) / 100.0;
+        double roundedCostValue = Math.round(costValue * 100.0) / 100.0;
+        double roundedYieldValue = Math.round(yieldValue * 100.0) / 100.0;
 
-        return new JigGraphResponseDto(day, output, cost, yield, countMissingJig);
-    }
-
-    private static float roundToTwoDecimalPlaces(double value) {
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
-        return bd.floatValue();
+        return new JigGraphResponseDto(day, roundedOutputValue, roundedCostValue, roundedYieldValue, countMissingJig);
     }
 }
