@@ -163,13 +163,13 @@ public class JigService {
             double monthOperatingTime = MONTH_DAY * DAY_TIME - (monthDownTime + monthMaintenanceTime);
 
             // 생산량
-            double outputValue = monthOperatingTime * PRODUCTION_HOUR;
+            double outputValue = monthOperatingTime * PRODUCTION_HOUR * PRODUCTION_PROFIT;
 
             // 생산 비용
             double costValue = monthOperatingTime * FACILITY_HOUR_OPERATING_COST + downTime * BREAKEDOWN_COST;
 
             // 차이
-            double yieldValue = outputValue * PRODUCTION_PROFIT - costValue;
+            double yieldValue = outputValue - costValue;
 
             jigGraphResponseDtoList.add(JigGraphResponseDto.of(
                     day,
