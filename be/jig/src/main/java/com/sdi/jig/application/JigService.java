@@ -35,8 +35,8 @@ public class JigService {
     private final int MONTH_DAY = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
     private final int DAY_TIME = 24;
     private final int CHECK_PEOPLE = 20;
-    private final int CHECK_REQUIRED_TIME = 4;
     private final int SPLIT_NUMBER = 100000;
+    private final int SPLIT_HALF = 2;
 
     private final JigRDBRepository jigRDBRepository;
     private final JigItemRDBRepository jigItemRDBRepository;
@@ -128,22 +128,30 @@ public class JigService {
         // 응답 리스트
         List<JigGraphResponseDto> jigGraphResponseDtoList = new ArrayList<>();
 
-        // 지그 모델 별 적정 점검 주기 List
-        List<Double> optimalIntervalList = getOptimalIntervalList();
+        // 현재 장착된 지그들 리스트
+        List<JigItemRDBEntity> jigItemList = jigItemRDBRepository.findByStatus(JigStatus.IN);
+
+        // 장착된 지그 별 적정 점검 주기 Map
+        Map<String, Double> optimalIntervalMap = getOptimalIntervalMap(jigItemList);
+        
+        Map<Long, Double> oneRepairOptimalIntervalMap = getOptimalIntervalMapByRepairCount(jigItemList, 1);
+
+        // 장착된 지그의 적정 점검 주기 List
+        List<Double> optimalIntervalList = new ArrayList<>(optimalIntervalMap.values());
 
         // 날짜 별 값을 확인하기 위한 for 문
         for (int day = startDay; day <= endDay; day++) {
             // 해당 점검 주기에 따른 예상 점검 횟수
             double monthCheckNumber = (double) MONTH_DAY / day;
 
+            // 점검 리스트 지그의 적정 점검 주기 List
             int finalDay = day;
-            // 점검을 놓친 지그 갯수
-            int countMissingJig = (int) optimalIntervalList.stream()
-                    .filter(cycle -> cycle < finalDay)
-                    .count();
+            List<Double> checkJigOptimalIntervalList = optimalIntervalList.stream()
+                    .filter(cycle -> cycle >= finalDay)
+                    .toList();
 
-            // 점검 대상 지그 갯수
-            int countCheckJig = optimalIntervalList.size() - countMissingJig;
+            // 점검을 놓친 지그 갯수
+            int countMissingJig = optimalIntervalList.size() - checkJigOptimalIntervalList.size();
 
             // 비정규 점검 소요 시간
             int downTime = getDownTime(countMissingJig);
@@ -153,7 +161,7 @@ public class JigService {
             }
 
             // 정규 유지 보수 소요 시간
-            int maintenanceTime = getMaintenanceTime(countCheckJig);
+            int maintenanceTime = getMaintenanceTime(jigItemList, oneRepairOptimalIntervalMap);
 
             // 한달 소요 되는 총 비정규 점검 시간
             Double monthDownTime = downTime * monthCheckNumber;
@@ -212,25 +220,53 @@ public class JigService {
         return startAndEndDate;
     }
 
-    private List<Double> getOptimalIntervalList() {
-        List<JigItemRDBEntity> jigItemList = jigItemRDBRepository.findByStatus(JigStatus.IN);
-
-        // 지그 모델 별 적정 점검 주기 List
-        List<Double> optimalIntervalList = new ArrayList<>();
+    private Map<String, Double> getOptimalIntervalMap(List<JigItemRDBEntity> jigItemList) {
+        // 지그 별 적정 점검 주기 List
+        Map<String, Double> optimalIntervalMap = new HashMap<>();
 
         for (JigItemRDBEntity jigItem : jigItemList) {
-            int countRepair = jigItemRepairHistoryRepository.countByJigItemId(jigItem.getJig().getId());
-            double optimalInterval = jigStatsRDBRepository.findByJigIdAndRepairCount(jigItem.getJig().getId(), countRepair).getOptimalInterval();
+            String serialNo = jigItem.getSerialNo();
+            Long jigModelId = jigItem.getJig().getId();
+            int countRepair = jigItemRepairHistoryRepository.countByJigItemSerialNo(serialNo);
+            double optimalInterval = getOptimalIntervalByRepairCount(jigModelId, countRepair);
             double optimalIntervalDouble = roundedValue(optimalInterval);
-            optimalIntervalList.add(optimalIntervalDouble);
+            optimalIntervalMap.put(serialNo, optimalIntervalDouble);
         }
 
-        return optimalIntervalList;
+        return optimalIntervalMap;
     }
 
-    private Integer getMaintenanceTime(int count) {
-        return count * CHECK_REQUIRED_TIME / CHECK_PEOPLE;
+    private Map<Long, Double>  getOptimalIntervalMapByRepairCount(List<JigItemRDBEntity> jigItemList, int count) {
+        // 지그 모델 별 수리 횟수 기준 적정 점검 주기 Map
+        Map<Long, Double> optimalIntervalMap = new HashMap<>();
+
+        for (JigItemRDBEntity jigItem : jigItemList) {
+            Long jigId = jigItem.getJig().getId();
+            if (optimalIntervalMap.containsKey(jigId)) continue;
+            double optimalInterval = getOptimalIntervalByRepairCount(jigId, count);
+            double optimalIntervalDouble = roundedValue(optimalInterval);
+            optimalIntervalMap.put(jigId, optimalIntervalDouble);
+        }
+
+        return optimalIntervalMap;
     }
+
+    // 해당 지그 모델의 수리 횟수에 따른 적정 점검 주기 조회
+    private double getOptimalIntervalByRepairCount(Long id, int count) {
+        return jigStatsRDBRepository.findByJigIdAndRepairCount(id, count).getOptimalInterval();
+    }
+
+    private Integer getMaintenanceTime(List<JigItemRDBEntity> jigItemList, Map<Long, Double> oneRepairOptimalIntervalMap) {
+        // 리스트의 모든 Double 값을 합산
+        double sumValue = jigItemList.stream()
+                .map(jigItem -> oneRepairOptimalIntervalMap.get(jigItem.getJig().getId()))
+                .mapToDouble(Double::doubleValue)  // Double을 기본 double로 변환
+                .sum();
+
+        // 합산된 값을 Integer로 변환하여 반환
+        return (int) (sumValue / SPLIT_HALF) / CHECK_PEOPLE;
+    }
+
 
     private static double roundedValue(double value) {
         return Math.round(value * 100.0) / 100.0;
