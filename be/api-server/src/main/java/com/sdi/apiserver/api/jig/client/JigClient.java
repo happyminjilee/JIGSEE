@@ -8,6 +8,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @FeignClient(name = "jigClient", url = "${apis.jig-base-url}")
 public interface JigClient {
 
@@ -31,4 +33,7 @@ public interface JigClient {
 
     @GetMapping("/optimal-interval")
     Response<JigOptimalIntervalResponseDto> jigOptimalInterval(@RequestParam(name = "model") String model);
+
+    @GetMapping("/graph")
+    Response<List<JigGraphResponseDto>> jigGraph();
 }
