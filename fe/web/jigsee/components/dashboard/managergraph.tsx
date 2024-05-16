@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 
 import {
     ComposedChart,
@@ -111,7 +111,7 @@ export default function App() {
         <ComposedChart
             width={1500}
             height={340}
-            data={data}
+            data={infos}
             margin={{
                 top: 20,
                 right: 20,
@@ -126,21 +126,21 @@ export default function App() {
                 </linearGradient>
             </defs>
             <CartesianGrid stroke="#EBEAEA"/>
-            <XAxis dataKey="name"/>
+            <XAxis dataKey="day"/>
             <YAxis/>
             <Tooltip/>
             <Legend/>
             <Area
                 type="monotone"
-                dataKey="amt"
+                dataKey="output"
                 fill="#F9E8C9"
                 stroke="none"
                 opacity={0.15}
             />
-            <Line type="monotone" dataKey="uv" stroke="#3185FC" strokeWidth="3"/>
-            <Line type="monotone" dataKey="amt" stroke="#5BBCFF" strokeWidth="3"/>
-            <Bar dataKey="pv" barSize={15} fill="#201658"/>
-            <Scatter dataKey="cnt" fill="#FFFFFF"/>
+            <Line type="monotone" dataKey="output" stroke="#3185FC" strokeWidth="3"/>
+            <Line type="monotone" dataKey="cost" stroke="#5BBCFF" strokeWidth="3"/>
+            <Bar dataKey="yield" barSize={15} fill="#201658"/>
+            <Scatter dataKey="countMissingJig" fill="#FFFFFF"/>
         </ComposedChart>
     );
 }
