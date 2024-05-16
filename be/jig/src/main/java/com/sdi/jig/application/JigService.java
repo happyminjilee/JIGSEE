@@ -29,7 +29,7 @@ public class JigService {
 
     private final int MAX_COUNT = 100;
     private final int PRODUCTION_HOUR = 1000;
-    private final int PRODUCTION_PROFIT = 100;
+    private final int PRODUCTION_PROFIT = 1000;
     private final int FACILITY_HOUR_OPERATING_COST = 1000;
     private final int BREAKEDOWN_COST = 500;
     private final int MONTH_DAY = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
