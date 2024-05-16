@@ -20,6 +20,8 @@ interface dashboardstore {
   change: number;
   request: number;
   finish: number;
+  isLoading: boolean;
+  setIsLoading: (n:boolean) => void;
   getJignumbers: () => Promise<void>;
   // 지그 창고, 현장대기 수
   maxcount: number;
@@ -39,6 +41,10 @@ export const useDashboardstore = create<dashboardstore>((set) => ({
   change: 0,
   request: 0,
   finish: 0,
+  isLoading: true,
+  setIsLoading: (n:boolean) => {
+    set({isLoading: n})
+  },
   getJignumbers: async () => {
     const data = await getMonthJig();
     console.log("jig nummmmm", data);
@@ -48,6 +54,7 @@ export const useDashboardstore = create<dashboardstore>((set) => ({
       request: data.countRepairRequest,
       finish: data.countRepairFinish,
     });
+    return data
   },
   // 지그 창고, 현장대기 수
   maxcount: 0,

@@ -107,28 +107,28 @@ export default function App() {
                 left: 20
             }}
         >
-            <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
+            <defs>
+                <linearGradient id="colorUvAmt" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#B0C4B1" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#B0C4B1" stopOpacity={0.8}/>
+                </linearGradient>
+            </defs>
+            <CartesianGrid stroke="#EBEAEA"/>
+            <XAxis dataKey="name"/>
+            <YAxis/>
+            <Tooltip/>
+            <Legend/>
             <Area
                 type="monotone"
                 dataKey="amt"
-                fill="rgba(255, 115, 0, 0.5)"
+                fill="#F9E8C9"
                 stroke="none"
+                opacity={0.15}
             />
-            <Area
-                type="monotone"
-                dataKey="uv"
-                fill="rgba(255, 255, 255, 1)"
-                stroke="none"
-            />
-            <Line type="monotone" dataKey="uv" stroke="#ff7300" />
-            <Line type="monotone" dataKey="amt" stroke="#2F76FF" />
-
-            <Bar dataKey="pv" barSize={20} fill="#413ea0" />
-            <Scatter dataKey="cnt" fill="red" />
+            <Line type="monotone" dataKey="uv" stroke="#3185FC" strokeWidth="3"/>
+            <Line type="monotone" dataKey="amt" stroke="#5BBCFF" strokeWidth="3"/>
+            <Bar dataKey="pv" barSize={15} fill="#201658"/>
+            <Scatter dataKey="cnt" fill="#FFFFFF"/>
         </ComposedChart>
     );
 }
