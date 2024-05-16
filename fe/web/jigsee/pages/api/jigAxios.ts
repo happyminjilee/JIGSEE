@@ -6,7 +6,9 @@ interface RowData {
 //지그 점검 항목 조회-
 export async function getjigMethod(modelID: string) {
   const params = { model: modelID };
-  return axiosAuthApi().get("/jig", { params });
+  const data = await axiosAuthApi().get("/jig", { params });
+  console.log(data, "checkckckckckckc");
+  return data.data.result;
 }
 
 // 지그 점검 항목 수정-관리자

@@ -4,8 +4,8 @@ import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 import { Select, SelectItem, Divider } from "@nextui-org/react";
 import { updatejigMethod } from "@/pages/api/jigAxios";
 import { useFacilityStore } from "@/store/facilitystore";
-import { useWoDetailStore } from "@/store/workorderstore";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { usejigStore } from "@/store/jigstore";
 
 // Step 1: prop types 정의
 interface EditStandardProps {
@@ -23,7 +23,7 @@ export default function EditStandard({ onClose }: EditStandardProps) {
   const [selectedFacility, setSelectedFacility] = useState(0);
   const [selectedModel, setSelectedModel] = useState("");
   // 기존점검항목 리스트를 불러옴
-  const { fetchWoDetail, checkList } = useWoDetailStore();
+  const { getJigMethodList, methodList } = usejigStore();
   // Row 타입의 배열로 rows 상태를 정의합니다.
   const [rows, setRows] = useState<RowData[]>([{ content: "", standard: "" }]);
 
@@ -57,7 +57,9 @@ export default function EditStandard({ onClose }: EditStandardProps) {
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
+
     onClose();
+    window.location.reload();
   };
 
   // 설비 선택이 바뀔때마다 설비 아이디 세팅
@@ -67,6 +69,19 @@ export default function EditStandard({ onClose }: EditStandardProps) {
     setfacilityID(selectedFacility);
     setEditJigs(selectedFacility);
   }, [selectedFacility, setfacilityID, setEditJigs, loadFacilities]);
+  // Jig 모델이 바뀔 때마다 methodList를 가져오고 rows를 업데이트
+  useEffect(() => {
+    const fetchMethodList = async () => {
+      if (selectedModel !== "") {
+        await getJigMethodList(selectedModel);
+      }
+    };
+    fetchMethodList();
+  }, [selectedModel, getJigMethodList]);
+
+  useEffect(() => {
+    setRows(methodList);
+  }, [methodList]);
 
   return (
     <>
