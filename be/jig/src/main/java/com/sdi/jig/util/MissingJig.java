@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum MissingJig {
-    LITTLE(2), PROPER(7), MORE(19);
+    LITTLE(5), PROPER(9), MORE(18);
 
     private final int count;
 }
