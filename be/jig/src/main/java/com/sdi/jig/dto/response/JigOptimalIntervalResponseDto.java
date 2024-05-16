@@ -3,9 +3,9 @@ package com.sdi.jig.dto.response;
 import java.util.List;
 
 public record JigOptimalIntervalResponseDto(
-        List<Float> data
+        List<Double> data
 ) {
-    public static JigOptimalIntervalResponseDto of(List<Float> data) {
+    public static JigOptimalIntervalResponseDto of(List<Double> data) {
         return new JigOptimalIntervalResponseDto(data);
     }
 }
