@@ -22,11 +22,12 @@
   max-height: 370px; /* 원하는 고정 높이 설정 */
   overflow-x: auto;
   padding-right: 10px; /* 스크롤바 공간 확보 */
+
   padding-top: 10px;
   min-width: 340px;
 
   button {
-    width: 400px;
+    width: 380px;
     height: 80px;
     border: 1px solid var(--light-gray);
     margin-bottom: 10px;

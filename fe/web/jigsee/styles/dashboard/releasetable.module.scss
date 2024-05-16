@@ -5,6 +5,7 @@
   flex-direction: column;
   height: 100%;
   width: 80%;
+  margin-right: 10px;
 }
 .table {
   height: 70%;
@@ -20,6 +21,7 @@
     }
   }
 }
+
 .input {
   background-color: var(--realwhite);
   // border: 1px solid var(--gray);
