@@ -21,3 +21,9 @@ export const updateChecked = async () => {
   const response = await axiosAuthApi().get("/jig/update-check-list", { params });
   return response.data.result;
 };
+// GET OPTIMAL
+export const getOptimal = async (Jigmodel: string) => {
+  const params = { model: Jigmodel };
+  const response = await axiosAuthApi().get("/jig/optimal-interval", { params });
+  return response.data.result;
+};
