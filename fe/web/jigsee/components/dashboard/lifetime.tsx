@@ -4,15 +4,18 @@ import { ApexOptions } from "apexcharts";
 import { useDashboardstore } from "@/store/dashboardstore";
 export default function Lifetime() {
   const [model, setModel] = useState("");
-  const { jigmodel } = useDashboardstore();
+  const { jigmodel, getInterval, optimalList, xlabelList } = useDashboardstore();
   useEffect(() => {
     setModel(jigmodel);
+    if (jigmodel !== "") {
+      getInterval(jigmodel);
+    }
   }, [jigmodel]);
   // 차트에 표시할 데이터
   const series = [
     {
       name: "Desktops",
-      data: [3500, 3300, 3200, 3000, 2900, 2800, 2760, 2654, 2500],
+      data: optimalList,
     },
   ];
 
@@ -24,6 +27,22 @@ export default function Lifetime() {
       zoom: {
         enabled: false,
       },
+      animations: {
+        enabled: true,
+        easing: "easeinout",
+        speed: 800,
+        animateGradually: {
+          enabled: true,
+          delay: 150,
+        },
+        dynamicAnimation: {
+          enabled: true,
+          speed: 350,
+        },
+      },
+    },
+    markers: {
+      size: 6,
     },
     dataLabels: {
       enabled: false,
@@ -32,17 +51,17 @@ export default function Lifetime() {
       curve: "straight",
     },
     title: {
-      text: `수리 횟수에 따른 예상 생명주기 ${model || "모델명"}`,
-      align: "left",
+      text: `수리 횟수에 따른 예상 생명주기 : ${model || "모델을 선택 하세요"}`,
+      align: "center",
     },
     grid: {
       row: {
-        colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+        colors: ["transparent", "transparent"], // takes an array which will be repeated on columns
         opacity: 0.5,
       },
     },
     xaxis: {
-      categories: ["1회", "2회", "3회", "4회", "5회", "6회", "7회", "8회", "9회"],
+      categories: xlabelList,
     },
   };
 
