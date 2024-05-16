@@ -20,6 +20,8 @@ import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.sdi.jig.util.DownTime.getDownTime;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -32,6 +34,8 @@ public class JigService {
     private final int BREAKEDOWN_COST = 500;
     private final int MONTH_DAY = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
     private final int DAY_TIME = 24;
+    private final int CHECK_PEOPLE = 20;
+    private final int CHECK_REQUIRED_TIME = 4;
 
     private final JigRDBRepository jigRDBRepository;
     private final JigItemRDBRepository jigItemRDBRepository;
@@ -217,21 +221,8 @@ public class JigService {
         return optimalIntervalList;
     }
 
-    private int getDownTime(int count) {
-        if (count <= MissingJig.LITTLE.getCount()) {
-            return DownTime.LITTLE.getTime();
-        } else if (count <= MissingJig.PROPER.getCount()) {
-            return DownTime.PROPER.getTime();
-        } else if (count <= MissingJig.MORE.getCount()) {
-            return DownTime.MORE.getTime();
-        } else if (MissingJig.MANY.getCount() <= count) {
-            return DownTime.MANY.getTime();
-        }
-        return DownTime.MANY.getTime();
-    }
-
     private Integer getMaintenanceTime(int count) {
-        return count * 4 / 20;
+        return count * CHECK_REQUIRED_TIME / CHECK_PEOPLE;
     }
 
     private static double roundedValue(double value) {

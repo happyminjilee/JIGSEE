@@ -13,10 +13,14 @@ public record JigGraphResponseDto(
                                          double yieldValue,
                                          int countMissingJig
     ) {
-        double roundedOutputValue = Math.round(outputValue * 100.0) / 100.0;
-        double roundedCostValue = Math.round(costValue * 100.0) / 100.0;
-        double roundedYieldValue = Math.round(yieldValue * 100.0) / 100.0;
+        double roundedOutputValue = roundedValue(outputValue);
+        double roundedCostValue = roundedValue(costValue);
+        double roundedYieldValue = roundedValue(yieldValue);
 
         return new JigGraphResponseDto(day, roundedOutputValue, roundedCostValue, roundedYieldValue, countMissingJig);
+    }
+
+    private static double roundedValue(double value) {
+        return Math.round(value * 100.0) / 100.0;
     }
 }
