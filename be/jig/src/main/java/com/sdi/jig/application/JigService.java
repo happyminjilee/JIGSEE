@@ -36,6 +36,7 @@ public class JigService {
     private final int DAY_TIME = 24;
     private final int CHECK_PEOPLE = 20;
     private final int CHECK_REQUIRED_TIME = 4;
+    private final int SPLIT_NUMBER = 10000;
 
     private final JigRDBRepository jigRDBRepository;
     private final JigItemRDBRepository jigItemRDBRepository;
@@ -170,7 +171,13 @@ public class JigService {
             // 차이
             double yieldValue = outputValue * PRODUCTION_PROFIT - costValue;
 
-            jigGraphResponseDtoList.add(JigGraphResponseDto.of(day, outputValue, costValue, yieldValue, countMissingJig));
+            jigGraphResponseDtoList.add(JigGraphResponseDto.of(
+                    day,
+                    outputValue / SPLIT_NUMBER,
+                    costValue / SPLIT_NUMBER,
+                    yieldValue / SPLIT_NUMBER,
+                    countMissingJig
+            ));
         }
 
         return jigGraphResponseDtoList;
