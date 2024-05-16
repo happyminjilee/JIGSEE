@@ -6,12 +6,14 @@ export const login = async (employeeNo: string, password: string) => {
   const http = axiosApi();
 
   return await http
-    .post("/login",
-        {
-      employeeNo: employeeNo,
-      password: password,
-    },
-        {})
+    .post(
+      "/login",
+      {
+        employeeNo: employeeNo,
+        password: password,
+      },
+      {}
+    )
     .then((response) => {
       localStorage.setItem("access_token", response.headers["authorization"]);
       localStorage.setItem("refresh_token", response.headers["refreshtoken"]);
@@ -27,6 +29,9 @@ export const login = async (employeeNo: string, password: string) => {
     })
     .catch((error) => {
       console.log("login failed", error.message);
+      eraseCookie("refresh_token");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
       return {
         success: false,
         name: "",
@@ -51,6 +56,9 @@ export const logout = async () => {
     // 토큰 만료 시 어떻게 해야하는거..?
     // local storage 삭제해야하나?
     .catch((error) => {
+      eraseCookie("refresh_token");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
       return false;
     });
 };
@@ -58,11 +66,11 @@ export const logout = async () => {
 export const searchUser = async () => {
   const request = axiosAuthApi();
   return await request
-      .get("/member/search", {})
-      .then((res) => {
-        return res.data.result
-      })
-      .catch((error) => {
-        console.log(error.message)
-      })
-}
+    .get("/member/search", {})
+    .then((res) => {
+      return res.data.result;
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+};
