@@ -5,15 +5,17 @@ import { axiosApi, axiosAuthApi } from "@/utils/instance";
 export const releaseRequest = async (serialNos: string[]) => {
   const http = axiosAuthApi();
   return await http
-    .post("/request/jig", {
-      serialNos: serialNos,
-    }, {})
+    .post(
+      "/request/jig",
+      {
+        serialNos: serialNos,
+      },
+      {}
+    )
     .then((response) => {
-      console.log(response, "불출요청 성공");
       return true;
     })
     .catch((error) => {
-      console.log(error.message);
       console.log(error);
       return false;
     });

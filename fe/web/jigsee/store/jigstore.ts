@@ -18,7 +18,6 @@ export const usejigStore = create<jigStore>((set) => ({
   stockList: [],
   setStockList: async () => {
     const data = await getStockList();
-    console.log("재고현황", data);
     set({ stockList: data.list });
     // console.log("stokkk", data.list);
   },

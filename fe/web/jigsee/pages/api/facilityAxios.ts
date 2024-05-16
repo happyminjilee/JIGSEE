@@ -6,7 +6,6 @@ export const getfacilitylist = async () => {
   return await http
     .get("/facility-item/all")
     .then((response) => {
-      console.log("tytyty", response);
       return response.data.result;
     })
     .catch((error) => {
@@ -23,7 +22,6 @@ export const getfacility = async (id: string) => {
       },
     })
     .then((response) => {
-      console.log("설비해당지그목록", response);
       return response;
     })
     .catch((error) => {
@@ -40,7 +38,6 @@ export const getfacilityitems = async (id: string) => {
       },
     })
     .then((response) => {
-      console.log("jigjigjig", response);
       return response.data.result;
     })
     .catch((error) => {

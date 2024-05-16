@@ -7,7 +7,6 @@ interface RowData {
 export async function getjigMethod(modelID: string) {
   const params = { model: modelID };
   const data = await axiosAuthApi().get("/jig", { params });
-  console.log(data, "checkckckckckckc");
   return data.data.result;
 }
 

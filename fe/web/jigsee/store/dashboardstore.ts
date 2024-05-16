@@ -21,7 +21,7 @@ interface dashboardstore {
   request: number;
   finish: number;
   isLoading: boolean;
-  setIsLoading: (n:boolean) => void;
+  setIsLoading: (n: boolean) => void;
   getJignumbers: () => Promise<void>;
   // 지그 창고, 현장대기 수
   maxcount: number;
@@ -46,26 +46,24 @@ export const useDashboardstore = create<dashboardstore>((set) => ({
   request: 0,
   finish: 0,
   isLoading: true,
-  setIsLoading: (n:boolean) => {
-    set({isLoading: n})
+  setIsLoading: (n: boolean) => {
+    set({ isLoading: n });
   },
   getJignumbers: async () => {
     const data = await getMonthJig();
-    console.log("jig nummmmm", data);
     set({
       change: data.countChange,
       deleted: data.countDelete,
       request: data.countRepairRequest,
       finish: data.countRepairFinish,
     });
-    return data
+    return data;
   },
   // 지그 창고, 현장대기 수
   maxcount: 0,
   modelscount: [],
   getJigcounts: async () => {
     const data = await getJigcount();
-    console.log("jig locaaaa", data);
     set({ modelscount: data.jigModelCountList, maxcount: data.maxCount });
   },
   updatedList: [],
@@ -82,7 +80,6 @@ export const useDashboardstore = create<dashboardstore>((set) => ({
   xlabelList: [],
   getInterval: async (id: string) => {
     const data = await getOptimal(id);
-    console.log("jig graphphphp", data);
     set({ optimalList: data.data });
     // optimalList의 길이 가져오기
     const optimalListLength = data.data.length;

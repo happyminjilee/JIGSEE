@@ -41,7 +41,6 @@ export const useAlarmStore = create<alarmtore>((set, get) => ({
   setUnchecked: async () => {
     try {
       const result = await getUnchecked(); // 미확인 알림 조회
-      console.log("unchecked received", result);
       // notification 필드가 있는지 확인하고, 없다면 빈 배열로 설정
       const notifications = result.notifications || [];
       set({
@@ -61,7 +60,7 @@ export const useAlarmStore = create<alarmtore>((set, get) => ({
     const page = get().page;
     try {
       const result = await getAllalarms(page); // 모든 알림 조회
-      console.log("all received", result);
+
       // notification 필드가 있는지 확인하고, 없다면 빈 배열로 설정
       const notifications = result.notifications || [];
       set({ alarmList: notifications, all_alarams: notifications.length }); // 모든 알림 리스트 업데이트
@@ -73,7 +72,6 @@ export const useAlarmStore = create<alarmtore>((set, get) => ({
     set({ alarmId: ID });
     try {
       const result = await checkAlarm(ID); // 모든 알림 조회
-      console.log("checked", result);
     } catch (error) {
       console.error("all Failed", error);
     }

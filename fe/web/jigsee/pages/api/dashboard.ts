@@ -1,12 +1,12 @@
 import { axiosAuthApi } from "@/utils/instance";
 export const getMonthJig = async () => {
   const today = new Date();
-  const year = today.getFullYear(); // Gets the current year
-  const month = today.getMonth() + 1; // Gets the current month (0-indexed, so add 1)
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
 
   const params = {
     year: year.toString(),
-    month: month.toString().padStart(2, "0"), // Ensures the month is always two digits
+    month: month.toString().padStart(2, "0"),
   };
   const response = await axiosAuthApi().get("/jig/status", { params });
   return response.data.result;
@@ -17,12 +17,12 @@ export const getJigcount = async () => {
 };
 export const updateChecked = async () => {
   const today = new Date();
-  const year = today.getFullYear(); // Gets the current year
-  const month = today.getMonth() + 1; // Gets the current month (0-indexed, so add 1)
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
 
   const params = {
     year: year.toString(),
-    month: month.toString().padStart(2, "0"), // Ensures the month is always two digits
+    month: month.toString().padStart(2, "0"),
   };
 
   const response = await axiosAuthApi().get("/jig/update-check-list", { params });

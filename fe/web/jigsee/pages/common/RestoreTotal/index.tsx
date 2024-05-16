@@ -1,7 +1,6 @@
 import { Pagination } from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
-import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
 import { useRestoreStore } from "@/store/restorestore";
 import Modal from "@mui/material/Modal";
@@ -67,35 +66,7 @@ export default function RestoreTotal() {
   useEffect(() => {
     getRestoreDetail();
   }, [restoreId]);
-  const restoreDummies = [
-    {
-      createdAt: "2024.04.22", // 요청날짜
-      from: "주준형프로", // 요청자
-      id: 12,
-    },
-    {
-      createdAt: "2024.04.21", // 요청날짜
-      from: "박수형프로", // 요청자
-      id: 1,
-    },
-    {
-      createdAt: "2024.04.23", // 요청날짜
-      from: "차현철프로", // 요청자
-      id: 3,
-    },
-    {
-      createdAt: "2024.04.24", // 요청날짜
-      from: "김용준프로", // 요청자
-      id: 4,
-    },
-    ,
-    {
-      createdAt: "2024.04.25", // 요청날짜
-      from: "강성범프로", // 요청자
-      id: 7,
-    },
-    // 다른 JIG 데이터 객체들...
-  ];
+
   return (
     <>
       {Navbar}
@@ -104,14 +75,9 @@ export default function RestoreTotal() {
           // Render restoreList once it's loaded
           <div className={styled.container}>
             {restoreList.map((item, index) => (
-              <div
-                key={index}
-                className={styled.fullWidth}
-                onClick={() => cardClick(item.id)}
-              >
+              <div key={index} className={styled.fullWidth} onClick={() => cardClick(item.id)}>
                 <h3>
-                  생성일 {item.createdAt[0]}년 {item.createdAt[1]}월{" "}
-                  {item.createdAt[2]}일
+                  생성일 {item.createdAt[0]}년 {item.createdAt[1]}월 {item.createdAt[2]}일
                 </h3>
                 <p>
                   보수 요청 번호 {item.id} | 요청자 {item.from}

@@ -1,20 +1,13 @@
-import {Link, Pagination, Select, SelectItem} from "@nextui-org/react";
+import { Link, Pagination } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import styled from "@/styles/Total/MyTotal.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
-import { useReleaseStore } from "@/store/releasestore";
-import {useCompoStore, useUserWoListStore, useWoDetailStore} from "@/store/workorderstore";
-import TotalCardModal from "@/components/repair/TotalCardModal";
+import { useCompoStore, useUserWoListStore, useWoDetailStore } from "@/store/workorderstore";
 import Box from "@mui/material/Box";
-import CreateWoModal from "@/components/workorder/CreateWoModal";
-import Report from "@/components/workorder/template";
-import ReuseModal from "@/components/repair/ReuseModal";
-import DisposeModal from "@/components/repair/DisposeModal";
 import Modal from "@mui/material/Modal";
 import WoModal from "@/components/workorder/template";
-import {useSearchUser} from "@/store/memberstore";
-
+import { useSearchUser } from "@/store/memberstore";
 
 interface Option {
   label: string;
@@ -33,8 +26,8 @@ interface Props {
 }
 
 export default function RepairTotal() {
-  const { list,fetchUserWo, endPage} = useUserWoListStore()
-  const {employeeNo, fetchSearchUser} = useSearchUser()
+  const { list, fetchUserWo, endPage } = useUserWoListStore();
+  const { employeeNo, fetchSearchUser } = useSearchUser();
   const [role, setRole] = useState<string>(""); // 초기 상태를 명시적으로 string 타입으로 설정
   useEffect(() => {
     // 컴포넌트가 클라이언트 사이드에서 마운트되었을 때 로컬 스토리지에서 role 읽기
@@ -63,8 +56,8 @@ export default function RepairTotal() {
   const [page, setPage] = useState<number>(1);
   // page와 선택 옵션이 바뀜에 따라 api 호출
   useEffect(() => {
-    fetchSearchUser()
-    const name = localStorage.getItem("name") || ""
+    fetchSearchUser();
+    const name = localStorage.getItem("name") || "";
     setIsLoading(true); // API 호출 시작 전에 로딩 상태를 true로 설정
     fetchUserWo(employeeNo, name, page, 5)
       .then(() => {
@@ -98,20 +91,19 @@ export default function RepairTotal() {
     }
   }, [values]);
 
-  const {setWoId, setModalName, setModal, modal, modalName} = useCompoStore()
-  const {fetchWoDetail} = useWoDetailStore()
+  const { setWoId, setModalName, setModal, modal, modalName } = useCompoStore();
+  const { fetchWoDetail } = useWoDetailStore();
   const [isLoading, setIsLoading] = useState(true);
   function cardClick(id: number) {
     fetchWoDetail(id)
-        .then((res) => {
-          console.log(res)
-          setWoId(id)
-          setModalName("TOTAL")
-          setModal(true)
-        })
-        .catch((error) => {
-          console.log(error.message)
-        })
+      .then((res) => {
+        setWoId(id);
+        setModalName("TOTAL");
+        setModal(true);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   }
 
   return (
@@ -120,10 +112,10 @@ export default function RepairTotal() {
       <div className={styled.bigcontainer}>
         <div className={styled.right}>
           <Link
-              href="/common/RepairTotal"
-              // passHref
-              underline="hover"
-              style={{color: "black", fontSize: "12px", fontWeight: "lighter"}}
+            href="/common/RepairTotal"
+            // passHref
+            underline="hover"
+            style={{ color: "black", fontSize: "12px", fontWeight: "lighter" }}
           >
             전체 내역 보기
           </Link>
@@ -137,52 +129,55 @@ export default function RepairTotal() {
             list.map((jig, index) => (
               <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
                 <div>
-                  {jig.id} | {jig.status !== "FINISH" ? `요청자 : ${jig.creator}` : `점검인 : ${jig.terminator}`} |
-                   {jig.status !== "FINISH" ? ` 생성일 : ${jig.createdAt[0]}. ${jig.createdAt[1]}. ${jig.createdAt[2]}` : ` 수정일 : ${jig.updatedAt[0]}. ${jig.updatedAt[1]}. ${jig.updatedAt[2]}`}
+                  {jig.id} |{" "}
+                  {jig.status !== "FINISH"
+                    ? `요청자 : ${jig.creator}`
+                    : `점검인 : ${jig.terminator}`}{" "}
+                  |
+                  {jig.status !== "FINISH"
+                    ? ` 생성일 : ${jig.createdAt[0]}. ${jig.createdAt[1]}. ${jig.createdAt[2]}`
+                    : ` 수정일 : ${jig.updatedAt[0]}. ${jig.updatedAt[1]}. ${jig.updatedAt[2]}`}
                 </div>
-                <div>
-                  {jig.status}
-                </div>
+                <div>{jig.status}</div>
               </div>
-            )))
-          }
+            ))
+          )}
         </div>
         <div className={styled.center}>
           <Pagination onChange={(e) => setPage(e)} total={endPage} />
         </div>
       </div>
       <Modal
-          open={modal} // Corrected from 'open'
-          onClose={() => {
-            setModal(false);
-          }} // Added onClose handler
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+        open={modal} // Corrected from 'open'
+        onClose={() => {
+          setModal(false);
+        }} // Added onClose handler
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          "& .MuiBox-root": {
+            // Assuming the box is causing issues
+            outline: "none",
+            border: "none",
+            boxShadow: "none",
+          },
+        }}
+      >
+        <Box
           sx={{
+            width: "100%",
+            height: "80%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            "& .MuiBox-root": {
-              // Assuming the box is causing issues
-              outline: "none",
-              border: "none",
-              boxShadow: "none",
-            },
           }}
-      >
-        <Box
-            sx={{
-              width: "100%",
-              height: "80%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
         >
-          {modalName === "TOTAL" && <WoModal/>}
+          {modalName === "TOTAL" && <WoModal />}
         </Box>
       </Modal>
-
     </>
   );
 }

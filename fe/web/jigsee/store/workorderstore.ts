@@ -1,7 +1,14 @@
 import { create } from "zustand";
 import { AxiosResponse } from "axios";
 import { state } from "sucrase/dist/types/parser/traverser/base";
-import { getAllWo, getWogroup, getWoInfo, saveWotmp, doneWo, getUserWoList } from "@/pages/api/workorderAxios";
+import {
+  getAllWo,
+  getWogroup,
+  getWoInfo,
+  saveWotmp,
+  doneWo,
+  getUserWoList,
+} from "@/pages/api/workorderAxios";
 
 interface compo {
   modal: boolean;
@@ -23,7 +30,7 @@ export const useCompoStore = create<compo>((set) => ({
   },
   modalName: "",
   setModalName: (n: string) => {
-      set({modalName: n})
+    set({ modalName: n });
   },
   // wo 조회에 필요한 wo id 변수
   woId: 0,
@@ -33,20 +40,19 @@ export const useCompoStore = create<compo>((set) => ({
   // wo test 컴포넌트를 여는 상태변수
   rightCompo: "",
   setRightCompo: (n: string) => {
-    set({rightCompo: n})
+    set({ rightCompo: n });
   },
 }));
 
-
 interface lst {
-  id: number,
-  model: string, // 지그 모델명
-  serialNo: string, // 지그 일련번호
-  creator: string, // 작성자
-  terminator: string, // 작성 종료자
-  status: string, // wo 상태
-  createdAt: number[], // wo 생성시간
-  updatedAt: string, // wo 수정시간
+  id: number;
+  model: string; // 지그 모델명
+  serialNo: string; // 지그 일련번호
+  creator: string; // 작성자
+  terminator: string; // 작성 종료자
+  status: string; // wo 상태
+  createdAt: number[]; // wo 생성시간
+  updatedAt: string; // wo 수정시간
 }
 
 interface jigItemInfo {
@@ -83,15 +89,15 @@ interface WoGroup {
 }
 
 interface WoDetail {
-  id: number,
-  status: string,
-  creator: string, // 생성자
-  terminator: string, // 완료자
-  createdAt: number[], // wo 생성일
-  updatedAt: string, // wo 수정일
-  jigItemInfo: jigItemInfo,
-  checkList: checklist[],
-  fetchWoDetail: (id:number) => Promise<AxiosResponse>,
+  id: number;
+  status: string;
+  creator: string; // 생성자
+  terminator: string; // 완료자
+  createdAt: number[]; // wo 생성일
+  updatedAt: string; // wo 수정일
+  jigItemInfo: jigItemInfo;
+  checkList: checklist[];
+  fetchWoDetail: (id: number) => Promise<AxiosResponse>;
   fetchWoUpdateTmp: (id: number, tmpcheckList: checklist[]) => Promise<AxiosResponse>;
   fetchWoDone: (id: number, tmpcheckList: checklist[]) => Promise<AxiosResponse>;
 }
@@ -102,7 +108,7 @@ export const useWoStore = create<Wo>((set) => ({
   list: [],
   fetchWo: async (state: string, page: number, size: number) => {
     const data = await getAllWo(state, page, size);
-    console.log('요청 보낸 내용', state)
+
     set({
       currentPage: data.data.result.currentPage,
       endPage: data.data.result.endPage,
@@ -132,7 +138,7 @@ export const useWoDetailStore = create<WoDetail>((set) => ({
   // work order 디테일 정보 불러오기
   fetchWoDetail: async (id: number) => {
     const data = await getWoInfo(id);
-    console.log("점검항목", data.data);
+
     set({
       id: data.data.result.id,
       status: data.data.result.status,
@@ -148,74 +154,53 @@ export const useWoDetailStore = create<WoDetail>((set) => ({
   // work oder 임시저장
   fetchWoUpdateTmp: async (id: number, tmpcheckList: checklist[]) => {
     const data = await saveWotmp(id, tmpcheckList);
-    console.log("임시저장 성공?", data);
     return data.data;
   },
+  // work order제출
   fetchWoDone: async (id: number, tmpcheckList: checklist[]) => {
     const data = await doneWo(id, tmpcheckList);
-    console.log("제출성공?", data.data.result.passOrNot);
     return data.data.result.passOrNot;
   },
 }));
 
-
-export const useWoGroupStore = create<WoGroup>(
-    (set) => ({
-      publish: [],
-      progress: [],
-      finish: [],
-      fetchWoGroup: async () => {
-        const data = await getWogroup();
-        set({
-          publish: data.data.result.publish || [] ,
-          progress: data.data.result.progress || [],
-          finish: data.data.result.finish || [] ,
-        })
-        return data.data
-      }
-    })
-)
-
-
+export const useWoGroupStore = create<WoGroup>((set) => ({
+  publish: [],
+  progress: [],
+  finish: [],
+  fetchWoGroup: async () => {
+    const data = await getWogroup();
+    set({
+      publish: data.data.result.publish || [],
+      progress: data.data.result.progress || [],
+      finish: data.data.result.finish || [],
+    });
+    return data.data;
+  },
+}));
 
 interface userWo {
-  currentPage: number,
-  endPage: number,
-  list: lst[],
-  fetchUserWo: (employeeNo: string, name: string, page: number, size: number) => Promise<AxiosResponse>;
+  currentPage: number;
+  endPage: number;
+  list: lst[];
+  fetchUserWo: (
+    employeeNo: string,
+    name: string,
+    page: number,
+    size: number
+  ) => Promise<AxiosResponse>;
 }
 
-export const useUserWoListStore = create<userWo>(
-    (set) => ({
-      currentPage: 1,
-      endPage: 1,
-      list: [],
-      fetchUserWo: async (employeeNo: string, name: string, page: number, size: number) => {
-        const data = await getUserWoList(employeeNo, name, page, size);
-        console.log(employeeNo, name, page, size)
-        console.log("userWo", data.data)
-        set({
-          currentPage: data.data.result.currentPage,
-          endPage: data.data.result.endPage,
-          list: data.data.result.list,
-        })
-        return data.data
-      }
-    })
-)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const useUserWoListStore = create<userWo>((set) => ({
+  currentPage: 1,
+  endPage: 1,
+  list: [],
+  fetchUserWo: async (employeeNo: string, name: string, page: number, size: number) => {
+    const data = await getUserWoList(employeeNo, name, page, size);
+    set({
+      currentPage: data.data.result.currentPage,
+      endPage: data.data.result.endPage,
+      list: data.data.result.list,
+    });
+    return data.data;
+  },
+}));
