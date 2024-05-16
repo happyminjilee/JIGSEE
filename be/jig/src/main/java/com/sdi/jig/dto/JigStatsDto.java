@@ -2,24 +2,22 @@ package com.sdi.jig.dto;
 
 import com.sdi.jig.entity.rdb.JigRDBEntity;
 
-import java.math.BigDecimal;
-
 public record JigStatsDto(
         int repairCount,
-        BigDecimal rowMeans,
-        BigDecimal interval,
-        BigDecimal mtbf,
-        BigDecimal lambda,
-        BigDecimal optimalInterval,
+        double rowMeans,
+        double interval,
+        double mtbf,
+        double lambda,
+        double optimalInterval,
         JigRDBEntity jig
 ) {
     public static JigStatsDto of(
             int repairCount,
-            BigDecimal rowMeans,
-            BigDecimal interval,
-            BigDecimal mtbf,
-            BigDecimal lambda,
-            BigDecimal optimalInterval,
+            double rowMeans,
+            double interval,
+            double mtbf,
+            double lambda,
+            double optimalInterval,
             JigRDBEntity jig
     ) {
         return new JigStatsDto(repairCount, rowMeans, interval, mtbf, lambda, optimalInterval, jig);

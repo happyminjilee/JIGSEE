@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/jig")
 @RequiredArgsConstructor
@@ -49,5 +51,10 @@ class JigController {
     @GetMapping("/optimal-interval")
     Response<JigOptimalIntervalResponseDto> jigOptimalInterval(@RequestParam(name = "model") String model) {
         return Response.success(jigService.jigOptimalInterval(model));
+    }
+
+    @GetMapping("/graph")
+    Response<List<JigGraphResponseDto>> jigGraph() {
+        return Response.success(jigService.jigGraph());
     }
 }

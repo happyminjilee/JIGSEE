@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Entity
 @Table(name = "jig_stats")
 @Getter
@@ -22,30 +20,22 @@ public class JigStatsRDBEntity {
 
     private int repairCount;
 
-    @Column(precision = 20, scale = 13)
-    private BigDecimal rowMeans;
-
-    @Column(name = "`interval`", precision = 20, scale = 13)
-    private BigDecimal interval;
-
-    @Column(precision = 20, scale = 13)
-    private BigDecimal mtbf;
-
-    @Column(precision = 20, scale = 13)
-    private BigDecimal lambda;
-
-    @Column(precision = 20, scale = 13)
-    private BigDecimal optimalInterval;
+    private double rowMeans;
+    @Column(name = "`interval`")
+    private double interval;
+    private double mtbf;
+    private double lambda;
+    private double optimalInterval;
 
     @ManyToOne
     private JigRDBEntity jig;
 
     private JigStatsRDBEntity(int repairCount,
-                              BigDecimal rowMeans,
-                              BigDecimal interval,
-                              BigDecimal mtbf,
-                              BigDecimal lambda,
-                              BigDecimal optimalInterval,
+                              double rowMeans,
+                              double interval,
+                              double mtbf,
+                              double lambda,
+                              double optimalInterval,
                               JigRDBEntity jig
     ) {
         this.repairCount = repairCount;
