@@ -51,8 +51,8 @@ export default function Lifetime() {
       curve: "straight",
     },
     title: {
-      text: `수리 횟수에 따른 예상 생명주기 ${model || "모델명"}`,
-      align: "left",
+      text: `수리 횟수에 따른 예상 생명주기 : ${model || "모델을 선택 하세요"}`,
+      align: "center",
     },
     grid: {
       row: {
