@@ -68,7 +68,14 @@ class MyApp extends StatelessWidget {
               return const LoginPage();
             }
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return Container(
+                color: Colors.white,
+                child: const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 47, 118, 255)),
+                    )
+                )
+            );
           }
         },
       ),

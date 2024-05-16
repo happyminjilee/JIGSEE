@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -100,6 +101,7 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
   late String scannedText = "";
   String? verificationImagePath;
   static Map<String, dynamic> jigData = {};
+  final Completer<void> _sendJigInfoCompleter = Completer<void>();
 
   @override
   void initState() {
@@ -124,7 +126,7 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
     searchJigInfo();  // 텍스트 인식 후 서버에 정보 요청
   }
 
-  void searchJigInfo() async {
+  Future<void> searchJigInfo() async {
     final DioClient dioClient = ref.read(dioClientProvider);
 
     try {
@@ -155,6 +157,8 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
           'Error': 'Error'
         };
       });
+    }finally {
+      _sendJigInfoCompleter.complete();
     }
   }
 
@@ -162,95 +166,114 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const CustomAppBar(),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              const Text('지그 정보', style: TextStyle(
-                  fontSize: 32,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Expanded(
+        body: FutureBuilder<void>(
+          future: _sendJigInfoCompleter.future,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return const Text('네트워크 에러 발생');
+              }
+              return Padding(
+                padding: const EdgeInsets.all(20),
                 child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(12),
-                        height: 300,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 25, 30, 40),
-                            width: 3,
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
+                  children: [
+                    const Text('지그 정보', style: TextStyle(
+                      fontSize: 32,
+                    ),
+                    ),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: Column(
                           children: [
-                            Image.file(File(widget.imagePath), scale: 3,),
-                            const SizedBox(width: 10),
-                            Expanded(
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      if (jigData.isNotEmpty && jigData['Error'] == null) Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('제품 명: ${jigData['model']}'),
-                                          Text('S / N : ${jigData['serialNo']}'),
-                                          Text('현 상태: ${jigData['status']}'),
-                                          Text('예상 수명: ${jigData['useCount']}'),
-                                          Text('사용 횟수: ${jigData['useCount']}'),
-                                          Text('수리 횟수: ${jigData['repairCount']}'),
-                                        ],
+                            Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(12),
+                              height: 300,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color.fromARGB(255, 25, 30, 40),
+                                  width: 3,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.file(File(widget.imagePath), scale: 3,),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                      child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            if (jigData.isNotEmpty && jigData['Error'] == null) Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('제품 명: ${jigData['model']}'),
+                                                Text('S / N : ${jigData['serialNo']}'),
+                                                Text('현 상태: ${jigData['status']}'),
+                                                Text('예상 수명: ${jigData['useCount']}'),
+                                                Text('사용 횟수: ${jigData['useCount']}'),
+                                                Text('수리 횟수: ${jigData['repairCount']}'),
+                                              ],
+                                            )
+                                            else if (jigData.isEmpty) const Text('인식 오류')
+                                            else const Text('인식 오류'),
+                                          ]
                                       )
-                                      else if (jigData.isEmpty) const Text('인식 오류')
-                                      else const Text('인식 오류'),
-                                    ]
-                                )
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
+                            const SizedBox(height: 100),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/home');
+                              },
+                              child: const Text('확인', style: TextStyle(fontSize: 20)),
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(360, 50),
+                                  foregroundColor: const Color.fromARGB(255, 248, 250, 252),
+                                  backgroundColor: const Color.fromARGB(255, 47, 118, 255),
+                                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)
+                                  )
+                              ),
+                            ),
+                            const SizedBox(height: largeGap),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('재촬영', style: TextStyle(fontSize: 20)),
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(360, 50),
+                                  foregroundColor: const Color.fromARGB(255, 25, 30, 40),
+                                  backgroundColor: const Color.fromARGB(255, 217, 217, 217),
+                                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)
+                                  )
+                              ),
+                            ),
+                          ]
                       ),
-                      const SizedBox(height: 100),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/home');
-                        },
-                        child: const Text('확인', style: TextStyle(fontSize: 20)),
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(360, 50),
-                            foregroundColor: const Color.fromARGB(255, 248, 250, 252),
-                            backgroundColor: const Color.fromARGB(255, 47, 118, 255),
-                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)
-                            )
-                        ),
-                      ),
-                      const SizedBox(height: largeGap),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('재촬영', style: TextStyle(fontSize: 20)),
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(360, 50),
-                            foregroundColor: const Color.fromARGB(255, 25, 30, 40),
-                            backgroundColor: const Color.fromARGB(255, 217, 217, 217),
-                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)
-                            )
-                        ),
-                      ),
-                    ]
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
+              );
+            } else {
+              return Container(
+                  color: Colors.white,
+                  child: const Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 47, 118, 255)),
+                      )
+                  )
+              );
+            }
+          }
         )
     );
   }
