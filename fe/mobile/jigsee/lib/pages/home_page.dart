@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:jigsee/api/user_auth.dart';
 import 'package:jigsee/components/header.dart';
 import 'package:jigsee/pages/spe_jig_list.dart';
 import 'package:jigsee/api/provider.dart';
@@ -48,9 +47,9 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   void initState() {
-    Future<String?> token = getMyDeviceToken(); // device-token 가져옴
+    Future<String?> token = getMyDeviceToken();
     token
-        .then((value) => sendTokenToServer(value!)); // 가져온 deveice-token을 서버에 저장함
+        .then((value) => sendTokenToServer(value!));
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification? notification = message.notification;
@@ -125,10 +124,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       DioClient dioClient = ref.read(dioClientProvider);
       Response response = await dioClient.get('/facility-item/inspection');
       if (response.statusCode == 200) {
-        // List<dynamic> data = response.data;
         List<dynamic> data = response.data['result']['list'];
         return data;
-        // return data.map<String>((e) => e.toString()).toList();
       } else {
         throw Exception('Failed to load equipments');
       }

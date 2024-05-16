@@ -30,21 +30,19 @@ class _FormPageState extends ConsumerState<CustomForm> {
         ),
       ),
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10))),	//	둥글게
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       backgroundColor: const Color(0xff9E9E9E),
-      behavior: SnackBarBehavior.floating,	//	아래 플로팅 띄우기
+      behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 2),
       action:
       SnackBarAction(label: '', textColor: Colors.white, onPressed: () {}),
     );
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      // global key를 form에 지정하여 해당 key로 form의 상태를 관리
       key: _formkey,
       child: Column(
         children: <Widget>[
@@ -58,7 +56,6 @@ class _FormPageState extends ConsumerState<CustomForm> {
             password = value;
           },),
           const SizedBox(height: largeGap,),
-          // 로그인 버튼
           ElevatedButton(
             onPressed: () async {
               _formkey.currentState!.save();

@@ -204,7 +204,6 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
                                           Text('예상 수명: ${jigData['useCount']}'),
                                           Text('사용 횟수: ${jigData['useCount']}'),
                                           Text('수리 횟수: ${jigData['repairCount']}'),
-                                          // Text('현 사용량: ${jigData['useTime'].toString().substring(0, 11)}'),
                                         ],
                                       )
                                       else if (jigData.isEmpty) const Text('인식 오류')

@@ -11,7 +11,6 @@ class LoginPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const PopScope(
         child: Scaffold(
-          // resizeToAvoidBottomInset : false,
             body: SingleChildScrollView(
               padding: EdgeInsets.all(30.0),
               child: Center(

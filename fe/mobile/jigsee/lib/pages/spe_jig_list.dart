@@ -20,7 +20,6 @@ class SpeJigList extends ConsumerWidget {
             '/facility-item/inspection/jig-item?facility-id=$equipmentId',
         );
         List<dynamic> data = response.data['result']['serialNos'];
-        // return data;
         return data;
       } catch (e) {
         return [

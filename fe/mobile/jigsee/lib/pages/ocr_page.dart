@@ -191,9 +191,9 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
         ),
       ),
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10))),	//	둥글게
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       backgroundColor: const Color(0xff9E9E9E),
-      behavior: SnackBarBehavior.floating,	//	아래 플로팅 띄우기
+      behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 2),
       action:
       SnackBarAction(label: '', textColor: Colors.white, onPressed: () {}),
@@ -261,7 +261,6 @@ class _DisplayPictureScreenState extends ConsumerState<DisplayPictureScreen> {
                       ),
                     ),
                     const SizedBox(height: 28.0,),
-                    // SvgPicture.asset('assets/raiseErrorMark.svg'),
                     if (verificationImagePath != null) SvgPicture.asset('assets/$verificationImagePath.svg')
                     else SvgPicture.asset('assets/raiseErrorMark.svg'),
                     Column(

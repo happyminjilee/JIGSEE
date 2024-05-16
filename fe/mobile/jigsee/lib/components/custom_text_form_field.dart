@@ -21,12 +21,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     if (value == null || value.isEmpty) {
       return '비밀번호를 입력해주세요.';
     }
-    // String pattern =
-    //     r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$';
-    // RegExp regExp = RegExp(pattern);
-    // if (!regExp.hasMatch(value)) {
-    //   return '올바른 비밀번호를 입력해주세요';
-    // }
     return null;
   }
 
@@ -63,7 +57,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             suffixIcon: widget.text == '비밀번호' ? IconButton(
               icon: SvgPicture.asset(
                   _passwordVisible ? 'assets/invisible_icon.svg' : 'assets/visible_icon.svg',
-                  key: ValueKey(_passwordVisible)  // Ensure icon updates correctly
+                  key: ValueKey(_passwordVisible)
               ),
               onPressed: () {
                 setState(() {
