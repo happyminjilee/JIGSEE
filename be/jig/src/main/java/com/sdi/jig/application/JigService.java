@@ -168,7 +168,7 @@ public class JigService {
             double costValue = monthOperatingTime * FACILITY_HOUR_OPERATING_COST + downTime * BREAKEDOWN_COST;
 
             // 차이
-            double yieldValue = outputValue * PRODUCTION_PROFIT - costValue;
+            double yieldValue = outputValue - costValue;
 
             jigGraphResponseDtoList.add(JigGraphResponseDto.of(day, outputValue, costValue, yieldValue, countMissingJig));
         }
