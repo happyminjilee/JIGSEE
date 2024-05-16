@@ -21,7 +21,7 @@
   /* border: 1px solid black; */
   width: 100%;
   height: 600px;
-  padding-top: 20px;
+  // padding-top: 50px;
 }
 .numberalarm {
   margin-top: 10px;
@@ -70,18 +70,16 @@
   /* border: 1px solid black; */
 }
 .scrollcontainer {
-  padding-top: 20px;
+  // padding-top: 20px;
   display: flex;
-  justify-content: center; /* Center horizontally */
+  justify-content: start; /* Center horizontally */
   align-items: center;
   flex-direction: column;
   width: 800px;
-  margin-top: 5px;
-
-  max-height: 440px;
+  margin-top: 20px;
+  max-height: 450px;
   overflow-y: auto; /* 수직 스크롤바만 표시 */
   overflow-x: hidden; /* 수평 스크롤바 숨김 */
-  margin-top: 30px;
 }
 .scrollcontainer::-webkit-scrollbar {
   width: 5px;
