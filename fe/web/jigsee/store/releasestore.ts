@@ -32,7 +32,7 @@ interface releaseDetail {
   updatedAt: number[];
   serialNos: string[]; // 요청 지그 리스트
   fetchReleaseDetail: (id: string) => Promise<AxiosResponse>;
-  setSerialNos: (n:string[]) => void;
+  setSerialNos: (n: string[]) => void;
 }
 
 interface modalState {
@@ -47,9 +47,6 @@ export const useReleaseStore = create<release>((set) => ({
   releaseList: [],
   fetchRelease: async (status: string, page: number, size: number) => {
     const data = await releaseGet(status, page, size);
-    console.log("release", data)
-    console.log("release isManager", data.isManager);
-    console.log("release list", data.list);
     set({
       isManager: data.isManager,
       currentPage: data.currentPage,
@@ -70,12 +67,11 @@ export const useReleaseDetailStore = create<releaseDetail>((set) => ({
   createdAt: [], // 요청시간
   updatedAt: [],
   serialNos: [], // 요청 지그 리스트
-  setSerialNos: (n:string[]) => {
-    set({serialNos:n})
+  setSerialNos: (n: string[]) => {
+    set({ serialNos: n });
   },
   fetchReleaseDetail: async (id: string) => {
     const data = await releaseDetailGet(id);
-    console.log("releaseDetail", data);
     set({
       isManager: data.isManager,
       id: data.id, // 요청 id
@@ -98,42 +94,32 @@ export const useReleaseModalStore = create<modalState>((set) => ({
   },
 }));
 
-
-
 interface buttonClick {
   showApproveModal: boolean;
-  setApproveShowModal: (n:boolean) => void;
+  setApproveShowModal: (n: boolean) => void;
   showReturnModal: boolean;
-  setReturnShowModal: (n:boolean) => void;
-  id: string,
-  approveClick: (id:string) => void;
-  returnClick: (id:string) => void;
+  setReturnShowModal: (n: boolean) => void;
+  id: string;
+  approveClick: (id: string) => void;
+  returnClick: (id: string) => void;
 }
 
-
-export const useButtonClickStore = create<buttonClick>(
-    (set) => ({
-      showApproveModal: false,
-      setApproveShowModal: (n:boolean) => {
-        set({showApproveModal: n})
-      },
-      showReturnModal: false,
-      setReturnShowModal: (n:boolean) => {
-        set({showReturnModal: n})
-      },
-      id: "",
-      approveClick: (id:string) => {
-        set({id: id})
-        set({showApproveModal: true})
-      },
-      returnClick: (id:string) => {
-        set({id: id})
-        set({showReturnModal: true})
-      },
-    })
-)
-
-
-
-
-
+export const useButtonClickStore = create<buttonClick>((set) => ({
+  showApproveModal: false,
+  setApproveShowModal: (n: boolean) => {
+    set({ showApproveModal: n });
+  },
+  showReturnModal: false,
+  setReturnShowModal: (n: boolean) => {
+    set({ showReturnModal: n });
+  },
+  id: "",
+  approveClick: (id: string) => {
+    set({ id: id });
+    set({ showApproveModal: true });
+  },
+  returnClick: (id: string) => {
+    set({ id: id });
+    set({ showReturnModal: true });
+  },
+}));

@@ -96,7 +96,6 @@ export default function RepairTotal() {
   }, [values, releaseList]);
 
   function cardClick(jig: item) {
-    console.log("clicked", jig);
     setOpen(true);
     setDetail(jig);
   }

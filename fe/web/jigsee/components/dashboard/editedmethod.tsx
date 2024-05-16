@@ -8,7 +8,6 @@ export default function Editmethod() {
 
   useEffect(() => {
     getJigupdated();
-    console.log(updatedList, "dfdkjflksdjflsd");
   }, []);
 
   return (

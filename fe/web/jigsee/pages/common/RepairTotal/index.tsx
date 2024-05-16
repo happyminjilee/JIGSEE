@@ -1,22 +1,10 @@
-import {
-  Pagination,
-  Select,
-  SelectItem,
-  Selection,
-  Link,
-} from "@nextui-org/react";
+import { Pagination, Select, SelectItem, Link } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
-import {
-  useCompoStore,
-  useWoDetailStore,
-  useWoStore,
-} from "@/store/workorderstore";
-import TotalCardModal from "@/components/repair/TotalCardModal";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import { useCompoStore, useWoDetailStore, useWoStore } from "@/store/workorderstore";
+
 import WoModal from "@/components/workorder/template";
 
 interface Option {
@@ -71,40 +59,6 @@ export default function RepairTotal() {
         console.log(error.message);
       });
   }, [page, values]);
-  // 임시 JIG 데이터
-  const jigData: JigData[] = [
-    {
-      date: "2024.04.21",
-      serialNumber: "S/N S00000001",
-      model: "Model Name",
-      status: "발행",
-    },
-    {
-      date: "2024.04.22",
-      serialNumber: "S/N S00000002",
-      model: "Model Name",
-      status: "발행",
-    },
-    {
-      date: "2024.04.23",
-      serialNumber: "S/N S00000003",
-      model: "Model Name",
-      status: "발행",
-    },
-    {
-      date: "2024.04.22",
-      serialNumber: "S/N S00000002",
-      model: "Model Name",
-      status: "발행",
-    },
-    {
-      date: "2024.04.23",
-      serialNumber: "S/N S00000003",
-      model: "Model Name",
-      status: "발행",
-    },
-    // 다른 JIG 데이터 객체들...
-  ];
 
   const { endPage, list, fetchWo } = useWoStore();
   const { fetchWoDetail } = useWoDetailStore();
@@ -162,11 +116,7 @@ export default function RepairTotal() {
           </div>
           <div className={styled.container}>
             {list.map((jig, index) => (
-              <div
-                key={index}
-                onClick={() => cardClick(jig.id)}
-                className={styled.fullWidth}
-              >
+              <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
                 <div className={styled.inCard}>
                   <div className={styled.inInCard}>
                     <div>

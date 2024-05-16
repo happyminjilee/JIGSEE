@@ -18,7 +18,6 @@ const ApexChart = () => {
         setRepairing(newRepairing);
         setNewdelete(deleted);
         setNewfinish(finish);
-        console.log(request - deleted - finish);
       })
       .catch((error) => {
         console.log("failed to get Jig numbers", error);

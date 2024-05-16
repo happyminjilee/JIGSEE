@@ -44,7 +44,7 @@ export const useFacilityStore = create<FacilityStore>((set, get) => ({
   facilityID: 0,
   loadFacilities: async () => {
     const data = await getfacilitylist();
-    console.log("facil", data.list);
+
     set({
       facilities: data.list,
     });
@@ -56,7 +56,7 @@ export const useFacilityStore = create<FacilityStore>((set, get) => ({
   jigmodels: [],
   getJigSN: async (facilityModel: string) => {
     const data = await getfacilityitems(facilityModel);
-    console.log("getjiglist", data.list);
+
     set({ jigmodels: data.list });
   },
   editStandardJigs: [],

@@ -22,7 +22,7 @@ export default function EngineerNavbar() {
   const { uncheckednumber, setUnchecked } = useAlarmStore();
 
   // profile logo 선택 메뉴 보기 핸들러
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
