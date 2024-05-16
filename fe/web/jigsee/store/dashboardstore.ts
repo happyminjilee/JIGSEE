@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { getMonthJig, getJigcount, updateChecked, getOptimal } from "@/pages/api/dashboard";
+import { getMonthJig, getJigcount, updateChecked, getOptimal, getManagerGraph } from "@/pages/api/dashboard";
+
 import { AxiosResponse } from "axios";
 interface Jiglocation {
   model: string;
@@ -92,3 +93,29 @@ export const useDashboardstore = create<dashboardstore>((set) => ({
     set({ xlabelList: countList });
   },
 }));
+
+
+interface graphInfo {
+  day: number,
+  output: number,
+  cost: number,
+  yield: number,
+  countMissingJig : number,
+}
+
+interface Infos {
+  infos: graphInfo[],
+  fetchManagerGraph: () => Promise<void>,
+}
+
+
+export const useManagerGraphStore = create<Infos>((set) => ({
+  infos: [],
+  fetchManagerGraph: async() => {
+    const data = await getManagerGraph();
+    set({
+      infos: data
+    })
+    return
+  }
+}))

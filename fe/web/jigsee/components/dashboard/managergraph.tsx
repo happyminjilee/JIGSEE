@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import {
     ComposedChart,
@@ -12,10 +12,22 @@ import {
     Legend,
     Scatter
 } from "recharts";
+import {useDashboardstore, useManagerGraphStore} from "@/store/dashboardstore";
+import {set} from "immutable";
 
 
 
 export default function App() {
+    const {infos, fetchManagerGraph} = useManagerGraphStore()
+    useEffect(() => {
+        fetchManagerGraph()
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((error) => {
+                console.log(error.message)
+            })
+    }, []);
     const data = [
         {
             name: "Page A",
