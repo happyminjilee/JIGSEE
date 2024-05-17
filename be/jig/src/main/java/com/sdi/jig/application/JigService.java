@@ -259,7 +259,7 @@ public class JigService {
     private Integer getMaintenanceTime(List<JigItemRDBEntity> checkJigList, Map<JigItemRDBEntity, Double> maxOptimalIntervalMap) {
         double sumValue = 0;
         for (JigItemRDBEntity jigItem : checkJigList) {
-            sumValue += jigItem.getJig().getId() * REAPIR_TIME_MIN + maxOptimalIntervalMap.get(jigItem);
+            sumValue += jigItem.getJig().getId() * REAPIR_TIME_MIN;
         }
 //                = checkJigList.stream()
 //                .map(maxOptimalIntervalMap::get)
