@@ -179,7 +179,8 @@ public class JigService {
 
             // 생산 비용
             double costValue = monthOperatingTime * FACILITY_HOUR_OPERATING_COST
-                    + (double) (downTime * BREAKEDOWN_COST + maintenanceTime * MAINTANANCE_COST) / day;
+                    + monthDownTime * BREAKEDOWN_COST
+                    + (double) (maintenanceTime * MAINTANANCE_COST) / day;
 
             // 차이
             double yieldValue = outputValue - costValue;
