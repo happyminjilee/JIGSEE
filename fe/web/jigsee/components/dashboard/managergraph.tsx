@@ -34,7 +34,7 @@ export default function App() {
         <ComposedChart
             width={1500}
             height={340}
-            data={infos.slice(10, 30)}
+            data={infos.slice(3, 30)}
             margin={{
                 top: 20,
                 right: 20,
