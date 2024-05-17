@@ -126,3 +126,22 @@
 .displayNone {
   display: none;
 }
+
+.filterJigDataCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+}
+
+.left {
+  margin: 0 auto;
+  width: 100%;
+  margin-left: 7%;
+}
+
+.rightArea {
+  width: 100%;
+  text-align: end;
+  margin-right: 8%;
+}

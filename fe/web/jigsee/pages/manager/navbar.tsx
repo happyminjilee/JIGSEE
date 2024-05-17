@@ -97,7 +97,7 @@ export default function ManagerNavbar() {
               style={{
                 height: "90%",
                 marginTop: "-20px",
-                marginLeft: "70%",
+                marginLeft: "30%",
                 paddingTop: "30px",
                 cursor: "pointer",
               }}

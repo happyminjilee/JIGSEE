@@ -132,9 +132,15 @@ export default function RepairTotal() {
             <p>Loading...</p>
           ) : filteredJigData.length > 0 ? (
             filteredJigData.map((jig, index) => (
-              <div key={index} onClick={() => cardClick(jig)} className={styled.fullWidth}>
-                <p>
-                  {jig.id} | 요청자 {jig.from} | status: {jig.status}
+              <div
+                key={index}
+                onClick={() => cardClick(jig)}
+                className={`${styled.fullWidth} ${styled.filterJigDataCard}`}
+              >
+                <p className={`${styled.left}`}>{jig.id}</p>
+                <p className={`${styled.rightArea}`}>
+                  <p>요청자 {jig.from}</p>
+                  <p>status: {jig.status}</p>
                 </p>
               </div>
             ))
