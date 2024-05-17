@@ -31,7 +31,8 @@ public class JigService {
     private final int PRODUCTION_HOUR = 1000;
     private final int PRODUCTION_PROFIT = 5;
     private final int FACILITY_HOUR_OPERATING_COST = 1000;
-    private final int BREAKEDOWN_COST = 500;
+    private final int BREAKEDOWN_COST = 1000;
+    private final int MAINTANANCE_COST = 500;
     private final int MONTH_DAY = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
     private final int DAY_TIME = 24;
     private final int CHECK_PEOPLE = 20;
@@ -175,7 +176,9 @@ public class JigService {
             double outputValue = monthOperatingTime * PRODUCTION_HOUR * PRODUCTION_PROFIT;
 
             // 생산 비용
-            double costValue = monthOperatingTime * FACILITY_HOUR_OPERATING_COST + downTime * BREAKEDOWN_COST;
+            double costValue = monthOperatingTime * FACILITY_HOUR_OPERATING_COST
+                    + downTime * BREAKEDOWN_COST
+                    + maintenanceTime * MAINTANANCE_COST;
 
             // 차이
             double yieldValue = outputValue - costValue;
