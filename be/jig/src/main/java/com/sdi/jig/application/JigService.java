@@ -136,9 +136,6 @@ public class JigService {
         // 장착된 지그 별 적정 점검 주기 Map
         Map<JigItemRDBEntity, Double> optimalIntervalMap = getOptimalIntervalMap(jigItemList);
 
-        // 장착된 지그 별 최대 적정 점검 주기 Map
-        Map<JigItemRDBEntity, Double> maxOptimalIntervalMap = getMaxOptimalIntervalMap(jigItemList);
-
         // 장착된 지그의 적정 점검 주기 List
         List<Double> optimalIntervalList = new ArrayList<>(optimalIntervalMap.values());
 
@@ -165,7 +162,7 @@ public class JigService {
             }
 
             // 정규 유지 보수 소요 시간
-            int maintenanceTime = getMaintenanceTime(checkJigList, maxOptimalIntervalMap);
+            int maintenanceTime = getMaintenanceTime(checkJigList);
 
             // 한달 소요 되는 총 비정규 점검 시간
             double monthDownTime = downTime * monthCheckNumber;
@@ -256,20 +253,15 @@ public class JigService {
         return optimalIntervalMap;
     }
 
-    private Integer getMaintenanceTime(List<JigItemRDBEntity> checkJigList, Map<JigItemRDBEntity, Double> maxOptimalIntervalMap) {
+    private Integer getMaintenanceTime(List<JigItemRDBEntity> checkJigList) {
         double sumValue = 0;
         for (JigItemRDBEntity jigItem : checkJigList) {
             sumValue += jigItem.getJig().getId() * REAPIR_TIME_MIN;
         }
-//                = checkJigList.stream()
-//                .map(maxOptimalIntervalMap::get)
-//                .mapToDouble(Double::doubleValue)  // Double을 기본 double로 변환
-//                .sum();
 
         // 합산된 값을 Integer로 변환하여 반환
         return (int) (sumValue / SPLIT_HALF) / CHECK_PEOPLE;
     }
-
 
     private static double roundedValue(double value) {
         return Math.round(value * 100.0) / 100.0;
