@@ -11,5 +11,5 @@ public interface JigItemRepairHistoryRepository extends JpaRepository<JigItemRep
     List<JigItemRepairHistoryRDBEntity> findByJigItemId(Long jigItemId);
     int countByRepairTimeBetween(LocalDateTime startDate, LocalDateTime endDate);
 
-    int countByJigItemSerialNo(String serialNo);
+    int countByJigItemId(Long jigItemId);
 }
