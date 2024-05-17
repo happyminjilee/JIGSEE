@@ -168,9 +168,9 @@ public class JigService {
             int maintenanceTime = getMaintenanceTime(checkJigList, maxOptimalIntervalMap);
 
             // 한달 소요 되는 총 비정규 점검 시간
-            Double monthDownTime = downTime * monthCheckNumber;
+            double monthDownTime = downTime * monthCheckNumber;
             // 한달 소요 되는 정규 유지 보수 소요 시간
-            Double monthMaintenanceTime = maintenanceTime * monthCheckNumber;
+            double monthMaintenanceTime = maintenanceTime * monthCheckNumber;
             // 한달 간 설비 총 가동 시간
             double monthOperatingTime = MONTH_DAY * DAY_TIME - (monthDownTime + monthMaintenanceTime);
 
@@ -178,7 +178,7 @@ public class JigService {
             double outputValue = monthOperatingTime * PRODUCTION_HOUR * PRODUCTION_PROFIT;
 
             // 생산 비용
-            double costValue = monthOperatingTime * FACILITY_HOUR_OPERATING_COST
+            double costValue = monthOperatingTime * FACILITY_HOUR_OPERATING_COST / day
                     + downTime * BREAKEDOWN_COST
                     + (double) (maintenanceTime * MAINTANANCE_COST) / day;
 
