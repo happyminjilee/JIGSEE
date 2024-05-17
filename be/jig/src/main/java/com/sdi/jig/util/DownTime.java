@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum DownTime {
-    LITTLE(10), PROPER(30), MORE(90), MANY(-1);
+    LITTLE(10), PROPER(25), MORE(45), MANY(-1);
 
     private final int time;
 
