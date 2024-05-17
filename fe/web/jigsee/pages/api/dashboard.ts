@@ -34,3 +34,8 @@ export const getOptimal = async (Jigmodel: string) => {
   const response = await axiosAuthApi().get("/jig/optimal-interval", { params });
   return response.data.result;
 };
+
+export const getManagerGraph = async() => {
+  const response = await axiosAuthApi().get('/jig/graph');
+  return response.data.result
+}
