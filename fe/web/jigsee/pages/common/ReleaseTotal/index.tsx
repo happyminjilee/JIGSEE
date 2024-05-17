@@ -143,7 +143,7 @@ export default function RepairTotal() {
           )}
         </div>
         <div className={styled.center}>
-          <Pagination onChange={(e) => setPage(e)} total={5} />
+          <Pagination onChange={(e) => setPage(e)} total={endPage} />
         </div>
       </div>
       <Modal

@@ -89,7 +89,7 @@ export default function RestoreTotal() {
           <div className={styled.container}>No data</div>
         )}
         <div className={styled.center}>
-          <Pagination onChange={(e) => setPage(e)} total={5} />
+          <Pagination onChange={(e) => setPage(e)} total={1} />
         </div>
       </div>
 

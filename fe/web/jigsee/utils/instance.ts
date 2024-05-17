@@ -68,13 +68,14 @@ const axiosAuthApi = (): AxiosInstance => {
           } catch (refreshError) {
             localStorage.removeItem("access_token");
             localStorage.removeItem("refresh_token");
-            // localStorage.setItem('refresh_token', "")
-            window.alert("로그인이 만료되었습니다.");
+            window.location.href = "/login"; // Redirect to login page
           }
         }
       }
       if (error.response.data.resultCode === "INVALID_ACCESS_TOKEN") {
-        window.alert(" Invalid Access Token");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        window.location.href = "/login"; // Redirect to login page
       }
 
       return Promise.reject(error);

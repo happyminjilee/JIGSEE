@@ -3,11 +3,11 @@
   justify-content: space-between; /* Center horizontally */
   align-items: center; /* Center vertically */
   height: 80vh; /* Full viewport height */
-  width: 100%;
+  width: 90vw;
   padding-left: 150px;
   padding-right: 150px;
   flex-direction: row; /* Stack children vertically */
-  margin-top: 30px;
+  margin: 30px auto 0 auto;
   padding-left: 100px;
   padding-right: 100px;
 }
