@@ -3,11 +3,11 @@
   border: 1px solid var(--light-gray);
   border-radius: 0.5rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 85%;
-  height: 90%;
+  width: 80%;
+  height: 100%;
 }
 .title {
-  font-size: 15px;
+  font-size: 16px;
   /* color: var(--samsungblue); */
   font-weight: bolder;
   margin: 10px 15px;
@@ -70,4 +70,10 @@
   align-items: center;
   justify-content: flex-end;
   width: 100%; /* 전체 너비 */
+}
+
+.isempty {
+  width: 100%;
+  text-align: center;
+  align-items: center;
 }

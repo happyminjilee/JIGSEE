@@ -3,8 +3,9 @@
   justify-content: space-between; /* Center horizontally */
   align-items: center; /* Center vertically */
   height: 85vh; /* Full viewport height */
-  width: 100%;
+  width: 80%;
   flex-direction: column;
+  margin: 0 auto;
   // border: 1px solid black;
 }
 .report {

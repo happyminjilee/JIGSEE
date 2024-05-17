@@ -22,7 +22,9 @@ export default function ManagerNavbar() {
   const { uncheckednumber, setUnchecked } = useAlarmStore();
 
   // profile logo 선택 메뉴 보기 핸들러
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -80,29 +82,39 @@ export default function ManagerNavbar() {
   };
   return (
     <>
-      <Box style={{ paddingTop: "5px" }}>
+      <Box
+        style={{
+          paddingTop: "-5px",
+          marginTop: "-30px",
+          marginBottom: "-20px",
+        }}
+      >
         <List sx={{ display: "flex", paddingTop: "5px" }}>
           <ListItem onClick={navigateToDashboard}>
             <img
               src="/images/sdi-logo.svg"
               alt="Logo"
               style={{
-                height: "60px",
-                marginTop: "-10px",
-                marginLeft: "40px",
-                marginRight: "520px",
+                height: "90%",
+                marginTop: "-20px",
+                marginLeft: "70%",
+                paddingTop: "30px",
                 cursor: "pointer",
               }}
             />
           </ListItem>
-          <ListItem sx={{ paddingTop: "10px", paddingBottom: "0px", width: "95%" }}>
+          <ListItem
+            sx={{ paddingTop: "10px", paddingBottom: "0px", width: "95%" }}
+          >
             <Button
               sx={{
                 fontSize: "20px",
                 color: "#40404A", // 현재 페이지에 따라 색상을 설정합니다.
                 fontWeight: "bold",
                 width: "100%",
-                textDecoration: isManagerPage ? "underline var(--samsungblue)" : "none",
+                textDecoration: isManagerPage
+                  ? "underline var(--samsungblue)"
+                  : "none",
               }}
               href="/manager"
             >
@@ -117,7 +129,9 @@ export default function ManagerNavbar() {
                 fontWeight: "bold",
                 width: "100%",
                 marginRight: "50px",
-                textDecoration: isRepairTotalPage ? "underline var(--samsungblue)" : "none",
+                textDecoration: isRepairTotalPage
+                  ? "underline var(--samsungblue)"
+                  : "none",
               }}
               href="/common/RepairTotal"
             >
@@ -125,13 +139,26 @@ export default function ManagerNavbar() {
             </Button>
           </ListItem>
 
-          <ListItem sx={{ paddingTop: "10px", paddingBottom: "0px" }}>
+          <ListItem
+            sx={{
+              paddingTop: "10px",
+              paddingBottom: "0px",
+              paddingRight: "80px",
+            }}
+          >
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/images/userprofile.svg" />
+              <Avatar
+                style={{ width: "30px", height: "30px" }}
+                alt="Remy Sharp"
+                src="/images/userprofile.svg"
+              />
             </IconButton>
-            {UserName}
+            <div style={{ paddingLeft: "10px" }}>{UserName}</div>
             <Badge badgeContent={uncheckednumber} color="primary">
-              <IconButton onClick={navigateToAlarm} sx={{ p: 0, marginLeft: "10px" }}>
+              <IconButton
+                onClick={navigateToAlarm}
+                sx={{ p: 0, marginLeft: "10px" }}
+              >
                 <Avatar
                   alt="Remy Sharp"
                   src="/images/bell.svg"

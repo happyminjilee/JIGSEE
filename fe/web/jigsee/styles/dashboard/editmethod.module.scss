@@ -4,8 +4,8 @@
   align-items: start;
   flex-direction: column;
   border: 1px solid var(--light-gray);
-  height: 170px; /* Full viewport height */
-  width: 450px;
+  height: 100%; /* Full viewport height */
+  width: 500px;
   border-radius: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   padding: 20px 30px; /* 패딩 */
@@ -28,7 +28,7 @@
 
   button {
     width: 380px;
-    height: 80px;
+    height: 40px;
     border: 1px solid var(--light-gray);
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

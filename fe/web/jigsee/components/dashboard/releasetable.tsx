@@ -18,7 +18,8 @@ interface Item {
 }
 
 export default function Releasetable() {
-  const { getJigcounts, modelscount, setJigmodel, jigmodel } = useDashboardstore();
+  const { getJigcounts, modelscount, setJigmodel, jigmodel } =
+    useDashboardstore();
   const [filterValue, setFilterValue] = useState("");
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
 
@@ -29,19 +30,26 @@ export default function Releasetable() {
   useEffect(() => {
     // Input 값에 따라 필터링
     setFilteredItems(
-      modelscount.filter((item) => item.model.toLowerCase().includes(filterValue.toLowerCase()))
+      modelscount.filter((item) =>
+        item.model.toLowerCase().includes(filterValue.toLowerCase())
+      )
     );
   }, [filterValue, modelscount]);
   // Input value가 바뀌는 것을 감지하는 함수
-  const onSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterValue(event.target.value);
-  }, []);
+  const onSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFilterValue(event.target.value);
+    },
+    []
+  );
 
   // Table 행이 선택되면 호출되는 함수
   const onRowSelectionChange = (keys: "all" | Set<React.Key>) => {
     if (keys !== "all" && keys.size > 0) {
       const selectedKey = Array.from(keys)[0];
-      const selectedItem = modelscount.find((item) => item.model === selectedKey);
+      const selectedItem = modelscount.find(
+        (item) => item.model === selectedKey
+      );
       if (selectedItem) {
         setJigmodel(selectedItem.model);
       }
