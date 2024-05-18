@@ -95,16 +95,21 @@ export default function ManagerNavbar() {
               src="/images/sdi-logo.svg"
               alt="Logo"
               style={{
-                height: "90%",
+                height: "80%",
                 marginTop: "-20px",
-                marginLeft: "30%",
+                marginLeft: "60%",
                 paddingTop: "30px",
                 cursor: "pointer",
               }}
             />
           </ListItem>
           <ListItem
-            sx={{ paddingTop: "10px", paddingBottom: "0px", width: "95%" }}
+            sx={{
+              paddingTop: "10px",
+              paddingBottom: "0px",
+              width: "95%",
+              marginLeft: "15%",
+            }}
           >
             <Button
               sx={{
@@ -143,7 +148,7 @@ export default function ManagerNavbar() {
             sx={{
               paddingTop: "10px",
               paddingBottom: "0px",
-              paddingRight: "80px",
+              // paddingRight: "20%",
             }}
           >
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
