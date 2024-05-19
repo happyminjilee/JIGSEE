@@ -1,4 +1,4 @@
-package com.sdi.apiserver.api.jig.dto.request;
+package com.sdi.jig.dto.request;
 
 public record JigItemRepairRequestDto(
         String serialNo
