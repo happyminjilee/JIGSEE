@@ -5,8 +5,7 @@ spring:
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost
-      port: 27017
+      uri: mongodb://localhost:27017
       database: jig
       username: jigsee
       password: jigseeadmin!
