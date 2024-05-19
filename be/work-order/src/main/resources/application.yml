@@ -1,0 +1,71 @@
+spring:
+  profiles:
+    active: local #default
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+spring:
+  config:
+    activate:
+      on-profile: common
+  application:
+    name: work-order
+
+server:
+  port: 8085
+  servlet:
+    context-path: /api
+apis:
+  api-base-url: ${API_BASE_URL}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+      database: ${MONGO_DB}
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${TEST_MYSQL_URL}
+    username: ${TEST_MYSQL_USERNAME}
+    password: ${TEST_MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    mongodb:
+      uri: ${TEST_MONGO_URI}
+      database: ${TEST_MONGO_DB}
+      username: ${TEST_MONGO_USERNAME}
+      password: ${TEST_MONGO_PASSWORD}
