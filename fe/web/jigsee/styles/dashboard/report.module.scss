@@ -1,0 +1,45 @@
+.report {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center;
+  flex-direction: row;
+  //   border: 1px solid black;
+  height: 15vh; /* Full viewport height */
+  width: 90%;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+.card {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center;
+  flex-direction: row;
+  border: 1px solid var(--light-gray);
+  height: 12vh; /* Full viewport height */
+  width: 250px;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  padding: 30px 30px; /* 패딩 */
+}
+.title {
+  font-size: 16px; /* 제목 폰트 크기 */
+  color: var(--subtext); /* 제목 색상 */
+  // margin-bottom: 10px; /* 제목 아래 마진 */
+}
+.views {
+  display: flex;
+  font-size: 30px; /* 조회수 폰트 크기 */
+  font-weight: bold; /* 굵기 */
+  color: #000; /* 조회수 색상 */
+  // justify-content: start;
+  // align-items: start;
+  // margin-bottom: 20px; /* 제목 아래 마진 */
+  // padding-bottom: 10px;
+  // padding-top: 0px;
+}
+
+.percentage {
+  font-size: 16px; /* 백분율 폰트 크기 */
+  color: var(--samsungblue); /* 백분율 색상 */
+  vertical-align: super; /* 상위 정렬 */
+}

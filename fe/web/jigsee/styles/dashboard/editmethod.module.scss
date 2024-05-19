@@ -1,0 +1,49 @@
+.card {
+  display: flex;
+  justify-content: start; /* Center horizontally */
+  align-items: start;
+  flex-direction: column;
+  border: 1px solid var(--light-gray);
+  height: 100%; /* Full viewport height */
+  width: 500px;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  padding: 20px 30px; /* 패딩 */
+  position: relative;
+}
+.title {
+  font-size: 16px; /* 제목 폰트 크기 */
+  // color: var(--samsungblue); /* 제목 색상 */
+  margin-bottom: 10px; /* 제목 아래 마진 */
+  font-weight: bolder;
+}
+.cardbody {
+  /* 새로운 스타일 추가 */
+  max-height: 370px; /* 원하는 고정 높이 설정 */
+  overflow-x: auto;
+  padding-right: 10px; /* 스크롤바 공간 확보 */
+
+  padding-top: 10px;
+  min-width: 340px;
+
+  button {
+    width: 380px;
+    height: 40px;
+    border: 1px solid var(--light-gray);
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: var(--white);
+  }
+}
+/* 스크롤바 스타일 */
+.cardbody::-webkit-scrollbar {
+  width: 8px; /* 스크롤바 폭 설정 */
+  height: 8px; /* 가로 스크롤바 높이 설정 */
+}
+.cardbody::-webkit-scrollbar-thumb {
+  background-color: var(--light-gray); /* 스크롤바 색상 */
+  border-radius: 10px; /* 스크롤바 끝부분 둥글게 */
+}
+.cardbody::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* 스크롤바 트랙 색상 */
+}

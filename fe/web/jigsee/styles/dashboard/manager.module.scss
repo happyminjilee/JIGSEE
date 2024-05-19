@@ -1,0 +1,56 @@
+.container {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 85vh; /* Full viewport height */
+  width: 80%;
+  flex-direction: column;
+  margin: 0 auto;
+  // border: 1px solid black;
+}
+.report {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center;
+  flex-direction: row;
+  //   border: 1px solid black;
+  height: 15vh; /* Full viewport height */
+  width: 100%;
+}
+.graph {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  // border: 1px solid black;
+  height: 45vh; /* Full viewport height */
+  width: 100%;
+  // margin: 0 auto;
+}
+.bottom {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center;
+  flex-direction: row;
+  // border: 1px solid black;
+  height: 400px; /* Full viewport height */
+  width: 100%;
+  padding-top: 30px;
+}
+.jiglocation {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;
+  flex-direction: row;
+  // border: 1px solid blue;
+  height: 100%; /* Full viewport height */
+  width: 60vw;
+}
+.jigalarm {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center;
+  flex-direction: row;
+  // border: 1px solid blue;
+  height: 90%; /* Full viewport height */
+  width: 50vw;
+}

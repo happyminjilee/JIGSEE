@@ -1,0 +1,37 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - common
+      prod:
+        - common
+---
+spring:
+  config:
+    activate:
+      on-profile: common
+  application:
+    name: api-server
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+---
+
+---
+apis:
+  jig-base-url: ${JIG_BASE_URL}
+  jig-item-base-url: ${JIG_ITEM_BASE_URL}
+  facility-item-base-url: ${FACILITY_ITEM_BASE_URL}
+  member-base-url: ${MEMBER_BASE_URL}
+  work-order-base-url: ${WORK_ORDER_BASE_URL}
+  notification-api-base-url: ${NOTIFICATION_API_BASE_URL}
+  notification-base-url: ${NOTIFICATION_BASE_URL}
+  mattermost-exception-webhook-url: ${MATTERMOST_WEBHOOK_URL}
+security:
+  cors-allowed-origins: ${ALLOWED_ORIGINS}
+  max-age: ${MAX_AGE}

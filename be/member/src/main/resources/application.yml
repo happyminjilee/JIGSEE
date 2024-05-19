@@ -1,0 +1,88 @@
+spring:
+  profiles:
+    active: local #default
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
+    application:
+      name: member
+
+server:
+  port: 8082
+  servlet:
+    context-path: /api
+
+jwt:
+  access:
+    secret: ${JWT_SECRET_ACCESS}
+    expiry: ${ACCESS_TOKEN_EXPIRY}
+  refresh:
+    secret: ${JWT_SECRET_REFRESH}
+    expiry: ${REFRESH_TOKEN_EXPIRY}
+
+security:
+  open:
+    all: ${OPEN_ALL}
+    manager: ${OPEN_MANAGER}
+    engineer: ${OPEN_ENGINEER}
+    producer: ${OPEN_PRODUCER}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  #DB
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_MEMBER_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      url: ${REDIS_URL}
+      username: ${REDIS_USERNAME}
+      password: ${REDIS_PASSWORD}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  #DB
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: ${TEST_MYSQL_MEMBER_URL}
+    username: ${TEST_MYSQL_USERNAME}
+    password: ${TEST_MYSQL_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: ${TEST_REDIS_HOST}
+      port: ${TEST_REDIS_PORT}
+      username: ${TEST_REDIS_USERNAME}
+      password: ${TEST_REDIS_PASSWORD}

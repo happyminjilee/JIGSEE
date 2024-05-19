@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+  flex-direction: column; /* Stack children vertically */
+}
+
+.logincontainer {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  width: 600px; /* Fixed width */
+  height: 400px; /* Fixed height */
+  padding: 20px; /* Padding around the content */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds shadow for better visibility */
+  Input {
+    width: 26rem;
+  }
+}
+.samsungbutton {
+  background-color: var(--samsungblue);
+  color: white; /* 버튼 텍스트 색상 */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 500px;
+}
