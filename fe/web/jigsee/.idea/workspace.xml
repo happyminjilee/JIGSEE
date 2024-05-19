@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c10e0a65-f04b-48b4-a8e0-0282665941a6" name="Changes" comment="################&#10;# type, body, footer는 각각 공백 줄로 한칸씩 띄워작성합니다.&#10;# 1. Type&#10;# [:tag_name] #이슈번호: Subject (공백 작성 시 주의)&#10;# Ex)[Feat] #S10P21S002-5: 샐러드/샌드위치 수량 계산&#10;# Ex)[Docs] #S10P21S002-37: README 추가&#10;&#10;################&#10;# 1-1. Subject Type&#10;#   - Feat: 새로운 기능을 추가하는 경우&#10;#   - Fix: 버그를 고친 경우&#10;#   - Docs: 문서/주석을 수정한 경우 (라이브러리 추가 등)&#10;#   - Style : 코드 포맷 변경, 세미콜론 누락, 코드 수정이 없는 경우&#10;#   - Refactor: 코드 로직 리펙토링&#10;#   - Test: 테스트 코드. 리펙토링 테스트 코드를 추가했을 때&#10;#   - Chore: 빌드 업무 수정, 패키지 매니저 수정&#10;#   - Design: CSS 등 사용자가 UI 디자인을 변경했을 때&#10;#   - Rename: 파일명(or 폴더명) 을 수정한 경우&#10;#   - Remove: 코드(파일) 의 삭제가 있을 때. &quot;Clean&quot;, &quot;Eliminate&quot; 를 사용하기도 함&#10;# 1-2. Subject&#10;#   - 50글자를 넘지 않도록 작성&#10;#   - 마침표 및 특수기호는 사용하지 않습니다.&#10;#   - 제목은 완전한 서술형 문장이 아니라, 간결하고 요점적인 서술을 위해 개조식 구문을 사용&#10;################(아래는 공백 유지 : Type과 Body의 구분)&#10;&#10;# 2. Body&#10;# body는 작업 내용이 복잡하거나 상세한 내용을 남겨야 하는 경우에만 작성&#10;# Ex) &#10;# - 이미지 업로드 기능 추가&#10;# - 회원 정보 수정 api 연동&#10;&#10;################&#10;# 2-1. Body 작성 규칙&#10;#   - 본문은 72자 내로 작성&#10;#   - 필요한 경우 여러줄로도 작성 가능&#10;#   - 여러 줄의 메시지를 작성할 땐 &quot;-&quot;로 구분 &#10;#   - 변경 내용보다 변경 이유를 작성해야 한다.(나중에 봤을 때 코드 작성 이유를 파악하기 위해)&#10;################(아래는 공백 유지 : Body와 Footer의 구분)&#10;&#10;# 3. Footer&#10;# 선택 사항으로 코드 작업과 관련된 이슈 번호 또는 참조 링크 등을 추가&#10;# Ex) Fixes: #1 (옵션_여기선 이슈번호에 []를 치면 안됨, 반영할려면 merge 필요)&#10;&#10;################&#10;# 3-1. Footer(꼬리말) 작성 규칙&#10;#   - 꼬리말은 optional이며 이슈 트래커 ID를 작성&#10;#   - 꼬리말은 &quot;유형: #이슈 번호&quot; 형식으로 사용&#10;#   - 여러 개의 이슈 번호를 적을 때는 쉼표(,)로 구분&#10;# 3-2. 이슈 트래커 유형&#10;#   - Fixes: 이슈 수정 중(아직 해결되지 않은 경우)&#10;&#10;# 최종 메세지 예시&#10;# [Feat] #S10P21S002-5: 샐러드/샌드위치 수량 계산&#10;# (공백 필수)&#10;# - 이미지 업로드 기능 추가(옵션)&#10;# - 회원 정보 수정 api 연동(옵션)&#10;# (공백 필수)&#10;# Fixes: #1(옵션_여기선 이슈번호에 []를 치면 안됨, 반영할려면 merge 필요)" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../../.." value="develop-web" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2fs8RlEE3xhgFNj4C9e9OcSR7v4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature__273&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/SSAFY/Desktop/sdi/S10P31S105/fe/web/jigsee/pages/common/ReleaseTotal/MyTotal&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\SSAFY\\Desktop\\sdi\\S10P31S105\\fe\\web\\jigsee\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\SSAFY\Desktop\sdi\S10P31S105\fe\web\jigsee\pages\common\ReleaseTotal\MyTotal" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\SSAFY\Desktop\sdi\S10P31S105\fe\web\jigsee\pages\common\ReleaseTotal" />
+      <recent name="C:\Users\SSAFY\Desktop\sdi\S10P31S105\fe\web\jigsee\pages\common\RepairTotal" />
+      <recent name="C:\Users\SSAFY\Desktop\sdi\S10P31S105\fe\web\jigsee\pages\common\ReleaseTotal\Total" />
+      <recent name="C:\Users\SSAFY\Desktop\sdi\S10P31S105\fe\web\jigsee\legacy" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.2-azul-21.0.2-4caba194b151-38275579" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c10e0a65-f04b-48b4-a8e0-0282665941a6" name="Changes" comment="" />
+      <created>1714578419161</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1714578419161</updated>
+      <workItem from="1714578424140" duration="20940000" />
+      <workItem from="1714627881701" duration="11465000" />
+      <workItem from="1714647365002" duration="4450000" />
+      <workItem from="1714652061936" duration="1683000" />
+      <workItem from="1714660877740" duration="1758000" />
+      <workItem from="1714693771130" duration="32926000" />
+      <workItem from="1714795724601" duration="13826000" />
+      <workItem from="1714827216765" duration="14380000" />
+      <workItem from="1714870206758" duration="21081000" />
+      <workItem from="1714965181378" duration="24079000" />
+      <workItem from="1715040029783" duration="26193000" />
+      <workItem from="1715076750016" duration="9197000" />
+      <workItem from="1715126496984" duration="13743000" />
+      <workItem from="1715147181936" duration="7574000" />
+      <workItem from="1715168750690" duration="4759000" />
+      <workItem from="1715173539471" duration="2202000" />
+      <workItem from="1715212939713" duration="30292000" />
+      <workItem from="1715298643218" duration="18305000" />
+      <workItem from="1715414844889" duration="10235000" />
+      <workItem from="1715494637952" duration="1067000" />
+      <workItem from="1715501381246" duration="11501000" />
+      <workItem from="1715559382266" duration="13597000" />
+      <workItem from="1715644879977" duration="11577000" />
+      <workItem from="1715688301585" duration="82000" />
+      <workItem from="1715751830059" duration="5048000" />
+      <workItem from="1715817861243" duration="16852000" />
+      <workItem from="1715849638938" duration="674000" />
+      <workItem from="1715856088513" duration="511000" />
+      <workItem from="1715856628211" duration="6000" />
+      <workItem from="1715859486973" duration="119000" />
+    </task>
+    <task id="LOCAL-00001" summary="[Fix] #S10P31S105-165: merging develop-web">
+      <option name="closed" value="true" />
+      <created>1714717906319</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1714717906319</updated>
+    </task>
+    <task id="LOCAL-00002" summary="[Feat] #S10P31S105-171 불출 승인 대기 조회&#10;&#10;Change-Id: I820132fd0f90ab0c2435b70dacc92c2ba6faa2d3">
+      <option name="closed" value="true" />
+      <created>1715005162404</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1715005162404</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="feature_273" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[Fix] #S10P31S105-165: merging develop-web" />
+    <MESSAGE value="[Feat] #S10P31S105-171 불출 승ì 대기 조회&#10;&#10;Change-Id: I820132fd0f90ab0c2435b70dacc92c2ba6faa2d3" />
+    <MESSAGE value="[Feat] #S10P31S105-171 불출 승인 대기 조회&#10;&#10;Change-Id: I820132fd0f90ab0c2435b70dacc92c2ba6faa2d3" />
+    <MESSAGE value="################&#10;# type, body, footer는 각각 공백 줄로 한칸씩 띄워작성합니다.&#10;# 1. Type&#10;# [:tag_name] #이슈번호: Subject (공백 작성 시 주의)&#10;# Ex)[Feat] #S10P21S002-5: 샐러드/샌드위치 수량 계산&#10;# Ex)[Docs] #S10P21S002-37: README 추가&#10;&#10;################&#10;# 1-1. Subject Type&#10;#   - Feat: 새로운 기능을 추가하는 경우&#10;#   - Fix: 버그를 고친 경우&#10;#   - Docs: 문서/주석을 수정한 경우 (라이브러리 추가 등)&#10;#   - Style : 코드 포맷 변경, 세미콜론 누락, 코드 수정이 없는 경우&#10;#   - Refactor: 코드 로직 리펙토링&#10;#   - Test: 테스트 코드. 리펙토링 테스트 코드를 추가했을 때&#10;#   - Chore: 빌드 업무 수정, 패키지 매니저 수정&#10;#   - Design: CSS 등 사용자가 UI 디자인을 변경했을 때&#10;#   - Rename: 파일명(or 폴더명) 을 수정한 경우&#10;#   - Remove: 코드(파일) 의 삭제가 있을 때. &quot;Clean&quot;, &quot;Eliminate&quot; 를 사용하기도 함&#10;# 1-2. Subject&#10;#   - 50글자를 넘지 않도록 작성&#10;#   - 마침표 및 특수기호는 사용하지 않습니다.&#10;#   - 제목은 완전한 서술형 문장이 아니라, 간결하고 요점적인 서술을 위해 개조식 구문을 사용&#10;################(아래는 공백 유지 : Type과 Body의 구분)&#10;&#10;# 2. Body&#10;# body는 작업 내용이 복잡하거나 상세한 내용을 남겨야 하는 경우에만 작성&#10;# Ex) &#10;# - 이미지 업로드 기능 추가&#10;# - 회원 정보 수정 api 연동&#10;&#10;################&#10;# 2-1. Body 작성 규칙&#10;#   - 본문은 72자 내로 작성&#10;#   - 필요한 경우 여러줄로도 작성 가능&#10;#   - 여러 줄의 메시지를 작성할 땐 &quot;-&quot;로 구분 &#10;#   - 변경 내용보다 변경 이유를 작성해야 한다.(나중에 봤을 때 코드 작성 이유를 파악하기 위해)&#10;################(아래는 공백 유지 : Body와 Footer의 구분)&#10;&#10;# 3. Footer&#10;# 선택 사항으로 코드 작업과 관련된 이슈 번호 또는 참조 링크 등을 추가&#10;# Ex) Fixes: #1 (옵션_여기선 이슈번호에 []를 치면 안됨, 반영할려면 merge 필요)&#10;&#10;################&#10;# 3-1. Footer(꼬리말) 작성 규칙&#10;#   - 꼬리말은 optional이며 이슈 트래커 ID를 작성&#10;#   - 꼬리말은 &quot;유형: #이슈 번호&quot; 형식으로 사용&#10;#   - 여러 개의 이슈 번호를 적을 때는 쉼표(,)로 구분&#10;# 3-2. 이슈 트래커 유형&#10;#   - Fixes: 이슈 수정 중(아직 해결되지 않은 경우)&#10;&#10;# 최종 메세지 예시&#10;# [Feat] #S10P21S002-5: 샐러드/샌드위치 수량 계산&#10;# (공백 필수)&#10;# - 이미지 업로드 기능 추가(옵션)&#10;# - 회원 정보 수정 api 연동(옵션)&#10;# (공백 필수)&#10;# Fixes: #1(옵션_여기선 이슈번호에 []를 치면 안됨, 반영할려면 merge 필요)" />
+    <option name="LAST_COMMIT_MESSAGE" value="################&#10;# type, body, footer는 각각 공백 줄로 한칸씩 띄워작성합니다.&#10;# 1. Type&#10;# [:tag_name] #이슈번호: Subject (공백 작성 시 주의)&#10;# Ex)[Feat] #S10P21S002-5: 샐러드/샌드위치 수량 계산&#10;# Ex)[Docs] #S10P21S002-37: README 추가&#10;&#10;################&#10;# 1-1. Subject Type&#10;#   - Feat: 새로운 기능을 추가하는 경우&#10;#   - Fix: 버그를 고친 경우&#10;#   - Docs: 문서/주석을 수정한 경우 (라이브러리 추가 등)&#10;#   - Style : 코드 포맷 변경, 세미콜론 누락, 코드 수정이 없는 경우&#10;#   - Refactor: 코드 로직 리펙토링&#10;#   - Test: 테스트 코드. 리펙토링 테스트 코드를 추가했을 때&#10;#   - Chore: 빌드 업무 수정, 패키지 매니저 수정&#10;#   - Design: CSS 등 사용자가 UI 디자인을 변경했을 때&#10;#   - Rename: 파일명(or 폴더명) 을 수정한 경우&#10;#   - Remove: 코드(파일) 의 삭제가 있을 때. &quot;Clean&quot;, &quot;Eliminate&quot; 를 사용하기도 함&#10;# 1-2. Subject&#10;#   - 50글자를 넘지 않도록 작성&#10;#   - 마침표 및 특수기호는 사용하지 않습니다.&#10;#   - 제목은 완전한 서술형 문장이 아니라, 간결하고 요점적인 서술을 위해 개조식 구문을 사용&#10;################(아래는 공백 유지 : Type과 Body의 구분)&#10;&#10;# 2. Body&#10;# body는 작업 내용이 복잡하거나 상세한 내용을 남겨야 하는 경우에만 작성&#10;# Ex) &#10;# - 이미지 업로드 기능 추가&#10;# - 회원 정보 수정 api 연동&#10;&#10;################&#10;# 2-1. Body 작성 규칙&#10;#   - 본문은 72자 내로 작성&#10;#   - 필요한 경우 여러줄로도 작성 가능&#10;#   - 여러 줄의 메시지를 작성할 땐 &quot;-&quot;로 구분 &#10;#   - 변경 내용보다 변경 이유를 작성해야 한다.(나중에 봤을 때 코드 작성 이유를 파악하기 위해)&#10;################(아래는 공백 유지 : Body와 Footer의 구분)&#10;&#10;# 3. Footer&#10;# 선택 사항으로 코드 작업과 관련된 이슈 번호 또는 참조 링크 등을 추가&#10;# Ex) Fixes: #1 (옵션_여기선 이슈번호에 []를 치면 안됨, 반영할려면 merge 필요)&#10;&#10;################&#10;# 3-1. Footer(꼬리말) 작성 규칙&#10;#   - 꼬리말은 optional이며 이슈 트래커 ID를 작성&#10;#   - 꼬리말은 &quot;유형: #이슈 번호&quot; 형식으로 사용&#10;#   - 여러 개의 이슈 번호를 적을 때는 쉼표(,)로 구분&#10;# 3-2. 이슈 트래커 유형&#10;#   - Fixes: 이슈 수정 중(아직 해결되지 않은 경우)&#10;&#10;# 최종 메세지 예시&#10;# [Feat] #S10P21S002-5: 샐러드/샌드위치 수량 계산&#10;# (공백 필수)&#10;# - 이미지 업로드 기능 추가(옵션)&#10;# - 회원 정보 수정 api 연동(옵션)&#10;# (공백 필수)&#10;# Fixes: #1(옵션_여기선 이슈번호에 []를 치면 안됨, 반영할려면 merge 필요)" />
+  </component>
+</project>
