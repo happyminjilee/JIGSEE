@@ -39,10 +39,7 @@ export default function ManagerNavbar() {
     setRole: state.setRole,
   }));
 
-  useEffect(() => {
-    console.log("Updated name:", name);
-    console.log("Updated role:", role);
-  }, [name, role]);
+  useEffect(() => {}, [name, role]);
 
   const handlelogout = async () => {
     //로그아웃 해제
@@ -52,11 +49,9 @@ export default function ManagerNavbar() {
       setName("");
       setRole("");
 
-      console.log("delete zustand info");
       // finishSSE();
       router.push("/login");
     } else {
-      console.log("로그인이 만료되었습니다.");
       router.push("/login");
     } // 알림 get test
   };

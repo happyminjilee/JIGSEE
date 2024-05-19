@@ -21,15 +21,12 @@ export default function Login() {
       setName(result.name);
       setRole(result.role);
       fetchSSE();
-      // console.log('what you want')
-      // console.log(localStorage.getItem('access_token'))
       if (result.role === "MANAGER") {
         router.push("/dashboard/manager");
       } else if (result.role === "ENGINEER") {
         router.push("/dashboard/engineer");
       }
     } else {
-      console.log("Login failed");
     }
   };
   return (
@@ -37,7 +34,7 @@ export default function Login() {
       <div
         className={styled.container}
         onKeyUp={(e) => {
-          e.key === "Enter" ? handlelogin(employeeNo, password) : console.log("타닥");
+          e.key === "Enter" ? handlelogin(employeeNo, password) : "";
         }}
       >
         <div className={styled.logincontainer}>
@@ -63,7 +60,13 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div style={{ marginBottom: "2rem", justifyContent: "flex-end", display: "flex" }}>
+          <div
+            style={{
+              marginBottom: "2rem",
+              justifyContent: "flex-end",
+              display: "flex",
+            }}
+          >
             <Checkbox defaultSelected>아이디 저장</Checkbox>
           </div>
           <Button

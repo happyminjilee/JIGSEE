@@ -8,9 +8,7 @@ export const getfacilitylist = async () => {
     .then((response) => {
       return response.data.result;
     })
-    .catch((error) => {
-      console.log("facilities", error.message);
-    });
+    .catch((error) => {});
 };
 
 export const getfacility = async (id: string) => {
@@ -24,9 +22,7 @@ export const getfacility = async (id: string) => {
     .then((response) => {
       return response;
     })
-    .catch((error) => {
-      console.log("facility", error.message);
-    });
+    .catch((error) => {});
 };
 // 설비에 장착가능한 jig 리스트 다 불러오기
 export const getfacilityitems = async (id: string) => {
@@ -40,7 +36,5 @@ export const getfacilityitems = async (id: string) => {
     .then((response) => {
       return response.data.result;
     })
-    .catch((error) => {
-      console.log("facility", error.message);
-    });
+    .catch((error) => {});
 };

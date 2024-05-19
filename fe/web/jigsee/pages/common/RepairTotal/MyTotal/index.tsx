@@ -3,7 +3,11 @@ import React, { useState, useEffect } from "react";
 import styled from "@/styles/Total/MyTotal.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
-import { useCompoStore, useUserWoListStore, useWoDetailStore } from "@/store/workorderstore";
+import {
+  useCompoStore,
+  useUserWoListStore,
+  useWoDetailStore,
+} from "@/store/workorderstore";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import WoModal from "@/components/workorder/template";
@@ -69,18 +73,42 @@ export default function RepairTotal() {
   }, [page, values]);
   // 임시 JIG 데이터- api 요청으로 불러오기
   const jigData: JigData[] = [
-    { date: "2024.04.21", serialNumber: "S/N S00000001", model: "Model Name", status: "PUBLISH" },
-    { date: "2024.04.22", serialNumber: "S/N S00000002", model: "Model Name", status: "PUBLISH" },
-    { date: "2024.04.23", serialNumber: "S/N S00000003", model: "Model Name", status: "REJECT" },
-    { date: "2024.04.21", serialNumber: "S/N S00000004", model: "Model Name", status: "REJECT" },
-    { date: "2024.04.22", serialNumber: "S/N S00000005", model: "Model Name", status: "FINISH" },
+    {
+      date: "2024.04.21",
+      serialNumber: "S/N S00000001",
+      model: "Model Name",
+      status: "PUBLISH",
+    },
+    {
+      date: "2024.04.22",
+      serialNumber: "S/N S00000002",
+      model: "Model Name",
+      status: "PUBLISH",
+    },
+    {
+      date: "2024.04.23",
+      serialNumber: "S/N S00000003",
+      model: "Model Name",
+      status: "REJECT",
+    },
+    {
+      date: "2024.04.21",
+      serialNumber: "S/N S00000004",
+      model: "Model Name",
+      status: "REJECT",
+    },
+    {
+      date: "2024.04.22",
+      serialNumber: "S/N S00000005",
+      model: "Model Name",
+      status: "FINISH",
+    },
     // 다른 JIG 데이터 객체들...
   ];
   // 선택한 값에 따라 필터링된 jigData를 저장할 상태 변수
   const [filteredJigData, setFilteredJigData] = useState<JigData[]>([]);
   // 값이 변경될 때마다 필터링된 데이터 업데이트
   useEffect(() => {
-    console.log("vvv", values);
     if (values === "ALL") {
       // "ALL"이면 전체 데이터 표시
       setFilteredJigData(jigData);
@@ -101,9 +129,7 @@ export default function RepairTotal() {
         setModalName("TOTAL");
         setModal(true);
       })
-      .catch((error) => {
-        console.log(error.message);
-      });
+      .catch((error) => {});
   }
 
   return (
@@ -127,7 +153,11 @@ export default function RepairTotal() {
             <p>Loading...</p>
           ) : (
             list.map((jig, index) => (
-              <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
+              <div
+                key={index}
+                onClick={() => cardClick(jig.id)}
+                className={styled.fullWidth}
+              >
                 <div>
                   {jig.id} |{" "}
                   {jig.status !== "FINISH"

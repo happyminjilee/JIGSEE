@@ -2,7 +2,6 @@ import { eraseCookie, setCookie } from "@/utils/cookie";
 import { axiosApi, axiosAuthApi } from "@/utils/instance";
 
 export const login = async (employeeNo: string, password: string) => {
-  console.log("Want to login?");
   const http = axiosApi();
 
   return await http
@@ -19,8 +18,6 @@ export const login = async (employeeNo: string, password: string) => {
       localStorage.setItem("refresh_token", response.headers["refreshtoken"]);
       setCookie("refresh_token", response.headers["refreshtoken"], 7);
       setCookie("role", response.data.result.role.toLowerCase(), 7);
-      // console.log('response login', response.headers)
-      // console.log(localStorage.getItem('refresh_token'))
       return {
         success: true,
         name: response.data.result.name,
@@ -28,7 +25,6 @@ export const login = async (employeeNo: string, password: string) => {
       };
     })
     .catch((error) => {
-      console.log("login failed", error.message);
       eraseCookie("refresh_token");
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
@@ -41,7 +37,6 @@ export const login = async (employeeNo: string, password: string) => {
 };
 
 export const logout = async () => {
-  console.log("want to logout?");
   const request = axiosAuthApi();
   return await request
     .post("/logout", {}, {})
@@ -70,7 +65,5 @@ export const searchUser = async () => {
     .then((res) => {
       return res.data.result;
     })
-    .catch((error) => {
-      console.log(error.message);
-    });
+    .catch((error) => {});
 };

@@ -19,9 +19,7 @@ const ApexChart = () => {
         setNewdelete(deleted);
         setNewfinish(finish);
       })
-      .catch((error) => {
-        console.log("failed to get Jig numbers", error);
-      });
+      .catch((error) => {});
   }, [request, deleted, finish]); // Include dependencies to avoid stale closures
 
   const state: state = {
@@ -72,7 +70,12 @@ const ApexChart = () => {
   };
 
   return (
-    <ReactApexChart width="380px" options={state.options} series={state.series} type="donut" />
+    <ReactApexChart
+      width="380px"
+      options={state.options}
+      series={state.series}
+      type="donut"
+    />
   );
 };
 

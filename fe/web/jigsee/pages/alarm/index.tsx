@@ -15,10 +15,15 @@ export default function Alarm() {
     setChecked(event.target.checked);
   };
   // 알람 스토어 변수 들
-  const { alarmId, uncheckednumber, uncheckedList, setUnchecked, setAlarmCheck } = useAlarmStore();
+  const {
+    alarmId,
+    uncheckednumber,
+    uncheckedList,
+    setUnchecked,
+    setAlarmCheck,
+  } = useAlarmStore();
   const { setAllalarm, alarmList, setPage, page } = useAlarmStore();
   const checkClick = (ID: number) => {
-    console.log(ID);
     setAlarmCheck(ID);
   };
 
@@ -77,7 +82,9 @@ export default function Alarm() {
                   {item.notificationStatus}{" "}
                   <div>
                     요청자{item.sender}
-                    {item.checkStatus === false && <LocalPostOfficeIcon color="primary" />}
+                    {item.checkStatus === false && (
+                      <LocalPostOfficeIcon color="primary" />
+                    )}
                   </div>
                 </div>
               ))}
@@ -86,9 +93,15 @@ export default function Alarm() {
         ) : (
           <div className={alarmStyle.container}>
             {alarmList.map((item, index) => (
-              <div key={index} className={alarmStyle.fullWidth} onClick={() => checkClick(item.id)}>
+              <div
+                key={index}
+                className={alarmStyle.fullWidth}
+                onClick={() => checkClick(item.id)}
+              >
                 {item.notificationStatus} | 요청자{item.sender}
-                {item.checkStatus === false && <LocalPostOfficeIcon color="primary" />}
+                {item.checkStatus === false && (
+                  <LocalPostOfficeIcon color="primary" />
+                )}
                 {item.checkStatus === true && <DraftsIcon />}
               </div>
             ))}

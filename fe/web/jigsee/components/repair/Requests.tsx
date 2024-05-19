@@ -7,11 +7,16 @@ import Box from "@mui/material/Box";
 import WoModal from "@/components/workorder/CreateWoModal";
 import Modal from "@mui/material/Modal";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useCartStore, useGroupFilter, useMartStore } from "@/store/repairrequeststore";
+import {
+  useCartStore,
+  useGroupFilter,
+  useMartStore,
+} from "@/store/repairrequeststore";
 import { DropBox } from "@/components/workorder/ListDnDbox";
 
 export default function RequestList() {
-  const { modalName, setModalName, modal, setModal, setRightCompo } = useCompoStore();
+  const { modalName, setModalName, modal, setModal, setRightCompo } =
+    useCompoStore();
   const { cartList, clearCartList, removeFromCart, addToCart } = useCartStore();
   const { setMart } = useMartStore();
   const { fetchWoGroup, publish, progress, finish } = useWoGroupStore();
@@ -25,31 +30,34 @@ export default function RequestList() {
 
   const requestPost = () => {
     // 리스트로 담아서 상태 변화
-    console.log("cartList", cartList);
-    console.log("forRequest", forRequest);
     // store 설정, 담아있는 리스트를 반환
     updateWoList(forRequest)
       .then((res) => {
         window.alert("요청 완료");
-        // console.log(res)
       })
       .catch((error) => {
-        console.log(error.message);
         window.alert("요청 실패!");
       })
       .finally(() => {
         clearCartList();
-        fetchWoGroup().then((res) => {
-          console.log("after request", res);
-        });
+        fetchWoGroup().then((res) => {});
       });
   };
 
   return (
     <>
       <div className={styled.box}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
-          <div style={{ fontWeight: "bold", fontSize: "15px" }}> 수리 요청 </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "15px",
+          }}
+        >
+          <div style={{ fontWeight: "bold", fontSize: "15px" }}>
+            {" "}
+            수리 요청{" "}
+          </div>
           <div
             className={styled.clear}
             onClick={() => {

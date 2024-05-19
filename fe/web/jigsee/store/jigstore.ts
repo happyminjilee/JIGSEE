@@ -19,7 +19,6 @@ export const usejigStore = create<jigStore>((set) => ({
   setStockList: async () => {
     const data = await getStockList();
     set({ stockList: data.list });
-    // console.log("stokkk", data.list);
   },
   methodList: [],
   getJigMethodList: async (model: string) => {

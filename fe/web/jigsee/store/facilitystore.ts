@@ -67,7 +67,6 @@ export const useFacilityStore = create<FacilityStore>((set, get) => ({
       set({ editStandardJigs: foundModel.jigModels });
     } else {
       // 선택한 facilityID로 모델을 찾을 수 없거나 jigModels 데이터가 없는 경우
-      console.log("No matching .");
       set({ editStandardJigs: [] }); // editStandardJigs를 비움
     }
   },

@@ -1,57 +1,50 @@
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@nextui-org/react";
 import { Divider, Textarea } from "@nextui-org/react";
 import styles from "@/styles/modal/releasereturn.module.css";
-import {useButtonClickStore, useReleaseDetailStore, useReleaseStore} from "@/store/releasestore";
-import React, {useEffect, useState} from "react";
-import {releaseResponse} from "@/pages/api/releaseAxios";
+import {
+  useButtonClickStore,
+  useReleaseDetailStore,
+  useReleaseStore,
+} from "@/store/releasestore";
+import React, { useEffect, useState } from "react";
+import { releaseResponse } from "@/pages/api/releaseAxios";
 // Props에 대한 인터페이스 정의
 interface ReturnProps {
   onClose: () => void; // 이 함수는 파라미터를 받지 않고 void를 반환함
 }
 export default function Return({ onClose }: ReturnProps) {
-  const {id} = useButtonClickStore()
-  const {fetchReleaseDetail, } = useReleaseDetailStore()
-  const {fetchRelease, } = useReleaseStore()
+  const { id } = useButtonClickStore();
+  const { fetchReleaseDetail } = useReleaseDetailStore();
+  const { fetchRelease } = useReleaseStore();
   useEffect(() => {
     fetchReleaseDetail(id)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((error) => {
-          console.log(error.message)
-        })
-        .finally(() => {
-          console.log(id)
-        })
+      .then((res) => {})
+      .catch((error) => {})
+      .finally(() => {});
   }, []);
 
-
-  const [memo, setMemo] = useState("")
+  const [memo, setMemo] = useState("");
   const cardClick = () => {
     releaseResponse(id, false, memo, [])
-        .then((res)=> {
-          console.log(res)
-        })
-        .catch((error) => {
-          console.log(error.message)
-        })
-        .finally(() => {
-          fetchRelease("PUBLISH", 1, 10)
-              .then((res) => {
-                  console.log('after return request', res)
-              })
-              .catch((error) => {
-                  console.log(error.message)
-              })
-              .finally(() => {
-                  setMemo("")
-                  onClose()
-              })
-        })
-  }
-    useEffect(() => {
-        console.log(memo)
-    }, [memo]);
+      .then((res) => {})
+      .catch((error) => {})
+      .finally(() => {
+        fetchRelease("PUBLISH", 1, 10)
+          .then((res) => {})
+          .catch((error) => {})
+          .finally(() => {
+            setMemo("");
+            onClose();
+          });
+      });
+  };
+  useEffect(() => {}, [memo]);
 
   return (
     <Modal className={styles.container} isOpen={true} onClose={onClose}>
@@ -60,12 +53,12 @@ export default function Return({ onClose }: ReturnProps) {
         <ModalBody>
           <Divider className={styles.divider} />
           <Textarea
-              label="Description"
-              placeholder="반려 사유 입력"
-              className={styles.content}
-              size="lg"
-              minRows={12}
-              onValueChange={(value:string) => setMemo(value)}
+            label="Description"
+            placeholder="반려 사유 입력"
+            className={styles.content}
+            size="lg"
+            minRows={12}
+            onValueChange={(value: string) => setMemo(value)}
           />
         </ModalBody>
         <ModalFooter>

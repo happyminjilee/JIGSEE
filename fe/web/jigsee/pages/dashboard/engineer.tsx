@@ -21,12 +21,8 @@ export default function Engineerdashboard() {
       const employeeNo = localStorage.getItem("employeeNo") || "";
       const name = localStorage.getItem("name") || "";
       fetchUserWo(employeeNo, name, 1, 5)
-        .then((res) => {
-          console.log("res", res);
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
+        .then((res) => {})
+        .catch((error) => {});
     }
   }, []);
   return (

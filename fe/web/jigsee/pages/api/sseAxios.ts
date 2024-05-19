@@ -12,15 +12,12 @@ export const fetchSSE = () => {
       heartbeatTimeout: 90000, // 밀리초 단위로 타임아웃을 90초로 설정
     });
     // sse 연결 시작
-    eventSource.onmessage = (e) => {
-      console.log("eeeee", e.data);
-    };
+    eventSource.onmessage = (e) => {};
 
     eventSource.onerror = (e) => {
       console.error(e, "SSE 에러 발생");
       // 자동 재연결 로직 추가
       if (e.target.readyState === EventSource.CLOSED) {
-        console.log("SSE 연결 재시도 중...");
         setTimeout(fetchSSE, 5000); // 5초 후 재시도
       }
     };
@@ -31,7 +28,6 @@ export const fetchSSE = () => {
 export const finishSSE = async () => {
   const url = "/notification/sse/disconnect";
   const response = await axiosAuthApi().delete(url);
-  console.log("알람 통신 끊기", response);
 };
 // 미확인 알림 조회
 export const getUnchecked = async () => {

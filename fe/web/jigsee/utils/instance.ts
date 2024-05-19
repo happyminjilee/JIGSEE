@@ -23,10 +23,7 @@ const axiosAuthApi = (): AxiosInstance => {
         response: { status },
       } = error;
 
-      console.log("!!!!!!!!!!", error.response.data.resultCode);
-      console.log(error.response);
       if (error.response.data.resultCode === "EXPIRED_ACCESS_TOKEN") {
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         const originRequest = config;
         // 무한 재시도 방지
         if (!originRequest._retry) {
@@ -46,24 +43,10 @@ const axiosAuthApi = (): AxiosInstance => {
             eraseCookie("refresh_token");
             const newAccessToken = response.headers["authorization"];
             const newRefreshToken = response.headers["refreshtoken"];
-            console.log("newAccessToken", newAccessToken);
-            console.log("newRefreshToken", newRefreshToken);
             localStorage.setItem("access_token", newAccessToken);
             localStorage.setItem("refresh_token", newRefreshToken);
             setCookie("refresh_token", newRefreshToken, 7);
-            console.log("local access", localStorage.getItem("access_token"));
-            console.log("local refresh", localStorage.getItem("refresh_token"));
             originRequest.headers.Authorization = newAccessToken;
-            // originRequest.headers.RefreshToken = newRefreshToken;
-            console.log("originRequest", originRequest);
-            console.log(
-              "orginRequestToken",
-              originRequest.headers.Authorization
-            );
-            console.log(
-              "originRequestRefresh",
-              originRequest.headers.RefreshToken
-            );
             return axios(originRequest);
           } catch (refreshError) {
             localStorage.removeItem("access_token");

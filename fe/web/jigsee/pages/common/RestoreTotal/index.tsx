@@ -60,7 +60,6 @@ export default function RestoreTotal() {
   function cardClick(jigID: number) {
     setRestoreJigid(jigID);
     setOpen(true);
-    console.log("clicked", jigID);
   }
   // jig선택한 id가 바뀔때마다 jig Detail이 변함
   useEffect(() => {
@@ -75,9 +74,14 @@ export default function RestoreTotal() {
           // Render restoreList once it's loaded
           <div className={styled.container}>
             {restoreList.map((item, index) => (
-              <div key={index} className={styled.fullWidth} onClick={() => cardClick(item.id)}>
+              <div
+                key={index}
+                className={styled.fullWidth}
+                onClick={() => cardClick(item.id)}
+              >
                 <h3>
-                  생성일 {item.createdAt[0]}년 {item.createdAt[1]}월 {item.createdAt[2]}일
+                  생성일 {item.createdAt[0]}년 {item.createdAt[1]}월{" "}
+                  {item.createdAt[2]}일
                 </h3>
                 <p>
                   보수 요청 번호 {item.id} | 요청자 {item.from}

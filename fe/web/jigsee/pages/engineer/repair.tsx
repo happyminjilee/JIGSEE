@@ -5,7 +5,11 @@ import WOtest from "@/components/repair/WOtestresult";
 import RepairList from "@/components/repair/List";
 
 import Information from "@/components/repair/JigDetail";
-import { useCompoStore, useWoGroupStore, useUserWoListStore } from "@/store/workorderstore";
+import {
+  useCompoStore,
+  useWoGroupStore,
+  useUserWoListStore,
+} from "@/store/workorderstore";
 import { DndProvider, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import React, { useEffect } from "react";
@@ -27,21 +31,12 @@ export default function Repair() {
   useEffect(() => {
     fetchSearchUser();
     const name = localStorage.getItem("name") || "";
-    console.log("employeeNo", employeeNo, role, name, id);
     fetchUserWo(employeeNo, name, 1, 10)
-      .then((res) => {
-        console.log("on reapir userwo", res);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+      .then((res) => {})
+      .catch((error) => {});
     fetchWoGroup()
-      .then((res) => {
-        console.log("on reapir groupwo", res);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+      .then((res) => {})
+      .catch((error) => {});
   }, []);
   const { setModal, setModalName, modal, modalName } = useCompoStore();
 

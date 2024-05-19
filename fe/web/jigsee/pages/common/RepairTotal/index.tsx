@@ -3,7 +3,11 @@ import React, { useState, useEffect } from "react";
 import styled from "@/styles/Total/Total.module.css";
 import EngineerNav from "@/pages/engineer/navbar";
 import ManagerNav from "@/pages/manager/navbar";
-import { useCompoStore, useWoDetailStore, useWoStore } from "@/store/workorderstore";
+import {
+  useCompoStore,
+  useWoDetailStore,
+  useWoStore,
+} from "@/store/workorderstore";
 
 import WoModal from "@/components/workorder/template";
 
@@ -50,14 +54,8 @@ export default function RepairTotal() {
   const [page, setPage] = useState(1);
   useEffect(() => {
     fetchWo(values, page, 5)
-      .then((res) => {
-        console.log(res);
-        console.log(values);
-        console.log(list);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+      .then((res) => {})
+      .catch((error) => {});
   }, [page, values]);
 
   const { endPage, list, fetchWo } = useWoStore();
@@ -66,12 +64,9 @@ export default function RepairTotal() {
   const cardClick = (id: number) => {
     fetchWoDetail(id)
       .then((res) => {
-        console.log(res);
         setShow(true);
       })
-      .catch((error) => {
-        console.log(error.message);
-      });
+      .catch((error) => {});
   };
 
   return (
@@ -116,7 +111,11 @@ export default function RepairTotal() {
           </div>
           <div className={styled.container}>
             {list.map((jig, index) => (
-              <div key={index} onClick={() => cardClick(jig.id)} className={styled.fullWidth}>
+              <div
+                key={index}
+                onClick={() => cardClick(jig.id)}
+                className={styled.fullWidth}
+              >
                 <div className={styled.inCard}>
                   <div className={styled.inInCard}>
                     <div>

@@ -23,12 +23,8 @@ export default function App() {
   const [list, setList] = useState([]);
   useEffect(() => {
     fetchManagerGraph()
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+      .then((res) => {})
+      .catch((error) => {});
   }, []);
 
   return (

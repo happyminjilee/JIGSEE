@@ -18,8 +18,14 @@ interface RowData {
 }
 
 export default function EditStandard({ onClose }: EditStandardProps) {
-  const { facilityID, facilities, loadFacilities, setfacilityID, editStandardJigs, setEditJigs } =
-    useFacilityStore();
+  const {
+    facilityID,
+    facilities,
+    loadFacilities,
+    setfacilityID,
+    editStandardJigs,
+    setEditJigs,
+  } = useFacilityStore();
   const [selectedFacility, setSelectedFacility] = useState(0);
   const [selectedModel, setSelectedModel] = useState("");
   // 기존점검항목 리스트를 불러옴
@@ -47,16 +53,11 @@ export default function EditStandard({ onClose }: EditStandardProps) {
 
   // 지그 점검 항목 제출 버튼
   const submitRow = async () => {
-    console.log("ssmodel", selectedModel);
     try {
-      console.log("tttt", rows);
       // jig model도 전달하는 로직으로 수정필요
       const result = await updatejigMethod(selectedModel, rows);
-      console.log("점검항목수정완", result);
       window.alert("점검 항목 수정이 완료되었습니다.");
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    }
+    } catch (error) {}
 
     onClose();
     window.location.reload();
@@ -86,7 +87,9 @@ export default function EditStandard({ onClose }: EditStandardProps) {
   return (
     <>
       <Card className={styled.requestcontainer}>
-        <CardHeader className={styled.cardheader}>지그 점검 항목 수정</CardHeader>
+        <CardHeader className={styled.cardheader}>
+          지그 점검 항목 수정
+        </CardHeader>
         <Divider className={styled.headerline} />
         <CardBody>
           <div className={styled.cardbody}>
@@ -136,7 +139,9 @@ export default function EditStandard({ onClose }: EditStandardProps) {
                   <input
                     type="text"
                     value={row.content}
-                    onChange={(e) => updateRow(index, "content", e.target.value)}
+                    onChange={(e) =>
+                      updateRow(index, "content", e.target.value)
+                    }
                   />
                 </label>
                 <label>
@@ -144,10 +149,15 @@ export default function EditStandard({ onClose }: EditStandardProps) {
                   <input
                     type="text"
                     value={row.standard}
-                    onChange={(e) => updateRow(index, "standard", e.target.value)}
+                    onChange={(e) =>
+                      updateRow(index, "standard", e.target.value)
+                    }
                   />
                 </label>
-                <RemoveCircleOutlineIcon color="primary" onClick={() => removeRow(index)} />
+                <RemoveCircleOutlineIcon
+                  color="primary"
+                  onClick={() => removeRow(index)}
+                />
               </div>
             ))}
           </div>

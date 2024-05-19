@@ -47,7 +47,6 @@ export async function saveWotmp(id: number, checklist: checklist[]) {
     id: id, // wo의 id
     checkList: checklist,
   };
-  console.log(id, checklist);
   return axiosAuthApi().put("/work-order/tmp", requestBody);
 }
 
@@ -73,7 +72,12 @@ export async function updateWoList(
   return axiosAuthApi().put("/work-order/status", requestBody);
 }
 
-export async function getUserWoList(employeeNo: string, name: string, page: number, size: number) {
+export async function getUserWoList(
+  employeeNo: string,
+  name: string,
+  page: number,
+  size: number
+) {
   const params = {
     "employee-no": employeeNo,
     name: name,

@@ -36,13 +36,21 @@ interface RowItem {
 }
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+  setRowModesModel: (
+    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+  ) => void;
 }
 export default function WOtestresult() {
   // const { woId } = useWoStore();
   const [testMethod, setTestMethod] = useState<testMethodItem[]>([]);
-  const { checkList, fetchWoDetail, id, fetchWoUpdateTmp, fetchWoDone, jigItemInfo } =
-    useWoDetailStore();
+  const {
+    checkList,
+    fetchWoDetail,
+    id,
+    fetchWoUpdateTmp,
+    fetchWoDone,
+    jigItemInfo,
+  } = useWoDetailStore();
   const { setRightCompo, setWoId } = useCompoStore();
   // id 가 바뀔때마다 새로운 리스트를 불러옴
   useEffect(() => {
@@ -125,10 +133,15 @@ export default function WOtestresult() {
     setRows(newRows);
   }, [testMethod]);
 
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
+    {}
+  );
 
   // 행 수정 중지 이벤트 핸들러
-  const handleRowEditStop: GridEventListener<"rowEditStop"> = (params, event) => {
+  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
+    params,
+    event
+  ) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
@@ -166,7 +179,6 @@ export default function WOtestresult() {
 
   // 임시저장 로직
   const updateTest = () => {
-    console.log("updaterow", rows);
     const newList = rows.map((item) => ({
       uuid: item.id,
       content: item.contents,
@@ -175,7 +187,6 @@ export default function WOtestresult() {
       memo: item.memo,
       passOrNot: item.passOrNot,
     }));
-    console.log("newrow", newList);
 
     // fetchWoUpdateTmp 함수 호출 후, 완료되면 alert 표시
     fetchWoUpdateTmp(id, newList)
@@ -203,7 +214,6 @@ export default function WOtestresult() {
     // 1대신 id를 입력하는 것으로 추후 수정해야함
     fetchWoDone(id, newList)
       .then((res) => {
-        console.log("look at me", res);
         if (res) {
           setModalName("REUSE");
           setModal(true);

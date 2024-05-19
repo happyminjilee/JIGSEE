@@ -55,10 +55,6 @@ export default function Releasetable() {
       }
     }
   };
-  // table 행 선택시 store지그 모델 변경 확인
-  // useEffect(() => {
-  //   console.log("change??", jigmodel);
-  // }, [jigmodel]);
   return (
     <>
       <div className={styled.container}>

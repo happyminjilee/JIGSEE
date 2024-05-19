@@ -28,7 +28,8 @@ export default function Request() {
   const [selectedFacility, setSelectedFacility] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
 
-  const { loadFacilities, facilities, getJigSN, jigmodels } = useFacilityStore();
+  const { loadFacilities, facilities, getJigSN, jigmodels } =
+    useFacilityStore();
   useEffect(() => {
     loadFacilities();
     if (selectedFacility) {
@@ -46,7 +47,6 @@ export default function Request() {
   // jigmodels가 변경될 때마다 left를 업데이트
   useEffect(() => {
     setLeft(jigmodels);
-    console.log("dsds", jigmodels);
   }, [jigmodels]);
   // 필터에 따라 리스트 업데이트
   useEffect(() => {
@@ -111,7 +111,11 @@ export default function Request() {
           const labelId = `transfer-list-item-${value}-label`;
 
           return (
-            <ListItemButton key={value} role="listitem" onClick={handleToggle(value)}>
+            <ListItemButton
+              key={value}
+              role="listitem"
+              onClick={handleToggle(value)}
+            >
               <ListItemIcon>
                 <Checkbox
                   checked={checked.indexOf(value) !== -1}
@@ -131,10 +135,8 @@ export default function Request() {
   );
   // 불출 요청
   const sendReleaseList = () => {
-    console.log(right);
     releaseRequest(right)
       .then((res) => {
-        console.log("resresrser", res);
         if (res === true) {
           // releaseRequest 함수가 성공적으로 완료되면 새로고침
           alert("불출 요청이 완료 되었습니다.");
@@ -145,10 +147,7 @@ export default function Request() {
           window.location.reload();
         }
       })
-      .catch((error) => {
-        // 오류 처리
-        console.error("Failed to send release request:", error);
-      });
+      .catch((error) => {});
   };
 
   return (

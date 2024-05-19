@@ -84,13 +84,14 @@ export default function RepairTotal() {
   const [filteredJigData, setFilteredJigData] = useState<any[]>([]);
   // 값이 변경될 때마다 필터링된 데이터 업데이트
   useEffect(() => {
-    console.log("vvv", values);
     if (values === "ALL") {
       // "ALL"이면 전체 데이터 표시
       setFilteredJigData(releaseList || []); // releaseList가 undefined인 경우 빈 배열을 사용
     } else {
       // 선택한 값에 따라 jigData 필터링
-      const filteredData = releaseList ? releaseList.filter((jig) => jig.status === values) : [];
+      const filteredData = releaseList
+        ? releaseList.filter((jig) => jig.status === values)
+        : [];
       setFilteredJigData(filteredData);
     }
   }, [values, releaseList]);

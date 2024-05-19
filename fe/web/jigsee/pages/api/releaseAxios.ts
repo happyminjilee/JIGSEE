@@ -16,7 +16,6 @@ export const releaseRequest = async (serialNos: string[]) => {
       return true;
     })
     .catch((error) => {
-      console.log(error);
       return false;
     });
 };
@@ -43,7 +42,6 @@ export const releaseResponse = async (
       return true;
     })
     .catch((error) => {
-      console.log(error.message);
       return false;
     });
 };
@@ -68,7 +66,6 @@ export const releaseGet = async (
       return response.data.result;
     })
     .catch((error) => {
-      console.log(error.message);
       return false;
     });
 };
@@ -88,7 +85,6 @@ export const releaseDetailGet = async (
       return response.data.result;
     })
     .catch((error) => {
-      console.log(error.message);
       return false;
     });
 };
