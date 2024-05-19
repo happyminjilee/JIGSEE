@@ -39,9 +39,6 @@
 ### Work Order
 
 <img src="./readme_assets/점검항목_수정.gif" style="width:550px;">
-
-<br>
-
 <img src="./readme_assets/wo_확인.gif" style="width:550px;">
 
 - Jig의 점검 항목을 수정할 수 있습니다.
@@ -79,6 +76,9 @@
 ## 생산팀 App
 
 <img src="./readme_assets/app.gif" style="width:550px;">
+
+<br>
+
 <img src="./readme_assets/app2.gif" style="width:550px;">
 
 - 생산팀은 교체 주기가 된 Jig의 목록을 확인할 수 있습니다.
