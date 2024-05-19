@@ -76,9 +76,11 @@
 ## 생산팀 App
 
 <img src="./readme_assets/app.gif" style="width:550px;">
+<img src="./readme_assets/app2.gif" style="width:550px;">
 
 - 생산팀은 교체 주기가 된 Jig의 목록을 확인할 수 있습니다.
 - 간단하게 S/N을 촬영하고 해당 Jig를 교체할 수 있습니다.
+- Jig의 잘못된 투입을 방지합니다.
 
 <br>
 <br>
