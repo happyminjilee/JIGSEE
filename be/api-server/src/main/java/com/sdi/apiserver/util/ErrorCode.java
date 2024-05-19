@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:be/api-server/src/main/java/com/sdi/apiserver/util/ErrorCode.java
 package com.sdi.apiserver.util;
-========
-package com.sdi.work_order.util;
->>>>>>>> release-wo:be/work-order/src/main/java/com/sdi/work_order/util/ErrorCode.java
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:be/member/src/main/java/com/sdi/member/util/Response.java
-package com.sdi.member.util;
-========
 package com.sdi.work_order.util;
->>>>>>>> release-wo:be/work-order/src/main/java/com/sdi/work_order/util/Response.java
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

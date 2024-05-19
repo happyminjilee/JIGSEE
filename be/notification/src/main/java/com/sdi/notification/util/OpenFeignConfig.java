@@ -1,4 +1,4 @@
-package com.sdi.common.util;
+package com.sdi.notification.util;
 
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;

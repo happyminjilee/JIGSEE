@@ -1,17 +1,10 @@
-<<<<<<<< HEAD:be/member/src/main/java/com/sdi/member/util/Response.java
 package com.sdi.member.util;
-========
-package com.sdi.work_order.util;
->>>>>>>> release-wo:be/work-order/src/main/java/com/sdi/work_order/util/Response.java
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Response<T> {
     private String resultCode;
     private T result;
@@ -24,7 +17,7 @@ public class Response<T> {
         return new Response<>("SUCCESS", result);
     }
 
-    public static Response<String> error(String message) {
-        return new Response<>("FAIL", message);
+    public static Response<Void> error(String errorCode) {
+        return new Response<>(errorCode, null);
     }
 }

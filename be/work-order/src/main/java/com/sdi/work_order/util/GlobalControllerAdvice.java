@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:be/member/src/main/java/com/sdi/member/util/GlobalControllerAdvice.java
-package com.sdi.member.util;
-========
 package com.sdi.work_order.util;
->>>>>>>> release-wo:be/work-order/src/main/java/com/sdi/work_order/util/GlobalControllerAdvice.java
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

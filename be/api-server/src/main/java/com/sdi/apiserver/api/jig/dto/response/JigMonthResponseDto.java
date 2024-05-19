@@ -1,4 +1,4 @@
-package com.sdi.jig.dto.response;
+package com.sdi.apiserver.api.jig.dto.response;
 
 public record JigMonthResponseDto(
 	int countDelete,
