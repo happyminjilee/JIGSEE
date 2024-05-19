@@ -4,6 +4,8 @@
 > Samsung SDI 기업 연계 프로젝트  
 > 개발 기간 : 2024.04.08 ~ 2024.05.20
 
+<br>
+
 # 1. 주요 기능
 
 ## 관리자 화면
@@ -15,6 +17,8 @@
 <img src="./readme_assets/대시보드2.gif" style="width:550px;">
 
 - 전체 Jig 현황, 예상 점검 주기, 점검 주기 별 생산량, 위험 지그 수를 한 눈에 파악할 수 있습니다.
+
+<br>
 
 ### Jig 불출 요청 및 불출 승인
 
@@ -30,6 +34,8 @@
 
 - 승인이나 반려된 Jig 목록을 확인할 수 있습니다.
 
+<br>
+
 ### Work Order
 
 <img src="./readme_assets/점검항목_수정.gif" style="width:550px;">
@@ -37,6 +43,8 @@
 
 - Jig의 점검 항목을 수정할 수 있습니다.
 - 수정된 점검 항목은 이후 작성되는 Work Order에 자동으로 반영됩니다.
+
+<br>
 
 ## 기술팀 화면
 
@@ -47,11 +55,15 @@
 
 - 각 Jig의 상세 정보, 수리 현황을 한 눈에 볼 수 있습니다.
 
+<br>
+
 ### Jig 불출 요청
 
 <img src="./readme_assets/기술팀_Jig_불출_요청.gif" style="width:550px;">
 
 - 필요한 Jig의 불출을 요청하고 요청 내역을 확인할 수 있습니다.
+
+<br>
 
 ### Jig 수리 내역
 
@@ -59,12 +71,17 @@
 
 - Jig의 수리 진행 내역을 조회하고 수리가 완료된 Jig의 Work Order를 작성할 수 있습니다.
 
+<br>
+
 ## 생산팀 App
 
 <img src="./readme_assets/app.gif" style="width:550px;">
 
 - 생산팀은 교체 주기가 된 Jig의 목록을 확인할 수 있습니다.
 - 간단하게 S/N을 촬영하고 해당 Jig를 교체할 수 있습니다.
+
+<br>
+<br>
 
 # 2. 프로젝트 구조
 
@@ -83,6 +100,8 @@
 <img src="https://img.shields.io/badge/AXIOS-%235A29E4?style=for-the-badge&logo=axios&logoColor=white"/>
 <img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white"/>
 </div>
+
+<br>
 
 <div align="center">
 <h1>✨Back-end Stack✨</h1>
@@ -103,6 +122,8 @@
 <img src="https://img.shields.io/badge/junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white"/>
 </div>
 
+<br>
+
 <div align="center">
 <h1>✨Infrastructure Stack✨</h1>
 <img src="https://img.shields.io/badge/DOCKER-%232496ED?style=for-the-badge&logo=docker&logoColor=white">
@@ -114,6 +135,8 @@
 <img src="https://img.shields.io/badge/kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white">
 </div>
 
+<br>
+
 <div align="center">
 <h1>✨Cooperation Tool✨</h1>
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"/>
@@ -122,6 +145,8 @@
 <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white"/>
 <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white"/>
 </div>
+
+<br>
 
 ## 2-2. API 명세서
 
@@ -145,6 +170,8 @@
 
 <img src="./readme_assets/api_6.png" style="width:550px;">
 
+<br>
+
 ## 2-3. ERD
 
 ### MySQL
@@ -155,6 +182,8 @@
 
 <img src="./readme_assets/Mongo-ERD.png" style="width:550px;">
 
+<br>
+
 ## 2-4. 시스템 아키텍처
 
 <img src="./readme_assets/msa.png" style="width:550px;">
@@ -163,12 +192,16 @@
 
 <img src="./readme_assets/architecture.png" style="width:550px;">
 
+<br>
+
 ## 2-5. 화면 정의서
 
 <img src="./readme_assets/figma_0.png" style="width:550px;">
 <img src="./readme_assets/figma_1.png" style="width:550px;">
 <img src="./readme_assets/figma_2.png" style="width:550px;">
 <img src="./readme_assets/figma_3.png" style="width:550px;">
+
+<br>
 
 ## 2-6. 디렉토리 구조
 
@@ -1136,6 +1169,9 @@
   ┣ 📜gradlew.bat
   ┗ 📜settings.gradle
   ```
+
+<br>
+<br>
 
 # 3. 팀 구성
 
