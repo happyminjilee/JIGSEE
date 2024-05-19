@@ -1,0 +1,60 @@
+spring:
+  profiles:
+    active: local #default
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
+    application:
+      name: notification
+
+server:
+  port: 8084
+  servlet:
+    context-path: /api
+---
+spring:
+  datasource:
+    url: ${MYSQL_NOTIFICATION_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    open-in-view: false
+---
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: ${EMAIL_NOTIFICATION_PORT}
+    username: ${EMAIL_NOTIFICATION_USERNAME}
+    password: ${EMAIL_NOTIFICATION_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+---
+security:
+  cors-allowed-origins: ${ALLOWED_ORIGINS}
+  max-age: ${MAX_AGE}
+  refresh-token-prefix: ${REFRESH_TOKEN_PREFIX}
+---
+apis:
+  api-base-url: ${API_BASE_URL}
