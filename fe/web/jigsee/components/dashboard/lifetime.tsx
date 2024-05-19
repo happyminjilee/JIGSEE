@@ -4,7 +4,8 @@ import { ApexOptions } from "apexcharts";
 import { useDashboardstore } from "@/store/dashboardstore";
 export default function Lifetime() {
   const [model, setModel] = useState("");
-  const { jigmodel, getInterval, optimalList, xlabelList } = useDashboardstore();
+  const { jigmodel, getInterval, optimalList, xlabelList } =
+    useDashboardstore();
   useEffect(() => {
     setModel(jigmodel);
     if (jigmodel !== "") {
@@ -14,7 +15,7 @@ export default function Lifetime() {
   // 차트에 표시할 데이터
   const series = [
     {
-      name: "Desktops",
+      name: "예상 점검 주기",
       data: optimalList,
     },
   ];
@@ -51,7 +52,7 @@ export default function Lifetime() {
       curve: "straight",
     },
     title: {
-      text: `수리 횟수에 따른 예상 생명주기 : ${model || "모델을 선택 하세요"}`,
+      text: `수리 횟수에 따른 예상 점검주기 : ${model || "모델을 선택 하세요"}`,
       align: "center",
     },
     grid: {
@@ -68,7 +69,13 @@ export default function Lifetime() {
   // ReactApexChart 컴포넌트를 사용하여 차트 렌더링
   return (
     <div>
-      <ReactApexChart width="500px" options={options} series={series} type="line" height={270} />
+      <ReactApexChart
+        width="500px"
+        options={options}
+        series={series}
+        type="line"
+        height={270}
+      />
     </div>
   );
 }
