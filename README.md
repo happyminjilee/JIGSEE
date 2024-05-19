@@ -39,6 +39,9 @@
 ### Work Order
 
 <img src="./readme_assets/점검항목_수정.gif" style="width:550px;">
+
+<br>
+
 <img src="./readme_assets/wo_확인.gif" style="width:550px;">
 
 - Jig의 점검 항목을 수정할 수 있습니다.
