@@ -1,0 +1,116 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: var(--samsungblue) solid 1px;
+  border-radius: 0.5rem;
+  width: 90%;
+  height: 100%;
+  padding: 10px;
+  box-shadow: 4px 4px var(--light-gray);
+}
+
+.head {
+  font-weight: 1000;
+  font-size: 20px;
+  color: var(--samsungblue) 1px;
+  margin-left: 10px;
+  display: flex;
+  align-content: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 500px;
+}
+
+.clear {
+  margin: auto 5px 10px auto;
+}
+
+.clear:hover {
+  color: var(--gray);
+  cursor: pointer;
+}
+
+.first {
+  display: flex;
+  flex-direction: column;
+  border: var(--samsungblue) solid 1px;
+  border-radius: 0.5rem;
+  font-weight: 900;
+  width: 500px;
+  height: 200px;
+  margin: 10px auto;
+}
+
+.card {
+  margin: 10px auto 10px 40px;
+}
+
+.second {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  border: var(--samsungblue) solid 1px;
+  border-radius: 0.5rem;
+  font-weight: 900;
+  width: 500px;
+  height: 70px;
+  box-shadow: 4px 4px var(--light-gray);
+  margin: 10px auto;
+}
+
+.second:hover {
+  background-color: var(--light-gray);
+}
+
+.third {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: var(--samsungblue) solid 1px;
+  border-radius: 0.5rem;
+  font-weight: 900;
+  width: 500px;
+  height: 250px;
+  margin: 10px auto;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  width: 400px;
+  margin: 10px auto 5px auto;
+  justify-content: center;
+  font-weight: 900;
+}
+
+.middleBox {
+  margin: auto auto;
+}
+
+.state {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 400px;
+  margin: 10px auto;
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 400px;
+  margin: 30px auto 10px auto;
+  font-weight: 900;
+}
+
+.notification {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 400px;
+  margin: 25px auto 10px auto;
+  font-weight: 500;
+}

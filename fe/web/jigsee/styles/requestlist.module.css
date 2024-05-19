@@ -1,0 +1,73 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  border: #2f76ff solid 1px;
+  border-radius: 0.5rem;
+  width: 100%;
+  height: 100%;
+  /* margin: 10px auto; */
+  padding: 5px;
+  box-shadow: 4px 4px var(--light-gray);
+  /*align-content: center;*/
+  /*justify-content: center;*/
+  /*height: 100vh;*/
+  /*width: 100vw;*/
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  border: #2f76ff solid 1px;
+  border-radius: 0.5rem;
+  width: 450px;
+  height: 180px;
+  margin: 10px auto;
+  background-color: var(--white);
+  box-shadow: 4px 4px var(--light-gray);
+  justify-content: space-between;
+}
+
+.contents {
+  height: 600px;
+  width: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 10px auto;
+}
+
+.contents::-webkit-scrollbar {
+  width: 3px;
+}
+
+.contents::-webkit-scrollbar-button {
+  display: none;
+}
+
+.contents::-webkit-scrollbar-thumb {
+  background-color: var(--realwhite); /* 스크롤바 썸의 배경색 */
+  border-radius: 10px; /* 스크롤바 썸의 모서리 둥글게 */
+  background-clip: padding-box;
+  border: 2px solid var(--realwhite); /* 스크롤바 썸의 테두리 색상 (선택적) */
+}
+
+.contents::-webkit-scrollbar-track {
+  background-color: var(--realwhite);
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px var(--realwhite);
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  margin: auto 10px;
+  /*align-items: center;*/
+  /*padding: 10px;*/
+}
+
+.division {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin: 5px auto;
+}

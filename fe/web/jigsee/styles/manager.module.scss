@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  //   높이 나중에 조절
+  height: 85vh;
+  width: 100%;
+  flex-direction: row; /* Stack children vertically */
+  padding-left: 100px;
+  padding-right: 100px;
+  // border: 1px solid black;
+}
+.releasecontainer {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 500px;
+  height: 100%;
+  flex-direction: column; /* Stack children vertically */
+  // border: 1px solid black;
+}
+.stockcontainer {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 400px;
+  height: 100%;
+  flex-direction: column; /* Stack children vertically */
+  // border: 1px solid black;
+}
+.btncontainer {
+  display: flex;
+  align-items: center; /* Center vertically */
+  width: 350px;
+  height: 100%;
+  flex-direction: column; /* Stack children vertically */
+}
+.jigbtn {
+  background-color: var(--white); /* Button background */
+  border: 1px solid var(--samsungblue); /* Button border */
+  color: black; /* Text color */
+  padding: 10px 20px; /* Padding inside the button */
+  text-decoration: none; /* No underline on the text */
+  display: inline-block; /* Allows setting dimensions */
+  font-size: 16px; /* Text size */
+  margin: 20px 2px; /* Margin around the button */
+  border-radius: 20px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  transition: all 0.3s; /* Smooth transition for hover effects */
+  width: 300px;
+  height: 90px;
+  display: flex; // Enable Flexbox
+  justify-content: space-between; // Space between items
+  align-items: center; // Center items vertically
+  text-align: left; // Align text to the left
+}
+.jigbtn:hover {
+  background-color: #f5f5f5; /* Lighter background on hover */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); /* Larger shadow on hover */
+}
+
+.jigbtn:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Smaller shadow when clicked */
+  transform: translateY(1px); /* Slightly move the button down when clicked */
+}
+.modalstyle {
+  width: 100%;
+  height: 80%;
+}

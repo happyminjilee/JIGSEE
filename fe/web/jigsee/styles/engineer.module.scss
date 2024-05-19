@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  justify-content: space-between; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 80vh; /* Full viewport height */
+  width: 90vw;
+  padding-left: 150px;
+  padding-right: 150px;
+  flex-direction: row; /* Stack children vertically */
+  margin: 30px auto 0 auto;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+.jigrelease {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 44%;
+  height: 100%;
+  flex-direction: column; /* Stack children vertically */
+  //   레이아웃 표시 나중에 지우기
+  // border: 1px solid black;
+}
+.jigrequest {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 600px;
+  height: 100%;
+  margin-left: 30px;
+  flex-direction: column; /* Stack children vertically */
+  //   레이아웃 표시 나중에 지우기
+  // border: 1px solid black;
+}
+.jigrepairlist {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 600px;
+  height: 100%;
+  flex-direction: column; /* Stack children vertically */
+  //   레이아웃 표시 나중에 지우기
+  // border: 1px solid black;
+}
+.repairrequest {
+  // margin-left: 20px;
+  display: flex;
+  justify-content: end; /* Center horizontally */
+  align-items: end; /* Center vertically */
+  width: 60%;
+  height: 100%;
+  flex-direction: column; /* Stack children vertically */
+  //   레이아웃 표시 나중에 지우기
+  // border: 1px solid black;
+}
