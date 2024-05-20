@@ -6,7 +6,27 @@
 
 <br>
 
-# 1. 주요 기능
+# 1. 프로젝트 배경
+
+<strong>[배경]</strong>
+
+<p>제품과 직접 맞닿아있는 JIG는 제품의 품질에 큰 영향을 미칩니다.
+기존 수기로 관리되고 있던 JIG는 작업자의 실수로 설비에 잘못된
+JIG가 투입되는 문제가 발생할 수 있고, 보수 처리되지 않은 JIG가
+다시 재투입되는 문제가 발생할 수 있습니다. 또한, 이력을 관리하기 어
+려워 JIG의 Spec과 품질에 연관성을 분석하기 어렵다는 불편함이 있습니다. 이와 같은 JIG에 대한 관리를 시스템을 통해 개선하고자 합니다.</p>
+
+<br>
+<strong>[목표]</strong>
+<p>- JIG 프로세스 상태에 따른 관리 기능 구현
+</p>
+<p>- 품질 분석 및 이력 조회를 위한 레포트 화면 구현
+</p>
+<p>- 설비 실적 인터페이스 및 제어 기능
+</p>
+<br>
+
+# 2. 주요 기능
 
 ## 관리자 화면
 
@@ -84,11 +104,57 @@
 - Jig의 잘못된 투입을 방지합니다.
 
 <br>
+
+# 3. 백엔드 기술
+
+## K8S
+
+## MSA
+
+- Q1) 왜 MSA 구조를 도입했나요?
+- Q2)
+
+### 프록시 서버(API Server)
+
+- Q1) 어떤 역할을 하나요?
+- Q2) 사용한 기술이 뭔가요?
+
+### Jig 상태 관리 서버(Jig Server)
+
+- Q1) 어떤 역할을 하나요?
+- Q2) 사용한 기술이 뭔가요?
+
+### 회원 서버(Member Server)
+
+- Q1) 어떤 역할을 하나요?
+- Q2) 사용한 기술이 뭔가요?
+
+### 알림 서버(Notification Server)
+
+- Q1) 어떤 역할을 하나요?
+- Q2) 사용한 기술이 뭔가요?
+
+### 회원 간 요청/응답 서버(Notification-API Server)
+
+- Q1) 어떤 역할을 하나요?
+- Q2) 사용한 기술이 뭔가요?
+
+### 주기 점검 리스트 생성 서버(Watching Server)
+
+- Q1) 어떤 역할을 하나요?
+- Q2) 사용한 기술이 뭔가요?
+
+### 작업지시서 관리 서버(Work-Order Server)
+
+- Q1) 어떤 역할을 하나요?
+- Q2) 사용한 기술이 뭔가요?
+
+<br>
 <br>
 
-# 2. 프로젝트 구조
+# 4. 프로젝트 구조
 
-## 2-1. 기술 스택
+## 4-1. 기술 스택
 
 <div align="center">
 <h1>✨Front-end Stack✨</h1>
@@ -151,7 +217,7 @@
 
 <br>
 
-## 2-2. API 명세서
+## 4-2. API 명세서
 
 <img src="./readme_assets/api.png" style="width:550px;">
 
@@ -175,7 +241,7 @@
 
 <br>
 
-## 2-3. ERD
+## 4-3. ERD
 
 ### MySQL
 
@@ -187,7 +253,7 @@
 
 <br>
 
-## 2-4. 시스템 아키텍처
+## 4-4. 시스템 아키텍처
 
 <img src="./readme_assets/msa.png" style="width:550px;">
 
@@ -197,7 +263,7 @@
 
 <br>
 
-## 2-5. 화면 정의서
+## 4-5. 화면 정의서
 
 <img src="./readme_assets/figma_0.png" style="width:550px;">
 <img src="./readme_assets/figma_1.png" style="width:550px;">
@@ -205,978 +271,9 @@
 <img src="./readme_assets/figma_3.png" style="width:550px;">
 
 <br>
-
-## 2-6. 디렉토리 구조
-
-### Front-End
-
-- Web
-  ```markdown
-  📦jigsee
-  ┣ 📂components
-  ┃ ┣ 📂dashboard
-  ┃ ┃ ┣ 📜editedmethod.tsx
-  ┃ ┃ ┣ 📜lifetime.tsx
-  ┃ ┃ ┣ 📜managergraph.tsx
-  ┃ ┃ ┣ 📜myWo.tsx
-  ┃ ┃ ┣ 📜releasetable.tsx
-  ┃ ┃ ┣ 📜repairdonut.tsx
-  ┃ ┃ ┗ 📜report.tsx
-  ┃ ┣ 📂icons
-  ┃ ┃ ┗ 📜circularwithLabels.tsx
-  ┃ ┣ 📂release
-  ┃ ┃ ┣ 📜Approve.tsx
-  ┃ ┃ ┣ 📜ApprovedRelease.tsx
-  ┃ ┃ ┣ 📜EditStandard.tsx
-  ┃ ┃ ┣ 📜RejectedRelease.tsx
-  ┃ ┃ ┣ 📜ReleaseStatusList.tsx
-  ┃ ┃ ┣ 📜Request.tsx
-  ┃ ┃ ┣ 📜RequestList.tsx
-  ┃ ┃ ┣ 📜Return.tsx
-  ┃ ┃ ┗ 📜StockList.tsx
-  ┃ ┣ 📂repair
-  ┃ ┃ ┣ 📜DisposeModal.tsx
-  ┃ ┃ ┣ 📜JigDetail.tsx
-  ┃ ┃ ┣ 📜List.tsx
-  ┃ ┃ ┣ 📜Requests.tsx
-  ┃ ┃ ┣ 📜ReuseModal.tsx
-  ┃ ┃ ┣ 📜stepper.tsx
-  ┃ ┃ ┣ 📜TotalCardModal.tsx
-  ┃ ┃ ┗ 📜WOtestresult.tsx
-  ┃ ┣ 📂restore
-  ┃ ┃ ┗ 📜RestoreMemo.tsx
-  ┃ ┗ 📂workorder
-  ┃ ┃ ┣ 📜CreateWoModal.tsx
-  ┃ ┃ ┣ 📜DndWrapper.tsx
-  ┃ ┃ ┣ 📜ListDnDbox.tsx
-  ┃ ┃ ┗ 📜template.tsx
-  ┣ 📂fonts
-  ┃ ┣ 📜font.css
-  ┃ ┣ 📜SamsungOne-400.woff
-  ┃ ┣ 📜SamsungOne-700.woff
-  ┃ ┗ 📜SamsungSharpSans-Bold.woff
-  ┣ 📂pages
-  ┃ ┣ 📂alarm
-  ┃ ┃ ┗ 📜index.tsx
-  ┃ ┣ 📂api
-  ┃ ┃ ┣ 📜dashboard.ts
-  ┃ ┃ ┣ 📜facilityAxios.ts
-  ┃ ┃ ┣ 📜health.ts
-  ┃ ┃ ┣ 📜jigAxios.ts
-  ┃ ┃ ┣ 📜memberAxios.ts
-  ┃ ┃ ┣ 📜releaseAxios.ts
-  ┃ ┃ ┣ 📜repairAxios.ts
-  ┃ ┃ ┣ 📜restoreAxios.ts
-  ┃ ┃ ┣ 📜sseAxios.ts
-  ┃ ┃ ┗ 📜workorderAxios.ts
-  ┃ ┣ 📂common
-  ┃ ┃ ┣ 📂ReleaseTotal
-  ┃ ┃ ┃ ┗ 📜index.tsx
-  ┃ ┃ ┣ 📂RepairTotal
-  ┃ ┃ ┃ ┣ 📂MyTotal
-  ┃ ┃ ┃ ┃ ┗ 📜index.tsx
-  ┃ ┃ ┃ ┗ 📜index.tsx
-  ┃ ┃ ┗ 📂RestoreTotal
-  ┃ ┃ ┃ ┗ 📜index.tsx
-  ┃ ┣ 📂dashboard
-  ┃ ┃ ┣ 📜engineer.tsx
-  ┃ ┃ ┣ 📜index.tsx
-  ┃ ┃ ┗ 📜manager.tsx
-  ┃ ┣ 📂engineer
-  ┃ ┃ ┣ 📜index.tsx
-  ┃ ┃ ┣ 📜navbar.tsx
-  ┃ ┃ ┣ 📜repair.tsx
-  ┃ ┃ ┗ 📜restore.tsx
-  ┃ ┣ 📂loading
-  ┃ ┃ ┗ 📜index.tsx
-  ┃ ┣ 📂login
-  ┃ ┃ ┗ 📜index.tsx
-  ┃ ┣ 📂manager
-  ┃ ┃ ┣ 📜index.tsx
-  ┃ ┃ ┗ 📜navbar.tsx
-  ┃ ┣ 📜index.tsx
-  ┃ ┣ 📜_app.tsx
-  ┃ ┗ 📜_document.tsx
-  ┣ 📂public
-  ┃ ┣ 📂images
-  ┃ ┃ ┣ 📜account.svg
-  ┃ ┃ ┣ 📜add_blue_btn.svg
-  ┃ ┃ ┣ 📜bell.svg
-  ┃ ┃ ┣ 📜delete_gray.svg
-  ┃ ┃ ┣ 📜delete_normal.svg
-  ┃ ┃ ┣ 📜icon.png
-  ┃ ┃ ┣ 📜Loadinglogo.gif
-  ┃ ┃ ┣ 📜profile.svg
-  ┃ ┃ ┣ 📜sdi-logo-left.svg
-  ┃ ┃ ┣ 📜sdi-logo.svg
-  ┃ ┃ ┗ 📜userprofile.svg
-  ┃ ┣ 📜favicon.ico
-  ┃ ┣ 📜next.svg
-  ┃ ┗ 📜vercel.svg
-  ┣ 📂store
-  ┃ ┣ 📜dashboardstore.ts
-  ┃ ┣ 📜facilitystore.ts
-  ┃ ┣ 📜jigstore.ts
-  ┃ ┣ 📜memberstore.ts
-  ┃ ┣ 📜releasestore.ts
-  ┃ ┣ 📜repairrequeststore.ts
-  ┃ ┣ 📜restorestore.ts
-  ┃ ┣ 📜ssestore.ts
-  ┃ ┗ 📜workorderstore.ts
-  ┣ 📂styles
-  ┃ ┣ 📂dashboard
-  ┃ ┃ ┣ 📜editmethod.module.scss
-  ┃ ┃ ┣ 📜engineer.module.scss
-  ┃ ┃ ┣ 📜manager.module.scss
-  ┃ ┃ ┣ 📜mywo.module.css
-  ┃ ┃ ┣ 📜releasetable.module.scss
-  ┃ ┃ ┗ 📜report.module.scss
-  ┃ ┣ 📂modal
-  ┃ ┃ ┣ 📜approvedrelease.module.css
-  ┃ ┃ ┣ 📜createwo.module.css
-  ┃ ┃ ┣ 📜disposeModal.module.css
-  ┃ ┃ ┣ 📜rejectedrelease.module.css
-  ┃ ┃ ┣ 📜releaseapprove.module.scss
-  ┃ ┃ ┣ 📜releasereturn.module.css
-  ┃ ┃ ┣ 📜restorerequest.module.css
-  ┃ ┃ ┣ 📜reuseModal.module.css
-  ┃ ┃ ┗ 📜workorder.module.css
-  ┃ ┣ 📂Total
-  ┃ ┃ ┣ 📜MyTotal.module.css
-  ┃ ┃ ┗ 📜Total.module.css
-  ┃ ┣ 📜alarm.module.scss
-  ┃ ┣ 📜engineer.module.scss
-  ┃ ┣ 📜globals.css
-  ┃ ┣ 📜Home.module.css
-  ┃ ┣ 📜jigdetail.module.css
-  ┃ ┣ 📜jigrequest.module.scss
-  ┃ ┣ 📜loading.module.css
-  ┃ ┣ 📜login.module.scss
-  ┃ ┣ 📜manager.module.scss
-  ┃ ┣ 📜releasestatuslist.module.css
-  ┃ ┣ 📜repairlist.module.css
-  ┃ ┣ 📜repairrequest.module.css
-  ┃ ┣ 📜requestlist.module.css
-  ┃ ┣ 📜stocklist.module.css
-  ┃ ┗ 📜wotestresult.module.scss
-  ┣ 📂utils
-  ┃ ┣ 📜cookie.ts
-  ┃ ┣ 📜instance.ts
-  ┃ ┗ 📜useDnd.ts
-  ┣ 📜.dockerignore
-  ┣ 📜.env.development
-  ┣ 📜.env.production
-  ┣ 📜.eslintrc.js
-  ┣ 📜.gitignore
-  ┣ 📜Dockerfile
-  ┣ 📜middleware.ts
-  ┣ 📜next.config.mjs
-  ┣ 📜package-lock.json
-  ┣ 📜package.json
-  ┣ 📜postcss.config.js
-  ┣ 📜README.md
-  ┣ 📜tailwind.config.ts
-  ┗ 📜tsconfig.json
-  ```
-- App
-  ```markdown
-  📦jigsee
-  ┣ 📂.vscode
-  ┃ ┗ 📜launch.json
-  ┣ 📂android
-  ┃ ┣ 📂app
-  ┃ ┃ ┣ 📂src
-  ┃ ┃ ┃ ┣ 📂debug
-  ┃ ┃ ┃ ┃ ┗ 📜AndroidManifest.xml
-  ┃ ┃ ┃ ┣ 📂main
-  ┃ ┃ ┃ ┃ ┣ 📂kotlin
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂example
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂jigsee
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MainActivity.kt
-  ┃ ┃ ┃ ┃ ┣ 📂res
-  ┃ ┃ ┃ ┃ ┃ ┣ 📂drawable
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜launch_background.xml
-  ┃ ┃ ┃ ┃ ┃ ┣ 📂drawable-v21
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜launch_background.xml
-  ┃ ┃ ┃ ┃ ┃ ┣ 📂mipmap-hdpi
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ic_launcher.png
-  ┃ ┃ ┃ ┃ ┃ ┣ 📂mipmap-mdpi
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ic_launcher.png
-  ┃ ┃ ┃ ┃ ┃ ┣ 📂mipmap-xhdpi
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ic_launcher.png
-  ┃ ┃ ┃ ┃ ┃ ┣ 📂mipmap-xxhdpi
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ic_launcher.png
-  ┃ ┃ ┃ ┃ ┃ ┣ 📂mipmap-xxxhdpi
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ic_launcher.png
-  ┃ ┃ ┃ ┃ ┃ ┣ 📂values
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜styles.xml
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂values-night
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜styles.xml
-  ┃ ┃ ┃ ┃ ┗ 📜AndroidManifest.xml
-  ┃ ┃ ┃ ┗ 📂profile
-  ┃ ┃ ┃ ┃ ┗ 📜AndroidManifest.xml
-  ┃ ┃ ┣ 📜build.gradle
-  ┃ ┃ ┗ 📜google-services.json
-  ┃ ┣ 📂gradle
-  ┃ ┃ ┗ 📂wrapper
-  ┃ ┃ ┃ ┗ 📜gradle-wrapper.properties
-  ┃ ┣ 📜.gitignore
-  ┃ ┣ 📜build.gradle
-  ┃ ┣ 📜gradle.properties
-  ┃ ┗ 📜settings.gradle
-  ┣ 📂assets
-  ┃ ┣ 📜availableMark.svg
-  ┃ ┣ 📜invisible_icon.svg
-  ┃ ┣ 📜notAvailableMark.svg
-  ┃ ┣ 📜notification.svg
-  ┃ ┣ 📜notification_alert.svg
-  ┃ ┣ 📜profileIcon.svg
-  ┃ ┣ 📜raiseErrorMark.svg
-  ┃ ┣ 📜SDI_LOGO.png
-  ┃ ┗ 📜visible_icon.svg
-  ┣ 📂ios
-  ┃ ┣ 📂Flutter
-  ┃ ┃ ┣ 📜AppFrameworkInfo.plist
-  ┃ ┃ ┣ 📜Debug.xcconfig
-  ┃ ┃ ┗ 📜Release.xcconfig
-  ┃ ┣ 📂Runner
-  ┃ ┃ ┣ 📂Assets.xcassets
-  ┃ ┃ ┃ ┣ 📂AppIcon.appiconset
-  ┃ ┃ ┃ ┃ ┣ 📜Contents.json
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-1024x1024@1x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-20x20@1x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-20x20@2x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-20x20@3x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-29x29@1x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-29x29@2x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-29x29@3x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-40x40@1x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-40x40@2x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-40x40@3x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-60x60@2x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-60x60@3x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-76x76@1x.png
-  ┃ ┃ ┃ ┃ ┣ 📜Icon-App-76x76@2x.png
-  ┃ ┃ ┃ ┃ ┗ 📜Icon-App-83.5x83.5@2x.png
-  ┃ ┃ ┃ ┗ 📂LaunchImage.imageset
-  ┃ ┃ ┃ ┃ ┣ 📜Contents.json
-  ┃ ┃ ┃ ┃ ┣ 📜LaunchImage.png
-  ┃ ┃ ┃ ┃ ┣ 📜LaunchImage@2x.png
-  ┃ ┃ ┃ ┃ ┣ 📜LaunchImage@3x.png
-  ┃ ┃ ┃ ┃ ┗ 📜README.md
-  ┃ ┃ ┣ 📂Base.lproj
-  ┃ ┃ ┃ ┣ 📜LaunchScreen.storyboard
-  ┃ ┃ ┃ ┗ 📜Main.storyboard
-  ┃ ┃ ┣ 📜AppDelegate.swift
-  ┃ ┃ ┣ 📜Info.plist
-  ┃ ┃ ┗ 📜Runner-Bridging-Header.h
-  ┃ ┣ 📂Runner.xcodeproj
-  ┃ ┃ ┣ 📂project.xcworkspace
-  ┃ ┃ ┃ ┣ 📂xcshareddata
-  ┃ ┃ ┃ ┃ ┣ 📜IDEWorkspaceChecks.plist
-  ┃ ┃ ┃ ┃ ┗ 📜WorkspaceSettings.xcsettings
-  ┃ ┃ ┃ ┗ 📜contents.xcworkspacedata
-  ┃ ┃ ┣ 📂xcshareddata
-  ┃ ┃ ┃ ┗ 📂xcschemes
-  ┃ ┃ ┃ ┃ ┗ 📜Runner.xcscheme
-  ┃ ┃ ┗ 📜project.pbxproj
-  ┃ ┣ 📂Runner.xcworkspace
-  ┃ ┃ ┣ 📂xcshareddata
-  ┃ ┃ ┃ ┣ 📜IDEWorkspaceChecks.plist
-  ┃ ┃ ┃ ┗ 📜WorkspaceSettings.xcsettings
-  ┃ ┃ ┗ 📜contents.xcworkspacedata
-  ┃ ┗ 📜.gitignore
-  ┣ 📂lib
-  ┃ ┣ 📂api
-  ┃ ┃ ┣ 📜dio_instance.dart
-  ┃ ┃ ┣ 📜provider.dart
-  ┃ ┃ ┗ 📜user_auth.dart
-  ┃ ┣ 📂components
-  ┃ ┃ ┣ 📜custom_form.dart
-  ┃ ┃ ┣ 📜custom_text_form_field.dart
-  ┃ ┃ ┣ 📜header.dart
-  ┃ ┃ ┗ 📜navigate_animation.dart
-  ┃ ┣ 📂consts
-  ┃ ┃ ┣ 📜constants.dart
-  ┃ ┃ ┗ 📜size.dart
-  ┃ ┣ 📂pages
-  ┃ ┃ ┣ 📜abrogate_jig.dart
-  ┃ ┃ ┣ 📜home_page.dart
-  ┃ ┃ ┣ 📜login_page.dart
-  ┃ ┃ ┣ 📜ocr_page.dart
-  ┃ ┃ ┗ 📜spe_jig_list.dart
-  ┃ ┣ 📂stores
-  ┃ ┃ ┗ 📜usePreference.dart
-  ┃ ┣ 📜firebase_options.dart
-  ┃ ┗ 📜main.dart
-  ┣ 📂test
-  ┃ ┗ 📜widget_test.dart
-  ┣ 📂web
-  ┃ ┣ 📂icons
-  ┃ ┃ ┣ 📜Icon-192.png
-  ┃ ┃ ┣ 📜Icon-512.png
-  ┃ ┃ ┣ 📜Icon-maskable-192.png
-  ┃ ┃ ┗ 📜Icon-maskable-512.png
-  ┃ ┣ 📜favicon.png
-  ┃ ┣ 📜index.html
-  ┃ ┗ 📜manifest.json
-  ┣ 📂windows
-  ┃ ┣ 📂flutter
-  ┃ ┃ ┣ 📜CMakeLists.txt
-  ┃ ┃ ┣ 📜generated_plugins.cmake
-  ┃ ┃ ┣ 📜generated_plugin_registrant.cc
-  ┃ ┃ ┗ 📜generated_plugin_registrant.h
-  ┃ ┣ 📂runner
-  ┃ ┃ ┣ 📂resources
-  ┃ ┃ ┃ ┗ 📜app_icon.ico
-  ┃ ┃ ┣ 📜CMakeLists.txt
-  ┃ ┃ ┣ 📜flutter_window.cpp
-  ┃ ┃ ┣ 📜flutter_window.h
-  ┃ ┃ ┣ 📜main.cpp
-  ┃ ┃ ┣ 📜resource.h
-  ┃ ┃ ┣ 📜runner.exe.manifest
-  ┃ ┃ ┣ 📜Runner.rc
-  ┃ ┃ ┣ 📜utils.cpp
-  ┃ ┃ ┣ 📜utils.h
-  ┃ ┃ ┣ 📜win32_window.cpp
-  ┃ ┃ ┗ 📜win32_window.h
-  ┃ ┣ 📜.gitignore
-  ┃ ┗ 📜CMakeLists.txt
-  ┣ 📜.gitignore
-  ┣ 📜.metadata
-  ┣ 📜analysis_options.yaml
-  ┣ 📜firebase.json
-  ┣ 📜pubspec.lock
-  ┣ 📜pubspec.yaml
-  ┗ 📜README.md
-  ```
-
-### Back-End
-
-- API
-  ```markdown
-  📦api-server
-  ┣ 📂.idea
-  ┃ ┗ 📜.gitignore
-  ┣ 📂gradle
-  ┃ ┗ 📂wrapper
-  ┃ ┃ ┣ 📜gradle-wrapper.jar
-  ┃ ┃ ┗ 📜gradle-wrapper.properties
-  ┣ 📂src
-  ┃ ┣ 📂main
-  ┃ ┃ ┣ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂apiserver
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂api
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂facility
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂client
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜FacilityItemClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜FacilityCreateRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityAllResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityDetailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemInspectionJigItemsResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜FacilityItemInspectionResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜FacilityController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂jig
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂client
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigItemClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemAcceptRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemAddRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemDeleteAndRepairRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemExchangeRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemInspectionRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemRepairRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemSerialNoRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemUpdateStatusRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigUpdateRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigGraphResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemFacilityAvailableResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemInventoryRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemIsUsableResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigModelCountResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigMonthResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigOptimalIntervalResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigUpdatedCheckListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂util
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigItemController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂member
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂client
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoginRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberSearchByMemberListRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoginResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LogoutResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberEmailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂notification
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂client
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FcmTokenRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MessageRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationFcmInspectionRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜NotificationListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UncheckedNotificationListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜EmailController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FcmController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜SearchController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SseController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request_response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂client
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationApiClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RepairJigRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RequestJigRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ResponseJigRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RepairJigDetailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RepairJigListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RequestJigDetailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RequestJigListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RequestController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ResponseController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂wo
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂client
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderAutoCreateRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderCreateRequest.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderDoneRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderUpdateRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderUpdateStatusRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂util
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderSummary.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderCountResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderDetailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderDoneResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderGroupingResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderStatusResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜HealthController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CorsConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜OpenFeignConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SwaggerConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂util
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂mattermost
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MattermostClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MatterMostMessageDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MattermostProperties.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MatterMostSender.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationManager.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CheckItem.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommonException.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ErrorCode.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜GlobalControllerAdvice.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HandleFeignResponse.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HeaderUtils.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigRequestStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜NotificationStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RequestJigCount.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Response.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderCheckItem.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ApiServerApplication.java
-  ┃ ┃ ┗ 📂resources
-  ┃ ┃ ┃ ┗ 📜application.yml
-  ┃ ┗ 📂test
-  ┃ ┃ ┗ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂apiserver
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ApiServerApplicationTests.java
-  ┣ 📜.gitignore
-  ┣ 📜build.gradle
-  ┣ 📜Dockerfile
-  ┣ 📜gradlew
-  ┣ 📜gradlew.bat
-  ┗ 📜settings.gradle
-  ```
-- Jig
-  ```markdown
-  📦jig
-  ┣ 📂gradle
-  ┃ ┗ 📂wrapper
-  ┃ ┃ ┣ 📜gradle-wrapper.jar
-  ┃ ┃ ┗ 📜gradle-wrapper.properties
-  ┣ 📂src
-  ┃ ┣ 📂main
-  ┃ ┃ ┣ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂jig
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂api
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HealthController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigItemController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂application
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂client
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜NotificationApiClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜NotificationClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemAcceptRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemAddRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemDeleteAndRepairRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemExchangeRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemInspectionRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemInventoryRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemRepairRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemSerialNoRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemUpdateStatusRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigUpdateRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜NotificationFcmInspectionRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderAutoCreateRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemAllResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemDetailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemInspectionJigItemsResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemNeedToInspectionResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigGraphResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemFacilityAvailableResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemIsUsableResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigModelCountResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigMonthResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigOptimalIntervalResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigUpdatedCheckListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RequestCountRepairResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderCountResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigStatsDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂nosql
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigNosqlEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂rdb
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityJigMappingRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemInspectionRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemIOHistoryRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemRepairHistoryRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigStatsRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂nosql
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigNosqlRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂rdb
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemRDBRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityJigMappingRDBRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityRDBRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemInspectionRDBRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemIOHistoryRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemRDBRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemRepairHistoryRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigRDBRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigStatsRDBRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂util
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CheckItem.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommonException.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜DownTime.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ErrorCode.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜GlobalControllerAdvice.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜IOStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MissingJig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜OpenFeignConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Response.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜TimeCalculator.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜TokenHeader.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigApplication.java
-  ┃ ┃ ┗ 📂resources
-  ┃ ┃ ┃ ┗ 📜application.yml
-  ┃ ┗ 📂test
-  ┃ ┃ ┗ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂jig
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂api
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FacilityItemControllerTest.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigControllerTest.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigItemControllerTest.java
-  ┣ 📜.gitignore
-  ┣ 📜build.gradle
-  ┣ 📜Dockerfile
-  ┣ 📜gradlew
-  ┣ 📜gradlew.bat
-  ┗ 📜settings.gradle
-  ```
-- Member
-  ```markdown
-  📦member
-  ┣ 📂gradle
-  ┃ ┗ 📂wrapper
-  ┃ ┃ ┣ 📜gradle-wrapper.jar
-  ┃ ┃ ┗ 📜gradle-wrapper.properties
-  ┣ 📂src
-  ┃ ┗ 📂main
-  ┃ ┃ ┣ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂member
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂api
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HealthController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂application
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AuthenticationConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JwtConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RedisConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SecurityConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberLoginRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberSearchByMemberListRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberEmailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberLoginResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberPrincipalDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RoleType.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂filter
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ExceptionHandlerFilter.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JwtTokenFilter.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂handler
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜CustomAccessDeniedHandler.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂jwt
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AuthToken.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜AuthTokenProvider.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RefreshTokenCacheRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂util
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommonException.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ErrorCode.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜GlobalControllerAdvice.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HeaderUtils.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Response.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberApplication.java
-  ┃ ┃ ┗ 📂resources
-  ┃ ┃ ┃ ┗ 📜application.yml
-  ┣ 📜.gitignore
-  ┣ 📜build.gradle
-  ┣ 📜docker-compose-local.yml
-  ┣ 📜Dockerfile
-  ┣ 📜gradlew
-  ┣ 📜gradlew.bat
-  ┗ 📜settings.gradle
-  ```
-- Notification
-  ```markdown
-  📦notification
-  ┣ 📂gradle
-  ┃ ┗ 📂wrapper
-  ┃ ┃ ┣ 📜gradle-wrapper.jar
-  ┃ ┃ ┗ 📜gradle-wrapper.properties
-  ┣ 📂src
-  ┃ ┣ 📂main
-  ┃ ┃ ┣ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂notification
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜EmailController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FcmController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HealthController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜SearchController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SseController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FcmTokenRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MessageRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationFcmInspectionRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MessageResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜NotificationListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UncheckedNotificationListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberEmailDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberInfoDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜EmailEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FcmEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜EmailRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜EmitterRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜EmitterRepositoryImpl.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FcmRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂service
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ApiService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜EmailService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FcmService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜SearchService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SseService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂util
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommonException.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CorsConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ErrorCode.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FcmConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜GlobalControllerAdvice.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜NotificationStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜OpenFeignConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Response.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RoleType.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationApplication.java
-  ┃ ┃ ┗ 📂resources
-  ┃ ┃ ┃ ┣ 📂firebase
-  ┃ ┃ ┃ ┃ ┗ 📜fcmServiceAccountKey.json
-  ┃ ┃ ┃ ┣ 📂static
-  ┃ ┃ ┃ ┃ ┗ 📂images
-  ┃ ┃ ┃ ┃ ┃ ┗ 📜warning.png
-  ┃ ┃ ┃ ┣ 📂templates
-  ┃ ┃ ┃ ┃ ┗ 📜mail.html
-  ┃ ┃ ┃ ┗ 📜application.yml
-  ┃ ┗ 📂test
-  ┃ ┃ ┗ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂notification
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationApplicationTests.java
-  ┣ 📜.gitignore
-  ┣ 📜build.gradle
-  ┣ 📜Dockerfile
-  ┣ 📜gradlew
-  ┣ 📜gradlew.bat
-  ┗ 📜settings.gradle
-  ```
-- Notification-API
-  ```markdown
-  📦notification-api
-  ┣ 📂gradle
-  ┃ ┗ 📂wrapper
-  ┃ ┃ ┣ 📜gradle-wrapper.jar
-  ┃ ┃ ┗ 📜gradle-wrapper.properties
-  ┣ 📂src
-  ┃ ┣ 📂main
-  ┃ ┃ ┣ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂notificationapi
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HealthController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RequestController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RepairJigRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RequestJigRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ResponseJigRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RepairJigDetailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RepairJigListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RequestJigDetailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RequestJigListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemStatusUpdateDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigRepairRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberInfoDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MessageDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RequestJigDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RepairRequestEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WantRequestEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WantResponseEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RepairRequestsRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WantRequestsRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WantResponsesRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂service
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ApiService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RequestService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂util
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommonException.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ErrorCode.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜GlobalControllerAdvice.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigRequestStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MessageClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜OpenFeignConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Response.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜RoleType.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SseStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationApiApplication.java
-  ┃ ┃ ┗ 📂resources
-  ┃ ┃ ┃ ┗ 📜application.yml
-  ┃ ┗ 📂test
-  ┃ ┃ ┗ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂notificationapi
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NotificationApiApplicationTests.java
-  ┣ 📜.gitignore
-  ┣ 📜build.gradle
-  ┣ 📜Dockerfile
-  ┣ 📜gradlew
-  ┣ 📜gradlew.bat
-  ┗ 📜settings.gradle
-  ```
-- Watching
-  ```markdown
-  📦watching
-  ┣ 📂gradle
-  ┃ ┗ 📂wrapper
-  ┃ ┃ ┣ 📜gradle-wrapper.jar
-  ┃ ┃ ┗ 📜gradle-wrapper.properties
-  ┣ 📂src
-  ┃ ┗ 📂main
-  ┃ ┃ ┣ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂watching
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂api
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜HealthController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂client
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂tasklet
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoadTooMuchUseJigItemTasklet.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SendToJigItemServerTasklet.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JobConfiguration.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ClientJigItemIdsRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemIOHistoryRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜NeedToInspectionInterface.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigItemIOHistoryRDBRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂scheduler
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜BatchScheduler.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂util
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜IOStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜OpenFeignConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WatchingApplication.java
-  ┃ ┃ ┗ 📂resources
-  ┃ ┃ ┃ ┗ 📜application.yml
-  ┣ 📜.gitignore
-  ┣ 📜build.gradle
-  ┣ 📜Dockerfile
-  ┣ 📜gradlew
-  ┣ 📜gradlew.bat
-  ┗ 📜settings.gradle
-  ```
-- Work-Order
-  ```markdown
-  📦work-order
-  ┣ 📂gradle
-  ┃ ┗ 📂wrapper
-  ┃ ┃ ┣ 📜gradle-wrapper.jar
-  ┃ ┃ ┗ 📜gradle-wrapper.properties
-  ┣ 📂src
-  ┃ ┣ 📂main
-  ┃ ┃ ┣ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂work_order
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂api
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HealthController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderController.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂application
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderService.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂client
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemDeleteRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JigItemRepairRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂response
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberListResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MemberClient.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RestTemplateConfig.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂reponse
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderCountResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderDetailResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderDoneResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderGroupingResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderStatusResponseDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂request
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigItemDeleteAndRepairRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderAutoCreateRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderCreateRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderSaveRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderUpdateStatusRequestDto.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderNosqlEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderRDBEntity.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderCriteriaRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderNosqlRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderRDBRepository.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂util
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommonException.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ErrorCode.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜GlobalControllerAdvice.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JigCheckItem.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Response.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderCheckItem.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜WorkOrderItem.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderStatus.java
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderApplication.java
-  ┃ ┃ ┗ 📂resources
-  ┃ ┃ ┃ ┗ 📜application.yml
-  ┃ ┗ 📂test
-  ┃ ┃ ┗ 📂java
-  ┃ ┃ ┃ ┗ 📂com
-  ┃ ┃ ┃ ┃ ┗ 📂sdi
-  ┃ ┃ ┃ ┃ ┃ ┗ 📂work_order
-  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂api
-  ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WorkOrderControllerTest.java
-  ┣ 📜.gitignore
-  ┣ 📜build.gradle
-  ┣ 📜Dockerfile
-  ┣ 📜gradlew
-  ┣ 📜gradlew.bat
-  ┗ 📜settings.gradle
-  ```
-
-<br>
 <br>
 
-# 3. 팀 구성
+# 5. 팀 구성
 
 <table border="1" cellpadding="1" cellspacing="1" style="width:700px">
 	<thead>
